@@ -25,6 +25,10 @@ def create_app():
     oauth.init_app(app)
     assets.init_app(app)
     admin.add_view(sqla.ModelView(models.User, db.session))
+    admin.add_view(sqla.ModelView(models.Project, db.session))
+    admin.add_view(sqla.ModelView(models.Category, db.session))
+    admin.add_view(sqla.ModelView(models.Comment, db.session))
+    admin.add_view(sqla.ModelView(models.Group, db.session))
 
     admin.init_app(app)
 
