@@ -5,7 +5,7 @@ from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 
-from python_toolshed import create_app, db
+from toolshed import create_app, db
 
 
 app = create_app()
@@ -27,8 +27,9 @@ def make_shell_context():
 
 @manager.command
 def createdb():
-    """Creates the database with all model tables. 
-    Migrations are preferred."""
+    """Creates the database with all model tables.
+    Migrations are preferred.
+    """
     db.create_all()
 
 
