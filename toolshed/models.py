@@ -7,7 +7,7 @@ class User(db.Model):
     github_url = db.Column(db.String(400))
     email = db.Column(db.String(255))
 
-    comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user")
+    comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id")
     #liked_projects = db.relationship('Project', backref='owner', lazy='dynamic', foreign_keys="Project.id")
 
 
@@ -27,8 +27,8 @@ class Project(db.Model):
     issues_url = db.Column(db.String(400))
     docs_url = db.Column(db.String(400))
 
-    category = db.Column(db.Integer, db.ForeignKey("category.id"))
-    comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project")
+    category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
+    comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project_id")
 
 
 class Comment(db.Model):
@@ -36,19 +36,19 @@ class Comment(db.Model):
     text = db.Column(db.String(400))
     created = db.Column(db.DateTime)
 
-    user = db.Column(db.Integer, db.ForeignKey("user.id"))
-    project = db.Column(db.Integer, db.ForeignKey("project.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
 
-    projects = db.relationship("Project", backref="category", lazy="dynamic", foreign_keys="Project.category")
-    group = db.Column(db.Integer, db.ForeignKey("group.id"))
+    projects = db.relationship("Project", backref="category", lazy="dynamic", foreign_keys="Project.category_id")
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
 
 
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
 
-    categories = db.relationship("Category", backref="group", lazy="dynamic", foreign_keys="Category.group")
+    categories = db.relationship("Category", backref="group", lazy="dynamic", foreign_keys="Category.group_id")

@@ -3,8 +3,8 @@ from flask import Flask, render_template
 from . import models
 from .extensions import db, migrate, config, oauth, assets, admin
 from .views.toolshed import toolshed
-from .views.toolshed_admin import toolshed_admin
-
+from .views.toolshed_admin import toolshed_admin, AdminView
+from flask_admin.contrib import sqla
 
 
 
@@ -24,6 +24,8 @@ def create_app():
     migrate.init_app(app, db)
     oauth.init_app(app)
     assets.init_app(app)
+    admin.add_view(sqla.ModelView(models.User, db.session))
+
     admin.init_app(app)
 
     return app
