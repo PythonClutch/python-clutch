@@ -18,3 +18,15 @@ class AdminView(BaseView):
 
 class UserAdmin(ModelView):
     inline_models = (models.User,)
+
+class ProjectAdmin(ModelView):
+    inline_models = (models.Project,)
+
+class CategoryAdmin(ModelView):
+    inline_models = (models.Category,)
+
+class CommentAdmin(ModelView):
+    inline_models = (models.Comment,)
+
+class GroupAdmin(ModelView):
+    inline_models = (models.Group,)
