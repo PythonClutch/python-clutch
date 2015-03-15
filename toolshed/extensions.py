@@ -16,3 +16,6 @@ oauth = OAuth()
 
 from flask.ext.assets import Environment
 assets = Environment()
+
+from flask_admin import Admin
+admin = Admin()
