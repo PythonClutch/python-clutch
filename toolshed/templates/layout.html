@@ -11,7 +11,7 @@
 </head>
 <body>
 <div id="wrapper" class="units-container">
-    <h1>Python Jungle</h1>
+    <h1 class="testing-header">Python Jungle</h1>
     {% block header %}
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -23,7 +23,6 @@
             {% endif %}
         {% endwith %}
     {% endblock %}
-    <a href=""
     {% block body %}{% endblock %}
     {% block footer %}
     {% endblock %}
