@@ -23,6 +23,7 @@ Flask-Migrate==1.3.0
 Flask-WTF==0.11
 WTForms==2.0.2
 Marshmallow
+wtf==0.1
 
 ## Config
 flask-appconfig==0.9.1
