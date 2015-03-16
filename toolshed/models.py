@@ -1,7 +1,5 @@
 from .extensions import db
 from marshmallow import Schema, fields, ValidationError
-from toolshed import ma
-
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
