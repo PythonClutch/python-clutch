@@ -19,7 +19,6 @@ SQLALCHEMY_DATABASE_URI = TEST_DATABASE_URI
 WTF_CSRF_ENABLED = False
 
 
-
 @pytest.fixture
 def app():
     app = create_app()

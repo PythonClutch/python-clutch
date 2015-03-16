@@ -8,7 +8,6 @@ from .views.api import api
 from flask_admin.contrib import sqla
 
 
-
 SQLALCHEMY_DATABASE_URI = "postgres://localhost/toolshed"
 DEBUG = True
 SECRET_KEY = 'development-key'
