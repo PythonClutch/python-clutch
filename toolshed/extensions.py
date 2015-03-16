@@ -19,3 +19,6 @@ assets = Environment()
 
 from flask_admin import Admin
 admin = Admin()
+
+from flask.ext.marshmallow import Marshmallow
+ma = Marshmallow()

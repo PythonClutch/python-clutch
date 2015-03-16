@@ -5,6 +5,7 @@ from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 
+
 from toolshed import create_app, db
 
 
