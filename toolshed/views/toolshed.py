@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, session,
 from toolshed.extensions import oauth
 
 
-toolshed = Blueprint("toolshed", __name__, static_folder="./static")
+toolshed = Blueprint("toolshed", __name__, static_folder="../static")
 
 
 github = oauth.remote_app(
