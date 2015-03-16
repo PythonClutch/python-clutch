@@ -2,15 +2,15 @@ import tempfile
 
 import pytest
 
-from coaction import create_app
-from coaction.extensions import db as _db
+from toolshed import create_app
+from toolshed.extensions import db as _db
 
 
 dbfile = tempfile.NamedTemporaryFile(delete=False)
 dbfile.close()
 
 TEST_DATABASE_FILE = dbfile.name
-TEST_DATABASE_URI = "sqlite:///" + TEST_DATABASE_FILE
+TEST_DATABASE_URI = "postgres://localhost/" + TEST_DATABASE_FILE
 TESTING = True
 DEBUG = False
 DEBUG_TB_ENABLED = False
