@@ -6,6 +6,7 @@ from marshmallow import Schema, fields, ValidationError
 Models
 """
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     github_name = db.Column(db.String(255), nullable=False)
@@ -13,7 +14,7 @@ class User(db.Model):
     email = db.Column(db.String(255))
 
     comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id")
-    #liked_projects = db.relationship('Project', backref='owner', lazy='dynamic', foreign_keys="Project.id")
+    # liked_projects = db.relationship('Project', backref='owner', lazy='dynamic', foreign_keys="Project.id")
 
 
 class Project(db.Model):
@@ -99,6 +100,5 @@ class GroupSchema(Schema):
     class Meta:
         categories = fields.Nested(CategorySchema, many=True)
         fields = ("id", "name", "categories")
-
 
 
