@@ -1,16 +1,10 @@
-import tempfile
-
 import pytest
 
 from toolshed import create_app
 from toolshed.extensions import db as _db
 
 
-dbfile = tempfile.NamedTemporaryFile(delete=False)
-dbfile.close()
-
-TEST_DATABASE_FILE = dbfile.name
-TEST_DATABASE_URI = "postgres://localhost/" + TEST_DATABASE_FILE
+TEST_DATABASE_URI = "postgres://localhost/testdb"
 TESTING = True
 DEBUG = False
 DEBUG_TB_ENABLED = False
