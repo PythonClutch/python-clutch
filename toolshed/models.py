@@ -1,6 +1,11 @@
 from .extensions import db
 from marshmallow import Schema, fields, ValidationError
 
+
+"""
+Models
+"""
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     github_name = db.Column(db.String(255), nullable=False)
@@ -9,12 +14,6 @@ class User(db.Model):
 
     comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id")
     #liked_projects = db.relationship('Project', backref='owner', lazy='dynamic', foreign_keys="Project.id")
-
-
-class UserSchema(Schema):
-    class Meta:
-        comments = fields.Nested(CommentSchema, many=True)
-        fields = ("id", "github_name", "github_url", "email", "comments")
 
 
 class Project(db.Model):
@@ -37,15 +36,6 @@ class Project(db.Model):
     comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project_id")
 
 
-class ProjectSchema(Schema):
-    class Meta:
-        comments = fields.Nested(CommentSchema, many=True)
-        fields = ("id", "name", "github_url", "website",
-                  "pypi_url", "forks", "starred", "watchers",
-                  "age", "version", "last_commit", "open_issues",
-                  "docs_url", "category_id", "comments")
-
-
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     text = db.Column(db.String(400))
@@ -53,16 +43,6 @@ class Comment(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
-
-
-class CommentSchema(Schema):
-    class Meta:
-        fields = ("id", "text", "created", "user_id",
-                  "project_id")
-'''
-For schemas we need to figure out how to make them more restful by adding
-the ability to display the api endpoints.
-'''
 
 
 class Category(db.Model):
@@ -73,12 +53,6 @@ class Category(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
 
 
-class CategorySchema(Schema):
-    class Meta:
-        projects = fields.Nested(ProjectSchema, many=True)
-        fields = ("id", "name", "projects", "group_id")
-
-
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
@@ -86,7 +60,45 @@ class Group(db.Model):
     categories = db.relationship("Category", backref="group", lazy="dynamic", foreign_keys="Category.group_id")
 
 
+"""
+Schemas
+
+For schemas we need to figure out how to make them more restful by adding
+the ability to display the api endpoints.
+"""
+
+
+class CommentSchema(Schema):
+    class Meta:
+        fields = ("id", "text", "created", "user_id",
+                  "project_id")
+
+
+class UserSchema(Schema):
+    class Meta:
+        comments = fields.Nested(CommentSchema, many=True)
+        fields = ("id", "github_name", "github_url", "email", "comments")
+
+
+class ProjectSchema(Schema):
+    class Meta:
+        comments = fields.Nested(CommentSchema, many=True)
+        fields = ("id", "name", "github_url", "website",
+                  "pypi_url", "forks", "starred", "w atchers",
+                  "age", "version", "last_commit", "open_issues",
+                  "docs_url", "category_id", "comments")
+
+
+class CategorySchema(Schema):
+    class Meta:
+        projects = fields.Nested(ProjectSchema, many=True)
+        fields = ("id", "name", "projects", "group_id")
+
+
 class GroupSchema(Schema):
     class Meta:
         categories = fields.Nested(CategorySchema, many=True)
         fields = ("id", "name", "categories")
+
+
+
