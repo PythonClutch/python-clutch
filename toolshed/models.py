@@ -11,7 +11,6 @@ class User(db.Model):
     github_name = db.Column(db.String(255), nullable=False)
     github_url = db.Column(db.String(400))
     email = db.Column(db.String(255))
-
     comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id")
     #liked_projects = db.relationship('Project', backref='owner', lazy='dynamic', foreign_keys="Project.id")
 
@@ -75,14 +74,14 @@ class CommentSchema(Schema):
 
 
 class UserSchema(Schema):
+    comments = fields.Nested(CommentSchema, many=True)
     class Meta:
-        comments = fields.Nested(CommentSchema, many=True)
         fields = ("id", "github_name", "github_url", "email", "comments")
 
 
 class ProjectSchema(Schema):
+    comments = fields.Nested(CommentSchema, many=True)
     class Meta:
-        comments = fields.Nested(CommentSchema, many=True)
         fields = ("id", "name", "github_url", "website",
                   "pypi_url", "forks", "starred", "w atchers",
                   "age", "version", "last_commit", "open_issues",
@@ -90,14 +89,14 @@ class ProjectSchema(Schema):
 
 
 class CategorySchema(Schema):
+    projects = fields.Nested(ProjectSchema, many=True)
     class Meta:
-        projects = fields.Nested(ProjectSchema, many=True)
         fields = ("id", "name", "projects", "group_id")
 
 
 class GroupSchema(Schema):
+    categories = fields.Nested(CategorySchema, many=True)
     class Meta:
-        categories = fields.Nested(CategorySchema, many=True)
         fields = ("id", "name", "categories")
 
 

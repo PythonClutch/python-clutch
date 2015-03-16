@@ -25,3 +25,7 @@ blockquote:before, blockquote:after, q:before, q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0; }
+
+.testing-header {
+  color: #888;
+  font-size: 2em; }
