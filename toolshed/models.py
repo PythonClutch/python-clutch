@@ -1,18 +1,28 @@
-from .extensions import db
+from .extensions import db, bcrypt, login_manager
 from marshmallow import Schema, fields, ValidationError
+from flask.ext.login import UserMixin
+
+
+@login_manager.user_loader
+def load_admin(id):
+    return Admin.query.get(id)
 
 
 """
 Models
 """
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     github_name = db.Column(db.String(255), nullable=False)
     github_url = db.Column(db.String(400))
     email = db.Column(db.String(255))
-    comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id")
-    #liked_projects = db.relationship('Project', backref='owner', lazy='dynamic', foreign_keys="Project.id")
+    comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id",
+                               cascade="all,delete")
+
+    def __repr__(self):
+        return "User: {}".format(self.github_name)
 
 
 class Project(db.Model):
@@ -32,7 +42,11 @@ class Project(db.Model):
     docs_url = db.Column(db.String(400))
 
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
-    comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project_id")
+    comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project_id",
+                               cascade="all,delete")
+
+    def __repr__(self):
+        return "Project: {}".format(self.name)
 
 
 class Comment(db.Model):
@@ -40,8 +54,11 @@ class Comment(db.Model):
     text = db.Column(db.String(400))
     created = db.Column(db.DateTime)
 
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"))
+    project_id = db.Column(db.Integer, db.ForeignKey("project.id", ondelete="CASCADE"))
+
+    def __repr__(self):
+        return "Comment: {}".format(self.text)
 
 
 class Category(db.Model):
@@ -51,12 +68,39 @@ class Category(db.Model):
     projects = db.relationship("Project", backref="category", lazy="dynamic", foreign_keys="Project.category_id")
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
 
+    def __repr__(self):
+        return "Category: {}".format(self.name)
+
 
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
 
     categories = db.relationship("Category", backref="group", lazy="dynamic", foreign_keys="Category.group_id")
+
+    def __repr__(self):
+        return "Group: {}".format(self.name)
+
+
+class Admin(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    admin_name = db.Column(db.String(255), nullable=False)
+    encrypted_password = db.Column(db.String(60))
+
+    def get_password(self):
+        return getattr(self, "_password", None)
+
+    def set_password(self, password):
+        self._password = password
+        self.encrypted_password = bcrypt.generate_password_hash(password)
+
+    password = property(get_password, set_password)
+
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.encrypted_password, password)
+
+    def __repr__(self):
+        return "Admin {}".format(self.admin_name)
 
 
 """
@@ -68,6 +112,7 @@ the ability to display the api endpoints.
 
 
 class CommentSchema(Schema):
+    text = fields.String(required=True)
     class Meta:
         fields = ("id", "text", "created", "user_id",
                   "project_id")

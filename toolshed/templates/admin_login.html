@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div>
+ <fieldset>
+   <form action="{{ url_for('.admin_login') }}" method='POST'>
+     {{ form.hidden_tag() }}
+     <div>
+       {{ form.login_name.label }}{{ form.login_name(size=20) }}
+     </div>
+     <div>
+       {{ form.password.label }}{{ form.password(size=20) }}
+     </div>
+     <input type=submit value='Login'>
+   </form>
+ </fieldset>
+</div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+
+<div class="project-links-div">
+	<a href="#/home">home ></a>
+	<a href="#/home" ng-controller="HomeCtrl as home">
+		<p ng-click="home.setCategories()">category ></p>
+	</a>
+	<a href="">group ></a>
+	<p>project name</p>
+</div>
+
+<div class="project-header">
+	<div class="projectname-user-div">
+		<h1>project name</h1>
+		<h3>by username</h3>
+	</div>
+	<div class="home-project-basic-info-right flex-row">
+		<div class="home-project-basic-info-like">like</div>
+		<div class="home-project-basic-info-comment">comment</div>
+		<div class="home-project-basic-info-score">score</div>
+	</div>		
+</div>
+
+<p>details of the project</p>
+
+
+
+<div>
+	<home-projects ng-controller="hnCtrl as hn"></home-projects>
+</div>
