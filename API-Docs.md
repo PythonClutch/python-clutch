@@ -18,7 +18,7 @@
 
 ## Example usage
 
-### Send a GET to ```/users``` when there are no users
+#### Send a GET to ```/users``` when there are no users
 Get back:
 ```
 {
@@ -26,5 +26,21 @@ Get back:
         "title": "There are no users."
     },
     "status": "fail"
+}
+```
+#### Send a GET to ```/users``` with a user in the database.
+
+```
+{
+    "data": [
+        {
+            "comments": [ ],
+            "email": "cndreisbach@clintondontusenoemail.com",
+            "github_name": "cndreisbach",
+            "github_url": "https://github.com/cndreisbach",
+            "id": 1
+        }
+    ],
+    "status": "success"
 }
 ```
