@@ -1,5 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
 from toolshed.extensions import oauth
+from functools import wraps
+from ..models import User
+from ..extensions import db
 
 
 toolshed = Blueprint("toolshed", __name__, static_folder="../static")
@@ -24,6 +27,11 @@ def index():
 @github.tokengetter
 def get_github_token(token=None):
     return session.get('github_token')
+
+
+def current_user():
+    me = github.get('/user')
+    return me.data['name']
 
 
 def require_login(view):
@@ -66,6 +74,13 @@ def github_authorized():
     session['github_token'] = (resp['access_token'],)
     me = github.get('/user')
     session['github_name'] = me.data['name']
+
+    if not User.query.filter_by(github_name=me.data['name']).first():
+        user = User(github_name = me.data['name'],
+                    email = me.data['email'],
+                    github_url = me.data['html_url'])
+        db.session.add(user)
+        db.session.commit()
 
     flash('You were signed in as %s' % repr(me.data['name']))
     return redirect(next_url)
