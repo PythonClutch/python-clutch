@@ -1,4 +1,4 @@
-app.controller('hpCtrl', function () {
+app.controller('hnCtrl', function () {
 	var self = this;
 
 	self.byNames = true;

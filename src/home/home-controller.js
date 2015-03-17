@@ -1,13 +1,15 @@
-app.controller('HomeCtrl', function () {
+app.controller('HomeCtrl', ['homeFactory', function (homeFactory) {
 	var self = this;
 
-	self.byProjects = true;
+	self.byProjects = homeFactory.byProjects();
 
 	self.setProjects = function () {
-		self.byProjects = true;
+		homeFactory.setProjects();
+		self.byProjects = homeFactory.byProjects();
 	}
 
 	self.setCategories = function () {
-		self.byProjects = false;
+		homeFactory.setCategories();
+		self.byProjects = homeFactory.byProjects();
 	}
-});
+}]);

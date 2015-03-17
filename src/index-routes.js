@@ -26,5 +26,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     templateUrl: 'static/submit/submit.html',
     controller: 'SubmitCtrl',
     controllerAs: 'vm'
+  })
+  // .when('/home/category', homePage)
+  .when('/project', {   
+    templateUrl: 'static/project/project.html',
+    controller: 'ProjectCtrl',
+    controllerAs: 'vm'
   });
 }]);

@@ -2,6 +2,9 @@
 <a ng-click="vm.setCategories()" href="">category</a>
 
 <div ng-show="vm.byProjects">
-	<home-groups ng-controller="hgCtrl as hg"></home-groups>
-	<home-projects ng-controller="hpCtrl as hp"></home-projects>
+<home-projects ng-controller="hpCtrl as hp"></home-projects>
+</div>
+
+<div ng-show="!vm.byProjects">
+	categories
 </div>

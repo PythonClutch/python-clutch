@@ -18,4 +18,25 @@
 	width: 50%;
 }
 
+.project-links-div {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-left;
+	flex-wrap: wrap;
+}
+
+.projectname-user-div {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.project-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
 /******************** comment *******************************/
