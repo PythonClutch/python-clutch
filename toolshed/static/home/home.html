@@ -1,3 +1,7 @@
-<p>fjalsdk</p>
+<a ng-click="vm.setProjects()" href="">projects</a>
+<a ng-click="vm.setCategories()" href="">category</a>
 
-<nav-bar></nav-bar>
+<div ng-show="vm.byProjects">
+	<home-groups ng-controller="hgCtrl as hg"></home-groups>
+	<home-projects ng-controller="hpCtrl as hp"></home-projects>
+</div>

@@ -1,0 +1,29 @@
+<h1>projects</h1>
+
+<a ng-click="hp.setNames()" href="">by name</a>
+<a ng-click="hp.setGroups()" href="">by group</a>
+
+<div ng-show="hp.byNames">
+	<ul>
+		<li class="home-projects-li">
+			<div class="home-project-basic-info flex-row">
+				<h4>project name</h4>
+				<div class="home-project-basic-info-right flex-row">
+					<div class="home-project-basic-info-like">like</div>
+					<div class="home-project-basic-info-comment">comment</div>
+					<div class="home-project-basic-info-score">score</div>
+					<div class="home-project-basic-info-more">+</div>
+				</div>
+			</div>
+			<div class="home-project-links flex-row">
+				<a href="">Website</a>
+				<a href="">PyDocs</a>
+				<a href="">Source Code</a>
+				<a href="">Mailing List</a>
+			</div>
+			<div class="home-project-pypy"><a href="">pypy</a></div>
+			<div class="home-project-pypy"><a href="">GitHub</a></div>
+		</li>
+	</ul>
+</div>
+<div ng-show="!hp.byNames">groups</div>

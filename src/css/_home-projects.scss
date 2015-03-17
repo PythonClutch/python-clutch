@@ -1,0 +1,21 @@
+/*************************************************************
+***** GENERAL *********
+*************************************************************/
+
+.home-projects-li {
+	width: 90%;
+	background: lightgray; 
+}
+
+.flex-row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.home-project-basic-info-right {
+	width: 50%;
+}
+
+/******************** comment *******************************/

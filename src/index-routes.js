@@ -3,7 +3,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 
   var homePage = {
     templateUrl: 'static/home/home.html',
-    controller: 'IndexCtrl',
+    controller: 'HomeCtrl',
     controllerAs: 'vm'
     // resolve: {
     //  apiTasks: ['taskService',
@@ -16,9 +16,15 @@ app.config(['$routeProvider', function ($routeProvider) {
 
   $routeProvider
   .when('/', homePage)
-  .when('/home', homePage);
-  // .when('/home/projects',    
-  //   templateUrl: 'static/home/groups/groups.html',
-  //   controller: 'IndexCtrl',
-  //   controllerAs: 'vm')
+  .when('/home', homePage)
+  .when('/account', {   
+    templateUrl: 'static/account/account.html',
+    controller: 'AccountCtrl',
+    controllerAs: 'vm'
+  })
+  .when('/submit', {   
+    templateUrl: 'static/submit/submit.html',
+    controller: 'SubmitCtrl',
+    controllerAs: 'vm'
+  });
 }]);

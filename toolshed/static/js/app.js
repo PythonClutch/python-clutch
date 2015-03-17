@@ -12,7 +12,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 }]);
 
 app.controller('IndexCtrl', function () {
-	console.log('hey');
+	
 });
 (function () {
 	'use strict';
@@ -34,7 +34,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 
   var homePage = {
     templateUrl: 'static/home/home.html',
-    controller: 'IndexCtrl',
+    controller: 'HomeCtrl',
     controllerAs: 'vm'
     // resolve: {
     //  apiTasks: ['taskService',
@@ -47,14 +47,55 @@ app.config(['$routeProvider', function ($routeProvider) {
 
   $routeProvider
   .when('/', homePage)
-  .when('/home', homePage);
-  // .when('/home/projects',    
-  //   templateUrl: 'static/home/groups/groups.html',
-  //   controller: 'IndexCtrl',
-  //   controllerAs: 'vm')
+  .when('/home', homePage)
+  .when('/account', {   
+    templateUrl: 'static/account/account.html',
+    controller: 'AccountCtrl',
+    controllerAs: 'vm'
+  })
+  .when('/submit', {   
+    templateUrl: 'static/submit/submit.html',
+    controller: 'SubmitCtrl',
+    controllerAs: 'vm'
+  });
 }]);
+app.controller('AccountCtrl', function () {
+	
+});
+app.controller('HomeCtrl', function () {
+	var self = this;
+
+	self.byProjects = true;
+
+	self.setProjects = function () {
+		self.byProjects = true;
+	}
+
+	self.setCategories = function () {
+		self.byProjects = false;
+	}
+});
+(function () {
+	'use strict';
+
+	app.directive('homeGroups', function () {
+		return {
+			restrict: 'E',
+			templateUrl: 'static/home/home-groups/home-groups.html'
+		};
+	});
+
+	app.directive('homeProjects', function () {
+		return {
+			restrict: 'E',
+			templateUrl: 'static/home/home-projects/home-projects.html'
+		};
+	});
 
 
+
+
+})();
 app.controller('NavCtrl', ['$location', function ($location) {
 
 	self.isActive = function (path) {
@@ -71,9 +112,28 @@ app.controller('NavCtrl', ['$location', function ($location) {
 
 }]);
 
+app.controller('SubmitCtrl', function () {
+	
+});
 app.controller('Error404Ctrl', ['$location', function ($location) {
   this.message = 'Could not find: ' + $location.url();
 }]);
 
 
+app.controller('hgCtrl', function () {
+	
+});
+app.controller('hpCtrl', function () {
+	var self = this;
+
+	self.byNames = true;
+
+	self.setGroups = function () {
+		self.byNames = false;
+	}
+
+	self.setNames = function () {
+		self.byNames = true;
+	}
+});
 //# sourceMappingURL=app.js.map

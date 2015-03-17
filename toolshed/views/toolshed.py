@@ -20,7 +20,6 @@ github = oauth.remote_app(
 def index():
     return toolshed.send_static_file("index.html")
 
-
 @github.tokengetter
 def get_github_token(token=None):
     return session.get('github_token')
