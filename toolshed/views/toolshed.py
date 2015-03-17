@@ -4,7 +4,6 @@ from functools import wraps
 from ..models import User
 from ..extensions import db
 
-
 toolshed = Blueprint("toolshed", __name__, static_folder="../static")
 
 
@@ -84,7 +83,6 @@ def github_authorized():
 
     flash('You were signed in as %s' % repr(me.data['name']))
     return redirect(next_url)
-
 
 
 
