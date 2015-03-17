@@ -29,6 +29,7 @@ def create_app():
     migrate.init_app(app, db)
     oauth.init_app(app)
     assets.init_app(app)
+
     bcrypt.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'toolshed_admin.login'
