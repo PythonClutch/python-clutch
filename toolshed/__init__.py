@@ -14,7 +14,7 @@ DEBUG = True
 SECRET_KEY = 'development-key'
 
 
-def create_app():
+def create_app(skip_admin=False):
     app = Flask('toolshed')
     app.config.from_object(__name__)
     app.register_blueprint(toolshed)
@@ -27,12 +27,16 @@ def create_app():
     migrate.init_app(app, db)
     oauth.init_app(app)
     assets.init_app(app)
-    admin.add_view(sqla.ModelView(models.User, db.session))
-    admin.add_view(sqla.ModelView(models.Project, db.session))
-    admin.add_view(sqla.ModelView(models.Category, db.session))
-    admin.add_view(sqla.ModelView(models.Comment, db.session))
-    admin.add_view(sqla.ModelView(models.Group, db.session))
+    if skip_admin:
+        pass
 
-    admin.init_app(app)
+    else:
+        admin.add_view(sqla.ModelView(models.User, db.session))
+        admin.add_view(sqla.ModelView(models.Project, db.session))
+        admin.add_view(sqla.ModelView(models.Category, db.session))
+        admin.add_view(sqla.ModelView(models.Comment, db.session))
+        admin.add_view(sqla.ModelView(models.Group, db.session))
+
+        admin.init_app(app)
 
     return app
