@@ -35,14 +35,14 @@ app.config(['$routeProvider', function ($routeProvider) {
   var homePage = {
     templateUrl: 'static/home/home.html',
     controller: 'HomeCtrl',
-    controllerAs: 'vm'
-    // resolve: {
-    //  apiTasks: ['taskService',
-    //         function(taskService) {
-    //             return taskService.list();
-    //         }
-    //     ],
-    //     apiUsers: usersResolve
+    controllerAs: 'vm',
+    resolve: {
+      projects: ['projectServices',
+        function(projectServices) {
+          return projectServices.list();
+        }
+      ]
+    }
   };
 
   $routeProvider
@@ -59,17 +59,58 @@ app.config(['$routeProvider', function ($routeProvider) {
     controllerAs: 'vm'
   })
   // .when('/home/category', homePage)
+  .when('/account', {   
+    templateUrl: 'static/account/account.html',
+    controller: 'AccountCtrl',
+    controllerAs: 'vm'
+  })
+  .when('/group', {   
+    templateUrl: 'static/group/group.html',
+    controller: 'GroupCtrl',
+    controllerAs: 'vm'
+  })
   .when('/project', {   
     templateUrl: 'static/project/project.html',
     controller: 'ProjectCtrl',
     controllerAs: 'vm'
   });
 }]);
+
+
+
+
 app.controller('AccountCtrl', function () {
-	
-});
-app.controller('HomeCtrl', ['homeFactory', function (homeFactory) {
 	var self = this;
+
+	self.byInfo = true;
+
+	self.setInfo = function () {
+		self.byInfo = true;
+	}
+
+	self.setActivity = function () {
+		self.byInfo = false;
+	}
+});
+(function () {
+	app.directive('accountActivity', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/account/account-activity.html'
+	  };
+	});
+
+	app.directive('accountInfo', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/account/account-info.html'
+	  };
+	});
+})();
+app.controller('HomeCtrl', ['homeFactory', 'projects', function (homeFactory, projects) {
+	var self = this;
+
+	self.projects = projects;
 
 	self.byProjects = homeFactory.byProjects();
 
@@ -104,6 +145,9 @@ app.controller('HomeCtrl', ['homeFactory', function (homeFactory) {
 
 
 })();
+app.controller('GroupCtrl', function () {
+	
+});
 app.controller('NavCtrl', ['$location', function ($location) {
 
 	self.isActive = function (path) {
@@ -120,6 +164,40 @@ app.controller('NavCtrl', ['$location', function ($location) {
 
 }]);
 
+app.controller('ProjectCtrl', function () {
+	
+});
+app.config(['$routeProvider', function ($routeProvider) {
+  'use strict';
+
+  var projectPage = {
+    templateUrl: '',
+    controller: '',
+    controllerAs: '',
+    // resolve: {
+    //   projects: ['',
+    //     function() {
+    //       return .list();
+    //     }
+    //   ]
+    // }
+  };
+
+  $routeProvider
+  .when('/', homePage)
+  // .when('/account', {   
+  //   templateUrl: '',
+  //   controller: '',
+  //   controllerAs: ''
+  // });
+}]);
+
+
+
+
+app.controller('SubmitCtrl', function () {
+	
+});
 app.factory('homeFactory', function () {
 
 	// var self = this;
@@ -157,12 +235,40 @@ app.factory('homeFactory', function () {
 	};
 
 });
-app.controller('ProjectCtrl', function () {
-	
-});
-app.controller('SubmitCtrl', function () {
-	
-});
+app.factory('projectServices', ['$http', '$log',
+  function($http, $log) {
+
+    function get(url) {
+      return processAjaxPromise($http.get(url));
+    }
+    function post(url, share) {
+      return processAjaxPromise($http.post(url, share));
+    }
+    function put(url, share) {
+      return processAjaxPromise($http.put(url, share));
+    }
+    function remove(url) {
+      return processAjaxPromise($http.delete(url));
+    }
+    function processAjaxPromise(p) {
+      return p.then(function(result) {
+        return result.data.data;
+      })
+      .catch(function(error) {
+        $log.log(error);
+      });
+    }
+
+    return {
+
+      list: function () {
+        return get('/api/v1/projects');
+      },
+
+    };
+  }
+]);
+
 app.controller('Error404Ctrl', ['$location', function ($location) {
   this.message = 'Could not find: ' + $location.url();
 }]);
@@ -198,6 +304,46 @@ app.controller('hpCtrl', function () {
 	  };
 	});
 })();
+app.factory('homeFactory', function () {
+
+	// var self = this;
+
+	// self.byProjects = true;
+
+	// self.setProjects = function () {
+	// 	self.byProjects = true;
+	// }
+
+	// self.setCategories = function () {
+	// 	console.log('cats')
+	// 	self.byProjects = false;
+	// 	console.log('cats')
+	// 	console.log(self.byProjects)
+	// }
+
+	var byProjects = true;
+
+	'use strict';
+
+	return {
+		byProjects: function () {
+			return byProjects;
+		},
+
+		setProjects: function () {
+			byProjects = true;
+		},
+
+		setCategories: function () {
+			byProjects = false;
+		}
+
+	};
+
+});
+app.controller('hgCtrl', function () {
+	
+});
 app.controller('hnCtrl', function () {
 	var self = this;
 
@@ -212,8 +358,5 @@ app.controller('hnCtrl', function () {
 		self.byNames = true;
 		console.log('hey')
 	}
-});
-app.controller('hgCtrl', function () {
-	
 });
 //# sourceMappingURL=app.js.map
