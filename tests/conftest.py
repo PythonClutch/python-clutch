@@ -19,7 +19,7 @@ WTF_CSRF_ENABLED = False
 
 @pytest.fixture
 def app(request):
-    app = create_app(skip_admin=True)
+    app = create_app()
     app.config.from_object(__name__)
 
     return app
@@ -27,16 +27,12 @@ def app(request):
 
 @pytest.fixture
 def db(app, request):
-    def teardown():
-        _db.drop_all()
-
     _db.app = app
+    _db.drop_all()
     _db.create_all()
-
-    request.addfinalizer(teardown)
-
-    _db.app = app
     return _db
+
+
 
 
 @pytest.fixture
