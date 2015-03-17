@@ -10,17 +10,23 @@ from datetime import datetime
 
 api = Blueprint('api', __name__)
 
+
+
+# Schemas
+
 all_users_schema = UserSchema(many=True)
 single_user_schema = UserSchema()
 all_projects_schema = ProjectSchema(many=True)
 single_project_schema = ProjectSchema()
-comments_schema = CommentSchema(many=True)
+single_comment_schema = CommentSchema()
+all_comments_schema = CommentSchema(many=True)
 single_category_schema = CategorySchema()
 all_categories_schema = CategorySchema(many=True)
 single_group_schema = GroupSchema()
 all_groups_schema = GroupSchema(many=True)
 
 
+# response functions
 
 def success_response(schema, data):
     results = schema.dump(data)
@@ -30,6 +36,8 @@ def success_response(schema, data):
 def failure_response(reason, code):
     return jsonify({"status": "fail", "data": {"title": reason}}), code
 
+
+# User routes
 
 @api.route('/user')
 def get_user():
@@ -59,6 +67,8 @@ def user(id):
         return failure_response("There was no such user.", 404)
 
 
+# project routes
+
 @api.route("/projects")
 def projects():
     projects = Project.query.all()
@@ -76,6 +86,8 @@ def project(id):
     else:
         return failure_response("There was no such project.", 404)
 
+
+#category routes
 
 @api.route("/categories")
 def all_categories():
@@ -95,6 +107,8 @@ def category_projects(id):
         return failure_response("There is no such category.", 404)
 
 
+# Group routes
+
 @api.route("/groups")
 def all_groups():
     groups = Group.query.all()
@@ -113,11 +127,13 @@ def group_categories(id):
         return failure_response("There is no group.", 404)
 
 
+# Comment routes
+
 @api.route("/users/<int:id>/comments")
 def user_comments(id):
-    user = User.query.get(id)
+    user = User.query.get_or_404(id)
     if user.comments:
-        return success_response(comments_schema, user.comments)
+        return success_response(all_comments_schema, user.comments)
     else:
         return failure_response("This user has no comments.", 404)
 
@@ -126,27 +142,58 @@ def user_comments(id):
 def project_comments(id):
     project = Project.query.get(id)
     if project.comments:
-        return success_response(comments_schema, project.comments)
+        return success_response(all_comments_schema, project.comments)
     else:
         return failure_response("This project has no comments.", 404)
 
 
 @api.route("/projects/<int:id>/comments", methods=["POST"])
+@require_login
 def add_project_comment(id):
     user_name = current_user()
     user = User.query.filter_by(github_name=user_name).first()
     comment_data = request.get_json()
     project = Project.query.get(id)
+    print(comment_data)
     if project:
-        comment = Comment(text=comment_data.text,
+        comment = Comment(text=comment_data['text'],
                           created=datetime.utcnow(),
                           project_id=project.id,
                           user_id=user.id)
+        print("BLAH")
+
+        user.comments.append(comment)
+        print("BLAH")
         db.session.add(comment)
+        print("BLAH")
         db.session.commit()
-        return success_response(comments_schema, comment)
+        return success_response(single_comment_schema, comment)
     else:
         return failure_response("There was no such project", 404)
+
+
+@api.route("/comments/<int:id>", methods=["PUT"])
+def edit_comment(id):
+    user_name = current_user()
+    user = User.query.filter_by(github_name=user_name).first()
+    comment = Comment.query.get_or_404(id)
+    comment_data = request.get_json()
+    if comment.user_id != user.id:
+        return failure_response("You are not authorized to edit this comment.")
+    comment.text = comment_data['text']
+    db.session.commit()
+    return success_response(single_comment_schema, comment)
+
+
+
+@api.route("/comments/<int:id>", methods=["Delete"])
+def delete_comment(id):
+    comment = Comment.query.get_or_404(id)
+    db.session.delete(comment)
+    db.session.commit()
+    return success_response(single_comment_schema, comment)
+
+
 
 
 

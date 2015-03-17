@@ -4,7 +4,7 @@ import os
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
-
+from toolshed.models import Admin
 
 from toolshed import create_app, db
 
@@ -32,6 +32,14 @@ def createdb():
     Migrations are preferred.
     """
     db.create_all()
+
+@manager.command
+def create_admin():
+    admin = Admin(admin_name="joel",
+                  password="password")
+    db.session.add(admin)
+    db.session.commit()
+
 
 
 if __name__ == '__main__':

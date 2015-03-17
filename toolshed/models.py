@@ -1,10 +1,17 @@
-from .extensions import db
+from .extensions import db, bcrypt, login_manager
 from marshmallow import Schema, fields, ValidationError
+from flask.ext.login import UserMixin
+
+
+@login_manager.user_loader
+def load_admin(id):
+    return Admin.query.get(id)
 
 
 """
 Models
 """
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -16,6 +23,7 @@ class User(db.Model):
 
     def __repr__(self):
         return "User: {}".format(self.github_name)
+
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -72,6 +80,27 @@ class Group(db.Model):
 
     def __repr__(self):
         return "Group: {}".format(self.name)
+
+
+class Admin(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    admin_name = db.Column(db.String(255), nullable=False)
+    encrypted_password = db.Column(db.String(60))
+
+    def get_password(self):
+        return getattr(self, "_password", None)
+
+    def set_password(self, password):
+        self._password = password
+        self.encrypted_password = bcrypt.generate_password_hash(password)
+
+    password = property(get_password, set_password)
+
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.encrypted_password, password)
+
+    def __repr__(self):
+        return "Admin {}".format(self.admin_name)
 
 
 """

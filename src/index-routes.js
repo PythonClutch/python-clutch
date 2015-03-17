@@ -4,14 +4,14 @@ app.config(['$routeProvider', function ($routeProvider) {
   var homePage = {
     templateUrl: 'static/home/home.html',
     controller: 'HomeCtrl',
-    controllerAs: 'vm'
-    // resolve: {
-    //  apiTasks: ['taskService',
-    //         function(taskService) {
-    //             return taskService.list();
-    //         }
-    //     ],
-    //     apiUsers: usersResolve
+    controllerAs: 'vm',
+    resolve: {
+      projects: ['projectServices',
+        function(projectServices) {
+          return projectServices.list();
+        }
+      ]
+    }
   };
 
   $routeProvider
@@ -28,9 +28,22 @@ app.config(['$routeProvider', function ($routeProvider) {
     controllerAs: 'vm'
   })
   // .when('/home/category', homePage)
+  .when('/account', {   
+    templateUrl: 'static/account/account.html',
+    controller: 'AccountCtrl',
+    controllerAs: 'vm'
+  })
+  .when('/group', {   
+    templateUrl: 'static/group/group.html',
+    controller: 'GroupCtrl',
+    controllerAs: 'vm'
+  })
   .when('/project', {   
     templateUrl: 'static/project/project.html',
     controller: 'ProjectCtrl',
     controllerAs: 'vm'
   });
 }]);
+
+
+

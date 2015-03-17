@@ -1,5 +1,7 @@
-app.controller('HomeCtrl', ['homeFactory', function (homeFactory) {
+app.controller('HomeCtrl', ['homeFactory', 'projects', function (homeFactory, projects) {
 	var self = this;
+
+	self.projects = projects;
 
 	self.byProjects = homeFactory.byProjects();
 
