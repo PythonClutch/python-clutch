@@ -11,9 +11,11 @@ class User(db.Model):
     github_name = db.Column(db.String(255), nullable=False)
     github_url = db.Column(db.String(400))
     email = db.Column(db.String(255))
-    comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id")
-    #liked_projects = db.relationship('Project', backref='owner', lazy='dynamic', foreign_keys="Project.id")
+    comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id",
+                               cascade="all,delete")
 
+    def __repr__(self):
+        return "User: {}".format(self.github_name)
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -32,7 +34,11 @@ class Project(db.Model):
     docs_url = db.Column(db.String(400))
 
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
-    comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project_id")
+    comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project_id",
+                               cascade="all,delete")
+
+    def __repr__(self):
+        return "Project: {}".format(self.name)
 
 
 class Comment(db.Model):
@@ -40,8 +46,11 @@ class Comment(db.Model):
     text = db.Column(db.String(400))
     created = db.Column(db.DateTime)
 
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"))
+    project_id = db.Column(db.Integer, db.ForeignKey("project.id", ondelete="CASCADE"))
+
+    def __repr__(self):
+        return "Comment: {}".format(self.text)
 
 
 class Category(db.Model):
@@ -51,12 +60,18 @@ class Category(db.Model):
     projects = db.relationship("Project", backref="category", lazy="dynamic", foreign_keys="Project.category_id")
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
 
+    def __repr__(self):
+        return "Category: {}".format(self.name)
+
 
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
 
     categories = db.relationship("Category", backref="group", lazy="dynamic", foreign_keys="Category.group_id")
+
+    def __repr__(self):
+        return "Group: {}".format(self.name)
 
 
 """
@@ -68,6 +83,7 @@ the ability to display the api endpoints.
 
 
 class CommentSchema(Schema):
+    text = fields.String(required=True)
     class Meta:
         fields = ("id", "text", "created", "user_id",
                   "project_id")
@@ -83,7 +99,7 @@ class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
     class Meta:
         fields = ("id", "name", "github_url", "website",
-                  "pypi_url", "forks", "starred", "w atchers",
+                  "pypi_url", "forks", "starred", "watchers",
                   "age", "version", "last_commit", "open_issues",
                   "docs_url", "category_id", "comments")
 
