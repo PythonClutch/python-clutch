@@ -1,21 +1,21 @@
 
 <div class="project-links-div">
 	<a href="#/home">home ></a>
-	<a href="#/home" ng-controller="HomeCtrl as home">
-		<p ng-click="home.setCategories()">category ></p>
+	<a href="#/home/categories">
+		<p>category ></p>
 	</a>
-	<a href="">group ></a>
-	<p>project name</p>
+	<a href="#/group">group ></a>
+	<p>{{vm.project.name}}</p>
 </div>
 
 <div class="project-header">
 	<div class="projectname-user-div">
-		<h1>project name</h1>
+		<h1>{{vm.project.name}}</h1>
 		<h3>by username</h3>
 	</div>
 	<div class="home-project-basic-info-right flex-row">
-		<div class="home-project-basic-info-like">like</div>
-		<div class="home-project-basic-info-comment">comment</div>
+		<div class="home-project-basic-info-like">likes</div>
+		<div class="home-project-basic-info-comment">comments</div>
 		<div class="home-project-basic-info-score">score</div>
 	</div>		
 </div>
@@ -24,6 +24,32 @@
 
 
 
-<div>
-	<home-projects ng-controller="hnCtrl as hn"></home-projects>
+<div class="gray-bg">
+	<div class="home-project-details-div">
+		<div class="home-project-links flex-row pink-bg">
+			<a href="http://{{vm.project.website}}">Website</a>
+			<a href="http://{{vm.project.docs_url}}">PyDocs</a>
+			<a href="http://{{vm.project.github_url}}">Source Code</a>
+			<a href="http://{{vm.project.website}}">Mailing List</a>
+		</div>
+		<div class="home-project-pypi green-bg">
+			<div class="home-project-pypi-header flex-row">
+				<h3>pypi</h3>
+				<a href="{{vm.project.pypi_url}}">pypi name</a>
+				<p>{{vm.project.version}}</p>
+				<p>score</p>
+			</div>
+
+		
+
+
+
+
+
+
+
+
+		</div>
+		<div class="home-project-pypi"><a href="">GitHub</a></div>
+	</div>
 </div>

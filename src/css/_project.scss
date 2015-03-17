@@ -2,9 +2,14 @@
 ***** GENERAL *********
 *************************************************************/
 
-.home-projects-li {
+.home-project-li {
 	width: 90%;
 	background: lightgray; 
+	margin: 20px 0;
+}
+
+.home-project-details-div {
+	padding: .4em;
 }
 
 .flex-row {

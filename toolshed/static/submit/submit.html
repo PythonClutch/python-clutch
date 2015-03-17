@@ -1,1 +1,55 @@
-submit
+<span class="submit-span" ng-click="vm.setNew()">new</span>
+<span class="submit-span" ng-click="vm.setPending()">pending</span>
+
+<form ng-show="vm.byNew">
+	<div class="new-input-div">
+		<p>Name</p>
+		<input type="text">
+	</div>
+	<div class="new-input-div">
+		<p>GitHub URL</p>
+		<input type="url">
+	</div>
+	<div class="new-input-div">
+		<p>PyPi URL</p>
+		<input type="url">
+	</div>
+	<div class="new-input-div">
+		<p>Website</p>
+		<input type="url">
+	</div>
+	<div class="new-input-div">
+		<p>Documenation</p>
+		<input type="url">
+	</div>
+	<div class="new-input-div">
+		<p>Source Code</p>
+		<input type="url">
+	</div>
+	<div class="new-input-div">
+		<p>Mailing List</p>
+		<input type="url">
+	</div>
+	<div class="new-input-div">
+		<p>Category</p>
+		<select>
+			<option value="{{user.id}}">active</option>
+		</select>
+		<p>Group</p>
+		<select>
+			<option value="{{user.id}}">support</option>
+		</select>
+	</div>
+	<input type="submit" value="Submit Project">
+</form>
+
+<div ng-show="!vm.byNew">
+
+	<div>
+		
+	</div>
+
+</div>
+
+
+

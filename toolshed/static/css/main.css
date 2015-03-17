@@ -29,9 +29,13 @@ table {
 /*************************************************************
 ***** GENERAL *********
 *************************************************************/
-.home-projects-li {
+.home-project-li {
   width: 90%;
-  background: lightgray; }
+  background: lightgray;
+  margin: 20px 0; }
+
+.home-project-details-div {
+  padding: .4em; }
 
 .flex-row {
   display: -webkit-flex;
@@ -93,6 +97,14 @@ table {
   flex-wrap: wrap; }
 
 /******************** comment *******************************/
+/*************************************************************
+***** comment *********
+*************************************************************/
+.submit-span {
+  cursor: pointer;
+  color: blue; }
+
+/******************** comment *******************************/
 @font-face {
   font-family: "fontastic";
   src: url("static/fonts/fontastic.eot");
@@ -102,6 +114,18 @@ table {
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important; }
+
+.yellow-bg {
+  background: lightyellow; }
+
+.pink-bg {
+  background: lightpink; }
+
+.green-bg {
+  background: lightgreen; }
+
+.gray-bg {
+  background: lightgray; }
 
 body {
   font-family: sans-serif;

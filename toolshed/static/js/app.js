@@ -48,6 +48,9 @@ app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
   .when('/', homePage)
   .when('/home', homePage)
+  .when('/home/projects', homePage)
+  // .when('/home/categories', homePage)
+  // .when('/projects', homePage)
   .when('/account', {   
     templateUrl: 'static/account/account.html',
     controller: 'AccountCtrl',
@@ -59,21 +62,16 @@ app.config(['$routeProvider', function ($routeProvider) {
     controllerAs: 'vm'
   })
   // .when('/home/category', homePage)
-  .when('/account', {   
-    templateUrl: 'static/account/account.html',
-    controller: 'AccountCtrl',
-    controllerAs: 'vm'
-  })
   .when('/group', {   
     templateUrl: 'static/group/group.html',
     controller: 'GroupCtrl',
     controllerAs: 'vm'
-  })
-  .when('/project', {   
-    templateUrl: 'static/project/project.html',
-    controller: 'ProjectCtrl',
-    controllerAs: 'vm'
   });
+  // .when('/project', {   
+  //   templateUrl: 'static/project/project.html',
+  //   controller: 'ProjectCtrl',
+  //   controllerAs: 'vm'
+  // });
 }]);
 
 
@@ -107,6 +105,9 @@ app.controller('AccountCtrl', function () {
 	  };
 	});
 })();
+app.controller('GroupCtrl', function () {
+	
+});
 app.controller('HomeCtrl', ['homeFactory', 'projects', function (homeFactory, projects) {
 	var self = this;
 
@@ -145,9 +146,6 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', function (homeFactory, pr
 
 
 })();
-app.controller('GroupCtrl', function () {
-	
-});
 app.controller('NavCtrl', ['$location', function ($location) {
 
 	self.isActive = function (path) {
@@ -164,40 +162,33 @@ app.controller('NavCtrl', ['$location', function ($location) {
 
 }]);
 
-app.controller('ProjectCtrl', function () {
+app.controller('ProjectCtrl', ['project', function (project) {
+
+	var self = this;
+
+	self.project = project;
 	
-});
-app.config(['$routeProvider', function ($routeProvider) {
-  'use strict';
+}]);
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/project/project.html',
+      controller: 'ProjectCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        project: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getByProjectId(routeParams.projectid);
+          }]
+      }
+    };
 
-  var projectPage = {
-    templateUrl: '',
-    controller: '',
-    controllerAs: '',
-    // resolve: {
-    //   projects: ['',
-    //     function() {
-    //       return .list();
-    //     }
-    //   ]
-    // }
-  };
+    $routeProvider.when('/home/projects/:projectid', routeDefinition);
 
-  $routeProvider
-  .when('/', homePage)
-  // .when('/account', {   
-  //   templateUrl: '',
-  //   controller: '',
-  //   controllerAs: ''
-  // });
 }]);
 
 
 
-
-app.controller('SubmitCtrl', function () {
-	
-});
 app.factory('homeFactory', function () {
 
 	// var self = this;
@@ -252,6 +243,7 @@ app.factory('projectServices', ['$http', '$log',
     }
     function processAjaxPromise(p) {
       return p.then(function(result) {
+        console.log(result.data.data)
         return result.data.data;
       })
       .catch(function(error) {
@@ -265,15 +257,58 @@ app.factory('projectServices', ['$http', '$log',
         return get('/api/v1/projects');
       },
 
+      getByProjectId: function(projectId) {
+        return get('/api/v1/projects/' + projectId);
+      },
+
     };
   }
 ]);
 
+app.controller('SubmitCtrl', function () {
+
+	var self = this;
+
+	self.byNew = true;
+
+	self.setNew = function () {
+		self.byNew = true;
+	}
+
+	self.setPending = function () {
+		self.byNew = false;
+	}
+	
+});
 app.controller('Error404Ctrl', ['$location', function ($location) {
   this.message = 'Could not find: ' + $location.url();
 }]);
 
 
+app.config(['$routeProvider', function ($routeProvider) {
+  'use strict';
+
+  var homePage = {
+    templateUrl: 'static/home/home.html',
+    controller: 'HomeCtrl',
+    controllerAs: 'vm',
+    resolve: {
+      projects: ['projectServices',
+        function(projectServices) {
+          return projectServices.list();
+        }
+      ],
+      changeToCat: ['homeFactory',
+        function(homeFactory) {
+          homeFactory.setCategories();
+        }
+      ]
+    }
+  };
+
+  $routeProvider
+  .when('/home/categories', homePage)
+}]);
 app.controller('hpCtrl', function () {
 	var self = this;
 
@@ -294,6 +329,13 @@ app.controller('hpCtrl', function () {
 	  return {
 	    restrict: 'E',
 	    templateUrl: 'static/home/home-projects/home-names/home-names.html'
+	  };
+	});
+
+	app.directive('namesDetails', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-names/names-details.html'
 	  };
 	});
 
@@ -345,18 +387,18 @@ app.controller('hgCtrl', function () {
 	
 });
 app.controller('hnCtrl', function () {
-	var self = this;
+	// var self = this;
 
-	self.byNames = true;
+	// self.byNames = true;
 
-	self.setGroups = function () {
-		self.byNames = false;
-		console.log('hefy')
-	}
+	// self.setGroups = function () {
+	// 	self.byNames = false;
+	// 	console.log('hefy')
+	// }
 
-	self.setNames = function () {
-		self.byNames = true;
-		console.log('hey')
-	}
+	// self.setNames = function () {
+	// 	self.byNames = true;
+	// 	console.log('hey')
+	// }
 });
 //# sourceMappingURL=app.js.map
