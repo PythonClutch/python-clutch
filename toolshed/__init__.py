@@ -1,21 +1,13 @@
 from flask import Flask, render_template
 
 from . import models
-<<<<<<< HEAD
-from .extensions import db, migrate, config, oauth, assets
-=======
 from .extensions import db, migrate, config, oauth, assets, login_manager, bcrypt
->>>>>>> daily-build
 from .views.toolshed import toolshed
 from .views.toolshed_admin import toolshed_admin, MyAdminIndexView, MyView
 from .views.api import api
 from flask_admin.contrib import sqla
-<<<<<<< HEAD
-from flask.ext.admin import Admin
-=======
 from flask_admin import Admin
 
->>>>>>> daily-build
 
 
 SQLALCHEMY_DATABASE_URI = "postgres://localhost/toolshed"
@@ -30,27 +22,14 @@ def create_app():
     app.register_blueprint(toolshed_admin)
     app.register_blueprint(api, url_prefix="/api/v1")
 
-<<<<<<< HEAD
-    admin = Admin()
-=======
     admin = Admin(app, 'Example: Auth', index_view=MyAdminIndexView(), base_template='my_master.html')
->>>>>>> daily-build
 
     config.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
     oauth.init_app(app)
     assets.init_app(app)
-<<<<<<< HEAD
 
-    admin.add_view(sqla.ModelView(models.User, db.session))
-    admin.add_view(sqla.ModelView(models.Project, db.session))
-    admin.add_view(sqla.ModelView(models.Category, db.session))
-    admin.add_view(sqla.ModelView(models.Comment, db.session))
-    admin.add_view(sqla.ModelView(models.Group, db.session))
-
-    admin.init_app(app)
-=======
     bcrypt.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'toolshed_admin.login'
@@ -59,6 +38,5 @@ def create_app():
     admin.add_view(MyView(models.Category, db.session))
     admin.add_view(MyView(models.Comment, db.session))
     admin.add_view(MyView(models.Group, db.session))
->>>>>>> daily-build
 
     return app

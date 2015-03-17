@@ -21,15 +21,10 @@ oauth = OAuth()
 from flask.ext.assets import Environment
 assets = Environment()
 
-<<<<<<< HEAD
-from flask.ext.admin import Admin
-# admin = Admin()
-=======
 
 from flask.ext.bcrypt import Bcrypt
 bcrypt = Bcrypt()
 
->>>>>>> daily-build
 
 from flask.ext.marshmallow import Marshmallow
 ma = Marshmallow()
