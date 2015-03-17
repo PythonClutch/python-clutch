@@ -6,7 +6,6 @@ from toolshed.extensions import db as _db
 from toolshed.models import User
 
 
-
 TEST_DATABASE_URI = "postgres://localhost/testdb"
 TESTING = True
 DEBUG = False
