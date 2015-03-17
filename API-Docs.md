@@ -14,3 +14,17 @@
 | GET         | ```/api/v1/users/<int:id>/comments```        | Get comments made by user with user_id == id              |
 | GET         | ```/api/v1//projects/<int:id>/comments```    | Get comments on project with project_id == id             |
 | POST        | ```/api/v1//projects/<int:id>/comments```    | Create a comment on a project with current user as author |
+
+
+## Example usage
+
+### Send a GET to ```/users``` when there are no users
+Get back:
+```
+{
+    "data": {
+        "title": "There are no users."
+    },
+    "status": "fail"
+}
+```
