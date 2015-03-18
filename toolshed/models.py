@@ -157,7 +157,7 @@ class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
     class Meta:
         fields = ("id", "name", "github_url", "website",
-                  "pypi_url", "forks", "starred", "w atchers",
+                  "pypi_url", "forks", "starred", "watchers",
                   "age", "version", "last_commit", "open_issues",
                   "docs_url", "category_id", "comments")
 

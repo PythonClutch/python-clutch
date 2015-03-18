@@ -41,6 +41,11 @@ app.config(['$routeProvider', function ($routeProvider) {
         function(projectServices) {
           return projectServices.list();
         }
+      ],
+      setProj: ['homeFactory',
+        function(homeFactory) {
+          homeFactory.setProjects();
+        }
       ]
     }
   };
@@ -108,7 +113,7 @@ app.controller('AccountCtrl', function () {
 app.controller('GroupCtrl', function () {
 	
 });
-app.controller('HomeCtrl', ['homeFactory', 'projects', function (homeFactory, projects) {
+app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location', function (homeFactory, projects, stringUtil, $location) {
 	var self = this;
 
 	self.projects = projects;
@@ -124,6 +129,17 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', function (homeFactory, pr
 		homeFactory.setCategories();
 		self.byProjects = homeFactory.byProjects();
 	}
+
+    self.isActive = function (path) {
+      // The default route is a special case.
+      if (path === '/') {
+        return $location.path() === '/';
+      }
+
+      console.log('active')
+
+      return stringUtil.startsWith($location.path(), path);
+    };
 }]);
 (function () {
 	'use strict';
@@ -146,6 +162,15 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', function (homeFactory, pr
 
 
 })();
+$(function () {
+	console.log('test');
+
+	$('.home-category-tab').on('click', function () {
+		console.log('hey')
+		console.log($('#tab-category'))
+		$('#tab-category').attr('checked', true);
+	});
+});
 app.controller('NavCtrl', ['$location', function ($location) {
 
 	self.isActive = function (path) {
@@ -265,6 +290,17 @@ app.factory('projectServices', ['$http', '$log',
   }
 ]);
 
+// A little string utility... no biggie
+app.factory('stringUtil', function() {
+    return {
+        startsWith: function(str, subStr) {
+            str = str || '';
+            console.log(str);
+            console.log(subStr);
+            return str.slice(0, subStr.length) === subStr;
+        }
+    };
+});
 app.controller('SubmitCtrl', function () {
 
 	var self = this;
