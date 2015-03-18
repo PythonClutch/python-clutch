@@ -1,0 +1,10 @@
+<a ng-click="vm.setProjects()" href="">projects</a>
+<a ng-click="vm.setCategories()" href="">category</a>
+
+<div ng-show="vm.byProjects">
+<home-projects ng-controller="hpCtrl as hp"></home-projects>
+</div>
+
+<div ng-show="!vm.byProjects">
+	categories
+</div>
