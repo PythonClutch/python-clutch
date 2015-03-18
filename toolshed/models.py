@@ -46,29 +46,36 @@ class Likes(db.Model):
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    status = db.Column(db.Boolean)
     name = db.Column(db.String(255), nullable=False, unique=True)
-    github_url = db.Column(db.String(400))
-    website = db.Column(db.String(400))
-    pypi_url = db.Column(db.String(400))
+    summary = db.Column(db.String(400))
     forks = db.Column(db.Integer)
     starred = db.Column(db.Integer)
     watchers = db.Column(db.Integer)
+    watchers_url = db.Column(db.String)
     age = db.Column(db.DateTime)
-    version = db.Column(db.String(20))
+    current_version = db.Column(db.String(20))
     last_commit = db.Column(db.DateTime)
+    first_commit = db.Colum(db.DateTime)
     open_issues = db.Column(db.Integer)
-    issues_url = db.Column(db.String(400))
+    project_stub = db.Column(db.String(400))
+    number_of_contributors = db.Column(db.Integer)
+    website = db.Column(db.String(400))
+    github_url = db.Column(db.String(400))
+    pypi_url = db.Column(db.String(400))
+    contributors_url = db.Column(db.String(400))
+    mailing_list_url = db.Column(db.String(400))
+    forks_url = db.Column(db.String(400))
+    starred_url = db.Column(db.String)
+    open_issues_url = db.Column(db.String(400))
     docs_url = db.Column(db.String(400))
-
-    category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
-    group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
 
     comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project_id")
     user_likes = db.relationship("Likes", backref="project", lazy="dynamic", foreign_keys="Likes.project_id")
 
     @property
     def number_of_comments(self):
-        return len(Comments.query.filter_by(project_id=self.id).all())
+        return len(Comment.query.filter_by(project_id=self.id).all())
 
     @property
     def number_of_likes(self):
