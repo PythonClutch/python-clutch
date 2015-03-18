@@ -56,7 +56,7 @@ class Project(db.Model):
     age = db.Column(db.DateTime)
     current_version = db.Column(db.String(20))
     last_commit = db.Column(db.DateTime)
-    first_commit = db.Colum(db.DateTime)
+    first_commit = db.Column(db.DateTime)
     open_issues = db.Column(db.Integer)
     project_stub = db.Column(db.String(400))
     number_of_contributors = db.Column(db.Integer)
@@ -69,6 +69,9 @@ class Project(db.Model):
     starred_url = db.Column(db.String)
     open_issues_url = db.Column(db.String(400))
     docs_url = db.Column(db.String(400))
+
+    category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
 
     comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project_id")
     user_likes = db.relationship("Likes", backref="project", lazy="dynamic", foreign_keys="Likes.project_id")
