@@ -162,7 +162,8 @@ class ProjectSchema(Schema):
         fields = ("id", "name", "github_url", "website",
                   "pypi_url", "forks", "starred", "watchers",
                   "age", "version", "last_commit", "open_issues",
-                  "docs_url", "category_id", "comments")
+                  "docs_url", "category_id", "comments", "number_of_likes",
+                  "number_of_comments")
 
 
 class CategorySchema(Schema):
