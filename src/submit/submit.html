@@ -2,54 +2,49 @@
 <span class="submit-span" ng-click="vm.setPending()">pending</span>
 
 <form ng-show="vm.byNew">
-	<div class="new-input-div">
-		<p>Name</p>
-		<input type="text">
-	</div>
-	<div class="new-input-div">
-		<p>GitHub URL</p>
-		<input type="url">
-	</div>
-	<div class="new-input-div">
-		<p>PyPi URL</p>
-		<input type="url">
-	</div>
-	<div class="new-input-div">
-		<p>Website</p>
-		<input type="url">
-	</div>
-	<div class="new-input-div">
-		<p>Documenation</p>
-		<input type="url">
-	</div>
-	<div class="new-input-div">
-		<p>Source Code</p>
-		<input type="url">
-	</div>
-	<div class="new-input-div">
-		<p>Mailing List</p>
-		<input type="url">
-	</div>
-	<div class="new-input-div">
-		<p>Category</p>
-		<select>
-			<option value="{{user.id}}">active</option>
-		</select>
-		<p>Group</p>
-		<select>
-			<option value="{{user.id}}">support</option>
-		</select>
-	</div>
+	<new-project></new-project>
 	<input type="submit" value="Submit Project">
 </form>
 
-<div ng-show="!vm.byNew">
-
-	<div>
-		
-	</div>
-
-</div>
+<ul ng-show="!vm.byNew">
+	<a href="">edit</a>
+	<li>
+		<div class="pending-div">
+			<h6>Name:</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>GitHub URL:</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>PyPi URL</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>Website</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>Documenation</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>Source Code</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>Mailing List</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>Category</h6>
+			<p class="pending-p"></p>
+			<h6>Group</h6>
+			<p class="pending-p"></p>
+		</div>
+	</li>
+</ul>
 
 
 

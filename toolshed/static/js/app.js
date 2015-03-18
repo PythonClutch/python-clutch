@@ -280,6 +280,14 @@ app.controller('SubmitCtrl', function () {
 	}
 	
 });
+(function () {
+	app.directive('newProject', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/submit/new-project.html'
+	  };
+	});
+})();
 app.controller('Error404Ctrl', ['$location', function ($location) {
   this.message = 'Could not find: ' + $location.url();
 }]);
