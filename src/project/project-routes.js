@@ -1,27 +1,19 @@
-app.config(['$routeProvider', function ($routeProvider) {
-  'use strict';
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/project/project.html',
+      controller: 'ProjectCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        project: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getByProjectId(routeParams.projectid);
+          }]
+      }
+    };
 
-  var projectPage = {
-    templateUrl: '',
-    controller: '',
-    controllerAs: '',
-    // resolve: {
-    //   projects: ['',
-    //     function() {
-    //       return .list();
-    //     }
-    //   ]
-    // }
-  };
+    $routeProvider.when('/home/projects/:projectid', routeDefinition);
 
-  $routeProvider
-  .when('/', homePage)
-  // .when('/account', {   
-  //   templateUrl: '',
-  //   controller: '',
-  //   controllerAs: ''
-  // });
 }]);
-
 
 
