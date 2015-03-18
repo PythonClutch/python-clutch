@@ -6,6 +6,13 @@
 	  };
 	});
 
+	app.directive('namesDetails', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-names/names-details.html'
+	  };
+	});
+
 	app.directive('homeGroups', function() {
 	  return {
 	    restrict: 'E',

@@ -29,9 +29,13 @@ table {
 /*************************************************************
 ***** GENERAL *********
 *************************************************************/
-.home-projects-li {
+.home-project-li {
   width: 90%;
-  background: lightgray; }
+  background: lightgray;
+  margin: 20px 0; }
+
+.home-project-details-div {
+  padding: .4em; }
 
 .flex-row {
   display: -webkit-flex;
@@ -92,6 +96,37 @@ table {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap; }
 
+.home-project-content-p {
+  font-size: .6em; }
+
+.home-project-content {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
+
+.more-info-label {
+  float: right; }
+
+.more-info-input {
+  visibility: hidden; }
+
+/******************** comment *******************************/
+/*************************************************************
+***** comment *********
+*************************************************************/
+.submit-span {
+  cursor: pointer;
+  color: blue; }
+
 /******************** comment *******************************/
 @font-face {
   font-family: "fontastic";
@@ -102,6 +137,21 @@ table {
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important; }
+
+.yellow-bg {
+  background: lightyellow; }
+
+.pink-bg {
+  background: lightpink; }
+
+.green-bg {
+  background: lightgreen; }
+
+.gray-bg {
+  background: lightgray; }
+
+.coral-bg {
+  background: #ffd8b2; }
 
 body {
   font-family: sans-serif;
@@ -152,14 +202,6 @@ input, textarea {
   font-size: 1em;
   border: 1px solid #DDD;
   padding: 0.25em; }
-
-button {
-  display: inline-block;
-  padding: 0.25em 0.75em;
-  border: 0;
-  background: #54CC14;
-  color: white;
-  font-size: 1em; }
 
 .root-content {
   padding: 2em; }

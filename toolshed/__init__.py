@@ -38,6 +38,6 @@ def create_app():
     admin.add_view(MyView(models.Category, db.session))
     admin.add_view(MyView(models.Comment, db.session))
     admin.add_view(MyView(models.Group, db.session))
-    admin.add_view(MyView(models.Likes, db.session))
+    admin.add_view(MyView(models.Like, db.session))
 
     return app
