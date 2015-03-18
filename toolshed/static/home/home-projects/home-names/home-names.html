@@ -2,24 +2,8 @@
 
 <div>
 	<ul>
-		<li ng-repeat="project in vm.projects" class="home-projects-li">
-			<div class="home-project-basic-info flex-row">
-				<h4><a href="#/project">{{project.name}}</a></h4>
-				<div class="home-project-basic-info-right flex-row">
-					<div class="home-project-basic-info-like">likes</div>
-					<div class="home-project-basic-info-comment">comment</div>
-					<div class="home-project-basic-info-score">score</div>
-					<div class="home-project-basic-info-more">+</div>
-				</div>
-			</div>
-			<div class="home-project-links flex-row">
-				<a href="http://{{project.website}}">Website</a>
-				<a href="http://{{project.docs_url}}">PyDocs</a>
-				<a href="http://{{project.github_url}}">Source Code</a>
-				<a href="http://{{project.website}}">Mailing List</a>
-			</div>
-			<div class="home-project-pypy"><a href="">pypy</a></div>
-			<div class="home-project-pypy"><a href="">GitHub</a></div>
+		<li ng-repeat="project in vm.projects" class="home-project-li">
+			<names-details></names-details>
 		</li>
 	</ul>
 </div>

@@ -2,9 +2,14 @@
 ***** GENERAL *********
 *************************************************************/
 
-.home-projects-li {
+.home-project-li {
 	width: 90%;
 	background: lightgray; 
+	margin: 20px 0;
+}
+
+.home-project-details-div {
+	padding: .4em;
 }
 
 .flex-row {
@@ -39,4 +44,52 @@
 	flex-wrap: wrap;
 }
 
+.home-project-content-p {
+	font-size: .6em;
+}
+
+.home-project-content {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.home-project-github {
+	 
+}
+
+.more-info-label {
+	float: right;
+}
+
+.more-info-input {
+	visibility: hidden
+}
+
 /******************** comment *******************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
