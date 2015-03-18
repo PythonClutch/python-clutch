@@ -60,6 +60,7 @@ class Project(db.Model):
     first_commit = db.Column(db.DateTime)
     open_issues = db.Column(db.Integer)
     project_stub = db.Column(db.String(400))
+    total_downloads = db.Column(db.Integer)
     number_of_contributors = db.Column(db.Integer)
     website = db.Column(db.String(400))
     github_url = db.Column(db.String(400))
