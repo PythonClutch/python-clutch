@@ -6,7 +6,7 @@ from .views.toolshed import toolshed
 from .views.toolshed_admin import toolshed_admin, MyAdminIndexView, MyView
 from .views.api import api
 from flask_admin.contrib import sqla
-from flask_admin import Admin
+from flask_admin import Admin, BaseView
 
 
 
@@ -22,7 +22,7 @@ def create_app():
     app.register_blueprint(toolshed_admin)
     app.register_blueprint(api, url_prefix="/api/v1")
 
-    admin = Admin(app, 'Example: Auth', index_view=MyAdminIndexView(), base_template='my_master.html')
+    admin = Admin(app, 'Python Clutch Admin', index_view=MyAdminIndexView(), base_template='my_master.html')
 
     config.init_app(app)
     db.init_app(app)
@@ -38,5 +38,6 @@ def create_app():
     admin.add_view(MyView(models.Category, db.session))
     admin.add_view(MyView(models.Comment, db.session))
     admin.add_view(MyView(models.Group, db.session))
+    admin.add_view(MyView(models.Likes, db.session))
 
     return app

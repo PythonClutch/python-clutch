@@ -7,7 +7,6 @@ from flask.ext.login import UserMixin
 def load_admin(id):
     return Admin.query.get(id)
 
-
 """
 Models
 """
@@ -18,11 +17,31 @@ class User(db.Model):
     github_name = db.Column(db.String(255), nullable=False)
     github_url = db.Column(db.String(400))
     email = db.Column(db.String(255))
+
     comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id",
                                cascade="all,delete")
+    likes = db.relationship("Likes", backref="user", lazy="dynamic", foreign_keys="Likes.user_id")
 
     def __repr__(self):
         return "User: {}".format(self.github_name)
+
+
+class Likes(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
+
+    @property
+    def user_name(self):
+        return self.user.github_name
+
+    @property
+    def project_name(self):
+        return self.project.name
+
+    def __repr__(self):
+        return "{} likes {}".format(self.user.github_name, self.project.name)
+
 
 
 class Project(db.Model):
@@ -42,11 +61,21 @@ class Project(db.Model):
     docs_url = db.Column(db.String(400))
 
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
-    comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project_id",
-                               cascade="all,delete")
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
+
+    comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project_id")
+    user_likes = db.relationship("Likes", backref="project", lazy="dynamic", foreign_keys="Likes.project_id")
+
+    @property
+    def number_of_comments(self):
+        return len(Comments.query.filter_by(project_id=self.id).all())
+
+    @property
+    def number_of_likes(self):
+        return len(Likes.query.filter_by(project_id=self.id).all())
 
     def __repr__(self):
-        return "Project: {}".format(self.name)
+        return "{}".format(self.name)
 
 
 class Comment(db.Model):
@@ -54,11 +83,12 @@ class Comment(db.Model):
     text = db.Column(db.String(400))
     created = db.Column(db.DateTime)
 
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"))
-    project_id = db.Column(db.Integer, db.ForeignKey("project.id", ondelete="CASCADE"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
 
     def __repr__(self):
         return "Comment: {}".format(self.text)
+
 
 
 class Category(db.Model):
@@ -76,11 +106,11 @@ class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
 
+    projects = db.relationship("Project", backref="group", lazy="dynamic", foreign_keys="Project.group_id")
     categories = db.relationship("Category", backref="group", lazy="dynamic", foreign_keys="Category.group_id")
 
     def __repr__(self):
         return "Group: {}".format(self.name)
-
 
 class Admin(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -112,7 +142,6 @@ the ability to display the api endpoints.
 
 
 class CommentSchema(Schema):
-    text = fields.String(required=True)
     class Meta:
         fields = ("id", "text", "created", "user_id",
                   "project_id")
@@ -128,7 +157,7 @@ class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
     class Meta:
         fields = ("id", "name", "github_url", "website",
-                  "pypi_url", "forks", "starred", "watchers",
+                  "pypi_url", "forks", "starred", "w atchers",
                   "age", "version", "last_commit", "open_issues",
                   "docs_url", "category_id", "comments")
 
@@ -145,4 +174,6 @@ class GroupSchema(Schema):
         fields = ("id", "name", "categories")
 
 
-
+class LikeSchema(Schema):
+    class Meta:
+        fields = ("id", "user_id", "project_id", "user_name", "project_name")

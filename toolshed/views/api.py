@@ -1,7 +1,7 @@
 import json
 from ..models import (User, UserSchema, Project, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
-                      Group, GroupSchema)
+                      Group, GroupSchema, LikeSchema)
 from flask import Blueprint, jsonify, request, abort, url_for
 from ..extensions import db
 from .toolshed import require_login, current_user
@@ -24,7 +24,8 @@ single_category_schema = CategorySchema()
 all_categories_schema = CategorySchema(many=True)
 single_group_schema = GroupSchema()
 all_groups_schema = GroupSchema(many=True)
-
+single_like_schema = LikeSchema()
+all_likes_schema = LikeSchema(many=True)
 
 # response functions
 
@@ -186,7 +187,7 @@ def edit_comment(id):
 
 
 
-@api.route("/comments/<int:id>", methods=["Delete"])
+@api.route("/comments/<int:id>", methods=["DELETE"])
 def delete_comment(id):
     comment = Comment.query.get_or_404(id)
     db.session.delete(comment)
@@ -194,12 +195,39 @@ def delete_comment(id):
     return success_response(single_comment_schema, comment)
 
 
+@api.route("/likes/projects/<int:id>", methods=["POST"])
+def like_project(id):
+    project = Project.query.get_or_404(id)
+    user_name = current_user()
+    user = User.query.filter_by(github_name=user_name).first()
+    new_like = Likes(user_id=user.id,
+                     project_id=project.id)
+    db.session.add(new_like)
+    db.session.commit()
+    return success_response(single_like_schema, new_like)
 
 
+@api.route("/likes/<int:id>", methods=["DELETE"])
+def unlike_project(id):
+    like = Likes.query.get_or_404(id)
+    db.session.delete(like)
+    db.session.commit()
+    return success_response(single_like_schema, like)
 
 
+@api.route("/users/<int:id>/likes")
+def get_user_likes(id):
+    user = User.query.get_or_404(id)
+    if user.likes:
+        return success_response(all_likes_schema, user.likes)
+    else:
+        return failure_response("User has no likes", 404)
 
 
-
-
-
+@api.route("/projects/<int:id>/likes")
+def get_project_likes(id):
+    project = Project.query.get_or_404(id)
+    if project.user_likes:
+        return success_response(all_likes_schema, project.user_likes)
+    else:
+        return failure_response("Project has no likes.", 404)

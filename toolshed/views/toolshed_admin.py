@@ -9,8 +9,6 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 toolshed_admin = Blueprint("toolshed_admin", __name__)
 
 
-
-
 class MyView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated()
@@ -18,18 +16,6 @@ class MyView(ModelView):
     def _handle_view(self, name, **kwargs):
         if not self.is_accessible():
             return redirect(url_for('login', next=request.url))
-
-
-# @toolshed_admin.route("/admin/login", methods=["GET", "POST"])
-# def admin_login():
-#     form = AdminLogin()
-#     if form.validate_on_submit():
-#         admin = models.Admin.query.filter_by(admin_name=form.login_name.data).first()
-#         if admin and admin.check_password(form.password.data):
-#             login_user(admin)
-#
-#     return render_template("admin_login.html", form=form)
-
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -51,10 +37,8 @@ class MyAdminIndexView(AdminIndexView):
                 return redirect(url_for(".index"))
         return render_template("admin_login.html", form=form)
 
+
     @expose("/logout")
     def logout_view(self):
         logout_user()
         return redirect(url_for(".admin_login"))
-
-
-
