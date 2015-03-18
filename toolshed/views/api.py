@@ -1,5 +1,5 @@
 import json
-from ..models import (User, UserSchema, Project, ProjectSchema,
+from ..models import (User, UserSchema, Project, Likes, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
                       Group, GroupSchema, LikeSchema)
 from flask import Blueprint, jsonify, request, abort, url_for
