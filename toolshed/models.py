@@ -20,13 +20,14 @@ class User(db.Model):
 
     comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id",
                                cascade="all,delete")
-    likes = db.relationship("Likes", backref="user", lazy="dynamic", foreign_keys="Likes.user_id")
+    like = db.relationship("Like", backref="user", lazy="dynamic", foreign_keys="Like.user_id",
+                           cascade="all,delete")
 
     def __repr__(self):
         return "User: {}".format(self.github_name)
 
 
-class Likes(db.Model):
+class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
@@ -73,8 +74,10 @@ class Project(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
 
-    comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project_id")
-    user_likes = db.relationship("Likes", backref="project", lazy="dynamic", foreign_keys="Likes.project_id")
+    comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project_id",
+                               cascade="all,delete")
+    user_likes = db.relationship("Like", backref="project", lazy="dynamic", foreign_keys="Like.project_id",
+                                 cascade="all,delete")
 
     @property
     def number_of_comments(self):
@@ -82,7 +85,7 @@ class Project(db.Model):
 
     @property
     def number_of_likes(self):
-        return len(Likes.query.filter_by(project_id=self.id).all())
+        return len(Like.query.filter_by(project_id=self.id).all())
 
     def __repr__(self):
         return "{}".format(self.name)
@@ -167,7 +170,7 @@ class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
     class Meta:
         fields = ("id", "name", "github_url", "website",
-                  "pypi_url", "forks", "starred", "w atchers",
+                  "pypi_url", "forks", "starred", "watchers",
                   "age", "version", "last_commit", "open_issues",
                   "docs_url", "category_id", "comments")
 
