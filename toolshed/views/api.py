@@ -231,10 +231,6 @@ def get_project_likes(id):
 
 
 
-@api.route("/projects", methods=["POST"])
-def make_project():
-    urls = request.get_json()
-
 
 
 
