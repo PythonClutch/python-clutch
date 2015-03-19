@@ -1,8 +1,35 @@
 <!-- <div class="full"> -->
 <!-- <div> -->
+
+<input type="search" placeholder="search projects">
+<i class="fa fa-search"></i>
+<h6>or browse by filter below</h6>
+
+<div class="home-project-a-div">
 	<a class="home-project-a" ng-click="hp.setNames()" href="">by name</a>
 	<a class="home-project-a" ng-click="hp.setGroups()" href="">by group</a>
+</div>
 <!-- </div> -->
-	<home-groups ng-show="!hp.byNames"></home-groups>
-	<home-names ng-show="hp.byNames"></home-names>
+
+<div class="home-project-filter">
+	<label for="hp-filter-popular">
+		<input type="radio">
+		Popular
+	</label>
+	<label for="hp-filter-newest">
+		<input type="radio">
+		Newest
+	</label>
+	<label for="hp-filter-trending">
+		<input type="radio">
+		Trending		
+	</label>
+	<label for="hp-filter-list">
+		<input type="radio">
+		List		
+	</label>
+</div>
+
+<home-groups ng-show="!hp.byNames"></home-groups>
+<home-names ng-show="hp.byNames"></home-names>
 <!-- </div> -->

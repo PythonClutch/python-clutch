@@ -5,9 +5,9 @@ app.controller('AccountCtrl', function () {
 
 	self.setInfo = function () {
 		self.byInfo = true;
-	}
+	};
 
 	self.setActivity = function () {
 		self.byInfo = false;
-	}
+	};
 });
