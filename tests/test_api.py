@@ -23,6 +23,13 @@ def test_get_empty_projects(client, db):
     assert response_data["data"]["title"] == "There are no projects."
 
 
+def test_get_project_list(client, project):
+    response = client.get("api/v1/projects")
+    response_data = json.loads(response.get_data().decode("utf-8"))
+    project_data = response_data["data"][0]
+
+    assert project_data['name'] == project.name
+
 def test_get_project(client, project):
     response = client.get("api/v1/projects/" + str(project.id))
     response_data = json.loads(response.get_data().decode("utf-8"))
