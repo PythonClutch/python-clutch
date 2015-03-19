@@ -5,11 +5,12 @@
 .home-project-li {
 	width: 90%;
 	background: lightgray; 
-	margin: 20px 0;
+	margin: 20px auto;
 }
 
 .home-project-details-div {
 	padding: .4em;
+	background: red;
 }
 
 .flex-row {
@@ -59,17 +60,48 @@
 	 
 }
 
+.more-info-input {
+	visibility: hidden
+}
+
+.home-project-a {
+	margin: 0 1%;
+}
+
+/******************** comment *******************************/
+
+/*************************************************************
+***** SHOW DETAILS *********
+*************************************************************/
+
+.home-project-basic-info-plus {
+	cursor: pointer;
+}
+
+.names-details-checkbox:checked ~ .home-project-details-div {
+	background: blue; 
+}
+
+/****************** PROJECT DETAILS *******************************/
+
 .more-info-label {
-	float: right;
+/*	float: right;*/
+	text-align: right;
+	margin-left: 70%;
+	cursor: pointer;
+}
+
+.fa-long-arrow-down {
+	font-size: 70%;
 }
 
 .more-info-input {
 	visibility: hidden
 }
 
-/******************** comment *******************************/
-
-
+/*// .home-project-details-div {
+// 	padding: .4em;
+// }*/
 
 
 
