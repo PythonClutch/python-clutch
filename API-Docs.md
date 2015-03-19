@@ -12,8 +12,15 @@
 | GET         | ```/api/v1/groups```                         | Get a list of all groups                                  |
 | GET         | ```/api/v1/groups/<int:id>/categories```     | Get group with group_id == id                             |
 | GET         | ```/api/v1/users/<int:id>/comments```        | Get comments made by user with user_id == id              |
-| GET         | ```/api/v1//projects/<int:id>/comments```    | Get comments on project with project_id == id             |
-| POST        | ```/api/v1//projects/<int:id>/comments```    | Create a comment on a project with current user as author |
+| GET         | ```/api/v1/projects/<int:id>/comments```     | Get comments on project with project_id == id             |
+| POST        | ```/api/v1/projects/<int:id>/comments```     | Create a comment on a project with current user as author |
+| PUT         | ```/api/v1/comments/<int:id>```              | Edit a comment with comment_id == id                      |
+| DELETE      | ```/api/v1/comments/<int:id>```              | Delete a comment with comment_id == id                    |
+| POST        | ```/api/v1/likes/projects/<int:id>```        | Like a project                                            |
+| DELETE      | ```/api/v1/likes/<int:id>```                 | Delete a like on a project with like_id == id             |
+| GET         | ```/api/v1/users/<int:id>/likes```           | Get the likes for a user with user_id == id               |
+| GET         | ```/api/v1/projects/<int:id>/likes```        | Get the likes for a project with project_id == id         |
+| POST        | ```/api/v1/projects```                       | Submit a new project                                      |
 
 
 ## Example usage

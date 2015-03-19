@@ -23,12 +23,12 @@ def github_populate(proj_dict, github_url):
     proj_dict['project_stub'] = project_stub
     proj_dict['starred_count'] = github_info['stargazers_count']
     proj_dict['watchers_count'] = github_info['watchers_count']
-    proj_dict['watchers_count'] = github_url + "/watchers"
+    proj_dict['watchers_url'] = github_url + "/watchers"
     proj_dict['last_commit'] = datetime.datetime.strptime(github_info['updated_at'], "%Y-%m-%dT%H:%M:%SZ")
     proj_dict['first_commit'] = datetime.datetime.strptime(github_info['created_at'], "%Y-%m-%dT%H:%M:%SZ")
     proj_dict['open_issues_count'] = github_info['open_issues_count']
     contributors = requests.get(github_info['contributors_url']).json()
-    proj_dict['contributors_count'] = len(contributors.items())
+    proj_dict['contributors_count'] = len(contributors)
     proj_dict['contributors_url'] = github_info['contributors_url']
     proj_dict['forks_url'] = github_url + "/network"
     proj_dict['starred_url'] = github_url + "/stargazers"
@@ -45,7 +45,7 @@ def python_three_check(pypi):
     return python_three in pypi['info']['classifiers']
 
 
-def create_project(pypi_url, github_url=None, docs_url=None):
+def create_project(pypi_url=None, github_url=None, docs_url=None):
     proj_dict = {}
     pypi_api = pypi_url + "/json"
     pypi_info = requests.get(pypi_api).json()
@@ -53,8 +53,8 @@ def create_project(pypi_url, github_url=None, docs_url=None):
     if github_url:
         proj_dict = github_populate(proj_dict, github_url)
     else:
-        if github_match_regex.search(pypi_info['website']):
-            github_url = pypi_info['website']
+        if github_match_regex.search(pypi_info["info"]['home_page']):
+            github_url = pypi_info["info"]['home_page']
             proj_dict = github_populate(proj_dict, github_url)
 
     proj_dict['name'] = pypi_info['info']['name']
@@ -62,19 +62,19 @@ def create_project(pypi_url, github_url=None, docs_url=None):
     proj_dict['website'] = pypi_info['info']['home_page']
     proj_dict['summary'] = pypi_info['info']['summary']
     proj_dict['downloads_count'] = get_total_downloads(pypi_info)
-    proj_dict['python3_compatible'] = python_three_check(pypi_info)
+    proj_dict['python_three_compatible'] = python_three_check(pypi_info)
+    proj_dict['status'] = False
+
+
 
     if docs_url:
         proj_dict['docs_url'] = docs_url
 
     else:
-        if pypi_info['docs_url']:
-            proj_dict['docs_url'] = pypi_info['docs_url']
+        if pypi_info['info']['docs_url']:
+            proj_dict['docs_url'] = pypi_info['info']['docs_url']
 
     proj_dict['pypi_url'] = pypi_url
 
     project = Project(**proj_dict)
     return project
-
-
-
