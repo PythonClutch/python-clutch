@@ -234,10 +234,7 @@ def get_project_likes(id):
 @api.route("/projects", methods=["POST"])
 def make_project():
     urls = request.get_json()
-
-
-
-
-
-
-
+    project = create_project(**urls)
+    db.session.add(project)
+    db.session.commit()
+    return success_response(single_project_schema, project)
