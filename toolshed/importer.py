@@ -62,7 +62,7 @@ def create_project(pypi_url, github_url=None, docs_url=None):
     proj_dict['website'] = pypi_info['info']['home_page']
     proj_dict['summary'] = pypi_info['info']['summary']
     proj_dict['downloads_count'] = get_total_downloads(pypi_info)
-    proj_dict['python3_compatible'] = python_three_check(pypi_info)
+    proj_dict['python_three_compatible'] = python_three_check(pypi_info)
 
     if docs_url:
         proj_dict['docs_url'] = docs_url
