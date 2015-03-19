@@ -170,14 +170,22 @@ class UserSchema(Schema):
         fields = ("id", "github_name", "github_url", "email", "comments")
 
 
+class LikeSchema(Schema):
+    class Meta:
+        fields = ("id", "user_id", "project_id", "user_name", "project_name")
+
 class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
+    user_likes = fields.Nested(LikeSchema, many=True)
     class Meta:
-        fields = ("id", "name", "github_url", "website",
-                  "pypi_url", "forks", "starred", "watchers",
-                  "age", "version", "last_commit", "open_issues",
-                  "docs_url", "category_id", "comments", "number_of_likes",
-                  "number_of_comments")
+        fields = ("id", "status", "name", "summary", "forks_count",
+                  "starred_count", "watchers_count", "watchers_url",
+                  "age", "current_version", "last_commit", "first_commit",
+                  "open_issues_count", "project_stub", "downloads_count",
+                  "contributors_count", "python_three_compatible", "website",
+                  "github_url", "pypi_url", "contributors_url", "mailing_list_url",
+                  "forks_url", "starred_url", "open_issues_url", "docs_url",
+                  "category_id", "group_id", "comments", "user_likes" )
 
 
 class CategorySchema(Schema):
@@ -191,7 +199,3 @@ class GroupSchema(Schema):
     class Meta:
         fields = ("id", "name", "categories")
 
-
-class LikeSchema(Schema):
-    class Meta:
-        fields = ("id", "user_id", "project_id", "user_name", "project_name")
