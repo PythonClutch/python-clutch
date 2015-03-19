@@ -6,6 +6,7 @@ from flask import Blueprint, jsonify, request, abort, url_for
 from ..extensions import db
 from .toolshed import require_login, current_user
 from datetime import datetime
+from ..importer import create_project
 
 
 api = Blueprint('api', __name__)
@@ -227,3 +228,13 @@ def get_project_likes(id):
         return success_response(all_likes_schema, project.user_likes)
     else:
         return failure_response("Project has no likes.", 404)
+
+
+
+@api.route("/projects", methods=["POST"])
+def make_project():
+    urls = request.get_json()
+    project = create_project(**urls)
+    db.session.add(project)
+    db.session.commit()
+    return success_response(single_project_schema, project)
