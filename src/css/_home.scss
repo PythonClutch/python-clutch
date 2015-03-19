@@ -1,0 +1,60 @@
+/************************************************************
+***** GENERAL *********
+*************************************************************/
+
+.home-set {
+	width: 90%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+// .home-set-a {
+// 	float: left;
+// 	text-decoration: none;
+//     display: block;
+//     // padding: 14px 21px;
+//     border-radius: 2px 2px 0 0;
+//     // font-size: 20px;
+//     // font-weight: normal;
+//     // text-transform: uppercase;
+//     background: lightgreen;
+//     cursor: pointer;
+//     top: 4px; 
+//     // @include transition(all 0.2s ease-in-out);
+//     &:hover {
+//       background: darken(lightgreen, 10);
+//     }
+// }
+
+.home-set-a.active {
+	background: red;
+	color: blue;
+}
+
+.home-set-section {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+	width: 100%;
+}
+
+// .home-set-a-div {
+// 	float: left;
+// 	display: block;
+// }
+
+
+/*************************************************************
+***** TABS *********
+*************************************************************/
+
+
+
+
+
+
+
+
+
+/******************** comment ******************************

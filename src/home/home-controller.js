@@ -1,4 +1,4 @@
-app.controller('HomeCtrl', ['homeFactory', 'projects', function (homeFactory, projects) {
+app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location', function (homeFactory, projects, stringUtil, $location) {
 	var self = this;
 
 	self.projects = projects;
@@ -14,4 +14,15 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', function (homeFactory, pr
 		homeFactory.setCategories();
 		self.byProjects = homeFactory.byProjects();
 	}
+
+    self.isActive = function (path) {
+      // The default route is a special case.
+      if (path === '/') {
+        return $location.path() === '/';
+      }
+
+      console.log('active')
+
+      return stringUtil.startsWith($location.path(), path);
+    };
 }]);
