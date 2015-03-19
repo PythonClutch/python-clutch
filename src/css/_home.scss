@@ -1,6 +1,8 @@
-/************************************************************
-***** GENERAL *********
-*************************************************************/
+/////////////////////////////////////////////////////////////
+// GENERAL
+/////////////////////////////////////////////////////////////
+
+/////////////// COMMENT /////////////////////////////////////
 
 .home-set {
 	width: 90%;
@@ -8,35 +10,52 @@
 	text-align: center;
 }
 
-// .home-set-a {
-// 	float: left;
-// 	text-decoration: none;
-//     display: block;
-//     // padding: 14px 21px;
-//     border-radius: 2px 2px 0 0;
-//     // font-size: 20px;
-//     // font-weight: normal;
-//     // text-transform: uppercase;
-//     background: lightgreen;
-//     cursor: pointer;
-//     top: 4px; 
-//     // @include transition(all 0.2s ease-in-out);
-//     &:hover {
-//       background: darken(lightgreen, 10);
-//     }
-// }
+.home-set-a {
+	box-shadow: 0px -3px 7px -3px #b8b8b8;
+	// float: left;
+	text-decoration: none;
+    display: block;
+    padding: 14px 18px;
+    border-radius: 2px 2px 0 0;
+    // font-size: 20px;
+    // font-weight: normal;
+    // text-transform: uppercase;
+    background: $tab-color;
+    cursor: pointer;
+    margin-top: 2px; 
+    // @include transition(all 0.2s ease-in-out);
+    &:hover {
+      background: lighten($tab-color, 4);
+    }
+}
 
 .home-set-a.active {
-	background: red;
-	color: blue;
+	box-shadow: 0px -4px 11px -3px #b8b8b8;
+	background: $bg-color;
+	padding: 15px 18px;
+	margin-top: 0;
+}
+
+.home-set-a:last-of-type {
+	margin-right: 15px; 
 }
 
 .home-set-section {
+	margin-top: -46px; 
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
 	flex-wrap: wrap;
 	width: 100%;
+	z-index: 3;
+	position: absolute;
+}
+
+.home-project-a-div {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
 }
 
 // .home-set-a-div {
@@ -45,16 +64,3 @@
 // }
 
 
-/*************************************************************
-***** TABS *********
-*************************************************************/
-
-
-
-
-
-
-
-
-
-/******************** comment ******************************

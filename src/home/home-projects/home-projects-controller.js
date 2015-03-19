@@ -5,11 +5,9 @@ app.controller('hpCtrl', function () {
 
 	self.setGroups = function () {
 		self.byNames = false;
-		console.log('hefy')
-	}
+	};
 
 	self.setNames = function () {
 		self.byNames = true;
-		console.log('hey')
-	}
+	};
 });

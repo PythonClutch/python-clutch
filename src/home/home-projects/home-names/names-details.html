@@ -1,5 +1,5 @@
 
-<input class="names-details-checkbox" id="names-details-checkbox" type="checkbox">
+<input id="names-details-checkbox" type="checkbox">
 
 <div class="home-project-basic-info flex-row yellow-bg">
 	<h4><a href="#/home/projects/{{project.id}}">{{project.name}}</a></h4>
@@ -16,7 +16,7 @@
 		<a href="http://{{project.website}}">Website</a>
 		<a href="http://{{project.docs_url}}">PyDocs</a>
 		<a href="http://{{project.github_url}}">Source Code</a>
-		<a href="http://{{project.website}}">Mailing List</a>
+		<a href="http://{{project.mailing_list_url}}">Mailing List</a>
 	</div>
 	<div class="home-project-pypi green-bg">
 		<input class="more-info-input" id="more-info-pypi" type="checkbox">
@@ -30,10 +30,10 @@
 				</div>
 				<div>
 					<h5>Downloads</h5>
-					<p class="home-project-header-p">##</p>
+					<p class="home-project-header-p">{{project.downloads_count}}</p>
 				</div>
 			</div>
-			<label class="more-info-label" for="more-info-github">more info <i class="fa fa-long-arrow-down"></i></label>
+			<label class="more-info-label" for="more-info-pypi">more info <i class="fa fa-long-arrow-down"></i></label>
 		</div>
 		<div class="home-project-content">
 			<div class="home-project-content-div">
@@ -66,14 +66,14 @@
 				<a href="{{project.github_url}}">gh repo</a>
 				<div>
 					<h5>Forks</h5>
-					<p class="home-project-header-p">{{project.forks}}</p>
+					<p class="home-project-header-p">{{project.forks_count}}</p>
 				</div>
 				<div>
 					<h5>Issues</h5>
-					<p class="home-project-header-p">{{project.open_issues}}</p>
+					<p class="home-project-header-p">{{project.open_issues_count}}</p>
 				</div>
 			</div>
-			<label class="more-info-label" for="more-info-github">more info <i>arrow</i></label>
+			<label class="more-info-label" for="more-info-github">more info <i class="fa fa-long-arrow-down"></i></label>
 		</div>
 		<div class="home-project-content">
 			<div class="home-project-content-div">
@@ -86,15 +86,15 @@
 			</div>
 			<div class="home-project-content-div">
 				<h6 class="home-project-content-header">Last commit</h6>
-				<p class="home-project-content-p">##</p>
+				<p class="home-project-content-p">{{project.last_commit}}</p>
 			</div>
 			<div class="home-project-content-div">
 				<h6 class="home-project-content-header">First commit</h6>
-				<p class="home-project-content-p">##</p>
+				<p class="home-project-content-p">{{project.first_commit}}</p>
 			</div>
 			<div class="home-project-content-div">
 				<h6 class="home-project-content-header">Contributors</h6>
-				<p class="home-project-content-p">##</p>
+				<p class="home-project-content-p">{{project.contributors_count}}</p>
 			</div>
 		</div>
 	</div>
