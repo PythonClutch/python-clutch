@@ -6,10 +6,10 @@ app.controller('SubmitCtrl', function () {
 
 	self.setNew = function () {
 		self.byNew = true;
-	}
+	};
 
 	self.setPending = function () {
 		self.byNew = false;
-	}
+	};
 	
 });
