@@ -110,9 +110,6 @@ app.controller('AccountCtrl', function () {
 	  };
 	});
 })();
-app.controller('GroupCtrl', function () {
-	
-});
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location', function (homeFactory, projects, stringUtil, $location) {
 	var self = this;
 
@@ -171,6 +168,25 @@ $(function () {
 		$('#tab-category').attr('checked', true);
 	});
 });
+app.controller('GroupCtrl', function () {
+	
+});
+app.controller('NavCtrl', ['$location', function ($location) {
+
+	self.isActive = function (path) {
+	  // The default route is a special case.
+	  if (path === '/') {
+	    return $location.path() === '/';
+	  }
+
+	  return function () {
+	  	// $location.path() = $location.path() || '';
+        return $location.path().slice(0, path.length) === path;
+	  };
+	};
+
+}]);
+
 app.controller('ProjectCtrl', ['project', function (project) {
 
 	var self = this;
@@ -198,45 +214,6 @@ app.config(['$routeProvider', function($routeProvider) {
 
 
 
-app.controller('NavCtrl', ['$location', function ($location) {
-
-	self.isActive = function (path) {
-	  // The default route is a special case.
-	  if (path === '/') {
-	    return $location.path() === '/';
-	  }
-
-	  return function () {
-	  	// $location.path() = $location.path() || '';
-        return $location.path().slice(0, path.length) === path;
-	  };
-	};
-
-}]);
-
-app.controller('SubmitCtrl', function () {
-
-	var self = this;
-
-	self.byNew = true;
-
-	self.setNew = function () {
-		self.byNew = true;
-	}
-
-	self.setPending = function () {
-		self.byNew = false;
-	}
-	
-});
-(function () {
-	app.directive('newProject', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/submit/new-project.html'
-	  };
-	});
-})();
 app.factory('homeFactory', function () {
 
 	// var self = this;
@@ -324,6 +301,29 @@ app.factory('stringUtil', function() {
         }
     };
 });
+app.controller('SubmitCtrl', function () {
+
+	var self = this;
+
+	self.byNew = true;
+
+	self.setNew = function () {
+		self.byNew = true;
+	}
+
+	self.setPending = function () {
+		self.byNew = false;
+	}
+	
+});
+(function () {
+	app.directive('newProject', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/submit/new-project.html'
+	  };
+	});
+})();
 app.controller('Error404Ctrl', ['$location', function ($location) {
   this.message = 'Could not find: ' + $location.url();
 }]);
