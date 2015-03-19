@@ -68,7 +68,7 @@ def create_project(pypi_url, github_url=None, docs_url=None):
         proj_dict['docs_url'] = docs_url
 
     else:
-        if pypi_info['docs_url']:
+        if pypi_info['info']['docs_url']:
             proj_dict['docs_url'] = pypi_info['info']['docs_url']
 
     proj_dict['pypi_url'] = pypi_url
