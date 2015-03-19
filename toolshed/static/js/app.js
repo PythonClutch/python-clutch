@@ -427,6 +427,9 @@ app.factory('homeFactory', function () {
 	};
 
 });
+app.controller('hgCtrl', function () {
+	
+});
 app.controller('hnCtrl', function () {
 	// var self = this;
 
@@ -441,8 +444,5 @@ app.controller('hnCtrl', function () {
 	// 	self.byNames = true;
 	// 	console.log('hey')
 	// }
-});
-app.controller('hgCtrl', function () {
-	
 });
 //# sourceMappingURL=app.js.map
