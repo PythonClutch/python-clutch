@@ -23,7 +23,7 @@ def github_populate(proj_dict, github_url):
     proj_dict['project_stub'] = project_stub
     proj_dict['starred_count'] = github_info['stargazers_count']
     proj_dict['watchers_count'] = github_info['watchers_count']
-    proj_dict['watchers_count'] = github_url + "/watchers"
+    proj_dict['watchers_url'] = github_url + "/watchers"
     proj_dict['last_commit'] = datetime.datetime.strptime(github_info['updated_at'], "%Y-%m-%dT%H:%M:%SZ")
     proj_dict['first_commit'] = datetime.datetime.strptime(github_info['created_at'], "%Y-%m-%dT%H:%M:%SZ")
     proj_dict['open_issues_count'] = github_info['open_issues_count']
