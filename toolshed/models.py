@@ -172,6 +172,7 @@ class UserSchema(Schema):
 
 class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
+    user_likes = fields.Nested(LikeSchema, many=True)
     class Meta:
         fields = ("id", "status", "name", "summary", "forks_count",
                   "starred_count", "watchers_count", "watchers_url",
@@ -179,7 +180,8 @@ class ProjectSchema(Schema):
                   "open_issues_count", "project_stub", "downloads_count",
                   "contributors_count", "python_three_compatible", "website",
                   "github_url", "pypi_url", "contributors_url", "mailing_list_url",
-                  "forks_url", "starred_url", "open_issues_url", "docs_url")
+                  "forks_url", "starred_url", "open_issues_url", "docs_url",
+                  "category_id", "group_id", "comments", "user_likes" )
 
 
 class CategorySchema(Schema):
