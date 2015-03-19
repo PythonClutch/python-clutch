@@ -10,6 +10,11 @@ app.config(['$routeProvider', function ($routeProvider) {
         function(projectServices) {
           return projectServices.list();
         }
+      ],
+      setProj: ['homeFactory',
+        function(homeFactory) {
+          homeFactory.setProjects();
+        }
       ]
     }
   };

@@ -3,7 +3,8 @@ import pytest
 
 from toolshed import create_app
 from toolshed.extensions import db as _db
-from toolshed.models import User
+from toolshed.models import User, Project
+from toolshed.importer import create_project
 
 
 TEST_DATABASE_URI = "postgres://localhost/testdb"
@@ -32,8 +33,6 @@ def db(app, request):
     return _db
 
 
-
-
 @pytest.fixture
 def user(db):
     user = User(github_name="cndreisbach",
@@ -42,3 +41,11 @@ def user(db):
     db.session.add(user)
     db.session.commit()
     return user
+
+
+@pytest.fixture
+def project(db):
+    project = create_project("https://pypi.python.org/pypi/pandas", github_url="https://github.com/pydata/pandas")
+    db.session.add(project)
+    db.session.commit()
+    return project
