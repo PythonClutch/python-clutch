@@ -187,6 +187,33 @@ app.controller('NavCtrl', ['$location', function ($location) {
 
 }]);
 
+app.controller('ProjectCtrl', ['project', function (project) {
+
+	var self = this;
+
+	self.project = project;
+	
+}]);
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/project/project.html',
+      controller: 'ProjectCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        project: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getByProjectId(routeParams.projectid);
+          }]
+      }
+    };
+
+    $routeProvider.when('/home/projects/:projectid', routeDefinition);
+
+}]);
+
+
+
 app.factory('homeFactory', function () {
 
 	// var self = this;
@@ -274,33 +301,6 @@ app.factory('stringUtil', function() {
         }
     };
 });
-app.controller('ProjectCtrl', ['project', function (project) {
-
-	var self = this;
-
-	self.project = project;
-	
-}]);
-app.config(['$routeProvider', function($routeProvider) {    
-    var routeDefinition = {
-      templateUrl: 'static/project/project.html',
-      controller: 'ProjectCtrl',
-      controllerAs: 'vm',
-      resolve: {
-        project: ['$route', 'projectServices',
-          function($route, projectServices) {
-            var routeParams = $route.current.params;
-            return projectServices.getByProjectId(routeParams.projectid);
-          }]
-      }
-    };
-
-    $routeProvider.when('/home/projects/:projectid', routeDefinition);
-
-}]);
-
-
-
 app.controller('SubmitCtrl', function () {
 
 	var self = this;
@@ -427,9 +427,6 @@ app.factory('homeFactory', function () {
 	};
 
 });
-app.controller('hgCtrl', function () {
-	
-});
 app.controller('hnCtrl', function () {
 	// var self = this;
 
@@ -444,5 +441,8 @@ app.controller('hnCtrl', function () {
 	// 	self.byNames = true;
 	// 	console.log('hey')
 	// }
+});
+app.controller('hgCtrl', function () {
+	
 });
 //# sourceMappingURL=app.js.map
