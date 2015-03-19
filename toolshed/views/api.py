@@ -7,6 +7,7 @@ from ..extensions import db
 from .toolshed import require_login, current_user
 from datetime import datetime
 from ..importer import create_project
+from ..updater import update_projects
 
 
 api = Blueprint('api', __name__)
@@ -89,7 +90,16 @@ def project(id):
         return failure_response("There was no such project.", 404)
 
 
-#category routes
+@api.route("/projects", methods=["POST"])
+def make_project():
+    urls = request.get_json()
+    project = create_project(**urls)
+    db.session.add(project)
+    db.session.commit()
+    return success_response(single_project_schema, project)
+
+
+# Category routes
 
 @api.route("/categories")
 def all_categories():
@@ -191,6 +201,7 @@ def delete_comment(id):
     db.session.commit()
     return success_response(single_comment_schema, comment)
 
+# Like Routes
 
 @api.route("/likes/projects/<int:id>", methods=["POST"])
 def like_project(id):
@@ -229,11 +240,11 @@ def get_project_likes(id):
     else:
         return failure_response("Project has no likes.", 404)
 
-@api.route("/projects", methods=["POST"])
-def make_project():
-    urls = request.get_json()
-    project = create_project(**urls)
-    db.session.add(project)
-    db.session.commit()
-    return success_response(single_project_schema, project)
+
+@api.route("/projects/update")
+def update_call():
+    projects = Project.query.all()
+    update_projects(projects)
+    return success_response()
+
 
