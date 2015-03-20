@@ -3,6 +3,7 @@ import re
 from datetime import datetime
 from .extensions import db
 from .importer import get_total_downloads, parse_github_url
+from .models import ProjectLog
 
 
 github_search_regex = re.compile('github.com/(.*)')
@@ -42,6 +43,7 @@ def update_pypi(project):
 
 
 def update_github(project):
+    log_project(project)
     github_api, project_stub = parse_github_url(project.github_url)
     github_info = requests.get(github_api).json()
     update_fields = [[project.forks_count, github_info['forks_count']],
@@ -55,3 +57,21 @@ def update_github(project):
     if True in field_update:
         return True
     return False
+
+
+def log_project(project):
+
+    proj_log = {}
+    proj_log["forks_count"] = project.forks_count
+    proj_log["starred_count"] = project.starred_count
+    proj_log["watchers_count"] = project.watchers_count
+    proj_log["current_version"] = project.current_version
+    proj_log["last_commit"] = project.last_commit
+    proj_log["open_issues_count"] = project.open_issues_count
+    proj_log["downloads_count"] = project.downloads_count
+    proj_log["contributors_count"] = project.contributors_count
+    proj_log["log_date"] = datetime.today()
+    project_log = ProjectLog(**proj_log)
+    project.append(project_log)
+    db.session.add(project_log)
+    db.session.commit()
