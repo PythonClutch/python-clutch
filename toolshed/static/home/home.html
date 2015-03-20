@@ -1,10 +1,18 @@
-<a ng-click="vm.setProjects()" href="">projects</a>
-<a ng-click="vm.setCategories()" href="">category</a>
+<section class="home-set-section">
+<!-- <div class="home-set-a-div"> -->
+	<a class="home-set-a home-set-a-projects" ng-class="{ active: vm.isActive('/home/projects') }" ng-click="vm.setProjects()" href="#/home/projects">projects</a>
+<!-- </div> -->
+<!-- <div class="home-set-a-div"> -->
+	<a class="home-set-a" ng-class="{ active: vm.isActive('/home/categories') }" ng-click="vm.setCategories()" href="#/home/categories">category</a>
+<!-- </div> -->
+</section>
 
-<div ng-show="vm.byProjects">
-<home-projects ng-controller="hpCtrl as hp"></home-projects>
+
+
+<div class="home-set" ng-show="vm.byProjects">
+	<home-projects ng-controller="hpCtrl as hp"></home-projects>
 </div>
 
-<div ng-show="!vm.byProjects">
+<div class="home-set" ng-show="!vm.byProjects">
 	categories
 </div>

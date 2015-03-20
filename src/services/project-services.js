@@ -15,6 +15,7 @@ app.factory('projectServices', ['$http', '$log',
     }
     function processAjaxPromise(p) {
       return p.then(function(result) {
+        console.log(result.data.data);
         return result.data.data;
       })
       .catch(function(error) {
@@ -26,6 +27,10 @@ app.factory('projectServices', ['$http', '$log',
 
       list: function () {
         return get('/api/v1/projects');
+      },
+
+      getByProjectId: function(projectId) {
+        return get('/api/v1/projects/' + projectId);
       },
 
     };

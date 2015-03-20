@@ -1,11 +1,13 @@
 import json
-from ..models import (User, UserSchema, Project, ProjectSchema,
+from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
                       Group, GroupSchema, LikeSchema)
 from flask import Blueprint, jsonify, request, abort, url_for
 from ..extensions import db
 from .toolshed import require_login, current_user
 from datetime import datetime
+from ..importer import create_project
+from ..updater import update_projects
 
 
 api = Blueprint('api', __name__)
@@ -88,7 +90,16 @@ def project(id):
         return failure_response("There was no such project.", 404)
 
 
-#category routes
+@api.route("/projects", methods=["POST"])
+def make_project():
+    urls = request.get_json()
+    project = create_project(**urls)
+    db.session.add(project)
+    db.session.commit()
+    return success_response(single_project_schema, project)
+
+
+# Category routes
 
 @api.route("/categories")
 def all_categories():
@@ -155,18 +166,14 @@ def add_project_comment(id):
     user = User.query.filter_by(github_name=user_name).first()
     comment_data = request.get_json()
     project = Project.query.get(id)
-    print(comment_data)
     if project:
         comment = Comment(text=comment_data['text'],
                           created=datetime.utcnow(),
                           project_id=project.id,
                           user_id=user.id)
-        print("BLAH")
 
         user.comments.append(comment)
-        print("BLAH")
         db.session.add(comment)
-        print("BLAH")
         db.session.commit()
         return success_response(single_comment_schema, comment)
     else:
@@ -194,13 +201,14 @@ def delete_comment(id):
     db.session.commit()
     return success_response(single_comment_schema, comment)
 
+# Like Routes
 
 @api.route("/likes/projects/<int:id>", methods=["POST"])
 def like_project(id):
     project = Project.query.get_or_404(id)
     user_name = current_user()
     user = User.query.filter_by(github_name=user_name).first()
-    new_like = Likes(user_id=user.id,
+    new_like = Like(user_id=user.id,
                      project_id=project.id)
     db.session.add(new_like)
     db.session.commit()
@@ -209,7 +217,7 @@ def like_project(id):
 
 @api.route("/likes/<int:id>", methods=["DELETE"])
 def unlike_project(id):
-    like = Likes.query.get_or_404(id)
+    like = Like.query.get_or_404(id)
     db.session.delete(like)
     db.session.commit()
     return success_response(single_like_schema, like)
@@ -231,3 +239,12 @@ def get_project_likes(id):
         return success_response(all_likes_schema, project.user_likes)
     else:
         return failure_response("Project has no likes.", 404)
+
+
+@api.route("/projects/update")
+def update_call():
+    projects = Project.query.all()
+    update_projects(projects)
+    return success_response()
+
+

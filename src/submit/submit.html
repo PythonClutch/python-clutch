@@ -1,1 +1,50 @@
-submit
+<span class="submit-span" ng-click="vm.setNew()">new</span>
+<span class="submit-span" ng-click="vm.setPending()">pending</span>
+
+<form ng-show="vm.byNew">
+	<new-project></new-project>
+	<input type="submit" value="Submit Project">
+</form>
+
+<ul ng-show="!vm.byNew">
+	<a href="">edit</a>
+	<li>
+		<div class="pending-div">
+			<h6>Name:</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>GitHub URL:</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>PyPi URL</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>Website</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>Documenation</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>Source Code</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>Mailing List</h6>
+			<p class="pending-p"></p>
+		</div>
+		<div class="pending-div">
+			<h6>Category</h6>
+			<p class="pending-p"></p>
+			<h6>Group</h6>
+			<p class="pending-p"></p>
+		</div>
+	</li>
+</ul>
+
+
+

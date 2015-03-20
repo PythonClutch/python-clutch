@@ -1,15 +1,15 @@
 app.controller('hnCtrl', function () {
-	var self = this;
+	// var self = this;
 
-	self.byNames = true;
+	// self.byNames = true;
 
-	self.setGroups = function () {
-		self.byNames = false;
-		console.log('hefy')
-	}
+	// self.setGroups = function () {
+	// 	self.byNames = false;
+	// 	console.log('hefy')
+	// }
 
-	self.setNames = function () {
-		self.byNames = true;
-		console.log('hey')
-	}
+	// self.setNames = function () {
+	// 	self.byNames = true;
+	// 	console.log('hey')
+	// }
 });

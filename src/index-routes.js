@@ -10,6 +10,11 @@ app.config(['$routeProvider', function ($routeProvider) {
         function(projectServices) {
           return projectServices.list();
         }
+      ],
+      setProj: ['homeFactory',
+        function(homeFactory) {
+          homeFactory.setProjects();
+        }
       ]
     }
   };
@@ -17,6 +22,9 @@ app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
   .when('/', homePage)
   .when('/home', homePage)
+  .when('/home/projects', homePage)
+  // .when('/home/categories', homePage)
+  // .when('/projects', homePage)
   .when('/account', {   
     templateUrl: 'static/account/account.html',
     controller: 'AccountCtrl',
@@ -28,21 +36,16 @@ app.config(['$routeProvider', function ($routeProvider) {
     controllerAs: 'vm'
   })
   // .when('/home/category', homePage)
-  .when('/account', {   
-    templateUrl: 'static/account/account.html',
-    controller: 'AccountCtrl',
-    controllerAs: 'vm'
-  })
   .when('/group', {   
     templateUrl: 'static/group/group.html',
     controller: 'GroupCtrl',
     controllerAs: 'vm'
-  })
-  .when('/project', {   
-    templateUrl: 'static/project/project.html',
-    controller: 'ProjectCtrl',
-    controllerAs: 'vm'
   });
+  // .when('/project', {   
+  //   templateUrl: 'static/project/project.html',
+  //   controller: 'ProjectCtrl',
+  //   controllerAs: 'vm'
+  // });
 }]);
 
 

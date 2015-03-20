@@ -1,4 +1,45 @@
-body {
+.yellow-bg {
+  background: lightyellow; 
+}
+
+.pink-bg {
+  background: lightpink; 
+}
+
+.green-bg {
+  background: lightgreen; 
+}
+
+.gray-bg {
+  background: lightgray; 
+}
+
+.coral-bg {
+  background: #ffd8b2; 
+}
+
+body,
+html {
+  height: 100%;
+  width: 100%;
+  font-family: helvetica;
+}
+
+.root-content {
+  background: $bg-color;  
+  z-index: 1; 
+  width: 100%;
+  height: 90%;
+  position: relative;
+  box-shadow: 0px -3px 9px -3px #b8b8b8;
+}
+
+.full {
+  width: 100%;
+  height: 100%;
+}
+
+/*body {
   font-family: sans-serif;
   line-height: 1.4em;
   background: $bg-color;
@@ -39,13 +80,13 @@ input, textarea {
   font-size: 1em;
   border: 1px solid $input-border-color;
   padding: 0.25em;
-}
+}*/
 
-button {
-  display: inline-block;
-  padding: 0.25em 0.75em;
-  border: 0;
-  background: $alt-accent-bg;
-  color: $alt-accent-fg;
-  font-size: 1em;
-}
+// button {
+//   display: inline-block;
+//   padding: 0.25em 0.75em;
+//   border: 0;
+//   background: $alt-accent-bg;
+//   color: $alt-accent-fg;
+//   font-size: 1em;
+// }

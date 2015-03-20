@@ -2,9 +2,15 @@
 ***** GENERAL *********
 *************************************************************/
 
-.home-projects-li {
+.home-project-li {
 	width: 90%;
 	background: lightgray; 
+	margin: 20px auto;
+}
+
+.home-project-details-div {
+	padding: .4em;
+	display: none;
 }
 
 .flex-row {
@@ -39,4 +45,89 @@
 	flex-wrap: wrap;
 }
 
+.home-project-content-p {
+	font-size: .6em;
+}
+
+.home-project-a {
+	margin: 0 1%;
+}
+
 /******************** comment *******************************/
+
+/*************************************************************
+***** SHOW DETAILS *********
+*************************************************************/
+#names-details-checkbox {
+	display: none;
+}
+
+.home-project-basic-info-plus {
+	cursor: pointer;
+}
+
+#names-details-checkbox:checked ~ .home-project-details-div {
+	display: block; 
+}
+
+/****************** PROJECT DETAILS *******************************/
+
+.more-info-label {
+/*	float: right;*/
+	text-align: right;
+	margin-left: 70%;
+	cursor: pointer;
+}
+
+.fa-long-arrow-down {
+	font-size: 70%;
+}
+
+.more-info-input {
+	visibility: hidden;
+}
+
+.home-project-content {
+	display: none;
+}
+
+#more-info-pypi:checked ~ .home-project-content {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+#more-info-github:checked ~ .home-project-content {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+/*// .home-project-details-div {
+// 	padding: .4em;
+// }*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

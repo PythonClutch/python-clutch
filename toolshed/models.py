@@ -47,19 +47,33 @@ class Like(db.Model):
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    status = db.Column(db.Boolean)
     name = db.Column(db.String(255), nullable=False, unique=True)
-    github_url = db.Column(db.String(400))
-    website = db.Column(db.String(400))
-    pypi_url = db.Column(db.String(400))
-    forks = db.Column(db.Integer)
-    starred = db.Column(db.Integer)
-    watchers = db.Column(db.Integer)
+    summary = db.Column(db.String(400))
+    forks_count = db.Column(db.Integer)
+    starred_count = db.Column(db.Integer)
+    watchers_count = db.Column(db.Integer)
+    watchers_url = db.Column(db.String)
     age = db.Column(db.DateTime)
-    version = db.Column(db.String(20))
+    current_version = db.Column(db.String(20))
     last_commit = db.Column(db.DateTime)
-    open_issues = db.Column(db.Integer)
-    issues_url = db.Column(db.String(400))
+    first_commit = db.Column(db.DateTime)
+    open_issues_count = db.Column(db.Integer)
+    project_stub = db.Column(db.String(400))
+    downloads_count = db.Column(db.Integer)
+    contributors_count = db.Column(db.Integer)
+    python_three_compatible = db.Column(db.Boolean)
+    website = db.Column(db.String(400))
+    github_url = db.Column(db.String(400))
+    pypi_url = db.Column(db.String(400))
+    contributors_url = db.Column(db.String(400))
+    mailing_list_url = db.Column(db.String(400))
+    forks_url = db.Column(db.String(400))
+    starred_url = db.Column(db.String)
+    open_issues_url = db.Column(db.String(400))
     docs_url = db.Column(db.String(400))
+
+
 
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
@@ -156,14 +170,22 @@ class UserSchema(Schema):
         fields = ("id", "github_name", "github_url", "email", "comments")
 
 
+class LikeSchema(Schema):
+    class Meta:
+        fields = ("id", "user_id", "project_id", "user_name", "project_name")
+
 class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
+    user_likes = fields.Nested(LikeSchema, many=True)
     class Meta:
-        fields = ("id", "name", "github_url", "website",
-                  "pypi_url", "forks", "starred", "watchers",
-                  "age", "version", "last_commit", "open_issues",
-                  "docs_url", "category_id", "comments", "number_of_likes",
-                  "number_of_comments")
+        fields = ("id", "status", "name", "summary", "forks_count",
+                  "starred_count", "watchers_count", "watchers_url",
+                  "age", "current_version", "last_commit", "first_commit",
+                  "open_issues_count", "project_stub", "downloads_count",
+                  "contributors_count", "python_three_compatible", "website",
+                  "github_url", "pypi_url", "contributors_url", "mailing_list_url",
+                  "forks_url", "starred_url", "open_issues_url", "docs_url",
+                  "category_id", "group_id", "comments", "user_likes" )
 
 
 class CategorySchema(Schema):
@@ -176,8 +198,3 @@ class GroupSchema(Schema):
     categories = fields.Nested(CategorySchema, many=True)
     class Meta:
         fields = ("id", "name", "categories")
-
-
-class LikeSchema(Schema):
-    class Meta:
-        fields = ("id", "user_id", "project_id", "user_name", "project_name")
