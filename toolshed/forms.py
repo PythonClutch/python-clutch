@@ -6,8 +6,8 @@ from wtforms.fields.html5 import URLField
 
 
 class AdminLogin(Form):
-    login_name = StringField(255, validators=[DataRequired()])
-    password = PasswordField(255, validators=[DataRequired()])
+    login_name = StringField("User", validators=[DataRequired()])
+    password = PasswordField("Pass", validators=[DataRequired()])
 
 
 class SubmissionForm(Form):
