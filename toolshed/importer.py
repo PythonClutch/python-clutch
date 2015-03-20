@@ -9,6 +9,10 @@ github_search_regex = re.compile('github.com/(.*)')
 github_match_regex = re.compile('((http(s)*://)*github.com/)')
 
 
+gitkey = os.environ['GITKEY']
+auth=(gitkey, 'x-oauth-basic')
+
+
 def parse_github_url(github_url):
     github_api_base = "https://api.github.com/repos/"
     github_stub = github_search_regex.search(github_url).groups()[0]
@@ -17,7 +21,7 @@ def parse_github_url(github_url):
 
 def github_populate(proj_dict, github_url):
     github_api, project_stub = parse_github_url(github_url)
-    github_info = requests.get(github_api).json()
+    github_info = requests.get(github_api, auth=auth).json()
     proj_dict['forks_count'] = github_info['forks_count']
     proj_dict['github_url'] = github_url
     proj_dict['project_stub'] = project_stub
@@ -27,7 +31,7 @@ def github_populate(proj_dict, github_url):
     proj_dict['last_commit'] = datetime.datetime.strptime(github_info['updated_at'], "%Y-%m-%dT%H:%M:%SZ")
     proj_dict['first_commit'] = datetime.datetime.strptime(github_info['created_at'], "%Y-%m-%dT%H:%M:%SZ")
     proj_dict['open_issues_count'] = github_info['open_issues_count']
-    contributors = requests.get(github_info['contributors_url']).json()
+    contributors = requests.get(github_info['contributors_url'], auth=auth).json()
     proj_dict['contributors_count'] = len(contributors)
     proj_dict['contributors_url'] = github_info['contributors_url']
     proj_dict['forks_url'] = github_url + "/network"
