@@ -2,27 +2,28 @@
 // GENERAL
 /////////////////////////////////////////////////////////////
 
-/////////////// COMMENT /////////////////////////////////////
-
 .home-set {
 	width: 90%;
 	margin: 0 auto;
 	text-align: center;
+	padding-top: 41px; 
 }
 
+/////////// TABS ////////////////////////////////
+
 .home-set-a {
-	box-shadow: 0px -3px 7px -3px #b8b8b8;
+	// box-shadow: 0px -3px 7px -3px #b8b8b8;
+	font-size: 20px; 
 	// float: left;
 	text-decoration: none;
+	color: black; 
     display: block;
-    padding: 14px 18px;
-    border-radius: 2px 2px 0 0;
+    padding: 15px 6.7%;
     // font-size: 20px;
     // font-weight: normal;
     // text-transform: uppercase;
     background: $tab-color;
     cursor: pointer;
-    margin-top: 2px; 
     // @include transition(all 0.2s ease-in-out);
     &:hover {
       background: lighten($tab-color, 4);
@@ -32,25 +33,32 @@
 .home-set-a.active {
 	box-shadow: 0px -4px 11px -3px #b8b8b8;
 	background: $bg-color;
-	padding: 15px 18px;
-	margin-top: 0;
+}
+
+.home-set-a:first-of-type {
+	margin-right: 4px; 
 }
 
 .home-set-a:last-of-type {
-	margin-right: 15px; 
+	margin-left: 4px; 
 }
 
 .home-set-section {
-	margin-top: -46px; 
+	margin: -50px 0 0; 
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-end;
+	justify-content: center;
 	flex-wrap: wrap;
 	width: 100%;
 	z-index: 3;
 	position: absolute;
 }
 
+/////////////////////////////////////////////////////////////
+// SEARCH AND FILTERS
+/////////////////////////////////////////////////////////////
+
+// by name or group
 .home-project-a-div {
 	display: flex;
 	flex-direction: row;
@@ -58,9 +66,75 @@
 	flex-wrap: wrap;
 }
 
-// .home-set-a-div {
-// 	float: left;
-// 	display: block;
+.home-project-a {
+	padding: 4px 20px;
+	text-decoration: none;
+	background: $base-color; 
+}
+
+.home-project-search {
+	width: 44.88%;
+	height: 41px;
+	background: $light-gray;
+	border: 1px solid $gray; 
+}
+
+.home-project-search-div {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.home-project-i-div {
+	height: 41px;
+	width: 5.51%;
+	position: relative;
+	background: $dark-gray;
+	i {
+		position: absolute;
+		right: 22px;
+		top: 10px; 
+		color: $light-gray; 
+		font-size: 20px; 
+	}
+}
+
+// .home-project-i-div i {
+// 	position: absolute;
+// 	right: 0px;
 // }
+
+/////////// FILTER ////////////////////////////////
+
+.project-radio {
+	visibility: hidden;
+	position: absolute;
+}
+
+.browse-heading {
+	margin: 20px 0 18px; 
+	color: $gray-text;
+}
+
+/////////// SEARCH BAR PLACEHOLDER ////////////////////////////////
+
+.home-project-search input::-webkit-input-placeholder {
+	// padding: 2px;
+	color: $gray; 
+	font-size: 12px; 
+}
+
+.home-project-search input:-moz-placeholder { 
+   color: $gray;  
+}
+
+.home-project-search input::-moz-placeholder {  
+   color: $gray; 
+}
+
+.home-project-search input:-ms-input-placeholder {  
+   color: $gray;   
+} 
 
 

@@ -1,31 +1,40 @@
 <!-- <div class="full"> -->
 <!-- <div> -->
 
-<input type="search" placeholder="search projects">
-<i class="fa fa-search"></i>
-<h6>or browse by filter below</h6>
+<div class="home-project-search-div">
+	<input class="home-project-search" type="search" placeholder="Search Projects">
+	<div class="home-project-i-div">
+		<i class="fa fa-search"></i>
+	</div>
+</div>
+
+<h6 class="browse-heading">or browse by filter below</h6>
 
 <div class="home-project-a-div">
-	<a class="home-project-a" ng-click="hp.setNames()" href="">by name</a>
-	<a class="home-project-a" ng-click="hp.setGroups()" href="">by group</a>
+	<a class="home-project-a home-project-a-name" ng-click="hp.setNames()" href="">by name</a>
+	<a class="home-project-a home-project-a-group" ng-click="hp.setGroups()" href="">by group</a>
 </div>
 <!-- </div> -->
 
 <div class="home-project-filter">
 	<label for="hp-filter-popular">
-		<input type="radio">
+		<input class="project-radio" id="project-popular-radio" name="filter" type="radio">
+		<i ng-click="hp.setPopular()" class="fa fa-dot-circle-o"></i>
 		Popular
 	</label>
 	<label for="hp-filter-newest">
-		<input type="radio">
+		<input class="project-radio" id="project-newest-radio" name="filter" type="radio">
+		<i ng-click="hp.setNewest()" class="fa fa-dot-circle-o"></i>
 		Newest
 	</label>
 	<label for="hp-filter-trending">
-		<input type="radio">
+		<input class="project-radio" id="project-trending-radio" name="filter" type="radio">
+		<i ng-click="hp.setTrending()" class="fa fa-dot-circle-o"></i>
 		Trending		
 	</label>
 	<label for="hp-filter-list">
-		<input type="radio">
+		<input class="project-radio" id="project-list-radio" name="filter" type="radio">
+		<i ng-click="hp.setList()" class="fa fa-dot-circle-o"></i>
 		List		
 	</label>
 </div>

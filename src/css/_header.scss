@@ -1,12 +1,72 @@
-/*************************************************************
-***** comment *********
-*************************************************************/
+/////////////////////////////////////////////////////////////
+// GENERAL
+/////////////////////////////////////////////////////////////
+
 
 header {
 	width: 100%;
-	height: 100px;
-	background: $base-color; 
+	height: 160px;
+	// background: url("../img/background-01.png");
+// background: -moz-linear-gradient(left,  rgba(18,137,125,1) 0%, rgba(5,182,134,0.6) 68%, rgba(2,192,136,0.75) 83%, rgba(2,192,136,0.9) 99%);
+// background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(18,137,125,1)), color-stop(68%,rgba(5,182,134,0.6)), color-stop(83%,rgba(2,192,136,0.75)), color-stop(99%,rgba(2,192,136,0.9)));
+// background: -webkit-linear-gradient(left,  rgba(18,137,125,1) 0%,rgba(5,182,134,0.6) 68%,rgba(2,192,136,0.75) 83%,rgba(2,192,136,0.9) 99%);
+// background: -o-linear-gradient(left,  rgba(18,137,125,1) 0%,rgba(5,182,134,0.6) 68%,rgba(2,192,136,0.75) 83%,rgba(2,192,136,0.9) 99%);
+// background: -ms-linear-gradient(left,  rgba(18,137,125,1) 0%,rgba(5,182,134,0.6) 68%,rgba(2,192,136,0.75) 83%,rgba(2,192,136,0.9) 99%);
+	background: linear-gradient(to right,  rgba(18,137,125,1) 0%,rgba(5,182,134,0.6) 68%,rgba(2,192,136,0.75) 83%,rgba(2,192,136,0.9) 99%),
+	            url("../img/background-01.png");
+// filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#12897d', endColorstr='#e602c088',GradientType=1 );
+	color: white; 
 	z-index: 2; 
+	font-family: 'Source Sans Pro', sans-serif; 
+}
+
+.nav-right a {
+	text-decoration: none;
+	color: white;
+	font-size: 16px; 
+	
+
+
+	&:hover {
+		color: black;
+	} 
+}
+
+.nav-logo-img {
+	width: 60px;
+	height: 60px;
+}
+
+.nav-logo {
+	margin: 23px 0 0 41px;
+	width: 240px;
+}
+
+.nav-logo a {
+	text-decoration: none;
+	color: white; 
+	cursor: pointer;
+	letter-spacing: 1px; 
+	font-size: 20px; 
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap; 
+	margin: 15px 0 0 5%; 
+}
+
+.nav-logo a h2 {
+	margin-top: 20px; 
+}
+
+.nav-right {
+	width: 36%;
+	height: 30px;
+	margin: 20px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
 }
 
 .nav-account {
@@ -16,12 +76,68 @@ header {
 	flex-wrap: wrap;
 }
 
-.nav-home-a {
-	margin: 15px 0 0 5%; 
-}
-
 .nav-login-a {
-	visibility: hidden
+	display: none;
 }
 
-/******************** comment *******************************/
+.nav-search-bar {
+	position: relative;
+}
+
+.nav-search-bar input {
+	background: transparent;
+	border: 2px solid white;  
+	color: white; 
+	padding: 1px 2px 3px; 
+}
+
+.nav-search-bar input::-webkit-input-placeholder {
+	// padding: 2px;
+	color: white; 
+	font-size: 12px; 
+}
+
+.nav-search-bar input:-moz-placeholder { 
+   color: white;  
+}
+
+.nav-search-bar input::-moz-placeholder {  
+   color: white; 
+}
+
+.nav-search-bar input:-ms-input-placeholder {  
+   color: white;   
+}
+
+.nav-search-bar i {
+	font-size: 14px; 
+	position: absolute;
+	top: 3px;
+	right: 5px;
+	color: white; 
+}
+
+/////////////// COMMENT /////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
