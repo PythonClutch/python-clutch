@@ -33,4 +33,10 @@ def test_get_project_list(client, project):
 def test_get_project(client, project):
     response = client.get("api/v1/projects/" + str(project.id))
     response_data = json.loads(response.get_data().decode("utf-8"))
-    assert response_data['status'] == "success"
+    assert response_data["status"] == "success"
+    assert response_data["data"]["name"] == project.name
+
+def test_user_login(client):
+    """ Find a way to simulate OAuth
+    """
+    pass
