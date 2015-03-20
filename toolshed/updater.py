@@ -42,13 +42,16 @@ def update_pypi(project):
 
 
 def update_github(project):
-
     github_api, project_stub = parse_github_url(project.github_url)
     github_info = requests.get(github_api).json()
-    difference_check(project.forks_count, github_info['forks_count'])
-    difference_check(project.starred_count, github_info['stargazers_count'])
-    difference_check(project.watchers_count, github_info['watchers_count'])
-    difference_check(project.last_commit, datetime.datetime.strptime(github_info['updated_at'], "%Y-%m-%dT%H:%M:%SZ"))
-    difference_check(project.open_issues_count, github_info['open_issues_count'])
-    contributors = requests.get(project.contributors_url).json()
-    project.contributors_count = len(contributors)
+    update_fields = [[project.forks_count, github_info['forks_count']],
+                     [project.starred_count, github_info['stargazers_count']],
+                     [project.watchers_count, github_info['watchers_count']],
+                     [project.last_commit, datetime.datetime.strptime(github_info['updated_at'], "%Y-%m-%dT%H:%M:%SZ")],
+                     [project.open_issues_count, github_info['open_issues_count']]]
+    field_update = []
+    for field in update_fields:
+        field_update.append(difference_check(field[0], field[1]))
+    if True in field_update:
+        return True
+    return False
