@@ -82,7 +82,7 @@ class Project(db.Model):
                                cascade="all,delete")
     user_likes = db.relationship("Like", backref="project", lazy="dynamic", foreign_keys="Like.project_id",
                                  cascade="all,delete")
-    back_logs = db.relationship("Log", backref="project", lazy="dynamic", foreign_keys="ProjectLog.project_id",
+    logs = db.relationship("Log", backref="project", lazy="dynamic", foreign_keys="ProjectLog.project_id",
                                 cascade="all,delete")
 
     @property
@@ -139,7 +139,6 @@ class Comment(db.Model):
 
     def __repr__(self):
         return "Comment: {}".format(self.text)
-
 
 
 class Category(db.Model):
@@ -221,6 +220,8 @@ class LogSchema(Schema):
 class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
     user_likes = fields.Nested(LikeSchema, many=True)
+    logs = fields.Nested(LogSchema, many=True)
+
     class Meta:
         fields = ("id", "status", "name", "summary", "forks_count",
                   "starred_count", "watchers_count", "watchers_url",
@@ -229,7 +230,8 @@ class ProjectSchema(Schema):
                   "contributors_count", "python_three_compatible", "website",
                   "github_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
-                  "category_id", "group_id", "comments", "user_likes")
+                  "category_id", "group_id", "comments", "user_likes",
+                  "logs")
 
 
 class CategorySchema(Schema):
