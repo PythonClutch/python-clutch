@@ -229,7 +229,7 @@ class ProjectSchema(Schema):
                   "contributors_count", "python_three_compatible", "website",
                   "github_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
-                  "category_id", "group_id", "comments", "user_likes" )
+                  "category_id", "group_id", "comments", "user_likes")
 
 
 class CategorySchema(Schema):

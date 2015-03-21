@@ -60,7 +60,6 @@ def update_github(project):
 
 
 def log_project(project):
-
     proj_log = {}
     proj_log["forks_count"] = project.forks_count
     proj_log["starred_count"] = project.starred_count
