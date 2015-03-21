@@ -1,6 +1,8 @@
 from .extensions import db, bcrypt, login_manager
 from marshmallow import Schema, fields, ValidationError
 from flask.ext.login import UserMixin
+from datetime import datetime, timedelta
+import arrow
 
 
 @login_manager.user_loader
@@ -54,7 +56,6 @@ class Project(db.Model):
     starred_count = db.Column(db.Integer)
     watchers_count = db.Column(db.Integer)
     watchers_url = db.Column(db.String)
-    age = db.Column(db.DateTime)
     current_version = db.Column(db.String(20))
     last_commit = db.Column(db.DateTime)
     first_commit = db.Column(db.DateTime)
@@ -90,6 +91,26 @@ class Project(db.Model):
     @property
     def number_of_likes(self):
         return len(Like.query.filter_by(project_id=self.id).all())
+
+    @property
+    def age_display(self):
+        if not self.first_commit:
+            return None
+        else:
+            age_string = str(self.first_commit)
+            arrow_age = arrow.get(age_string)
+            return arrow_age.humanize()
+
+    @property
+    def last_commit_display(self):
+        if not self.last_commit:
+            return None
+        else:
+            last_string = str(self.last_commit)
+            arrow_last_commit = arrow.get(last_string)
+            return arrow_last_commit.humanize()
+
+
 
     def __repr__(self):
         return "{}".format(self.name)
@@ -180,12 +201,13 @@ class ProjectSchema(Schema):
     class Meta:
         fields = ("id", "status", "name", "summary", "forks_count",
                   "starred_count", "watchers_count", "watchers_url",
-                  "age", "current_version", "last_commit", "first_commit",
+                  "current_version", "last_commit", "first_commit",
                   "open_issues_count", "project_stub", "downloads_count",
                   "contributors_count", "python_three_compatible", "website",
                   "github_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
-                  "category_id", "group_id", "comments", "user_likes" )
+                  "category_id", "group_id", "comments", "user_likes", "age_display",
+                  "last_commit_display" )
 
 
 class CategorySchema(Schema):
