@@ -3,8 +3,8 @@
 
 <div class="home-project-search-div">
 	<div class="home-project-search-holder-div">
-		<input class="home-project-search" type="search">
-		<p>Search Projects</p>
+		<input ng-click="hp.checkSearch()" class="home-project-search" type="search">
+		<p ng-click="hp.checkSearch()" ng-show="hp.searchClicked" for="search-projects-checkbox">Search Projects</p>
 	</div>
 	<div class="home-project-i-div">
 		<i class="fa fa-search"></i>

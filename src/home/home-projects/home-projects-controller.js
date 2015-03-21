@@ -46,4 +46,13 @@ app.controller('hpCtrl', function () {
 		$('#project-list-radio').prop('checked', true);
 	}
 
+	self.searchClicked = true;
+
+	self.checkSearch = function () {
+		self.searchClicked = false;
+		$(event.target).parent().find('.home-project-search').focus();
+	}
+
+
+
 });
