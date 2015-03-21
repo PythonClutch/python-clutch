@@ -357,55 +357,6 @@ app.controller('Error404Ctrl', ['$location', function ($location) {
   this.message = 'Could not find: ' + $location.url();
 }]);
 
-app.controller('hpCtrl', function () {
-	var self = this;
-
-	self.byNames = true;
-
-	self.setGroups = function () {
-		self.byNames = false;
-		$(event.target).closest('.home-project-a-name').removeClass('project-active');
-		$(event.target).addClass('project-active');
-	};
-
-	self.setNames = function () {
-		self.byNames = true;
-		var close = $(event.target).closest('.home-project-a-group');
-		console.log(close);
-		$(event.target).closest('.home-project-a-group').removeClass('project-active');
-		$(event.target).addClass('project-active');
-	};
-
-	self.setPopular = function () {
-		$('#project-popular-radio').attr('checked', true);
-	}
-
-	self.setNewest = function () {
-		$('#project-newest-radio').attr('checked', true);
-	}
-});
-(function () {
-	app.directive('homeNames', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/home/home-projects/home-names/home-names.html'
-	  };
-	});
-
-	app.directive('namesDetails', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/home/home-projects/home-names/names-details.html'
-	  };
-	});
-
-	app.directive('homeGroups', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/home/home-projects/home-groups/home-groups.html'
-	  };
-	});
-})();
 
 app.config(['$routeProvider', function ($routeProvider) {
   'use strict';
@@ -431,6 +382,77 @@ app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
   .when('/home/categories', homePage);
 }]);
+app.controller('hpCtrl', function () {
+	var self = this;
+
+	self.byNames = true;
+
+	self.setGroups = function () {
+		self.byNames = false;
+	};
+
+	self.setNames = function () {
+		self.byNames = true;
+	};
+
+	function selectedClass () {
+		var closest = $(event.target).parent().parent().children();
+		closest.each(function () {
+			var fa = $(this).find('.fa');
+			$(this).find('.fa').removeClass('fa-dot-circle-o');
+			console.log($(this).find('.project-radio')[0]);
+			$(this).find('.project-radio').prop('checked', false);
+			if (!fa.hasClass('fa-circle-o')) {
+				fa.addClass('fa-circle-o');
+			}
+		})
+		$(event.target).removeClass('fa-circle-o');
+		$(event.target).addClass('fa-dot-circle-o');
+	}
+
+	self.setPopular = function () {
+		selectedClass();
+		$('#project-popular-radio').prop('checked', true);
+	}
+
+	self.setNewest = function () {
+		selectedClass();
+		$('#project-newest-radio').prop('checked', true);
+	}
+
+	self.setTrending = function () {
+		selectedClass();
+		$('#project-trending-radio').prop('checked', true);
+	}
+
+	self.setList = function () {
+		selectedClass();
+		$('#project-list-radio').prop('checked', true);
+	}
+
+});
+(function () {
+	app.directive('homeNames', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-names/home-names.html'
+	  };
+	});
+
+	app.directive('namesDetails', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-names/names-details.html'
+	  };
+	});
+
+	app.directive('homeGroups', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-groups/home-groups.html'
+	  };
+	});
+})();
 app.factory('homeFactory', function () {
 
 	// var self = this;
