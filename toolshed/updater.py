@@ -30,6 +30,7 @@ def update_projects(projects):
 
 def update_pypi(project):
     pypi_info = requests.get(project.pypi_url + "/json").json()
+    print("DERP")
     update_fields = [[project.current_version, pypi_info['info']['version']],
                      [project.website, pypi_info['info']['home_page']],
                      [project.current_version, pypi_info['info']['version']],
@@ -37,7 +38,7 @@ def update_pypi(project):
                      [project.downloads_count, get_total_downloads(pypi_info)]]
     field_update = []
     for field in update_fields:
-        field_update.append(difference_check(list[0], list[1]))
+        difference_check(list[0], list[1])
     if True in field_update:
         return True
     return False
@@ -53,7 +54,7 @@ def update_github(project):
                      [project.open_issues_count, github_info['open_issues_count']]]
     field_update = []
     for field in update_fields:
-        field_update.append(difference_check(field[0], field[1]))
+        difference_check(field[0], field[1])
     if True in field_update:
         return True
     return False
@@ -71,6 +72,6 @@ def log_project(project):
     proj_log["contributors_count"] = project.contributors_count
     proj_log["log_date"] = datetime.today()
     project_log = ProjectLog(**proj_log)
-    project.append(project_log)
+    project.logs.append(project_log)
     db.session.add(project_log)
     db.session.commit()

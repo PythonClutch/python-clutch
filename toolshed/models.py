@@ -1,9 +1,7 @@
 from .extensions import db, bcrypt, login_manager
 from marshmallow import Schema, fields, ValidationError
 from flask.ext.login import UserMixin
-from datetime import datetime, timedelta
 import arrow
-
 
 @login_manager.user_loader
 def load_admin(id):
