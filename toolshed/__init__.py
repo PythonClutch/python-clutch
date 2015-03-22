@@ -33,6 +33,7 @@ def create_app():
     login_manager.login_view = 'toolshed_admin.login'
     admin.add_view(MyView(models.User, db.session))
     admin.add_view(MyView(models.Project, db.session))
+    admin.add_view(MyView(models.ProjectLog, db.session))
     admin.add_view(MyView(models.Category, db.session))
     admin.add_view(MyView(models.Comment, db.session))
     admin.add_view(MyView(models.Group, db.session))
