@@ -21,7 +21,7 @@ app.controller('hpCtrl', function () {
 			if (!fa.hasClass('fa-circle-o')) {
 				fa.addClass('fa-circle-o');
 			}
-		})
+		});
 		$(event.target).removeClass('fa-circle-o');
 		$(event.target).addClass('fa-dot-circle-o');
 	}
@@ -29,29 +29,29 @@ app.controller('hpCtrl', function () {
 	self.setPopular = function () {
 		selectedClass();
 		$('#project-popular-radio').prop('checked', true);
-	}
+	};
 
 	self.setNewest = function () {
 		selectedClass();
 		$('#project-newest-radio').prop('checked', true);
-	}
+	};
 
 	self.setTrending = function () {
 		selectedClass();
 		$('#project-trending-radio').prop('checked', true);
-	}
+	};
 
 	self.setList = function () {
 		selectedClass();
 		$('#project-list-radio').prop('checked', true);
-	}
+	};
 
 	self.searchClicked = true;
 
 	self.checkSearch = function () {
 		self.searchClicked = false;
 		$(event.target).parent().find('.home-project-search').focus();
-	}
+	};
 
 
 

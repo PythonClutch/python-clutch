@@ -1,248 +1,41 @@
 /////////////////////////////////////////////////////////////
-// GENERAL
+// PROJECT.HTML
 /////////////////////////////////////////////////////////////
 
-.home-project-li {
-	width: 100%;
+.project-info {
 	background: $light-gray;
-	margin: 13px auto; 
+	margin-top: 24px;  
 }
 
-.home-project-li a {
-	color: $base-color;
-	&:hover {
-		color: black; 
-	} 
+.project a {
+	color: $base-color; 
 }
 
-/////////////// COMMENT /////////////////////////////////////
-
-/////////////////////////////////////////////////////////////
-// HEADING
-/////////////////////////////////////////////////////////////
-
-.home-project-name {
-	margin: 21px 0 0 27px; 
-	font-size: 30px; 
-	text-transform: capitalize;
-	font-weight: 600; 
-	a {
-		color: black;
-		&:hover {
-			color: $base-color; 
-		}		
-	}
+.project {
+	margin-bottom: 13px; 
 }
 
-.project-header {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	flex-wrap: wrap;
-}
-
-.home-project-basic-info {
-	height: 79px;
-}
-
-.home-project-basic-info-icon {
-	margin-top: 28px; 
-	i {
-		color: $base-color; 
-	}
-}
-
-.home-project-basic-info-right {
-	width: 42%;
-	margin-right: 25px; 
-	font-size: 24px; 
-	position: relative;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	.fa {
-		margin-right: 5px; 	
-	}
-}
-
-/////////////////////////////////////////////////////////////
-// DETAILS
-/////////////////////////////////////////////////////////////
-
-.home-project-details-div {
-	padding-bottom: 1px; 
-	display: none;
+.project-details-div {
+	padding: 10px 0 1px; 
 	background: transparent;
 	width: 97.38%;
 	margin: 0 auto;  
 }
 
-.home-project-content-p {
-	font-size: 12px;
-	font-weight: 700; 
-}
-
-.more-info-label {
-	text-align: right;
-	cursor: pointer;
-	font-size: 18px; 
-	font-spacing: 2px; 
-	font-weight: 600; 
-	color: $base-color; 
-}
-
-.more-info-label i.fa {
-	font-weight: 600;
-	font-size: 20px;  
-}
-
-// .home-project-content {
-// 	display: none;
-// }
-
-.home-project-content-sizer {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	flex-wrap: wrap;
-}
-
-.home-project-content-div {
-	font-weight: 300;
-	font-size: 18px;  
-}
-
-.home-project-content-div:first-of-type {
-	text-align: left;
-}
-
-/////////////////////////////////////////////////////////////
-// THREE BLOCK DETAILS
-/////////////////////////////////////////////////////////////
-
-.home-project-details {
-	// width: 100%;
-	background: white; 
-	margin: 13px auto;
-	padding: 28px 20px 28px; 
-}
-
-.home-project-header-top {
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-start;
-	flex-wrap: wrap;
-	font-size: 26px; 
-	margin-bottom: 26px; 
-}
-
-.home-project-header-top > i {
-	margin-right: 10px; 
-	color: $base-color; 
-}
-
-.home-project-header-top > h3 {
-	margin-right: 14px; 
-}
-
-.home-project-header-top a.link {
-	text-decoration: underline;
-}
-
-.home-project-header-bottom {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	font-size: 22px; 
-}
-
-/////////////// FIRST BLOCK /////////////////////////////////////
-
-.home-project-links {
-	margin-top: 0; 
-	height: 27px;
-	color: $base-color;
-	font-size: 22px; 
-	padding-top: 28px;  
-}
-
-.home-project-links-div-sizer {
+.graph {
 	width: 100%;
 	margin: 0 auto;
-}
-
-.home-project-links a.link {
-	text-decoration: underline; 
-}
-
-.home-project-links-div i.fa {
-	margin-right: 6px; 
-}
-
-.home-project-links-div:last-of-type {
-	margin-right: 40px; 
-}
-
-/////////////// SECOND BLOCK /////////////////////////////////////
-.home-project-header-bottom-downloads {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	flex-wrap: wrap;
-}
-
-.home-project-header-bottom-downloads h5 {
-	margin-left: 10px; 
-}
-
-/////////////// THIRD BLOCK /////////////////////////////////////
-
-.home-project-content-div-gh {
-	text-align: left;
+	background: lightpink;
+	height: 150px; 
 }
 
 /////////////////////////////////////////////////////////////
-// SHOW DETAILS
+// HEADING
 /////////////////////////////////////////////////////////////
 
-.gray-line {
-	height: 2px;
-	width: 100%;
-	background: $light-gray; 
-	margin: 26px auto;; 
+.project-header {
+	margin-top: 13px; 
 }
-
-.names-details-checkbox {
-	visibility: hidden;
-	position: absolute;
-}
-
-.home-project-basic-info-plus {
-	cursor: pointer;
-}
-
-.names-details-checkbox:checked ~ .home-project-details-div {
-	display: block; 
-}
-
-.more-info-input {
-	visibility: hidden;
-	position: absolute;
-}
-
-// #more-info-pypi:checked ~ .home-project-content {
-// 	display: block;
-// }
-
-// #more-info-github:checked ~ .home-project-content {
-// 	display: block;
-// }
-
-/////////////////////////////////////////////////////////////
-// PROJECT.HTML
-/////////////////////////////////////////////////////////////
 
 .projectname-user-div {
 	display: flex;
@@ -256,13 +49,30 @@
 	flex-direction: row;
 	justify-content: flex-left;
 	flex-wrap: wrap;
+	margin-top: 20px; 
 }
 
+.project-links-div a {
+	margin-right: 3px; 
+}
 
+.projectname-user-div h1 {
+	font-size: 32px; 
+}
 
+.projectname-user-div h3 {
+	font-size: 16px; 
+}
 
+.project-details {
+	margin: 13px 0 24px;
+	width: 100%; 
+	font-size: 24px; 
+}
 
-
+.home-project-basic-info-icon-gh {
+	margin-top: 13px;
+}
 
 
 

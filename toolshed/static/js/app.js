@@ -119,10 +119,8 @@ app.controller('AccountCtrl', function () {
 	  };
 	});
 })();
-app.controller('GroupCtrl', function () {
-	
-});
-app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location', function (homeFactory, projects, stringUtil, $location) {
+app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location', 'projectFactory', 
+	function (homeFactory, projects, stringUtil, $location, projectFactory) {
 	var self = this;
 
 	self.projects = projects;
@@ -167,7 +165,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location'
 
 	self.like = function () {
 		self.likedHeart = true;
-		var target = $(event.target)
+		var target = $(event.target);
 		console.log(target);
 		if (target.hasClass('fa-heart-o')) {
 			target.removeClass('fa-heart-o');		
@@ -175,27 +173,23 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location'
 			target.addClass('fa-heart-o');
 			self.likedHeart = false;
 		}
-	}
+	};
 
-	self.pyMoreInfo = false;
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
 
 	self.pyInfo = function () {
-		if (self.pyMoreInfo === true) {
-			self.pyMoreInfo = false;
-		} else {
-			self.pyMoreInfo = true;
-		}	
-	}
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
 
-	self.ghMoreInfo = false;
+	self.ghMoreInfo = pf.byGh();
 
 	self.ghInfo = function () {
-		if (self.ghMoreInfo === true) {
-			self.ghMoreInfo = false;
-		} else {
-			self.ghMoreInfo = true;
-		}	
-	}
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
 
 }]);
 (function () {
@@ -235,6 +229,9 @@ $(function () {
 	}
 
 });
+app.controller('GroupCtrl', function () {
+	
+});
 app.controller('NavCtrl', ['$location', function ($location) {
 
 	var self = this;
@@ -263,11 +260,27 @@ app.controller('NavCtrl', ['$location', function ($location) {
 
 }]);
 
-app.controller('ProjectCtrl', ['project', function (project) {
+app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, projectFactory) {
 
 	var self = this;
 
 	self.project = project;
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
 	
 }]);
 app.config(['$routeProvider', function($routeProvider) {    
@@ -321,6 +334,42 @@ app.factory('homeFactory', function () {
 
 		setCategories: function () {
 			byProjects = false;
+		}
+
+	};
+
+});
+app.factory('projectFactory', function () {
+
+	'use strict';
+
+	var pyMoreInfo = false;
+	var ghMoreInfo = false;
+
+	return {
+
+		byPy: function () {
+			return pyMoreInfo;
+		},
+
+		byGh: function () {
+			return ghMoreInfo;
+		},
+
+		pyInfo: function () {
+			if (pyMoreInfo === true) {
+				pyMoreInfo = false;
+			} else {
+				pyMoreInfo = true;
+			}	
+		},
+
+		ghInfo: function () {
+			if (ghMoreInfo === true) {
+				ghMoreInfo = false;
+			} else {
+				ghMoreInfo = true;
+			}
 		}
 
 	};
@@ -449,7 +498,7 @@ app.controller('hpCtrl', function () {
 			if (!fa.hasClass('fa-circle-o')) {
 				fa.addClass('fa-circle-o');
 			}
-		})
+		});
 		$(event.target).removeClass('fa-circle-o');
 		$(event.target).addClass('fa-dot-circle-o');
 	}
@@ -457,29 +506,29 @@ app.controller('hpCtrl', function () {
 	self.setPopular = function () {
 		selectedClass();
 		$('#project-popular-radio').prop('checked', true);
-	}
+	};
 
 	self.setNewest = function () {
 		selectedClass();
 		$('#project-newest-radio').prop('checked', true);
-	}
+	};
 
 	self.setTrending = function () {
 		selectedClass();
 		$('#project-trending-radio').prop('checked', true);
-	}
+	};
 
 	self.setList = function () {
 		selectedClass();
 		$('#project-list-radio').prop('checked', true);
-	}
+	};
 
 	self.searchClicked = true;
 
 	self.checkSearch = function () {
 		self.searchClicked = false;
 		$(event.target).parent().find('.home-project-search').focus();
-	}
+	};
 
 
 

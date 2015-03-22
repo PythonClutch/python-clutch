@@ -1,4 +1,5 @@
-app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location', function (homeFactory, projects, stringUtil, $location) {
+app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location', 'projectFactory', 
+	function (homeFactory, projects, stringUtil, $location, projectFactory) {
 	var self = this;
 
 	self.projects = projects;
@@ -43,7 +44,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location'
 
 	self.like = function () {
 		self.likedHeart = true;
-		var target = $(event.target)
+		var target = $(event.target);
 		console.log(target);
 		if (target.hasClass('fa-heart-o')) {
 			target.removeClass('fa-heart-o');		
@@ -51,26 +52,22 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location'
 			target.addClass('fa-heart-o');
 			self.likedHeart = false;
 		}
-	}
+	};
 
-	self.pyMoreInfo = false;
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
 
 	self.pyInfo = function () {
-		if (self.pyMoreInfo === true) {
-			self.pyMoreInfo = false;
-		} else {
-			self.pyMoreInfo = true;
-		}	
-	}
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
 
-	self.ghMoreInfo = false;
+	self.ghMoreInfo = pf.byGh();
 
 	self.ghInfo = function () {
-		if (self.ghMoreInfo === true) {
-			self.ghMoreInfo = false;
-		} else {
-			self.ghMoreInfo = true;
-		}	
-	}
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
 
 }]);
