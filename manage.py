@@ -58,5 +58,23 @@ def update():
     return "Projects Updated."
 
 
+@manager.command
+def seed_db():
+ with open('better_projects.csv') as csvfile:
+     reader = csv.DictReader(csvfile)
+     for row in reader:
+         list = []
+         for key, value in row.items():
+             list.append(value)
+         if len(list) == 2:
+             print(list[0], list[1])
+             project = create_project(pypi_url=str(list[0]), github_url=str(list[1]))
+             db.session.add(project)
+         elif len(list) == 1:
+             project = create_project(pypi_url=list[0])
+             db.session.add(project)
+     db.session.commit()
+
+
 if __name__ == '__main__':
     manager.run()
