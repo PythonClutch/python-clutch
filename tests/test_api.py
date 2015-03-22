@@ -40,3 +40,11 @@ def test_user_login(client):
     """ Find a way to simulate OAuth
     """
     pass
+
+def test_post_comment(client, user, project):
+    project_comment_url = "api/v1/projects/" + str(project.id) + "/comments"
+    data = {
+        "text": "This is a test comment."
+    }
+    client.post(project_comment_url, data=data)
+    assert project.number_of_comments == 1
