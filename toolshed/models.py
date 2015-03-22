@@ -82,7 +82,7 @@ class Project(db.Model):
                                cascade="all,delete")
     user_likes = db.relationship("Like", backref="project", lazy="dynamic", foreign_keys="Like.project_id",
                                  cascade="all,delete")
-    logs = db.relationship("Log", backref="project", lazy="dynamic", foreign_keys="ProjectLog.project_id",
+    logs = db.relationship("ProjectLog", backref="project", lazy="dynamic", foreign_keys="ProjectLog.project_id",
                                 cascade="all,delete")
 
     @property
