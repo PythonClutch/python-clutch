@@ -20,6 +20,7 @@ def difference_check(project_info, api_info):
 
 def update_projects(projects):
     for project in projects:
+        log_project(project)
         update_pypi(project)
         if project.github_url:
             update_github(project)
@@ -43,7 +44,6 @@ def update_pypi(project):
 
 
 def update_github(project):
-    log_project(project)
     github_api, project_stub = parse_github_url(project.github_url)
     github_info = requests.get(github_api).json()
     update_fields = [[project.forks_count, github_info['forks_count']],
