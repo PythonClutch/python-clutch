@@ -1,60 +1,203 @@
-/************************************************************
-***** GENERAL *********
-*************************************************************/
+/////////////////////////////////////////////////////////////
+// GENERAL
+/////////////////////////////////////////////////////////////
 
 .home-set {
-	width: 90%;
-	margin: 0 auto;
 	text-align: center;
+	padding-top: 41px; 
 }
 
-// .home-set-a {
-// 	float: left;
-// 	text-decoration: none;
-//     display: block;
-//     // padding: 14px 21px;
-//     border-radius: 2px 2px 0 0;
-//     // font-size: 20px;
-//     // font-weight: normal;
-//     // text-transform: uppercase;
-//     background: lightgreen;
-//     cursor: pointer;
-//     top: 4px; 
-//     // @include transition(all 0.2s ease-in-out);
-//     &:hover {
-//       background: darken(lightgreen, 10);
-//     }
-// }
+/////////// TABS ////////////////////////////////
+
+.home-set-a {
+	// box-shadow: 0px -3px 7px -3px #b8b8b8;
+	font-size: 20px; 
+	// float: left;
+	text-decoration: none;
+	color: black; 
+    display: block;
+    opacity: .6; 
+    padding: 15px 6.7%;
+    // font-size: 20px;
+    // font-weight: normal;
+    // text-transform: uppercase;
+    background: $tab-color;
+    cursor: pointer;
+}
 
 .home-set-a.active {
-	background: red;
-	color: blue;
+	opacity: .77; 
+	box-shadow: 0px -4px 11px -3px #b8b8b8;
+	background: $bg-color;
+}
+
+.home-set-a:first-of-type {
+	margin-right: 4px; 
+}
+
+.home-set-a:last-of-type {
+	margin-left: 4px; 
 }
 
 .home-set-section {
+	margin: -50px 0 0; 
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-end;
+	justify-content: center;
 	flex-wrap: wrap;
 	width: 100%;
+	z-index: 3;
+	position: absolute;
 }
 
-// .home-set-a-div {
-// 	float: left;
-// 	display: block;
+/////////////////////////////////////////////////////////////
+// SEARCH AND FILTERS
+/////////////////////////////////////////////////////////////
+
+// by name or group
+.home-project-a-div {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.home-project-a {
+	padding: 11px 0;
+	margin: 0 1.165%;
+	text-decoration: none;
+	background: white;
+	border: 2px solid $base-color;
+	color: $base-color;  
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	height: 19px;
+	width: 26.02%;
+	font-size: 18px; 
+	font-weight: bold; 
+}
+
+.projectActive {
+	background: $base-color; 
+	color: white;  
+}
+
+.home-project-search-holder-div {
+	width: 49.903%;
+	height: 41px;
+	position: relative;
+}
+
+.home-project-search {
+	width: 100%;
+	height: 100%;
+	background: $light-gray;
+	border: 1px solid $gray;
+	// &.ng-dirty {
+	// 	border: 51px solid $dark-gray;
+	// }
+	&:focus {
+		outline: 0;
+		border: 2px solid $dark-gray;
+	}
+}
+
+.home-project-search-div {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.home-project-i-div {
+	height: 41px;
+	width: 5.51%;
+	position: relative;
+	background: $dark-gray;
+	i {
+		position: absolute;
+		right: 22px;
+		top: 10px; 
+		color: $light-gray; 
+		font-size: 20px; 
+	}
+}
+
+.home-project-search-div p {
+	position: absolute;
+	top: 10px;
+	left: 20px;
+	font-size: 20px;
+	color: $dark-gray;  
+}
+
+// .home-project-i-div i {
+// 	position: absolute;
+// 	right: 0px;
 // }
 
+/////////// SEARCH BAR PLACEHOLDER ////////////////////////////////
 
-/*************************************************************
-***** TABS *********
-*************************************************************/
+.home-project-search::-webkit-input-placeholder {
+	padding: 0 0 6px;
+	color: $dark-gray; 
+	font-size: 20px; 
+}
+
+.home-project-search:-moz-placeholder { 
+   color: $gray;  
+   font-size: 20px; 
+}
+
+.home-project-search::-moz-placeholder {  
+   color: $gray; 
+   font-size: 20px; 
+}
+
+.home-project-search:-ms-input-placeholder {  
+   color: $gray;   
+   font-size: 20px; 
+}
+
+/////////// FILTER ////////////////////////////////
+
+.project-radio {
+	visibility: hidden;
+	position: absolute;
+}
+
+.home-project-filter .fa-dot-circle-o,
+.home-project-filter .fa-circle-o, {
+	font-size: 24px;  
+}
+
+.browse-heading {
+	margin: 34px 0 36px; 
+	color: $gray-text;
+}
+
+.home-project-filter {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	width: 62%;
+	margin: 34px auto;
+}
+
+.home-project-filter label {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.home-project-filter p {
+	margin-top: 4px; 
+	margin-left: 6px;
+	font-weight: 300;  
+}
 
 
 
 
-
-
-
-
-
-/******************** comment ******************************

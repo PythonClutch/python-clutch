@@ -1,34 +1,40 @@
-/*************************************************************
-***** GENERAL *********
-*************************************************************/
+/////////////////////////////////////////////////////////////
+// PROJECT.HTML
+/////////////////////////////////////////////////////////////
 
-.home-project-li {
-	width: 90%;
-	background: lightgray; 
-	margin: 20px auto;
+.project-info {
+	background: $light-gray;
+	margin-top: 24px;  
 }
 
-.home-project-details-div {
-	padding: .4em;
-	background: red;
+.project a {
+	color: $base-color; 
 }
 
-.flex-row {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	flex-wrap: wrap;
+.project {
+	margin-bottom: 13px; 
 }
 
-.home-project-basic-info-right {
-	width: 50%;
+.project-details-div {
+	padding: 10px 0 1px; 
+	background: transparent;
+	width: 97.38%;
+	margin: 0 auto;  
 }
 
-.project-links-div {
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-left;
-	flex-wrap: wrap;
+.graph {
+	width: 100%;
+	margin: 0 auto;
+	background: lightpink;
+	height: 150px; 
+}
+
+/////////////////////////////////////////////////////////////
+// HEADING
+/////////////////////////////////////////////////////////////
+
+.project-header {
+	margin-top: 13px; 
 }
 
 .projectname-user-div {
@@ -38,81 +44,35 @@
 	flex-wrap: wrap;
 }
 
-.project-header {
+.project-links-div {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	justify-content: flex-left;
 	flex-wrap: wrap;
+	margin-top: 20px; 
 }
 
-.home-project-content-p {
-	font-size: .6em;
+.project-links-div a {
+	margin-right: 3px; 
 }
 
-.home-project-content {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	flex-wrap: wrap;
+.projectname-user-div h1 {
+	font-size: 32px; 
 }
 
-.home-project-github {
-	 
+.projectname-user-div h3 {
+	font-size: 16px; 
 }
 
-.more-info-input {
-	visibility: hidden
+.project-details {
+	margin: 13px 0 24px;
+	width: 100%; 
+	font-size: 24px; 
 }
 
-.home-project-a {
-	margin: 0 1%;
+.home-project-basic-info-icon-gh {
+	margin-top: 13px;
 }
-
-/******************** comment *******************************/
-
-/*************************************************************
-***** SHOW DETAILS *********
-*************************************************************/
-
-.home-project-basic-info-plus {
-	cursor: pointer;
-}
-
-.names-details-checkbox:checked ~ .home-project-details-div {
-	background: blue; 
-}
-
-/****************** PROJECT DETAILS *******************************/
-
-.more-info-label {
-/*	float: right;*/
-	text-align: right;
-	margin-left: 70%;
-	cursor: pointer;
-}
-
-.fa-long-arrow-down {
-	font-size: 70%;
-}
-
-.more-info-input {
-	visibility: hidden
-}
-
-/*// .home-project-details-div {
-// 	padding: .4em;
-// }*/
-
-
-
-
-
-
-
-
-
-
-
 
 
 

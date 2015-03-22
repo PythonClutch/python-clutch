@@ -25,3 +25,8 @@ THE SOFTWARE.
 
 ## Testing Notes
 Before running tests, run ```createdb testdb```, to make the testing database.
+
+## Personal Access Keys
+To create a personal access key, go to https://github.com/settings/applications#personal-access-tokens and make one. 
+Then, assuming you've installed direnv, run ```echo export GITKEY=<thekeyyougenerate> > .envrc```
+We'll figure out how to use it to do API calls in a bit.
