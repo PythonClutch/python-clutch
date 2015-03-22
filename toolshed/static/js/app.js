@@ -12,7 +12,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 }]);
 
 app.controller('IndexCtrl', function () {
-	
+	console.log($('.home-project-search'));
 });
 (function () {
 	'use strict';
@@ -119,10 +119,8 @@ app.controller('AccountCtrl', function () {
 	  };
 	});
 })();
-app.controller('GroupCtrl', function () {
-	
-});
-app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location', function (homeFactory, projects, stringUtil, $location) {
+app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location', 'projectFactory', 
+	function (homeFactory, projects, stringUtil, $location, projectFactory) {
 	var self = this;
 
 	self.projects = projects;
@@ -153,6 +151,46 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location'
       
       return stringUtil.startsWith($location.path(), path);
     };
+
+    self.checkBox = function () {
+    	var target = $(event.target).parent().parent().parent().find('.names-details-checkbox');
+		if (target.prop('checked')) {
+			target.prop('checked', false);
+		} else {
+			target.prop('checked', true);
+		}
+	};
+
+	self.likedHeart = false;
+
+	self.like = function () {
+		self.likedHeart = true;
+		var target = $(event.target);
+		console.log(target);
+		if (target.hasClass('fa-heart-o')) {
+			target.removeClass('fa-heart-o');		
+		} else {
+			target.addClass('fa-heart-o');
+			self.likedHeart = false;
+		}
+	};
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
+
 }]);
 (function () {
 	'use strict';
@@ -191,6 +229,9 @@ $(function () {
 	}
 
 });
+app.controller('GroupCtrl', function () {
+	
+});
 app.controller('NavCtrl', ['$location', function ($location) {
 
 	var self = this;
@@ -219,11 +260,27 @@ app.controller('NavCtrl', ['$location', function ($location) {
 
 }]);
 
-app.controller('ProjectCtrl', ['project', function (project) {
+app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, projectFactory) {
 
 	var self = this;
 
 	self.project = project;
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
 	
 }]);
 app.config(['$routeProvider', function($routeProvider) {    
@@ -277,6 +334,42 @@ app.factory('homeFactory', function () {
 
 		setCategories: function () {
 			byProjects = false;
+		}
+
+	};
+
+});
+app.factory('projectFactory', function () {
+
+	'use strict';
+
+	var pyMoreInfo = false;
+	var ghMoreInfo = false;
+
+	return {
+
+		byPy: function () {
+			return pyMoreInfo;
+		},
+
+		byGh: function () {
+			return ghMoreInfo;
+		},
+
+		pyInfo: function () {
+			if (pyMoreInfo === true) {
+				pyMoreInfo = false;
+			} else {
+				pyMoreInfo = true;
+			}	
+		},
+
+		ghInfo: function () {
+			if (ghMoreInfo === true) {
+				ghMoreInfo = false;
+			} else {
+				ghMoreInfo = true;
+			}
 		}
 
 	};
@@ -394,6 +487,51 @@ app.controller('hpCtrl', function () {
 	self.setNames = function () {
 		self.byNames = true;
 	};
+
+	function selectedClass () {
+		var closest = $(event.target).parent().parent().children();
+		closest.each(function () {
+			var fa = $(this).find('.fa');
+			$(this).find('.fa').removeClass('fa-dot-circle-o');
+			console.log($(this).find('.project-radio')[0]);
+			$(this).find('.project-radio').prop('checked', false);
+			if (!fa.hasClass('fa-circle-o')) {
+				fa.addClass('fa-circle-o');
+			}
+		});
+		$(event.target).removeClass('fa-circle-o');
+		$(event.target).addClass('fa-dot-circle-o');
+	}
+
+	self.setPopular = function () {
+		selectedClass();
+		$('#project-popular-radio').prop('checked', true);
+	};
+
+	self.setNewest = function () {
+		selectedClass();
+		$('#project-newest-radio').prop('checked', true);
+	};
+
+	self.setTrending = function () {
+		selectedClass();
+		$('#project-trending-radio').prop('checked', true);
+	};
+
+	self.setList = function () {
+		selectedClass();
+		$('#project-list-radio').prop('checked', true);
+	};
+
+	self.searchClicked = true;
+
+	self.checkSearch = function () {
+		self.searchClicked = false;
+		$(event.target).parent().find('.home-project-search').focus();
+	};
+
+
+
 });
 (function () {
 	app.directive('homeNames', function() {
