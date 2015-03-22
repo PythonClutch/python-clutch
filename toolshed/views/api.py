@@ -84,15 +84,6 @@ def projects():
         return failure_response("There are no projects.", 404)
 
 
-@api.route("/projects/logs")
-def project_logs():
-    projects = Project.query.all()
-    if projects:
-        return success_response(all_projects_with_logs, projects)
-    else:
-        return failure_response("There are no projects", 404)
-
-
 @api.route("/projects", methods=["POST"])
 def make_project():
     urls = request.get_json()
@@ -102,14 +93,17 @@ def make_project():
     return success_response(single_project_schema, project)
 
 
-@api.route("/projects/logs/<int:id>")
-def project_logs():
-    project = Project.query.get_or_404(id)
-    logs = project.logs
-    success_response(all_logs_schema,logs)
-
-
 # Logs routes
+
+
+@api.route("/projects/logs")
+def project_logs():
+    projects = Project.query.all()
+    if projects:
+        return success_response(all_projects_with_logs, projects)
+    else:
+        return failure_response("There are no projects", 404)
+
 
 @api.route("/projects/<int:id>")
 def project(id):
