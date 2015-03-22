@@ -122,7 +122,7 @@ class ProjectLog(db.Model):
     forks_count = db.Column(db.Integer)
     starred_count = db.Column(db.Integer)
     watchers_count = db.Column(db.Integer)
-    current_version = db.Column(db.Integer)
+    current_version = db.Column(db.String(20))
     last_commit = db.Column(db.DateTime)
     open_issues_count = db.Column(db.Integer)
     downloads_count = db.Column(db.Integer)
