@@ -36,10 +36,6 @@ def test_get_project(client, project):
     assert response_data["status"] == "success"
     assert response_data["data"]["name"] == project.name
 
-def test_user_login(client):
-    """ Find a way to simulate OAuth
-    """
-    pass
 
 def test_post_comment(client, user, project):
     project_comment_url = "api/v1/projects/" + str(project.id) + "/comments"
