@@ -63,6 +63,7 @@ def bitbucket_populate(proj_dict, bitbucket_url):
     proj_dict['last_commit'] = bitbucket_info['last_updated']
     proj_dict['first_commit'] = bitbucket_info['created_on']
     proj_dict['open_issues_url'] = bitbucket_url + "issues?status=new&status=open"
+    proj_dict['open_issues_count'] = open_issues_info['count']
     return proj_dict
 
 def get_total_downloads(pypi_result):
