@@ -4,8 +4,8 @@ import os
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
-from toolshed.models import Admin
-
+from toolshed.models import Admin, Project
+from toolshed.updater import update_projects
 from toolshed import create_app, db
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -35,12 +35,13 @@ def createdb():
     """
     db.create_all()
 
+
 @manager.command
 def test():
     """Run tests."""
     import pytest
-
     exit_code = pytest.main([TEST_PATH, '--verbose'])
+
 
 @manager.command
 def create_admin():
@@ -50,6 +51,11 @@ def create_admin():
     db.session.commit()
 
 
+@manager.command
+def update():
+    projects = Project.query.all()
+    update_projects(projects)
+    return "Projects Updated."
 
 
 if __name__ == '__main__':

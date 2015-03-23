@@ -1,32 +1,44 @@
 <!-- <div class="full"> -->
 <!-- <div> -->
 
-<input type="search" placeholder="search projects">
-<i class="fa fa-search"></i>
-<h6>or browse by filter below</h6>
+<div class="home-project-search-div">
+	<div class="home-project-search-holder-div">
+		<input ng-click="hp.checkSearch()" class="home-project-search" type="search">
+		<p ng-click="hp.checkSearch()" ng-show="hp.searchClicked" for="search-projects-checkbox">Search Projects</p>
+	</div>
+	<div class="home-project-i-div">
+		<i class="fa fa-search"></i>
+	</div>
+</div>
+
+<h6 class="browse-heading">or browse by filter below</h6>
 
 <div class="home-project-a-div">
-	<a class="home-project-a" ng-click="hp.setNames()" href="">by name</a>
-	<a class="home-project-a" ng-click="hp.setGroups()" href="">by group</a>
+	<a class="home-project-a home-project-a-name" ng-class="{ projectActive: hp.byNames }" ng-click="hp.setNames()" href="">by name</a>
+	<a class="home-project-a home-project-a-group" ng-class="{ projectActive: !hp.byNames }" ng-click="hp.setGroups()" href="">by group</a>
 </div>
 <!-- </div> -->
 
 <div class="home-project-filter">
 	<label for="hp-filter-popular">
-		<input type="radio">
-		Popular
+		<input class="project-radio" id="project-popular-radio" name="filter" type="radio" checked />
+		<i ng-click="hp.setPopular()" class="fa fa-dot-circle-o"></i>
+		<p>Popular</p>
 	</label>
 	<label for="hp-filter-newest">
-		<input type="radio">
-		Newest
+		<input class="project-radio" id="project-newest-radio" name="filter" type="radio">
+		<i ng-click="hp.setNewest()" class="fa fa-circle-o"></i>
+		<p>Newest</p>
 	</label>
 	<label for="hp-filter-trending">
-		<input type="radio">
-		Trending		
+		<input class="project-radio" id="project-trending-radio" name="filter" type="radio">
+		<i ng-click="hp.setTrending()" class="fa fa-circle-o"></i>
+		<p>Trending</p>		
 	</label>
 	<label for="hp-filter-list">
-		<input type="radio">
-		List		
+		<input class="project-radio" id="project-list-radio" name="filter" type="radio">
+		<i ng-click="hp.setList()" class="fa fa-circle-o"></i>
+		<p>List (A-Z)</p>		
 	</label>
 </div>
 
