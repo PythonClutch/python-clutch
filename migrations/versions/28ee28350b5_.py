@@ -21,7 +21,7 @@ def upgrade():
     sa.Column('forks_count', sa.Integer(), nullable=True),
     sa.Column('starred_count', sa.Integer(), nullable=True),
     sa.Column('watchers_count', sa.Integer(), nullable=True),
-    sa.Column('current_version', sa.Integer(), nullable=True),
+    sa.Column('current_version', sa.String(length=20), nullable=True),
     sa.Column('last_commit', sa.DateTime(), nullable=True),
     sa.Column('open_issues_count', sa.Integer(), nullable=True),
     sa.Column('downloads_count', sa.Integer(), nullable=True),
