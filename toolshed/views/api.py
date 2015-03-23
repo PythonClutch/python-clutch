@@ -1,7 +1,7 @@
 import json
 from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
-                      Group, GroupSchema, LikeSchema, LogSchema, ProjectLog)
+                      Group, GroupSchema, LikeSchema)
 from flask import Blueprint, jsonify, request, abort, url_for
 from ..extensions import db
 from .toolshed import require_login, current_user
@@ -18,8 +18,7 @@ api = Blueprint('api', __name__)
 
 all_users_schema = UserSchema(many=True)
 single_user_schema = UserSchema()
-all_projects_schema = ProjectSchema(many=True, exclude=("logs",))
-all_projects_with_logs = ProjectSchema(many=True)
+all_projects_schema = ProjectSchema(many=True)
 single_project_schema = ProjectSchema()
 single_comment_schema = CommentSchema()
 all_comments_schema = CommentSchema(many=True)
@@ -29,8 +28,6 @@ single_group_schema = GroupSchema()
 all_groups_schema = GroupSchema(many=True)
 single_like_schema = LikeSchema()
 all_likes_schema = LikeSchema(many=True)
-all_logs_schema = LogSchema(many=True)
-single_log_schema = LogSchema()
 
 # response functions
 
@@ -84,27 +81,6 @@ def projects():
         return failure_response("There are no projects.", 404)
 
 
-@api.route("/projects", methods=["POST"])
-def make_project():
-    urls = request.get_json()
-    project = create_project(**urls)
-    db.session.add(project)
-    db.session.commit()
-    return success_response(single_project_schema, project)
-
-
-# Logs routes
-
-
-@api.route("/projects/logs")
-def project_logs():
-    projects = Project.query.all()
-    if projects:
-        return success_response(all_projects_with_logs, projects)
-    else:
-        return failure_response("There are no projects", 404)
-
-
 @api.route("/projects/<int:id>")
 def project(id):
     project = Project.query.get(id)
@@ -112,6 +88,15 @@ def project(id):
         return success_response(single_project_schema, project)
     else:
         return failure_response("There was no such project.", 404)
+
+
+@api.route("/projects", methods=["POST"])
+def make_project():
+    urls = request.get_json()
+    project = create_project(**urls)
+    db.session.add(project)
+    db.session.commit()
+    return success_response(single_project_schema, project)
 
 
 # Category routes
@@ -255,3 +240,14 @@ def get_project_likes(id):
     else:
         return failure_response("Project has no likes.", 404)
 
+
+@api.route("/projects/update")
+def update_call():
+    projects = Project.query.all()
+    update_projects(projects)
+    return success_response()
+
+
+@api.route("/projects/dump", methods=["POST"])
+def projects_seed():
+    urls_json = request.get_json()
