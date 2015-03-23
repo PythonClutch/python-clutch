@@ -59,8 +59,7 @@ send JSON like:
 ```
 {
     "pypi_url": "https://pypi.python.org/pypi/pandas",
-    "github_url": "https://github.com/pydata/pandas", 
-    "docs_url": null
+    "github_url": "https://github.com/pydata/pandas"
     
 }
 ```
