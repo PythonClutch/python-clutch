@@ -33,4 +33,14 @@ def test_get_project_list(client, project):
 def test_get_project(client, project):
     response = client.get("api/v1/projects/" + str(project.id))
     response_data = json.loads(response.get_data().decode("utf-8"))
-    assert response_data['status'] == "success"
+    assert response_data["status"] == "success"
+    assert response_data["data"]["name"] == project.name
+
+
+def test_post_comment(client, user, project):
+    project_comment_url = "api/v1/projects/" + str(project.id) + "/comments"
+    data = {
+        "text": "This is a test comment."
+    }
+    client.post(project_comment_url, data=data)
+    assert project.number_of_comments == 1

@@ -17,6 +17,7 @@ class User(db.Model):
     github_name = db.Column(db.String(255), nullable=False)
     github_url = db.Column(db.String(400))
     email = db.Column(db.String(255))
+    avatar_url = db.Column(db.String(255))
 
     comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id",
                                cascade="all,delete")

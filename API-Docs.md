@@ -51,3 +51,57 @@ Get back:
     "status": "success"
 }
 ```
+
+
+#### POST to ```/projects```
+
+send JSON like:
+```
+{
+    "pypi_url": "https://pypi.python.org/pypi/pandas",
+    "github_url": "https://github.com/pydata/pandas"
+    
+}
+```
+
+and get back: 
+
+```
+{
+    "data": {
+        "age_display": "4 years ago",
+        "category_id": null,
+        "comments": [ ],
+        "contributors_count": 30,
+        "contributors_url": "https://api.github.com/repos/pydata/pandas/contributors",
+        "current_version": "0.16.0",
+        "docs_url": null,
+        "downloads_count": 2183076,
+        "first_commit": "2010-08-24T01:37:33+00:00",
+        "forks_count": 1492,
+        "forks_url": "https://github.com/pydata/pandas/network",
+        "github_url": "https://github.com/pydata/pandas",
+        "group_id": null,
+        "id": 2,
+        "last_commit": "2015-03-23T16:40:46+00:00",
+        "last_commit_display": "an hour ago",
+        "logs": [ ],
+        "mailing_list_url": null,
+        "name": "pandas",
+        "open_issues_count": 1332,
+        "open_issues_url": "https://github.com/pydata/pandas/issues",
+        "project_stub": "pydata/pandas",
+        "pypi_url": "https://pypi.python.org/pypi/pandas",
+        "python_three_compatible": true,
+        "starred_count": 4174,
+        "starred_url": "https://github.com/pydata/pandas/stargazers",
+        "status": false,
+        "summary": "Powerful data structures for data analysis, time series,and statistics",
+        "user_likes": [ ],
+        "watchers_count": 4174,
+        "watchers_url": "https://github.com/pydata/pandas/watchers",
+        "website": "http://pandas.pydata.org"
+    },
+    "status": "success"
+}
+```
