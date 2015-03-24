@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 import os
+import csv
 
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
-from toolshed.models import Admin
-
+from toolshed.models import Admin, Project
+from toolshed.updater import update_projects
 from toolshed import create_app, db
+from toolshed.importer import create_project
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 TEST_PATH = os.path.join(HERE, 'tests')
@@ -35,12 +37,13 @@ def createdb():
     """
     db.create_all()
 
+
 @manager.command
 def test():
     """Run tests."""
     import pytest
-
     exit_code = pytest.main([TEST_PATH, '--verbose'])
+
 
 @manager.command
 def create_admin():
@@ -50,6 +53,24 @@ def create_admin():
     db.session.commit()
 
 
+@manager.command
+def update():
+    projects = Project.query.all()
+    update_projects(projects)
+    return "Projects Updated."
+
+
+@manager.command
+def seed_db():
+ with open('better_projects.csv') as csvfile:
+     reader = csv.reader(csvfile)
+     for row in reader:
+         list = []
+         for url in row:
+             list.append(url)
+             project = create_project(pypi_url=str(list[0]), github_url=str(list[1]), bitbucket_url=str(list[2]))
+             db.session.add(project)
+     db.session.commit()
 
 
 if __name__ == '__main__':

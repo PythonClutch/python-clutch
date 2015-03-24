@@ -248,3 +248,6 @@ def update_call():
     return success_response()
 
 
+@api.route("/projects/dump", methods=["POST"])
+def projects_seed():
+    urls_json = request.get_json()

@@ -1,7 +1,7 @@
 from .extensions import db, bcrypt, login_manager
 from marshmallow import Schema, fields, ValidationError
 from flask.ext.login import UserMixin
-
+import arrow
 
 @login_manager.user_loader
 def load_admin(id):
@@ -17,6 +17,7 @@ class User(db.Model):
     github_name = db.Column(db.String(255), nullable=False)
     github_url = db.Column(db.String(400))
     email = db.Column(db.String(255))
+    avatar_url = db.Column(db.String(255))
 
     comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id",
                                cascade="all,delete")
@@ -54,7 +55,6 @@ class Project(db.Model):
     starred_count = db.Column(db.Integer)
     watchers_count = db.Column(db.Integer)
     watchers_url = db.Column(db.String)
-    age = db.Column(db.DateTime)
     current_version = db.Column(db.String(20))
     last_commit = db.Column(db.DateTime)
     first_commit = db.Column(db.DateTime)
@@ -82,6 +82,8 @@ class Project(db.Model):
                                cascade="all,delete")
     user_likes = db.relationship("Like", backref="project", lazy="dynamic", foreign_keys="Like.project_id",
                                  cascade="all,delete")
+    logs = db.relationship("ProjectLog", backref="project", lazy="dynamic", foreign_keys="ProjectLog.project_id",
+                                cascade="all,delete")
 
     @property
     def number_of_comments(self):
@@ -91,8 +93,60 @@ class Project(db.Model):
     def number_of_likes(self):
         return len(Like.query.filter_by(project_id=self.id).all())
 
+    @property
+    def age_display(self):
+        if not self.first_commit:
+            return None
+        else:
+            age_string = str(self.first_commit)
+            arrow_age = arrow.get(age_string)
+            return arrow_age.humanize()
+
+    @property
+    def last_commit_display(self):
+        if not self.last_commit:
+            return None
+        else:
+            last_string = str(self.last_commit)
+            arrow_last_commit = arrow.get(last_string)
+            return arrow_last_commit.humanize()
+
+
+
     def __repr__(self):
         return "{}".format(self.name)
+
+
+
+class ProjectLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    forks_count = db.Column(db.Integer)
+    starred_count = db.Column(db.Integer)
+    watchers_count = db.Column(db.Integer)
+    current_version = db.Column(db.String(20))
+    last_commit = db.Column(db.DateTime)
+    open_issues_count = db.Column(db.Integer)
+    downloads_count = db.Column(db.Integer)
+    contributors_count = db.Column(db.Integer)
+    log_date = db.Column(db.Date)
+
+    project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
+
+    @property
+    def stars_difference(self):
+        return Project.query.get(self.project_id) - self.starred_count
+    @property
+    def forks_difference(self):
+        return Project.query.get(self.project_id) - self.forks_count
+    @property
+    def watchers_difference(self):
+        return Project.query.get(self.project_id) - self.watchers_count
+    @property
+    def download_difference(self):
+        return Project.query.get(self.project_id) - self.downloads_count
+    @property
+    def contributor_difference(self):
+        return Project.query.get(self.project_id) - self.contributors_count
 
 
 class Comment(db.Model):
@@ -105,7 +159,6 @@ class Comment(db.Model):
 
     def __repr__(self):
         return "Comment: {}".format(self.text)
-
 
 
 class Category(db.Model):
@@ -158,6 +211,7 @@ the ability to display the api endpoints.
 """
 
 
+
 class CommentSchema(Schema):
     class Meta:
         fields = ("id", "text", "created", "user_id",
@@ -174,18 +228,30 @@ class LikeSchema(Schema):
     class Meta:
         fields = ("id", "user_id", "project_id", "user_name", "project_name")
 
+
+class LogSchema(Schema):
+    class Meta:
+        fields = ("id", "project_id", "forks_count", "starred_count",
+                  "current_version", "last_commit", "open_issues_count",
+                  "downloads_count", "contributors_count", "log_date",
+                  "stars_difference", "forks_difference", "watchers_difference",
+                  "download_difference", "contributor_difference")
+
 class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
     user_likes = fields.Nested(LikeSchema, many=True)
+    logs = fields.Nested(LogSchema, many=True)
+
     class Meta:
         fields = ("id", "status", "name", "summary", "forks_count",
                   "starred_count", "watchers_count", "watchers_url",
-                  "age", "current_version", "last_commit", "first_commit",
+                  "current_version", "last_commit", "first_commit",
                   "open_issues_count", "project_stub", "downloads_count",
                   "contributors_count", "python_three_compatible", "website",
                   "github_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
-                  "category_id", "group_id", "comments", "user_likes" )
+                  "category_id", "group_id", "comments", "user_likes", "age_display",
+                  "last_commit_display", "logs" )
 
 
 class CategorySchema(Schema):
@@ -198,3 +264,6 @@ class GroupSchema(Schema):
     categories = fields.Nested(CategorySchema, many=True)
     class Meta:
         fields = ("id", "name", "categories")
+
+
+
