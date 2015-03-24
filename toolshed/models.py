@@ -64,7 +64,7 @@ class Project(db.Model):
     contributors_count = db.Column(db.Integer)
     python_three_compatible = db.Column(db.Boolean)
     website = db.Column(db.String(400))
-    github_url = db.Column(db.String(400))
+    git_url = db.Column(db.String(400))
     pypi_url = db.Column(db.String(400))
     contributors_url = db.Column(db.String(400))
     mailing_list_url = db.Column(db.String(400))
@@ -248,7 +248,7 @@ class ProjectSchema(Schema):
                   "current_version", "last_commit", "first_commit",
                   "open_issues_count", "project_stub", "downloads_count",
                   "contributors_count", "python_three_compatible", "website",
-                  "github_url", "pypi_url", "contributors_url", "mailing_list_url",
+                  "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
                   "category_id", "group_id", "comments", "user_likes", "age_display",
                   "last_commit_display", "logs" )
