@@ -53,10 +53,10 @@ https://pypi.python.org/pypi/parse,,
 https://pypi.python.org/pypi/zdaemon,https://github.com/zopefoundation/zdaemon,
 https://pypi.python.org/pypi/django-templatetag-sugar,,
 https://pypi.python.org/pypi/guppy,,
-https://pypi.python.org/pypi/Beaver,,
+https://pypi.python.org/pypi/Beaver,https://github.com/josegonzalez/python-beaver,
 https://pypi.python.org/pypi/marionette-transport,,
-https://pypi.python.org/pypi/django-autocomplete-light,https://github.com/yourlabs/django-autocomplete-light/
-https://pypi.python.org/pypi/IPy,https://github.com/haypo/python-ipy/
+https://pypi.python.org/pypi/django-autocomplete-light,https://github.com/yourlabs/django-autocomplete-light/,
+https://pypi.python.org/pypi/IPy,https://github.com/haypo/python-ipy/,
 https://pypi.python.org/pypi/OERPLib,https://github.com/osiell/oerplib/,
 https://pypi.python.org/pypi/APScheduler,,https://bitbucket.org/agronholm/apscheduler
 https://pypi.python.org/pypi/pysnmp,,
@@ -68,7 +68,6 @@ https://pypi.python.org/pypi/pyaml,,
 https://pypi.python.org/pypi/OpenGroupware,,
 https://pypi.python.org/pypi/pyquery,,
 https://pypi.python.org/pypi/manifestparser,,
-https://pypi.python.org/pypi/facebook-sdk,,
 https://pypi.python.org/pypi/cli53,,
 https://pypi.python.org/pypi/JSONMapperHGMMPFork,,
 https://pypi.python.org/pypi/jsonrpclib,,
@@ -100,7 +99,7 @@ https://pypi.python.org/pypi/html2text,https://github.com/Alir3z4/html2text,
 https://pypi.python.org/pypi/Products.TinyMCE,https://github.com/plone/Products.TinyMCE,
 https://pypi.python.org/pypi/patsy,https://github.com/pydata/patsy,
 https://pypi.python.org/pypi/Jinja,,
-https://pypi.python.org/pypi/aniso8601,https://bitbucket.org/nielsenb/aniso8601
+https://pypi.python.org/pypi/aniso8601,,https://bitbucket.org/nielsenb/aniso8601
 https://pypi.python.org/pypi/argcomplete,https://github.com/kislyuk/argcomplete,
 https://pypi.python.org/pypi/splinter,https://github.com/cobrateam/splinter,
 https://pypi.python.org/pypi/pyelasticsearch,https://github.com/pyelasticsearch/pyelasticsearch,
@@ -184,8 +183,8 @@ https://pypi.python.org/pypi/plone.app.locales,https://github.com/collective/plo
 https://pypi.python.org/pypi/zope.pagetemplate,https://github.com/zopefoundation/zope.pagetemplate,
 https://pypi.python.org/pypi/cql,,
 https://pypi.python.org/pypi/azure,https://github.com/Azure/azure-sdk-for-python,
-https://pypi.python.org/pypi/pytest-cache,https://bitbucket.org/hpk42/pytest-cache/,
-https://pypi.python.org/pypi/plone.app.iterate,https://github.com/plone/plone.app.iterate
+https://pypi.python.org/pypi/pytest-cache,,https://bitbucket.org/hpk42/pytest-cache/
+https://pypi.python.org/pypi/plone.app.iterate,https://github.com/plone/plone.app.iterate,
 https://pypi.python.org/pypi/mandrill,,https://bitbucket.org/mailchimp/mandrill-api-python/
 https://pypi.python.org/pypi/nma-python,https://github.com/thekad/nma-python,
 https://pypi.python.org/pypi/langid,https://github.com/saffsd/langid.py,

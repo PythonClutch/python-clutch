@@ -114,6 +114,8 @@ def project(id):
 def make_project():
     urls = request.get_json()
     project = create_project(**urls)
+    if not project:
+        return failure_response("This project already exsists.", 409)
     user_name = current_user()
     user = User.query.filter_by(github_name=user_name).first()
     project.submitted_by_id = user.id

@@ -20,12 +20,16 @@ auth=(gitkey, 'x-oauth-basic')
 def parse_github_url(github_url):
     github_api_base = "https://api.github.com/repos/"
     github_stub = github_search_regex.search(github_url).groups()[0]
+    if github_stub[-1] == "/":
+        github_stub = github_stub[:-1:]
     return (github_api_base + github_stub), github_stub
 
 
 def parse_bitbucket_url(bitbucket_url):
     bitbucket_api_base = "https://api.bitbucket.org/1.0/repositories/"
     bitbucket_stub = bitbucket_search_regex.search(bitbucket_url).groups()[0]
+    if bitbucket_stub[-1] == "/":
+        bitbucket_stub = bitbucket_stub[:-1:]
     return (bitbucket_api_base + bitbucket_stub), bitbucket_stub
 
 
@@ -54,11 +58,8 @@ def github_populate(proj_dict, github_url):
 def bitbucket_populate(proj_dict, bitbucket_url):
     bitbucket_api, project_stub = parse_bitbucket_url(bitbucket_url)
     bitbucket_info = requests.get(bitbucket_api).json()
-    print(bitbucket_api)
     open_issues_api = bitbucket_api + "issues"
     payload = {'status': "open"}
-    open_issues_info = requests.get(open_issues_api, params=payload).json()
-    print(open_issues_api)
     proj_dict['forks_count'] = bitbucket_info['forks_count']
     proj_dict['git_url'] = bitbucket_url
     proj_dict['project_stub'] = bitbucket_info['slug']
@@ -66,7 +67,9 @@ def bitbucket_populate(proj_dict, bitbucket_url):
     proj_dict['last_commit'] = bitbucket_info['last_updated']
     proj_dict['first_commit'] = bitbucket_info['created_on']
     proj_dict['open_issues_url'] = bitbucket_url + "issues?status=new&status=open"
-    proj_dict['open_issues_count'] = open_issues_info['count']
+    open_issues_info = requests.get(open_issues_api, params=payload).json()
+    if not open_issues_info['error']:
+        proj_dict['open_issues_count'] = open_issues_info['count']
     return proj_dict
 
 def get_total_downloads(pypi_result):
@@ -79,20 +82,24 @@ def python_three_check(pypi):
 
 
 def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=None):
+    project = Project.query.filter_by(pypi_url=pypi_url).first()
+    if project:
+        return None
     proj_dict = {}
     pypi_api = pypi_url + "/json"
     pypi_info = requests.get(pypi_api).json()
 
-    if github_url and github_url != '':
+    if github_url:
         proj_dict = github_populate(proj_dict, github_url)
     elif bitbucket_url:
         proj_dict = bitbucket_populate(proj_dict, bitbucket_url)
-    elif github_match_regex.search(pypi_info["info"]['home_page']):
-        github_url = pypi_info["info"]['home_page']
-        proj_dict = github_populate(proj_dict, github_url)
-    elif bitbucket_match_regex.search(pypi_info['info']['home_page']):
-        bitbucket_url = pypi_info['info']['home_page']
-        proj_dict = bitbucket_populate(proj_dict, bitbucket_url)
+    elif pypi_info["info"]['home_page']:
+        if github_match_regex.search(pypi_info["info"]['home_page']):
+            github_url = pypi_info["info"]['home_page']
+            proj_dict = github_populate(proj_dict, github_url)
+        if bitbucket_match_regex.search(pypi_info['info']['home_page']):
+            bitbucket_url = pypi_info['info']['home_page']
+            proj_dict = bitbucket_populate(proj_dict, bitbucket_url)
 
     proj_dict['name'] = pypi_info['info']['name']
     proj_dict['current_version'] = pypi_info['info']['version']
