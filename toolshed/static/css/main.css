@@ -1109,9 +1109,6 @@ header {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap; }
 
-.nav-login-a {
-  display: none; }
-
 .nav-search-bar {
   position: relative; }
 
@@ -1243,3 +1240,20 @@ footer a {
 
 .home-project-basic-info-right-group-details .home-project-basic-info-score {
   margin-right: 25px; }
+
+.home-group-basic-info-right-category {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
+
+.home-project-details-div-li-cat {
+  background: white; }

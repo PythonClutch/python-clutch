@@ -1,7 +1,6 @@
 <home-filters></home-filters>
 
 <ul>
-	<!-- <li class="home-project-li" ng-repeat="project in vm.projects" > -->
 	<li class="home-project-li" dir-paginate="project in vm.projects | itemsPerPage: 1" pagination-id="name">
 		<names-details class="name-details"></names-details>
 	</li>

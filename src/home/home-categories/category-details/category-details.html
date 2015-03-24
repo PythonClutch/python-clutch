@@ -1,0 +1,14 @@
+<input class="names-details-checkbox" type="checkbox">
+
+<div class="home-project-basic-info flex-row">
+	<h4 class="home-project-name"><a href="#/home/groups/{{group.id}}">{{category.name}}</a></h4>
+	<div class="home-project-basic-info-right home-group-basic-info-right-category">
+		<i ng-click="vm.checkBox()" class="home-project-basic-info-icon home-project-basic-info-plus fa fa-plus"></i>
+	</div>
+</div>
+
+<ul class="home-project-details-div">
+	<li class="home-project-details-div-li home-project-details-div-li-cat">
+		<cat-details-groups></cat-details-groups>
+	</li>
+</ul>

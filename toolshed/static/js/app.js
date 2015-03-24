@@ -249,20 +249,31 @@ app.config(['$routeProvider', function ($routeProvider) {
 app.controller('FooterCtrl', function () {
 	
 });
-app.controller('GroupCtrl', function () {
+app.controller('GroupCtrl', ['projects', 'group', function (projects, group) {
+	var self = this;
+
+	self.projects = projects;
+
+	self.group = group;
 	
-});
+}]);
 app.config(['$routeProvider', function($routeProvider) {    
     var routeDefinition = {
       templateUrl: 'static/group/group.html',
       controller: 'GroupCtrl',
       controllerAs: 'vm',
       resolve: {
+        projects: ['projectServices',
+          function(projectServices) {
+            return projectServices.list();
+          }
+        ],
         group: ['$route', 'groupServices',
           function($route, groupServices) {
             var routeParams = $route.current.params;
             return groupServices.getByGroupId(routeParams.groupid);
-          }]
+          }
+        ]
       }
     };
 
@@ -332,15 +343,6 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 	self.ghInfo = function () {
 		pf.ghInfo();
 		self.ghMoreInfo = pf.byGh();
-	};
-
-	self.left = function () {
-		console.log(self.projects);
-		console.log('left')
-	};
-
-	self.right = function () {
-		console.log('right')
 	};
 
 }]);
@@ -781,7 +783,47 @@ app.controller('Error404Ctrl', ['$location', function ($location) {
   this.message = 'Could not find: ' + $location.url();
 }]);
 
+(function () {
+	app.directive('homeCategories', function () {
+		return {
+			restrict: 'E',
+			templateUrl: 'static/home/home-categories/home-categories.html'
+		};
+	});
 
+	app.directive('homeCatFilters', function () {
+		return {
+			restrict: 'E',
+			templateUrl: 'static/home/home-categories/category-details/home-cat-filters.html'
+		};
+	});
+
+	app.directive('categoryDetails', function () {
+		return {
+			restrict: 'E',
+			templateUrl: 'static/home/home-categories/category-details/category-details.html'
+		};
+	});
+
+	app.directive('catDetailsGroups', function () {
+		return {
+			restrict: 'E',
+			templateUrl: 'static/home/home-categories/category-details/cat-details-groups.html'
+		};
+	});
+})();
+app.controller('CategoryCtrl', ['appearFactory', function (appearFactory) {
+	var self = this;
+
+	self.categories = [{
+			'name': 'peter',
+	
+		}]
+	
+	self.checkBox = function () {
+    	appearFactory.checkBox();
+	};
+}]);
 app.config(['$routeProvider', function ($routeProvider) {
   'use strict';
 

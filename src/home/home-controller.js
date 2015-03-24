@@ -63,13 +63,4 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 		self.ghMoreInfo = pf.byGh();
 	};
 
-	self.left = function () {
-		console.log(self.projects);
-		console.log('left')
-	};
-
-	self.right = function () {
-		console.log('right')
-	};
-
 }]);

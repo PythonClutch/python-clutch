@@ -1,1 +1,13 @@
-categories
+<home-cat-filters></home-cat-filters>
+
+<ul>
+	<li class="home-project-li home-project-li-category" dir-paginate="category in vm.categories | itemsPerPage: 1" pagination-id="category">
+		<category-details></category-details>
+	</li>
+</ul>
+
+<div class="pagination-div">
+	<p ng-show="{{vm.categories.length}} > 5">5 of {{vm.categories.length}}</p>
+	<p ng-show="{{vm.categories.length}} < 5">{{vm.categories.length}} of {{vm.categories.length}}</p>
+	<dir-pagination-controls pagination-id="category"></dir-pagination-controls>
+</div>

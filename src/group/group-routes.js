@@ -4,11 +4,17 @@ app.config(['$routeProvider', function($routeProvider) {
       controller: 'GroupCtrl',
       controllerAs: 'vm',
       resolve: {
+        projects: ['projectServices',
+          function(projectServices) {
+            return projectServices.list();
+          }
+        ],
         group: ['$route', 'groupServices',
           function($route, groupServices) {
             var routeParams = $route.current.params;
             return groupServices.getByGroupId(routeParams.groupid);
-          }]
+          }
+        ]
       }
     };
 
