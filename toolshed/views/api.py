@@ -11,7 +11,7 @@ from ..importer import create_project
 
 api = Blueprint('api', __name__)
 
-git 
+
 # Schemas
 
 all_users_schema = UserSchema(many=True)
