@@ -69,7 +69,7 @@ class Project(db.Model):
     contributors_count = db.Column(db.Integer)
     python_three_compatible = db.Column(db.Boolean)
     date_added = db.Column(db.Date)
-    score = db.Column(db.Integer)
+    score = db.Column(db.Float)
     website = db.Column(db.String(400))
     git_url = db.Column(db.String(400))
     pypi_url = db.Column(db.String(400))
@@ -135,7 +135,7 @@ class ProjectLog(db.Model):
     contributors_count = db.Column(db.Integer)
     log_date = db.Column(db.Date)
     likes_count = db.Column(db.Integer)
-    previous_score = db.Column(db.Integer)
+    previous_score = db.Column(db.Float)
 
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
 
