@@ -246,6 +246,9 @@ app.config(['$routeProvider', function ($routeProvider) {
   });
 
 }]);
+app.controller('FooterCtrl', function () {
+	
+});
 app.controller('GroupCtrl', function () {
 	
 });
@@ -266,9 +269,6 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/home/groups/:groupid', routeDefinition);
 
 }]);
-app.controller('FooterCtrl', function () {
-	
-});
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups',
 	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups) {
 	var self = this;
@@ -777,6 +777,10 @@ app.factory('accountFactory', function () {
 	};
 
 });
+app.controller('Error404Ctrl', ['$location', function ($location) {
+  this.message = 'Could not find: ' + $location.url();
+}]);
+
 
 app.config(['$routeProvider', function ($routeProvider) {
   'use strict';
@@ -1459,10 +1463,6 @@ app.factory('homeFactory', function () {
 	};
 
 });
-app.controller('Error404Ctrl', ['$location', function ($location) {
-  this.message = 'Could not find: ' + $location.url();
-}]);
-
 app.factory('submitFactory', function () {
 
 	'use strict';
