@@ -389,49 +389,6 @@ app.controller('NavCtrl', ['$location', function ($location) {
 
 }]);
 
-app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, projectFactory) {
-
-	var self = this;
-
-	self.project = project;
-
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-	
-}]);
-app.config(['$routeProvider', function($routeProvider) {    
-    var routeDefinition = {
-      templateUrl: 'static/project/project.html',
-      controller: 'ProjectCtrl',
-      controllerAs: 'vm',
-      resolve: {
-        project: ['$route', 'projectServices',
-          function($route, projectServices) {
-            var routeParams = $route.current.params;
-            return projectServices.getByProjectId(routeParams.projectid);
-          }]
-      }
-    };
-
-    $routeProvider.when('/home/projects/:projectid', routeDefinition);
-
-}]);
-
-
-
 app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $location) {
 
 	'use strict';
@@ -589,6 +546,49 @@ app.factory('stringUtil', function() {
         }
     };
 });
+app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, projectFactory) {
+
+	var self = this;
+
+	self.project = project;
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
+	
+}]);
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/project/project.html',
+      controller: 'ProjectCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        project: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getByProjectId(routeParams.projectid);
+          }]
+      }
+    };
+
+    $routeProvider.when('/home/projects/:projectid', routeDefinition);
+
+}]);
+
+
+
 app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', function (activeRoute, submitFactory) {
 
 	var self = this;
@@ -681,6 +681,10 @@ app.config(['$routeProvider', function ($routeProvider) {
   // });
 
 }]);
+app.controller('Error404Ctrl', ['$location', function ($location) {
+  this.message = 'Could not find: ' + $location.url();
+}]);
+
 app.factory('accountFactory', function () {
 
 	'use strict';
@@ -716,10 +720,6 @@ app.factory('accountFactory', function () {
 	};
 
 });
-app.controller('Error404Ctrl', ['$location', function ($location) {
-  this.message = 'Could not find: ' + $location.url();
-}]);
-
 
 app.config(['$routeProvider', function ($routeProvider) {
   'use strict';
@@ -824,6 +824,20 @@ app.controller('hpCtrl', function () {
 	    templateUrl: 'static/home/home-projects/home-groups/home-groups.html'
 	  };
 	});
+
+	app.directive('groupDetails', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-groups/group-details.html'
+	  };
+	});	
+
+	app.directive('groupDetailsProjects', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-groups/group-details-projects.html'
+	  };
+	});	
 })();
 /**
  * dirPagination - AngularJS module for paginating (almost) anything.

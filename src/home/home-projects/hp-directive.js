@@ -19,4 +19,18 @@
 	    templateUrl: 'static/home/home-projects/home-groups/home-groups.html'
 	  };
 	});
+
+	app.directive('groupDetails', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-groups/group-details.html'
+	  };
+	});	
+
+	app.directive('groupDetailsProjects', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-groups/group-details-projects.html'
+	  };
+	});	
 })();
