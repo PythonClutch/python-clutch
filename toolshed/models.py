@@ -6,7 +6,7 @@ import arrow
 
 @login_manager.user_loader
 def load_admin(admin_id):
-    return Admin.query.get(admin_id)
+    return AdminAccount.query.get(admin_id)
 
 
 """

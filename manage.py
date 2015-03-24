@@ -47,7 +47,7 @@ def test():
 
 @manager.command
 def create_admin():
-    admin = Admin(admin_name="joel",
+    admin = AdminAccount(admin_name="joel",
                   password="password")
     db.session.add(admin)
     db.session.commit()
