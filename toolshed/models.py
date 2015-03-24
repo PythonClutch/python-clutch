@@ -26,7 +26,9 @@ class User(db.Model):
     like = db.relationship("Like", backref="user", lazy="dynamic", foreign_keys="Like.user_id",
                            cascade="all,delete")
 
-    submissions = db.relationship("Project", backref="submitted_by", lazy="dynamic", foreign_keys="Project.submitted_by_id")
+    submissions = db.relationship("Project", backref="submitted_by",
+                                   lazy="dynamic", cascade="all,delete",
+                                   foreign_keys="Project.submitted_by_id")
 
     def __repr__(self):
         return "User: {}".format(self.github_name)
@@ -78,11 +80,8 @@ class Project(db.Model):
     open_issues_url = db.Column(db.String(400))
     docs_url = db.Column(db.String(400))
 
-<<<<<<< HEAD
-
     submitted_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-=======
->>>>>>> fee8bf8d8058424fc630bfef1ccc91331437ac09
+
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
 
