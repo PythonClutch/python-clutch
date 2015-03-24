@@ -16,7 +16,8 @@ api = Blueprint('api', __name__)
 
 all_users_schema = UserSchema(many=True)
 single_user_schema = UserSchema()
-all_projects_schema = ProjectSchema(many=True)
+all_projects_schema = ProjectSchema(many=True, exclude=("logs",))
+all_projects_with_logs = ProjectSchema(many=True)
 single_project_schema = ProjectSchema()
 single_comment_schema = CommentSchema()
 all_comments_schema = CommentSchema(many=True)
@@ -26,6 +27,9 @@ single_group_schema = GroupSchema()
 all_groups_schema = GroupSchema(many=True)
 single_like_schema = LikeSchema()
 all_likes_schema = LikeSchema(many=True)
+all_logs_schema = LogSchema(many=True)
+single_log_schema = LogSchema()
+
 
 # response functions
 
