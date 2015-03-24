@@ -82,8 +82,8 @@ class Project(db.Model):
 
     submitted_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
-    category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
+    category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
 
     comments = db.relationship("Comment", backref="project", lazy="dynamic", foreign_keys="Comment.project_id",
                                cascade="all,delete")
@@ -176,26 +176,26 @@ class Comment(db.Model):
         return "Comment: {}".format(self.text)
 
 
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(255))
-
-    projects = db.relationship("Project", backref="category", lazy="dynamic", foreign_keys="Project.category_id")
-    group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
-
-    def __repr__(self):
-        return "Category: {}".format(self.name)
-
-
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
 
     projects = db.relationship("Project", backref="group", lazy="dynamic", foreign_keys="Project.group_id")
-    categories = db.relationship("Category", backref="group", lazy="dynamic", foreign_keys="Category.group_id")
+    category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
 
     def __repr__(self):
         return "Group: {}".format(self.name)
+
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255))
+
+    projects = db.relationship("Project", backref="category", lazy="dynamic", foreign_keys="Project.category_id")
+    groups = db.relationship("Group", backref="category", lazy="dynamic", foreign_keys="Group.category_id")
+
+    def __repr__(self):
+        return "Category: {}".format(self.name)
 
 
 class Admin(db.Model, UserMixin):
@@ -267,19 +267,19 @@ class ProjectSchema(Schema):
                   "contributors_count", "python_three_compatible", "website",
                   "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
-                  "category_id", "group_id", "comments", "user_likes", "age_display",
+                  "group_id", "category_id", "comments", "user_likes", "age_display",
                   "last_commit_display", "logs", "date_added")
 
 
-class CategorySchema(Schema):
+class GroupSchema(Schema):
     projects = fields.Nested(ProjectSchema, many=True)
 
     class Meta:
-        fields = ("id", "name", "projects", "group_id")
+        fields = ("id", "name", "projects", "category_id")
 
 
-class GroupSchema(Schema):
-    categories = fields.Nested(CategorySchema, many=True)
+class CategorySchema(Schema):
+    groups = fields.Nested(GroupSchema, many=True)
 
     class Meta:
-        fields = ("id", "name", "categories")
+        fields = ("id", "name", "groups")
