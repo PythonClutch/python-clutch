@@ -125,26 +125,6 @@ def make_project():
 
 # Category routes
 
-@api.route("/categories")
-def all_categories():
-    categories = Category.query.all()
-    if categories:
-        return success_response(all_categories_schema, categories)
-    else:
-        return failure_response("There are no categories.", 404)
-
-
-@api.route("/categories/<int:id>/projects")
-def category_projects(id):
-    category = Category.query.get(id)
-    if category:
-        return success_response(single_category_schema, category)
-    else:
-        return failure_response("There is no such category.", 404)
-
-
-# Group routes
-
 @api.route("/groups")
 def all_groups():
     groups = Group.query.all()
@@ -154,13 +134,33 @@ def all_groups():
         return failure_response("There are no groups.", 404)
 
 
-@api.route("/groups/<int:id>/categories")
-def group_categories(id):
+@api.route("/groups/<int:id>/projects")
+def group_projects(id):
     group = Group.query.get(id)
-    if group:
-        return success_response(single_group_schema, group)
+    if group.projects:
+        return success_response(single_group_schema, group.projects)
     else:
-        return failure_response("There is no group.", 404)
+        return failure_response("There is no such group.", 404)
+
+
+# Group routes
+
+@api.route("/categories")
+def all_categories():
+    categories = Category.query.all()
+    if categories:
+        return success_response(all_categories_schema, categories)
+    else:
+        return failure_response("There are no categories.", 404)
+
+
+@api.route("/categories/<int:id>/groups")
+def group_categories(id):
+    category = Category.query.get(id)
+    if category.groups:
+        return success_response(single_category_schema, category.groups)
+    else:
+        return failure_response("There is no such category.", 404)
 
 
 # Comment routes
