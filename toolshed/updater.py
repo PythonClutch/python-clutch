@@ -70,3 +70,5 @@ def log_project(project):
     project.logs.append(project_log)
     db.session.add(project_log)
     db.session.commit()
+
+
