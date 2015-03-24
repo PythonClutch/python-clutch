@@ -3,9 +3,11 @@ from marshmallow import Schema, fields, ValidationError
 from flask.ext.login import UserMixin
 import arrow
 
+
 @login_manager.user_loader
-def load_admin(id):
-    return Admin.query.get(id)
+def load_admin(admin_id):
+    return Admin.query.get(admin_id)
+
 
 """
 Models
@@ -45,7 +47,6 @@ class Like(db.Model):
         return "{} likes {}".format(self.user.github_name, self.project.name)
 
 
-
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     status = db.Column(db.Boolean)
@@ -63,6 +64,8 @@ class Project(db.Model):
     downloads_count = db.Column(db.Integer)
     contributors_count = db.Column(db.Integer)
     python_three_compatible = db.Column(db.Boolean)
+    date_added = db.Column(db.Date)
+    score = db.Column(db.Integer)
     website = db.Column(db.String(400))
     git_url = db.Column(db.String(400))
     pypi_url = db.Column(db.String(400))
@@ -73,8 +76,6 @@ class Project(db.Model):
     open_issues_url = db.Column(db.String(400))
     docs_url = db.Column(db.String(400))
 
-
-
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
 
@@ -83,7 +84,7 @@ class Project(db.Model):
     user_likes = db.relationship("Like", backref="project", lazy="dynamic", foreign_keys="Like.project_id",
                                  cascade="all,delete")
     logs = db.relationship("ProjectLog", backref="project", lazy="dynamic", foreign_keys="ProjectLog.project_id",
-                                cascade="all,delete")
+                           cascade="all,delete")
 
     @property
     def number_of_comments(self):
@@ -112,10 +113,8 @@ class Project(db.Model):
             return arrow_last_commit.humanize()
 
 
-
     def __repr__(self):
         return "{}".format(self.name)
-
 
 
 class ProjectLog(db.Model):
@@ -129,23 +128,33 @@ class ProjectLog(db.Model):
     downloads_count = db.Column(db.Integer)
     contributors_count = db.Column(db.Integer)
     log_date = db.Column(db.Date)
+    likes_count = db.Column(db.Integer)
+    previous_score = db.Column(db.Integer)
 
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
 
     @property
     def stars_difference(self):
         return Project.query.get(self.project_id) - self.starred_count
+
     @property
     def forks_difference(self):
         return Project.query.get(self.project_id) - self.forks_count
+
     @property
     def watchers_difference(self):
         return Project.query.get(self.project_id) - self.watchers_count
+
     @property
     def download_difference(self):
         return Project.query.get(self.project_id) - self.downloads_count
+
     @property
     def contributor_difference(self):
+        return Project.query.get(self.project_id) - self.contributors_count
+
+    @property
+    def likes_difference(self):
         return Project.query.get(self.project_id) - self.contributors_count
 
 
@@ -182,6 +191,7 @@ class Group(db.Model):
     def __repr__(self):
         return "Group: {}".format(self.name)
 
+
 class Admin(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     admin_name = db.Column(db.String(255), nullable=False)
@@ -211,7 +221,6 @@ the ability to display the api endpoints.
 """
 
 
-
 class CommentSchema(Schema):
     class Meta:
         fields = ("id", "text", "created", "user_id",
@@ -220,6 +229,7 @@ class CommentSchema(Schema):
 
 class UserSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
+
     class Meta:
         fields = ("id", "github_name", "github_url", "email", "comments")
 
@@ -235,7 +245,8 @@ class LogSchema(Schema):
                   "current_version", "last_commit", "open_issues_count",
                   "downloads_count", "contributors_count", "log_date",
                   "stars_difference", "forks_difference", "watchers_difference",
-                  "download_difference", "contributor_difference")
+                  "download_difference", "contributor_difference", "likes_difference")
+
 
 class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
@@ -251,19 +262,18 @@ class ProjectSchema(Schema):
                   "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
                   "category_id", "group_id", "comments", "user_likes", "age_display",
-                  "last_commit_display", "logs" )
+                  "last_commit_display", "logs", "date_added")
 
 
 class CategorySchema(Schema):
     projects = fields.Nested(ProjectSchema, many=True)
+
     class Meta:
         fields = ("id", "name", "projects", "group_id")
 
 
 class GroupSchema(Schema):
     categories = fields.Nested(CategorySchema, many=True)
+
     class Meta:
         fields = ("id", "name", "categories")
-
-
-

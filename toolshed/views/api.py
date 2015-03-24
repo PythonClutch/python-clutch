@@ -1,19 +1,17 @@
 import json
 from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
-                      Group, GroupSchema, LikeSchema)
-from flask import Blueprint, jsonify, request, abort, url_for
+                      Group, GroupSchema, LikeSchema, LogSchema)
+from flask import Blueprint, jsonify, request
 from ..extensions import db
 from .toolshed import require_login, current_user
 from datetime import datetime
 from ..importer import create_project
-from ..updater import update_projects
 
 
 api = Blueprint('api', __name__)
 
-
-
+git 
 # Schemas
 
 all_users_schema = UserSchema(many=True)
@@ -73,21 +71,12 @@ def user(id):
 # project routes
 
 @api.route("/projects")
-def projects():
-    projects = Project.query.all()
+def show_projects():
+    projects = Project.query.order_by(Project.name)
     if projects:
         return success_response(all_projects_schema, projects)
     else:
         return failure_response("There are no projects.", 404)
-
-
-@api.route("/projects/<int:id>")
-def project(id):
-    project = Project.query.get(id)
-    if project:
-        return success_response(single_project_schema, project)
-    else:
-        return failure_response("There was no such project.", 404)
 
 
 @api.route("/projects", methods=["POST"])
@@ -97,6 +86,35 @@ def make_project():
     db.session.add(project)
     db.session.commit()
     return success_response(single_project_schema, project)
+
+
+@api.route("/projects/newest")
+def get_newest_project():
+    projects = Project.query.order_by(Project.date_added)
+    if projects:
+        return success_response(all_projects_schema, projects)
+    failure_response("There are no projects.", 404)
+
+
+# Logs routes
+
+
+@api.route("/projects/logs")
+def project_logs():
+    projects = Project.query.all()
+    if projects:
+        return success_response(all_projects_with_logs, projects)
+    else:
+        return failure_response("There are no projects", 404)
+
+@api.route("/projects/<int:id>")
+def show_project(id):
+    project = Project.query.get(id)
+    if project:
+        return success_response(single_project_schema, project)
+    else:
+        return failure_response("There was no such project.", 404)
+
 
 
 # Category routes
