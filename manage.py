@@ -61,16 +61,18 @@ def update():
 
 
 @manager.command
-def seed_db():
- with open('better_projects.csv') as csvfile:
-     reader = csv.reader(csvfile)
-     for row in reader:
-         list = []
-         for url in row:
-             list.append(url)
-             project = create_project(pypi_url=str(list[0]), github_url=str(list[1]), bitbucket_url=str(list[2]))
-             db.session.add(project)
-     db.session.commit()
+def seed_db(file):
+    """ Takes a csv file as an argument, adds the listed urls to the database.
+    """
+    with open(file) as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            list = []
+            for url in row:
+                list.append(url)
+            project = create_project(pypi_url=str(list[0]), github_url=str(list[1]), bitbucket_url=str(list[2]))
+            db.session.add(project)
+            db.session.commit()
 
 
 if __name__ == '__main__':
