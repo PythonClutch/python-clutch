@@ -6,7 +6,7 @@ from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 from toolshed.models import Admin, Project
-from toolshed.updater import update_projects
+from toolshed.updater import update_projects, update_projects_score
 from toolshed import create_app, db
 from toolshed.importer import create_project
 
@@ -57,20 +57,28 @@ def create_admin():
 def update():
     projects = Project.query.all()
     update_projects(projects)
-    return "Projects Updated."
+    return "Projects updated."
+
+@manager.command
+def update_score():
+    projects = Project.query.all()
+    update_projects_score(projects)
+    return "Scores updated."
 
 
 @manager.command
-def seed_db():
- with open('better_projects.csv') as csvfile:
-     reader = csv.reader(csvfile)
-     for row in reader:
-         list = []
-         for url in row:
-             list.append(url)
-             project = create_project(pypi_url=str(list[0]), github_url=str(list[1]), bitbucket_url=str(list[2]))
-             db.session.add(project)
-     db.session.commit()
+def seed_db(file):
+    """ Takes a csv file as an argument, adds the listed urls to the database.
+    """
+    with open(file) as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            list = []
+            for url in row:
+                list.append(url)
+            project = create_project(pypi_url=str(list[0]), github_url=str(list[1]), bitbucket_url=str(list[2]))
+            db.session.add(project)
+            db.session.commit()
 
 
 if __name__ == '__main__':

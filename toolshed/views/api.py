@@ -70,6 +70,26 @@ def user(id):
         return failure_response("There was no such user.", 404)
 
 
+@api.route("/users/<int:id>/pending_submissions")
+def get_pending_submissions(id):
+    user = User.query.get(id)
+    if user.submissions:
+        pending = Project.query.filter_by(submitted_by_id=user.id).filter_by(status=False).all()
+        return success_response(all_projects_schema, pending)
+    else:
+        return failure_repsonse("No pending submissions.")
+
+
+@api.route("/users/<int:id>/submissions")
+def get_submissions(id):
+    user = User.query.get(id)
+    if user.submissions:
+        submissions = Project.query.filter_by(submitted_by_id=user.id).filter_by(status=True).all()
+        return success_response(all_projects_schema, submissions)
+    else:
+        return failure_repsonse("No submissions.")
+
+
 # project routes
 
 @api.route("/projects")
@@ -94,6 +114,10 @@ def project(id):
 def make_project():
     urls = request.get_json()
     project = create_project(**urls)
+    user_name = current_user()
+    user = User.query.filter_by(github_name=user_name).first()
+    project.submitted_by_id = user.id
+    user.submissions.append(project)
     db.session.add(project)
     db.session.commit()
     return success_response(single_project_schema, project)
@@ -210,6 +234,7 @@ def like_project(id):
     user = User.query.filter_by(github_name=user_name).first()
     new_like = Like(user_id=user.id,
                      project_id=project.id)
+    user.like.append(new_like)
     db.session.add(new_like)
     db.session.commit()
     return success_response(single_like_schema, new_like)
