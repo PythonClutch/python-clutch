@@ -54,8 +54,11 @@ def github_populate(proj_dict, github_url):
 def bitbucket_populate(proj_dict, bitbucket_url):
     bitbucket_api, project_stub = parse_bitbucket_url(bitbucket_url)
     bitbucket_info = requests.get(bitbucket_api).json()
-    open_issues_api = bitbucket_api + "/issues?status=open"
-    open_issues_info = requests.get(open_issues_api)
+    print(bitbucket_api)
+    open_issues_api = bitbucket_api + "issues"
+    payload = {'status': "open"}
+    open_issues_info = requests.get(open_issues_api, params=payload).json()
+    print(open_issues_api)
     proj_dict['forks_count'] = bitbucket_info['forks_count']
     proj_dict['git_url'] = bitbucket_url
     proj_dict['project_stub'] = bitbucket_info['slug']
@@ -80,7 +83,7 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
     pypi_api = pypi_url + "/json"
     pypi_info = requests.get(pypi_api).json()
 
-    if github_url:
+    if github_url and github_url != '':
         proj_dict = github_populate(proj_dict, github_url)
     elif bitbucket_url:
         proj_dict = bitbucket_populate(proj_dict, bitbucket_url)
