@@ -10,7 +10,14 @@
 		};
 	});
 
-
+	app.directive('footerBar', function () {
+		return {
+			restrict: 'E',
+			templateUrl: 'static/footer/footer.html',
+			controllerAs: 'vm',
+			controller: 'FooterCtrl'
+		};
+	});
 
 
 

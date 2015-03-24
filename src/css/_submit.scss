@@ -1,10 +1,101 @@
-/*************************************************************
-***** comment *********
-*************************************************************/
+/////////////////////////////////////////////////////////////
+// GENERAL
+/////////////////////////////////////////////////////////////
 
 .submit-span {
 	cursor: pointer;
 	color: blue; 
 }
 
-/******************** comment *******************************/
+.submit-wrapper {
+	padding-top: 41px; 
+}
+
+.submit-wrapper .submit-button {
+	margin-top: 28px; 
+}
+
+.new-input-div {
+	margin-bottom: 13px; 
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+}
+
+.new-input-div p {
+	width: 110px;
+}
+
+.new-input-div input {
+	width: 200px;
+	height: 15px;
+	&:focus {
+		// height: 13px; 
+		background: white;
+		border: 1px solid $light-gray;  
+	}
+}
+
+.new-project-heading {
+	margin-bottom: 28px;
+	font-size: 24px;
+	font-weight: 600;   
+}
+
+/////////////////////////////////////////////////////////////
+// PENDING
+/////////////////////////////////////////////////////////////
+
+.pending-project-ul {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;	
+}
+
+.pending-project-li {
+	background: $light-gray;
+	width: 44%;  
+	margin-bottom: 4%;
+	padding: 2%; 
+	position: relative;
+}
+
+.pending-div {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	&:last-of-type {
+		h6 {
+			margin-bottom: 2%;	
+		}
+	}
+}
+
+.pending-div h6 {
+	width: 120px;
+	margin-bottom: 4%;  
+	font-size: 14px; 
+}
+
+.edit-div-submit {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	top: 4%;
+	right: 4%;
+}
+
+
+
+
+
+
+/////////////// COMMENT /////////////////////////////////////
+
+
+
+

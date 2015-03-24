@@ -39,43 +39,28 @@
 			<div class="home-project-pypi-header-div">	
 				<div class="home-project-header-top">
 					<h3>PyPi</h3>
-					<i class="fa fa-code"></i>
-					<a class="link" href="{{project.pypi_url}}">pypi name</a>
+					<a class="link" href="{{project.pypi_url}}"><i class="fa fa-code"></i><p>pypi name</p></a>
 				</div>
-				<div class="home-project-header-bottom">
+				<div class="home-project-header-bottom home-project-header-bottom-pypi">
 					<h5>Version <b>{{project.current_version}}</b> Released on date</h5>
 					<div class="home-project-header-bottom-downloads">
 						<i class="fa fa-download"></i>
 						<h5>{{project.downloads_count}} Downloads</h5>
 					</div>
-					<label ng-click="vm.pyInfo()" class="more-info-label" for="more-info-pypi">VIEW MORE <i ng-class="{ 'fa-angle-up': vm.pyMoreInfo, 'fa-angle-down': !vm.pyMoreInfo}" class="fa"></i></label>
 				</div>
 			</div>
-			<div ng-show="vm.pyMoreInfo" class="home-project-content">
-				<section class="gray-line"></section>
-				<div class="home-project-content-sizer">
-					<div class="home-project-content-div">
-						<h6 class="home-project-content-header"><b>##</b> Release(s)</h6>
-						<h6 class="home-project-content-header"><b>1st</b> Release on date</h6>
-						<h6 class="home-project-content-header"><b>##</b> Depending Projects</h6>
-					</div>
-					<div class="home-project-content-div">
-						<h6 class="home-project-content-header">Depends on the Following Projects:</h6>
-						<p class="home-project-content-p">Python</p>
-					</div>
-					<div class="home-project-content-div">
-						<h6 class="home-project-content-header">Popular Projects Depending on this Project:</h6>
-						<p class="home-project-content-p">Ruby</p>
-					</div>
-				</div>
+			<div class="home-project-content home-project-content-pypi">
+				<h6 class="home-project-content-header"><b>##</b> Release(s)</h6>
+				<h6 class="home-project-content-header"><b>1st</b> Release on date</h6>
+				<h6 class="home-project-content-header"><b>##</b> Depending Projects</h6>
 			</div>
 		</div>
 		<div class="home-project-details home-project-github">
 			<div class="home-project-github-header-div">
 				<div class="home-project-header-top">
 					<h3>GitHub</h3>
-					<i class="fa fa-github"></i>
-					<a class="link" href="{{project.github_url}}">gh repo</a>
+					
+					<a class="link" href="{{project.github_url}}"><i class="fa fa-github"></i><p>gh repo</p></a>
 				</div>
 				<div class="home-project-header-bottom">
 					<h5>{{project.forks_count}} Forks</h5>

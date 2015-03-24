@@ -1,0 +1,133 @@
+<h2 class="activity-header">Projects</h2>
+
+<a class="new-project-a" href="#/submit">Add New Project</a>
+
+<h3 class="activity-subheader">Featured</h3>
+
+<ul>
+	<li>
+		
+
+	<div class="project-info">
+		<div class="home-project-basic-info flex-row">
+			<h4 class="home-project-name home-project-name-account"><a href="#/home/projects/{{project.id}}">project name</a></h4>
+			<div class="home-project-basic-info-right">
+				<div class="home-project-basic-info-icon home-project-basic-info-like"><i ng-click="vm.like()" ng-class="{ 'fa-heart' : vm.likedHeart }" class="fa fa-heart-o"></i>##</div>
+				<div class="home-project-basic-info-icon home-project-basic-info-comment"><i class="fa fa-comment-o"></i>##</div>
+				<div class="home-project-basic-info-icon home-project-basic-info-score"><i class="fa fa-calculator"></i></i>##</div>
+	<!-- 			<div class="home-project-basic-info-more"></div> -->
+	<!-- 			<label for="names-details-checkbox" class="home-project-basic-info-icon home-project-basic-info-plus "> -->
+					<i ng-click="vm.checkBox()" class="home-project-basic-info-icon home-project-basic-info-plus fa fa-plus"></i>
+	<!-- 			</label> -->
+			</div>
+		</div>
+		<div class="project-details-div project-details-div-account">
+			<div class="home-project-details home-project-links">
+				<div class="flex-row home-project-links-div-sizer">
+					<div class="home-project-links-div">
+						<i class="fa fa-link"></i>
+						<a class="link" href="{{vm.project.website}}">Website</a>
+					</div>
+					<div class="home-project-links-div">
+						<i class="fa fa-file-o"></i>
+						<a class="link" href="{{vm.project.docs_url}}">PyDocs</a>
+					</div>
+					<div class="home-project-links-div">
+						<i class="fa fa-code"></i>
+						<a class="link" href="{{vm.project.github_url}}">Source Code</a>
+					</div>
+					<div class="home-project-links-div">
+						<i class="fa fa-envelope-o"></i>
+						<a class="link" href="{{vm.project.mailing_list_url}}">Mailing List</a>
+					</div>
+				</div>
+			</div>
+			<div class="home-project-details home-project-pypi">
+	<!-- 			<input class="more-info-input" id="more-info-pypi" type="checkbox"> -->
+				<div class="home-project-pypi-header-div">	
+					<div class="home-project-header-top">
+						<h3>PyPi</h3>
+						<i class="fa fa-code"></i>
+						<a class="link" href="{{vm.project.pypi_url}}">pypi name</a>
+					</div>
+					<div class="home-project-header-bottom">
+						<h5>Version <b>{{vm.project.current_version}}</b> Released on date</h5>
+						<div class="home-project-header-bottom-downloads">
+							<i class="fa fa-download"></i>
+							<h5>{{vm.project.downloads_count}} Downloads</h5>
+						</div>
+						<label ng-click="vm.pyInfo()" class="more-info-label" for="more-info-pypi">VIEW MORE <i ng-class="{ 'fa-angle-up': vm.pyMoreInfo, 'fa-angle-down': !vm.pyMoreInfo}" class="fa"></i></label>
+					</div>
+				</div>
+				<div ng-show="vm.pyMoreInfo" class="home-project-content">
+					<section class="gray-line"></section>
+					<div class="home-project-content-sizer">
+						<div class="home-project-content-div">
+							<h6 class="home-project-content-header"><b>##</b> Release(s)</h6>
+							<h6 class="home-project-content-header"><b>1st</b> Release on date</h6>
+							<h6 class="home-project-content-header"><b>##</b> Depending Projects</h6>
+						</div>
+						<div class="home-project-content-div">
+							<h6 class="home-project-content-header">Depends on the Following Projects:</h6>
+							<p class="home-project-content-p">Python</p>
+						</div>
+						<div class="home-project-content-div">
+							<h6 class="home-project-content-header">Popular Projects Depending on this Project:</h6>
+							<p class="home-project-content-p">Ruby</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="home-project-details home-project-github">
+				<div class="home-project-github-header-div">
+					<div class="home-project-header-top">
+						<h3>GitHub</h3>
+						<i class="fa fa-github"></i>
+						<a class="link" href="{{vm.project.github_url}}">gh repo</a>
+					</div>
+					<div class="home-project-header-bottom">
+						<h5>{{vm.project.forks_count}} Forks</h5>
+						<h5>{{vm.project.open_issues_count}} Issues</h5>
+						<label ng-click="vm.ghInfo()" class="more-info-label" for="more-info-github">VIEW MORE <i ng-class="{ 'fa-angle-up': vm.ghMoreInfo, 'fa-angle-down': !vm.ghMoreInfo}" class="fa"></i></label>					
+					</div>
+				</div>
+				<div ng-show="vm.ghMoreInfo" class="home-project-content">
+					<section class="gray-line"></section>
+					<div class="home-project-content-sizer">
+						<div class="home-project-content-div">
+							<h6 class="home-project-content-header"><b>{{vm.project.watchers_count}}</b> Watchers</h6>
+							<h6 class="home-project-content-header"><b>High</b> Developer Activity</h6>
+							<h6 class="home-project-content-header"><b>{{vm.project.contributors_count}}</b> Contributors</h6>
+						</div>
+						<div class="home-project-content-div home-project-content-div-gh">
+							<h6 class="home-project-content-header">Last commit:</h6>
+							<p class="home-project-content-p">{{vm.project.last_commit}}</p>
+						</div>
+						<div class="home-project-content-div home-project-content-div-gh">
+							<h6 class="home-project-content-header">First commit:</h6>
+							<p class="home-project-content-p">{{vm.project.first_commit}}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</li>
+</ul>

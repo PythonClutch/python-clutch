@@ -1,0 +1,193 @@
+/////////////////////////////////////////////////////////////
+// GENERAL
+/////////////////////////////////////////////////////////////
+
+.account-set {
+	padding-top: 41px; 
+	position: relative;
+}
+
+.account-set a {
+	color: $base-color; 
+	&:hover {
+		color: black;
+	}
+}
+
+.edit-div {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	position: absolute;
+	top: 41px;
+	right: 13px; 
+	color: $base-color; 
+	&:hover {
+		color: black;
+	}
+}
+
+.edit-div p {
+	margin-right: 10px; 
+}
+
+.account-set h2 {
+	font-size: 32px;
+}
+
+/////////////////////////////////////////////////////////////
+// CONTENT
+/////////////////////////////////////////////////////////////
+
+.account-links {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	width: 100%;
+	padding-top: 28px; 
+}
+
+.account-links img {
+	margin: 13px 13px 13px 0; 
+}
+
+.account-links-div {
+	font-size: 22px; 
+}
+
+.account-info-links {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	text-align: left;
+	margin: 13px 0; 
+}
+
+.account-info-links i {
+	margin-right: 10px; 
+}
+
+/////////////// NUMBERS PORTION /////////////////////////////////////
+
+.account-info-numbers {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	padding-top: 28px; 
+	font-size: 28px;
+	text-align: center; 
+}
+
+.account-info-numbers h5 {
+	text-align: left;
+}
+
+.account-info-numbers div:first-of-type {
+	margin-right: 30%; 
+}
+
+/////////////////////////////////////////////////////////////
+// EDIT ACCOUNT
+/////////////////////////////////////////////////////////////
+
+.file-maker {
+	position: absolute;
+	visibility: hidden;
+}
+
+.file-link {
+	margin-top: 13px; 
+	cursor: pointer;
+	width: 130px;
+}
+
+.account-links-edit {
+	padding-top: 41px; 
+}
+
+.account-links-div {
+	margin-top: 28px; 
+}
+
+.account-links-edit {
+	padding-top: 0; 
+}
+
+.edit-img-div {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	padding-top: 41px; 
+}
+
+.account-info-links input {
+	width: 300px;
+}
+
+.account-links-edit .submit-button {
+	margin: 28px 0;
+}
+
+/////////////////////////////////////////////////////////////
+// ACCOUNT ACTIVITY
+/////////////////////////////////////////////////////////////
+
+.activity-li {
+	background: $light-gray; 
+}
+
+h2.activity-header {
+	margin-top: 80px; 
+	font-size: 40px;
+	margin-bottom: 13px; 
+}
+
+.activity-ul-submitted {
+	margin-bottom: 100px; 
+}
+
+.activity-subheader {
+	margin: 41px 0 28px;
+	font-size: 32px; 
+	font-weight: 700; 
+}
+
+.new-project-a {
+	font-size: 18px;
+}
+
+.new-project-a div {
+	margin-top: 13px; 	
+	float: right; 
+	&:hover {
+		color: black; 
+	}
+}
+
+.new-project-a div i.fa {
+	margin-left: 6px; 
+}
+
+.project-details-div-account {
+	padding-top: 0;  
+}
+
+.home-project-name-account a,
+.home-project-name a {
+	color: black;
+	&:hover {
+		color: $base-color; 
+	} 
+}
+
+
+
+
+
+
+

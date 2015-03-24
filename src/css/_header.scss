@@ -17,7 +17,7 @@ header {
 // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#12897d', endColorstr='#e602c088',GradientType=1 );
 	color: white; 
 	z-index: 1; 
-	position: absolute;
+	// position: absolute;
 	font-family: 'Source Sans Pro', sans-serif; 
 }
 
@@ -62,7 +62,7 @@ header {
 }
 
 .nav-right {
-	width: 36%;
+	width: 400px;
 	height: 30px;
 	margin: 20px;
 	display: flex;

@@ -23,18 +23,13 @@ app.config(['$routeProvider', function ($routeProvider) {
   .when('/', homePage)
   .when('/home', homePage)
   .when('/home/projects', homePage)
-  // .when('/home/categories', homePage)
-  // .when('/projects', homePage)
-  .when('/account', {   
-    templateUrl: 'static/account/account.html',
-    controller: 'AccountCtrl',
-    controllerAs: 'vm'
-  })
-  .when('/submit', {   
+  .when('/submit', {
     templateUrl: 'static/submit/submit.html',
     controller: 'SubmitCtrl',
     controllerAs: 'vm'
   })
+  // .when('/home/categories', homePage)
+  // .when('/projects', homePage)
   // .when('/home/category', homePage)
   .when('/group', {   
     templateUrl: 'static/group/group.html',

@@ -1,5 +1,12 @@
 <ul>
-	<li class="home-project-li" ng-repeat="project in vm.projects" >
+	<!-- <li class="home-project-li" ng-repeat="project in vm.projects" > -->
+	<li class="home-project-li" dir-paginate="project in vm.projects | itemsPerPage: 1">
 		<names-details class="name-details"></names-details>
 	</li>
 </ul>
+
+<div class="pagination-div">
+	<p ng-show="{{vm.projects.length}} > 5">5 of {{vm.projects.length}}</p>
+	<p ng-show="{{vm.projects.length}} < 5">{{vm.projects.length}} of {{vm.projects.length}}</p>
+	<dir-pagination-controls></dir-pagination-controls>
+</div>

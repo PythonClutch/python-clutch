@@ -1,5 +1,5 @@
-app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location', 'projectFactory', 
-	function (homeFactory, projects, stringUtil, $location, projectFactory) {
+app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory',
+	function (homeFactory, projects, projectFactory, activeRoute, appearFactory) {
 	var self = this;
 
 	self.projects = projects;
@@ -24,20 +24,11 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location'
 
     self.isActive = function (path) {
       // The default route is a special case.
-      if (path === '/') {
-        return $location.path() === '/';
-      }
-      
-      return stringUtil.startsWith($location.path(), path);
+      return activeRoute.isActive(path);
     };
 
     self.checkBox = function () {
-    	var target = $(event.target).parent().parent().parent().find('.names-details-checkbox');
-		if (target.prop('checked')) {
-			target.prop('checked', false);
-		} else {
-			target.prop('checked', true);
-		}
+    	appearFactory.checkBox();
 	};
 
 	self.likedHeart = false;
@@ -68,6 +59,15 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'stringUtil', '$location'
 	self.ghInfo = function () {
 		pf.ghInfo();
 		self.ghMoreInfo = pf.byGh();
+	};
+
+	self.left = function () {
+		console.log(self.projects);
+		console.log('left')
+	};
+
+	self.right = function () {
+		console.log('right')
 	};
 
 }]);

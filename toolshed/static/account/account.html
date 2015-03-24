@@ -1,85 +1,12 @@
-<a ng-click="vm.setInfo()" href="">info</a>
-<a ng-click="vm.setActivity()" href="">activity</a>
+<section class="home-set-section">
+	<a class="home-set-a home-set-a-projects" ng-class="{ active: vm.isActive('/account/info') || vm.isActive('/account/edit') }" ng-click="vm.setInfo()" href="#/account/info">Info</a>
+	<a class="home-set-a" ng-class="{ active: vm.isActive('/account/activity') }" ng-click="vm.setActivity()" href="#/account/activity">Activity</a>
+</section>
 
-<div>
-	
-	<div ng-show="vm.byInfo">
-
-		<h2>username</h2>
-
-		<div>
-			<img src="" alt="">
-			<div>
-				<div class="account-info-links">
-					<i>a</i>
-					<input type="text">
-				</div>
-				<div class="account-info-links">
-					<i>a</i>
-					<input type="text">
-				</div>
-				<div class="account-info-links">
-					<i>a</i>
-					<input type="text">
-				</div>
-				<div class="account-info-links">
-					<i>a</i>
-					<input type="text">
-				</div>
-			</div>
-		</div>
-
-		<div>
-			<div>
-				<h4>GitHub Forks</h4>
-				<h5>##</h5>
-			</div>
-			<div>
-				<h4>Submitted Resources</h4>
-				<h5>##</h5>
-			</div>
-
-		</div>
-
-
-
-
-
-
-	</div>
-
-
-
-
-
-
-
-
-	<div ng-show="!vm.byInfo">
-
-	<h2>projects</h2>
-
-	<a href="#/submit">Add New Project</a>
-
-	<h3>featured</h3>
-
-
-
-
-
-
-
-
-
-
-
-	</div>
-
-
-
-
-
-
+<div class="account-set container-width">
+	<account-info ng-show="vm.byInfo && !vm.byEdit"></account-info>
+	<account-activity ng-show="!vm.byInfo && !vm.byEdit"></account-activity>
+	<edit-account ng-show="vm.byEdit"></edit-account>
 </div>
 
 

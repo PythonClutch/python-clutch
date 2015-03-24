@@ -42,6 +42,7 @@
 	flex-direction: column;
 	justify-content: center;
 	flex-wrap: wrap;
+	margin-top: 70px; 
 }
 
 .project-links-div {
@@ -49,7 +50,7 @@
 	flex-direction: row;
 	justify-content: flex-left;
 	flex-wrap: wrap;
-	margin-top: 20px; 
+	padding-top: 20px; 
 }
 
 .project-links-div a {
@@ -57,17 +58,19 @@
 }
 
 .projectname-user-div h1 {
+	text-transform: capitalize;
 	font-size: 32px; 
 }
 
 .projectname-user-div h3 {
+	margin-top: 5px; 
 	font-size: 16px; 
 }
 
 .project-details {
-	margin: 13px 0 24px;
+	margin: 24px 0 26px;
 	width: 100%; 
-	font-size: 24px; 
+	font-size: 18px; 
 }
 
 .home-project-basic-info-icon-gh {
