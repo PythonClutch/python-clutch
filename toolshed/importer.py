@@ -13,7 +13,6 @@ bitbucket_search_regex = re.compile('bitbucket.org/(.*)')
 bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
 
 
-
 gitkey = os.environ['GITKEY']
 auth=(gitkey, 'x-oauth-basic')
 
