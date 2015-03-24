@@ -5,7 +5,7 @@ import csv
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
-from toolshed.models import Admin, Project
+from toolshed.models import AdminAccount, Project
 from toolshed.updater import update_projects, update_projects_score
 from toolshed import create_app, db
 from toolshed.importer import create_project
@@ -47,7 +47,7 @@ def test():
 
 @manager.command
 def create_admin():
-    admin = Admin(admin_name="joel",
+    admin = AdminAccount(admin_name="joel",
                   password="password")
     db.session.add(admin)
     db.session.commit()
