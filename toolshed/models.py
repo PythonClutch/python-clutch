@@ -280,11 +280,6 @@ class CategorySchema(Schema):
 
 class GroupSchema(Schema):
     categories = fields.Nested(CategorySchema, many=True)
-<<<<<<< HEAD
-    class Meta:
-        fields = ("id", "name", "categories")
-=======
 
     class Meta:
         fields = ("id", "name", "categories")
->>>>>>> fee8bf8d8058424fc630bfef1ccc91331437ac09
