@@ -1,8 +1,10 @@
-app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory',
-	function (homeFactory, projects, projectFactory, activeRoute, appearFactory) {
+app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups',
+	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups) {
 	var self = this;
 
 	self.projects = projects;
+
+	self.groups = groups;
 
 	self.byProjects = homeFactory.byProjects();
 

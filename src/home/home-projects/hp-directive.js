@@ -32,5 +32,12 @@
 	    restrict: 'E',
 	    templateUrl: 'static/home/home-projects/home-groups/group-details-projects.html'
 	  };
-	});	
+	});
+
+	app.directive('homeFilters', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-filters.html'
+	  };
+	});		
 })();

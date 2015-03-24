@@ -1,5 +1,13 @@
+<home-filters></home-filters>
+
 <ul>
-	<li class="home-projects-li">
+	<li class="home-project-li home-project-li-group" dir-paginate="group in vm.groups | itemsPerPage: 1" pagination-id="group">
 		<group-details></group-details>
 	</li>
 </ul>
+
+<div class="pagination-div">
+	<p ng-show="{{vm.projects.length}} > 5">5 of {{vm.groups.length}}</p>
+	<p ng-show="{{vm.projects.length}} < 5">{{vm.groups.length}} of {{vm.groups.length}}</p>
+	<dir-pagination-controls pagination-id="group"></dir-pagination-controls>
+</div>

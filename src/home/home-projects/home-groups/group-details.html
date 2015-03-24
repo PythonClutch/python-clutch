@@ -1,8 +1,8 @@
 <input class="names-details-checkbox" type="checkbox">
 
 <div class="home-project-basic-info flex-row">
-	<h4 class="home-project-name"><a href="#/home/projects/{{project.id}}">{{group.name}}</a></h4>
-	<div class="home-project-basic-info-right">
+	<h4 class="home-project-name"><a href="#/home/groups/{{group.id}}">{{group.name}}</a></h4>
+	<div class="home-project-basic-info-right home-group-basic-info-right">
 		<div class="home-project-basic-info-icon home-project-basic-info-score"><i class="fa fa-calculator"></i></i>##</div>
 		<i ng-click="vm.checkBox()" class="home-project-basic-info-icon home-project-basic-info-plus fa fa-plus"></i>
 	</div>
@@ -21,8 +21,8 @@
 		<div class="home-project-basic-info-more">+</div>
 	</div>
 </div> -->
-<ul>
-	<li class="flex-row">
+<ul class="home-project-details-div">
+	<li class="home-project-details-div-li">
 		<group-details-projects></group-details-projects>
 	</li>
 </ul>

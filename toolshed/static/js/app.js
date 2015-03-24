@@ -51,6 +51,11 @@ app.config(['$routeProvider', function ($routeProvider) {
           return projectServices.list();
         }
       ],
+      groups: ['groupServices',
+        function(groupServices) {
+          return groupServices.list();
+        }
+      ],
       setProj: ['homeFactory',
         function(homeFactory) {
           homeFactory.setProjects();
@@ -241,17 +246,36 @@ app.config(['$routeProvider', function ($routeProvider) {
   });
 
 }]);
-app.controller('FooterCtrl', function () {
-	
-});
 app.controller('GroupCtrl', function () {
 	
 });
-app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory',
-	function (homeFactory, projects, projectFactory, activeRoute, appearFactory) {
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/group/group.html',
+      controller: 'GroupCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        group: ['$route', 'groupServices',
+          function($route, groupServices) {
+            var routeParams = $route.current.params;
+            return groupServices.getByGroupId(routeParams.groupid);
+          }]
+      }
+    };
+
+    $routeProvider.when('/home/groups/:groupid', routeDefinition);
+
+}]);
+app.controller('FooterCtrl', function () {
+	
+});
+app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups',
+	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups) {
 	var self = this;
 
 	self.projects = projects;
+
+	self.groups = groups;
 
 	self.byProjects = homeFactory.byProjects();
 
@@ -389,6 +413,49 @@ app.controller('NavCtrl', ['$location', function ($location) {
 
 }]);
 
+app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, projectFactory) {
+
+	var self = this;
+
+	self.project = project;
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
+	
+}]);
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/project/project.html',
+      controller: 'ProjectCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        project: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getByProjectId(routeParams.projectid);
+          }]
+      }
+    };
+
+    $routeProvider.when('/home/projects/:projectid', routeDefinition);
+
+}]);
+
+
+
 app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $location) {
 
 	'use strict';
@@ -427,6 +494,43 @@ app.factory('appearFactory', function () {
 	};
 
 });
+app.factory('groupServices', ['$http', '$log',
+  function($http, $log) {
+
+    function get(url) {
+      return processAjaxPromise($http.get(url));
+    }
+    function post(url, share) {
+      return processAjaxPromise($http.post(url, share));
+    }
+    function put(url, share) {
+      return processAjaxPromise($http.put(url, share));
+    }
+    function remove(url) {
+      return processAjaxPromise($http.delete(url));
+    }
+    function processAjaxPromise(p) {
+      return p.then(function(result) {
+        return result.data.data;
+      })
+      .catch(function(error) {
+        $log.log(error);
+      });
+    }
+
+    return {
+
+      list: function () {
+        return get('/api/v1/groups');
+      },
+
+      getByGroupId: function (groupId) {
+        return get('/api/v1/groups/' + groupId);
+      },
+
+    };
+  }
+]);
 app.factory('homeFactory', function () {
 
 	// var self = this;
@@ -546,49 +650,6 @@ app.factory('stringUtil', function() {
         }
     };
 });
-app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, projectFactory) {
-
-	var self = this;
-
-	self.project = project;
-
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-	
-}]);
-app.config(['$routeProvider', function($routeProvider) {    
-    var routeDefinition = {
-      templateUrl: 'static/project/project.html',
-      controller: 'ProjectCtrl',
-      controllerAs: 'vm',
-      resolve: {
-        project: ['$route', 'projectServices',
-          function($route, projectServices) {
-            var routeParams = $route.current.params;
-            return projectServices.getByProjectId(routeParams.projectid);
-          }]
-      }
-    };
-
-    $routeProvider.when('/home/projects/:projectid', routeDefinition);
-
-}]);
-
-
-
 app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', function (activeRoute, submitFactory) {
 
 	var self = this;
@@ -681,10 +742,6 @@ app.config(['$routeProvider', function ($routeProvider) {
   // });
 
 }]);
-app.controller('Error404Ctrl', ['$location', function ($location) {
-  this.message = 'Could not find: ' + $location.url();
-}]);
-
 app.factory('accountFactory', function () {
 
 	'use strict';
@@ -732,6 +789,11 @@ app.config(['$routeProvider', function ($routeProvider) {
       projects: ['projectServices',
         function(projectServices) {
           return projectServices.list();
+        }
+      ],
+      groups: ['groupServices',
+        function(groupServices) {
+          return groupServices.list();
         }
       ],
       changeToCat: ['homeFactory',
@@ -837,7 +899,14 @@ app.controller('hpCtrl', function () {
 	    restrict: 'E',
 	    templateUrl: 'static/home/home-projects/home-groups/group-details-projects.html'
 	  };
-	});	
+	});
+
+	app.directive('homeFilters', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-filters.html'
+	  };
+	});		
 })();
 /**
  * dirPagination - AngularJS module for paginating (almost) anything.
@@ -1390,6 +1459,10 @@ app.factory('homeFactory', function () {
 	};
 
 });
+app.controller('Error404Ctrl', ['$location', function ($location) {
+  this.message = 'Could not find: ' + $location.url();
+}]);
+
 app.factory('submitFactory', function () {
 
 	'use strict';
@@ -1425,9 +1498,16 @@ app.factory('submitFactory', function () {
 	};
 
 });
-app.controller('hgCtrl', function () {
-	
-});
+app.controller('hgCtrl', ['group', function (group) {
+	var self = this;
+
+	self.group = group;
+
+	console.log(group);
+
+
+
+}]);
 app.controller('hnCtrl', function () {
 	// var self = this;
 
