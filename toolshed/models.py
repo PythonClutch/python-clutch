@@ -6,7 +6,7 @@ import arrow
 
 @login_manager.user_loader
 def load_admin(admin_id):
-    return Admin.query.get(admin_id)
+    return AdminAccount.query.get(admin_id)
 
 
 """
@@ -198,7 +198,7 @@ class Category(db.Model):
         return "Category: {}".format(self.name)
 
 
-class Admin(db.Model, UserMixin):
+class AdminAccount(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     admin_name = db.Column(db.String(255), nullable=False)
     encrypted_password = db.Column(db.String(60))
