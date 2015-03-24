@@ -5,8 +5,8 @@ import arrow
 
 
 @login_manager.user_loader
-def load_admin(id):
-    return Admin.query.get(id)
+def load_admin(admin_id):
+    return Admin.query.get(admin_id)
 
 
 """
@@ -277,6 +277,3 @@ class GroupSchema(Schema):
 
     class Meta:
         fields = ("id", "name", "categories")
-
-
-

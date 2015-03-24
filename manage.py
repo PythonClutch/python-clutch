@@ -5,7 +5,7 @@ from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 from toolshed.models import Admin, Project
-from toolshed.updater import update_projects
+from toolshed.updater import update_projects, update_projects_score
 from toolshed import create_app, db
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -55,7 +55,13 @@ def create_admin():
 def update():
     projects = Project.query.all()
     update_projects(projects)
-    return "Projects Updated."
+    return "Projects updated."
+
+@manager.command
+def update_score():
+    projects = Project.query.all()
+    update_projects_score(projects)
+    return "Scores updated."
 
 
 if __name__ == '__main__':
