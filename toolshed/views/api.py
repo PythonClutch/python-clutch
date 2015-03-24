@@ -1,13 +1,14 @@
 import json
 from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
-                      Group, GroupSchema, LikeSchema, LogSchema, ProjectLog)
-from flask import Blueprint, jsonify, request, abort, url_for
+                      Group, GroupSchema, LikeSchema, LogSchema)
+from flask import Blueprint, jsonify, request
 from ..extensions import db
 from .toolshed import require_login, current_user
 from datetime import datetime
 from ..importer import create_project
-from ..updater import update_projects
+from sqlalchemy import desc
+
 
 
 api = Blueprint('api', __name__)
@@ -77,7 +78,7 @@ def user(id):
 
 @api.route("/projects")
 def projects():
-    projects = Project.query.all()
+    projects = Project.query.order_by(Project.name)
     if projects:
         return success_response(all_projects_schema, projects)
     else:
@@ -91,6 +92,14 @@ def make_project():
     db.session.add(project)
     db.session.commit()
     return success_response(single_project_schema, project)
+
+
+@api.route("/projects/newest")
+def get_newest_project():
+    projects = Project.query.order_by(Project.date_added)
+    if projects:
+        return success_response(all_projects_schema, projects)
+    failure_response("There are no projects.", 404)
 
 
 # Logs routes

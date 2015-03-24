@@ -1,6 +1,6 @@
 import re
 import requests
-import datetime
+from datetime import datetime
 import os
 
 from .models import Project
@@ -29,11 +29,12 @@ def github_populate(proj_dict, github_url):
     proj_dict['starred_count'] = github_info['stargazers_count']
     proj_dict['watchers_count'] = github_info['watchers_count']
     proj_dict['watchers_url'] = github_url + "/watchers"
-    proj_dict['last_commit'] = datetime.datetime.strptime(github_info['updated_at'], "%Y-%m-%dT%H:%M:%SZ")
-    proj_dict['first_commit'] = datetime.datetime.strptime(github_info['created_at'], "%Y-%m-%dT%H:%M:%SZ")
+    proj_dict['last_commit'] = datetime.strptime(github_info['updated_at'], "%Y-%m-%dT%H:%M:%SZ")
+    proj_dict['first_commit'] = datetime.strptime(github_info['created_at'], "%Y-%m-%dT%H:%M:%SZ")
     proj_dict['open_issues_count'] = github_info['open_issues_count']
     contributors = requests.get(github_info['contributors_url'], auth=auth).json()
     proj_dict['contributors_count'] = len(contributors)
+    proj_dict['date_added'] = datetime.today()
     proj_dict['contributors_url'] = github_info['contributors_url']
     proj_dict['forks_url'] = github_url + "/network"
     proj_dict['starred_url'] = github_url + "/stargazers"

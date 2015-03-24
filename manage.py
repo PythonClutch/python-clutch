@@ -57,6 +57,15 @@ def update():
     update_projects(projects)
     return "Projects Updated."
 
+@manager.command
+def test():
+    wanted_projects = []
+    projects = Project.query.all()
+    for project in projects:
+        if project.name[0] == "A":
+            wanted_projects.append(project)
+    return wanted_projects
+
 
 if __name__ == '__main__':
     manager.run()
