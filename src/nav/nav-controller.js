@@ -1,27 +1,27 @@
-app.controller('NavCtrl', ['$location', function ($location) {
+app.controller('NavCtrl', ['$location', 'userServices', function ($location, userServices) {
 
 	var self = this;
 
-	self.toProject = function () {
-		console.log('works');
-		if (window.location.href === 'http://localhost:5000/#/home') {
-			console.log('true');
-			window.location.href = 'http://localhost:5000/#/home' + '/projects';
-		}
-	};
+	self.loggedIn = true;
 
-	console.log('is this real life?');
+	self.currentUser;
 
-	self.isActive = function (path) {
-	  // The default route is a special case.
-	  if (path === '/') {
-	    return $location.path() === '/';
-	  }
+	function checkLogIn () {
+		userServices.currentUser().then(function (result) {
+			console.log('hm')
+			self.currentUser = result;
+			if (self.currentUser.status === "success") {
+				self.loggedIn = true;
+			} else {
+				self.loggedIn = false;
+			}
+		});
+	}
 
-	  return function () {
-	  	// $location.path() = $location.path() || '';
-        return $location.path().slice(0, path.length) === path;
-	  };
-	};
+	self.checkUser = function () {
+		checkLogIn();
+	}
+
+	checkLogIn();
 
 }]);

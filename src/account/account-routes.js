@@ -6,6 +6,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     controller: 'AccountCtrl',
     controllerAs: 'vm',
     resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToInfo: ['accountFactory',
         function(accountFactory) {
           accountFactory.setInfo();
@@ -19,6 +24,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     controller: 'AccountCtrl',
     controllerAs: 'vm',
     resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToAct: ['accountFactory',
         function(accountFactory) {
           accountFactory.setActivity();
@@ -36,6 +46,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     controller: 'AccountCtrl',
     controllerAs: 'vm',
     resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToAct: ['accountFactory',
         function(accountFactory) {
           accountFactory.setEdit();

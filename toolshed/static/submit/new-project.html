@@ -1,46 +1,50 @@
 <h2 class="new-project-heading">Submit New Project</h2>
 
-<div class="new-input-div">
+<!-- <div class="new-input-div">
 	<p>Name</p>
-	<input class="search" type="text" placeholder="Enter project name">
-</div>
+	<input ng-model="vm.newProject.name" class="search" type="text" placeholder="Enter project name">
+</div> -->
 <div class="new-input-div">
 	<p>GitHub URL</p>
-	<input class="search" type="url" placeholder="Enter a URL">
+	<input ng-model="vm.newProject.github_url" class="search" type="url" placeholder="Enter a URL" required>
+</div>
+<div class="new-input-div">
+	<p>Bitbucket URL</p>
+	<input ng-model="vm.newProject.bitbucket_url" class="search" type="url" placeholder="Enter a URL" required>
 </div>
 <div class="new-input-div">
 	<p>PyPi URL</p>
-	<input class="search" type="url" placeholder="Enter a URL">
+	<input ng-model="vm.newProject.pypi_url" class="search" type="url" placeholder="Enter a URL">
 </div>
-<div class="new-input-div">
+<!-- <div class="new-input-div">
 	<p>Website</p>
-	<input class="search" type="url" placeholder="Enter a URL">
-</div>
+	<input ng-model="vm.newProject.website" class="search" type="url" placeholder="Enter a URL">
+</div> -->
 <div class="new-input-div">
-	<p>Documenation</p>
-	<input class="search" type="url" placeholder="Enter a URL">
+	<p>PyPi Documenation</p>
+	<input ng-model="vm.newProject.docs_url" class="search" type="url" placeholder="Enter a URL">
 </div>
-<div class="new-input-div">
+<!-- <div class="new-input-div">
 	<p>Source Code</p>
 	<input class="search" type="url" placeholder="Enter a URL">
-</div>
+</div> -->
 <div class="new-input-div">
 	<p>Mailing List</p>
-	<input class="search" type="url" placeholder="Enter a URL">
+	<input ng-model="vm.newProject.mailing_list_url" class="search" type="url" placeholder="Enter a URL">
 </div>
 <div class="new-input-div">
 	<p>Category</p>
-	<select>
-		<option value="{{user.id}}">active</option>
+	<select ng-model="vm.newProject.category_id" >
+		<option ng-repeat="category in vm.categories" value="{{category.id}}">{{category.name}}</option>
 	</select>
 </div>
-<div class="new-input-div">
+<!-- <div class="new-input-div">
 	<p>Group</p>
 	<select>
 		<option value="{{user.id}}">support</option>
 	</select>
-</div>
-<div class="new-input-div">
+</div> -->
+<!-- <div class="new-input-div">
 	<p>Comments:</p>
-	<input class="search" type="textarea" placeholder="Anything else we should know?">
-</div>
+	<input ng-model="vm.newProject.comments" class="search" type="textarea" placeholder="Anything else we should know?">
+</div> -->

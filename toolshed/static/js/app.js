@@ -13,6 +13,8 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.controller('IndexCtrl', function () {
 	console.log($('.home-project-search'));
+
+	self.loggedIn = true;
 });
 (function () {
 	'use strict';
@@ -101,13 +103,15 @@ $(function () {
 		console.log('hey')
 	};
 });
-app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory', 'projectFactory',
-	function (activeRoute, accountFactory, appearFactory, projectFactory) {
+app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory', 'projectFactory', 'user',
+	function (activeRoute, accountFactory, appearFactory, projectFactory, user) {
 	var self = this;
 
 	self.byInfo = accountFactory.byInfo();
 
 	self.byEdit = accountFactory.byEdit();
+
+	self.user = user.data;
 
 	self.setInfo = function () {
 		accountFactory.setInfo();
@@ -200,6 +204,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     controller: 'AccountCtrl',
     controllerAs: 'vm',
     resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToInfo: ['accountFactory',
         function(accountFactory) {
           accountFactory.setInfo();
@@ -213,6 +222,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     controller: 'AccountCtrl',
     controllerAs: 'vm',
     resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToAct: ['accountFactory',
         function(accountFactory) {
           accountFactory.setActivity();
@@ -230,6 +244,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     controller: 'AccountCtrl',
     controllerAs: 'vm',
     resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToAct: ['accountFactory',
         function(accountFactory) {
           accountFactory.setEdit();
@@ -387,76 +406,33 @@ $(function () {
 	}
 
 });
-app.controller('NavCtrl', ['$location', function ($location) {
+app.controller('NavCtrl', ['$location', 'userServices', function ($location, userServices) {
 
 	var self = this;
 
-	self.toProject = function () {
-		console.log('works');
-		if (window.location.href === 'http://localhost:5000/#/home') {
-			console.log('true');
-			window.location.href = 'http://localhost:5000/#/home' + '/projects';
-		}
-	};
+	self.loggedIn = true;
 
-	console.log('is this real life?');
+	self.currentUser;
 
-	self.isActive = function (path) {
-	  // The default route is a special case.
-	  if (path === '/') {
-	    return $location.path() === '/';
-	  }
+	function checkLogIn () {
+		userServices.currentUser().then(function (result) {
+			console.log('hm')
+			self.currentUser = result;
+			if (self.currentUser.status === "success") {
+				self.loggedIn = true;
+			} else {
+				self.loggedIn = false;
+			}
+		});
+	}
 
-	  return function () {
-	  	// $location.path() = $location.path() || '';
-        return $location.path().slice(0, path.length) === path;
-	  };
-	};
+	self.checkUser = function () {
+		checkLogIn();
+	}
 
-}]);
-
-app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, projectFactory) {
-
-	var self = this;
-
-	self.project = project;
-
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-	
-}]);
-app.config(['$routeProvider', function($routeProvider) {    
-    var routeDefinition = {
-      templateUrl: 'static/project/project.html',
-      controller: 'ProjectCtrl',
-      controllerAs: 'vm',
-      resolve: {
-        project: ['$route', 'projectServices',
-          function($route, projectServices) {
-            var routeParams = $route.current.params;
-            return projectServices.getByProjectId(routeParams.projectid);
-          }]
-      }
-    };
-
-    $routeProvider.when('/home/projects/:projectid', routeDefinition);
+	checkLogIn();
 
 }]);
-
-
 
 app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $location) {
 
@@ -547,6 +523,10 @@ app.factory('groupServices', ['$http', '$log',
 
       getByGroupId: function (groupId) {
         return get('/api/v1/groups/' + groupId);
+      },
+
+      listGroups: function () {
+        return get('/api/v1/groups')
       },
 
       listCats: function () {
@@ -670,7 +650,11 @@ app.factory('projectServices', ['$http', '$log',
       },
 
       like: function (projectId) {
-        return post('/api/v1/likes/projects/' + projectId)
+        return post('/api/v1/likes/projects/' + projectId);
+      },
+
+      addProject: function (project) {
+        return post('/api/v1/projects', project);
       }
 
     };
@@ -686,11 +670,119 @@ app.factory('stringUtil', function() {
         }
     };
 });
-app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', function (activeRoute, submitFactory) {
+app.factory('userServices', ['$http', '$q', '$log',
+    function($http, $q, $log) {
+        function get(url) {
+          return processAjaxPromise($http.get(url));
+        }
+        function post(url, user) {
+          return processAjaxPromise($http.post(url, user));
+        }
+        function remove(url) {
+          return processAjaxPromise($http.delete(url));
+        }
+        function processAjaxPromise(p) {
+          return p.then(function(result) {
+            console.log(result.data)
+            return result.data;
+          })
+          .catch(function(error) {
+            $log.log(error);
+          });
+        }
+
+        return {
+            list: function() {
+                return get('/api/v1/users');
+            },
+
+            getByUserId: function(userId) {
+                if (!userId) {
+                    throw new Error('getByUserId requires a user id');
+                }
+
+                return get('/api/v1/users/' + userId);
+            },
+
+            currentUser: function() {
+                return get('/api/v1/user');
+            },
+
+            // login: function (user) {
+            //     // console.log(user);
+            //     return post('/api/login', user)
+            // }
+
+            // api/register
+            // api/login
+        };
+    }
+]);
+app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, projectFactory) {
+
+	var self = this;
+
+	self.project = project;
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
+	
+}]);
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/project/project.html',
+      controller: 'ProjectCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        project: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getByProjectId(routeParams.projectid);
+          }]
+      }
+    };
+
+    $routeProvider.when('/home/projects/:projectid', routeDefinition);
+
+}]);
+
+
+
+app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices',
+	function (activeRoute, submitFactory, groupServices, projectServices) {
 
 	var self = this;
 
 	self.byNew = true;
+
+	self.newProject = {};
+
+	self.categories;
+
+	groupServices.listCats().then(function (result) {
+		self.categories = result;
+		console.log(result);
+	})
+
+	self.createProject = function () {
+		console.log(self.newProject);
+		projectServices.addProject(self.newProject);
+		self.newProject = {};
+		console.log(self.newProject);
+	}
 
 	self.setNew = function () {
 		self.byNew = true;
