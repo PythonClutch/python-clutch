@@ -3,7 +3,7 @@ import re
 from datetime import datetime
 from .extensions import db
 from .importer import get_total_downloads, parse_github_url
-from .models import ProjectLog
+from .models import ProjectLog, Project
 
 
 github_search_regex = re.compile('github.com/(.*)')
@@ -49,24 +49,58 @@ def update_github(project):
 
 def log_project(project):
     proj_log = {}
-    print(project.forks_count)
     proj_log["forks_count"] = project.forks_count
-    print(project.starred_count)
     proj_log["starred_count"] = project.starred_count
-    print(project.watchers_count)
     proj_log["watchers_count"] = project.watchers_count
-    print(project.current_version)
     proj_log["current_version"] = project.current_version
-    print(project.last_commit)
     proj_log["last_commit"] = project.last_commit
-    print(project.open_issues_count)
     proj_log["open_issues_count"] = project.open_issues_count
-    print(project.downloads_count)
     proj_log["downloads_count"] = project.downloads_count
-    print(project.contributors_count)
     proj_log["contributors_count"] = project.contributors_count
+    proj_log["score"] = project.score
     proj_log["log_date"] = datetime.today()
     project_log = ProjectLog(**proj_log)
     project.logs.append(project_log)
     db.session.add(project_log)
     db.session.commit()
+
+
+def update_projects_score(projects):
+    def raw_github_score(project):
+        num_forks = project.forks_count
+        num_watch = project.watchers_count
+        num_cont = project.contributors_count
+        num_stars = project.starred_count
+        github_score = (num_forks + num_watch + num_cont + num_stars)
+        return github_score
+
+    def raw_pypi_score(project):
+        num_download = project.downloads_count
+        pypi_score = num_download
+        return pypi_score
+
+    def get_best_pypi(projects):
+        downloads = [raw_pypi_score(project) for project in projects]
+        return max(downloads)
+
+    def get_best_github(projects):
+        git_projects = [project for project in projects
+                        if project.github_url]
+        git_score = [raw_github_score(project)
+                     for project in git_projects]
+        return max(git_score)
+
+    def set_scores(projects):
+        best_pypi = get_best_pypi(projects)
+        best_github = get_best_github(projects)
+        for project in projects:
+            score = raw_pypi_score(project) / best_pypi
+            if project.github_url:
+                git_score = raw_github_score(project) / best_github
+                score = score + git_score
+                project.score = score
+            else:
+                project.score = score
+        db.session.commit()
+    set_scores(projects)
+

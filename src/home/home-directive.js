@@ -15,7 +15,11 @@
 		};
 	});
 
-
-
+	app.directive('pagination', function () {
+		return {
+			restrict: 'E',
+			templateUrl: 'static/home/pagination/pagination.html',
+		};
+	});
 
 })();

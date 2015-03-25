@@ -1,0 +1,92 @@
+/////////////////////////////////////////////////////////////
+// GENERAL
+/////////////////////////////////////////////////////////////
+
+/////////////// COMMENT /////////////////////////////////////
+
+.push {
+	height: 30%;
+}
+
+footer {
+	height: 117px;
+	width: 100%;
+	background: $footer-gray;
+	z-index: 10; 
+	color: white; 
+}
+
+.footer-div {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+footer a {
+	margin-left: 30px; 
+	color: white;
+	text-decoration: none;
+	&:hover {
+		color: $base-color;
+	} 
+}
+
+.footer-links {
+	margin: 51px 48px 0 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	font-weight: 300;
+	font-size: 14px;  
+}
+
+.footer-links-github {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.footer-links-github i {
+	margin-right: 4px; 
+}
+
+.footer-links-github p {
+	text-decoration: underline;
+}
+
+.donate-button {
+	margin: 35px 0 0 48px;
+	border: 2px solid white;
+	background: transparent;
+	color: white; 
+	width: 264px; 
+	height: 44px;
+	font-size: 18px; 
+	letter-spacing: 2px;
+	&:hover {
+		color: $footer-gray;
+		background: white; 
+		cursor: pointer;
+		transition: all .3s;
+		transition: color .1s;
+	}
+	&:focus {
+		outline: 0;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

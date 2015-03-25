@@ -31,12 +31,13 @@ def create_app():
     bcrypt.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'toolshed_admin.login'
-    admin.add_view(MyView(models.User, db.session))
-    admin.add_view(MyView(models.Project, db.session))
-    admin.add_view(MyView(models.ProjectLog, db.session))
-    admin.add_view(MyView(models.Category, db.session))
-    admin.add_view(MyView(models.Comment, db.session))
-    admin.add_view(MyView(models.Group, db.session))
-    admin.add_view(MyView(models.Like, db.session))
+    admin.add_view(MyView(models.User, db.session, category="Account"))
+    admin.add_view(MyView(models.AdminAccount, db.session, category="Account"))
+    admin.add_view(MyView(models.Project, db.session, category="Libraries"))
+    admin.add_view(MyView(models.ProjectLog, db.session, category="Libraries"))
+    admin.add_view(MyView(models.Category, db.session, category="Libraries"))
+    admin.add_view(MyView(models.Comment, db.session, category="Libraries"))
+    admin.add_view(MyView(models.Group, db.session, category="Libraries"))
+    admin.add_view(MyView(models.Like, db.session, category="Libraries"))
 
     return app

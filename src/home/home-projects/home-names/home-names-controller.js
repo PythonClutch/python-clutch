@@ -1,15 +1,27 @@
-app.controller('hnCtrl', function () {
-	// var self = this;
+app.controller('hnCtrl', ['projects', 'appearFactory', 'projectFactory', function (projects, appearFactory, projectFactory) {
+	var self = this;
 
-	// self.byNames = true;
+	self.projects = projects;
 
-	// self.setGroups = function () {
-	// 	self.byNames = false;
-	// 	console.log('hefy')
-	// }
+	self.checkBox = function () {
+    	appearFactory.checkBox();
+	};
 
-	// self.setNames = function () {
-	// 	self.byNames = true;
-	// 	console.log('hey')
-	// }
-});
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
+
+
+}]);

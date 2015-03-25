@@ -31,7 +31,7 @@ class MyAdminIndexView(AdminIndexView):
     def admin_login(self):
         form = AdminLogin()
         if form.validate_on_submit():
-            admin = models.Admin.query.filter_by(admin_name=form.login_name.data).first()
+            admin = models.AdminAccount.query.filter_by(admin_name=form.login_name.data).first()
             if admin and admin.check_password(form.password.data):
                 login_user(admin)
                 return redirect(url_for(".index"))
