@@ -246,6 +246,11 @@ class CommentSchema(Schema):
                   "project_id")
 
 
+class LikeSchema(Schema):
+    class Meta:
+        fields = ("id", "user_id", "project_id", "user_name", "project_name")
+
+
 class UserSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
     likes = fields.Nested(LikeSchema, many=True)
@@ -253,10 +258,6 @@ class UserSchema(Schema):
     class Meta:
         fields = ("id", "github_name", "github_url", "email", "comments", "likes")
 
-
-class LikeSchema(Schema):
-    class Meta:
-        fields = ("id", "user_id", "project_id", "user_name", "project_name")
 
 
 class LogSchema(Schema):
