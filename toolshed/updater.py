@@ -85,7 +85,7 @@ def update_projects_score(projects):
 
     def get_best_github(projects):
         git_projects = [project for project in projects
-                        if project.github_url]
+                        if project.git_url]
         git_score = [raw_github_score(project)
                      for project in git_projects]
         return max(git_score)
@@ -95,7 +95,7 @@ def update_projects_score(projects):
         best_github = get_best_github(projects)
         for project in projects:
             score = raw_pypi_score(project) / best_pypi
-            if project.github_url:
+            if project.git_url:
                 git_score = raw_github_score(project) / best_github
                 score = score + git_score
                 project.score = score

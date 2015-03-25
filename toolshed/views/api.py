@@ -1,7 +1,7 @@
 import json
 from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
-                      Group, GroupSchema, LikeSchema)
+                      Group, GroupSchema, LikeSchema, LogSchema)
 from flask import Blueprint, jsonify, request, abort, url_for
 from ..extensions import db
 from .toolshed import require_login, current_user
@@ -18,7 +18,8 @@ api = Blueprint('api', __name__)
 
 all_users_schema = UserSchema(many=True)
 single_user_schema = UserSchema()
-all_projects_schema = ProjectSchema(many=True)
+all_projects_schema = ProjectSchema(many=True, exclude=("logs",))
+all_projects_with_logs = ProjectSchema(many=True)
 single_project_schema = ProjectSchema()
 single_comment_schema = CommentSchema()
 all_comments_schema = CommentSchema(many=True)
@@ -28,6 +29,8 @@ single_group_schema = GroupSchema()
 all_groups_schema = GroupSchema(many=True)
 single_like_schema = LikeSchema()
 all_likes_schema = LikeSchema(many=True)
+all_logs_schema = LogSchema(many=True)
+single_log_schema = LogSchema()
 
 # response functions
 
@@ -77,7 +80,7 @@ def get_pending_submissions(id):
         pending = Project.query.filter_by(submitted_by_id=user.id).filter_by(status=False).all()
         return success_response(all_projects_schema, pending)
     else:
-        return failure_repsonse("No pending submissions.")
+        return failure_response("No pending submissions.", 404)
 
 
 @api.route("/users/<int:id>/submissions")
@@ -87,18 +90,35 @@ def get_submissions(id):
         submissions = Project.query.filter_by(submitted_by_id=user.id).filter_by(status=True).all()
         return success_response(all_projects_schema, submissions)
     else:
-        return failure_repsonse("No submissions.")
+        return failure_response("No submissions.", 404)
 
 
 # project routes
 
 @api.route("/projects")
 def projects():
-    projects = Project.query.all()
+    projects = Project.query.order_by(Project.name)
     if projects:
         return success_response(all_projects_schema, projects)
     else:
         return failure_response("There are no projects.", 404)
+
+
+@api.route("/projects/newest")
+def newest_projects():
+    projects = Project.query.order_by(Project.date_added)
+    if projects:
+        return success_response(all_projects_schema, projects)
+    else:
+        return failure_response("There are no projects.", 404)
+
+
+@api.route("/projects/popular")
+def popular_projects():
+    projects = Project.query.order_by(Project.score)
+    if projects:
+        return success_response(all_projects_schema, projects)
+
 
 
 @api.route("/projects/<int:id>")
@@ -114,6 +134,8 @@ def project(id):
 def make_project():
     urls = request.get_json()
     project = create_project(**urls)
+    if not project:
+        return failure_response("This project already exists.", 409)
     user_name = current_user()
     user = User.query.filter_by(github_name=user_name).first()
     project.submitted_by_id = user.id
@@ -123,7 +145,29 @@ def make_project():
     return success_response(single_project_schema, project)
 
 
-# Category routes
+# Logs routes
+
+
+@api.route("/projects/logs")
+def projects_logs():
+    projects = Project.query.all()
+    if projects:
+        return success_response(all_projects_with_logs, projects)
+    else:
+        return failure_response("There are no projects", 404)
+
+
+@api.route("/projects/<int:id>/logs")
+def project_logs(id):
+    project = Project.query.get(id)
+    if project:
+        return success_response(single_project_schema, project)
+    else:
+        return failure_response("There was no such project.", 404)
+
+
+# Group routes
+
 
 @api.route("/groups")
 def all_groups():
@@ -134,16 +178,16 @@ def all_groups():
         return failure_response("There are no groups.", 404)
 
 
-@api.route("/groups/<int:id>/projects")
+@api.route("/groups/<int:id>")
 def group_projects(id):
     group = Group.query.get(id)
     if group.projects:
-        return success_response(single_group_schema, group.projects)
+        return success_response(single_group_schema, group)
     else:
         return failure_response("There is no such group.", 404)
 
 
-# Group routes
+# Category routes
 
 @api.route("/categories")
 def all_categories():
@@ -154,11 +198,11 @@ def all_categories():
         return failure_response("There are no categories.", 404)
 
 
-@api.route("/categories/<int:id>/groups")
+@api.route("/categories/<int:id>")
 def group_categories(id):
     category = Category.query.get(id)
-    if category.groups:
-        return success_response(single_category_schema, category.groups)
+    if category:
+        return success_response(single_category_schema, category)
     else:
         return failure_response("There is no such category.", 404)
 
