@@ -1,28 +1,28 @@
 import requests
 import re
+import math
 from datetime import datetime
 from .extensions import db
-from .importer import get_total_downloads, parse_github_url
+from .importer import get_total_downloads, parse_github_url, parse_bitbucket_url
 from .models import ProjectLog, Project
 
 
 github_search_regex = re.compile('github.com/(.*)')
 github_match_regex = re.compile('((http(s)*://)*github.com/)')
 
-
-# def difference_check(project_info, api_info):
-#     if project_info != api_info:
-#         project_info = api_info
-#         db.session.commit()
-
-
+bitbucket_search_regex = re.compile('bitbucket.org/(.*)')
+bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
 
 def update_projects(projects):
     for project in projects:
+        print(project)
+        print(project.github_url)
         log_project(project)
         update_pypi(project)
         if project.github_url:
             update_github(project)
+        elif project.bitbucket_url:
+            update_bitbucket(project)
     return print("Update Complete.")
 
 
@@ -30,6 +30,8 @@ def update_pypi(project):
     pypi_info = requests.get(project.pypi_url + "/json").json()
     project.current_version =  pypi_info['info']['version']
     project.website = pypi_info['info']['home_page']
+    version_release_string = pypi_info['releases'][project.current_version][0]['upload_time']
+    project.current_version_release = datetime.strptime(version_release_string, "%Y-%m-%dT%H:%M:%S")
     project.current_version = pypi_info['info']['version'],
     project.summary = pypi_info['info']['summary']
     project.downloads_count = get_total_downloads(pypi_info)
@@ -37,13 +39,27 @@ def update_pypi(project):
 
 
 def update_github(project):
-    github_api, project_stub = parse_github_url(project.github_url)
+    github_api, project_stub = parse_github_url(project.git_url)
     github_info = requests.get(github_api).json()
     project.forks_count = github_info['forks_count']
     project.starred_count = github_info['stargazers_count']
     project.watchers_count = github_info['watchers_count']
     project.last_commit = datetime.strptime(github_info['updated_at'], "%Y-%m-%dT%H:%M:%SZ")
     project.open_issues_count = github_info['open_issues_count']
+    db.session.commit()
+
+
+def update_bitbucket(project):
+    bitbucket_api, project_stub = parse_bitbucket_url(project.git_url)
+    bitbucket_info = requests.get(bitbucket_api).json()
+    open_issues_api = bitbucket_api + "issues"
+    payload = {'status': "open"}
+    project.forks_count = bitbucket_info['forks_count']
+    project.watchers_count = bitbucket_info['followers_count']
+    project.last_commit = bitbucket_info['last_updated']
+    open_issues_info = requests.get(open_issues_api, params=payload).json()
+    if not open_issues_info['error']:
+        project.open_issues_count = open_issues_info['count']
     db.session.commit()
 
 
@@ -57,8 +73,9 @@ def log_project(project):
     proj_log["open_issues_count"] = project.open_issues_count
     proj_log["downloads_count"] = project.downloads_count
     proj_log["contributors_count"] = project.contributors_count
-    proj_log["score"] = project.score
+    proj_log["previous_score"] = project.score
     proj_log["log_date"] = datetime.today()
+    proj_log["current_version_release"] = project.current_version_release
     project_log = ProjectLog(**proj_log)
     project.logs.append(project_log)
     db.session.add(project_log)
@@ -66,17 +83,22 @@ def log_project(project):
 
 
 def update_projects_score(projects):
+    github_lambda = 0.05
+    pypi_lambda = 0.05
+
     def raw_github_score(project):
         num_forks = project.forks_count
         num_watch = project.watchers_count
-        num_cont = project.contributors_count
-        num_stars = project.starred_count
-        github_score = (num_forks + num_watch + num_cont + num_stars)
+        time_delta = project.last_commit - datetime.now()
+        days_since_last_commit = time_delta.days
+        github_score = (num_forks + num_watch) * math.exp(-1 * days_since_last_commit * github_lambda)
         return github_score
 
     def raw_pypi_score(project):
         num_download = project.downloads_count
-        pypi_score = num_download
+        time_delta = project.current_version_release - datetime.now()
+        days_since_last_release = time_delta.days
+        pypi_score = num_download * math.exp(-1 * days_since_last_release * pypi_lambda)
         return pypi_score
 
     def get_best_pypi(projects):
@@ -103,4 +125,6 @@ def update_projects_score(projects):
                 project.score = score
         db.session.commit()
     set_scores(projects)
+
+
 

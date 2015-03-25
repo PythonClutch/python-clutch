@@ -47,11 +47,12 @@ def github_populate(proj_dict, github_url):
     proj_dict['open_issues_count'] = github_info['open_issues_count']
     contributors = requests.get(github_info['contributors_url'], auth=auth).json()
     proj_dict['contributors_count'] = len(contributors)
-    proj_dict['date_added'] = datetime.today()
     proj_dict['contributors_url'] = github_info['contributors_url']
     proj_dict['forks_url'] = github_url + "/network"
     proj_dict['starred_url'] = github_url + "/stargazers"
     proj_dict['open_issues_url'] = github_url + "/issues"
+    proj_dict['github_url'] = True
+    proj_dict['bitbucket_url'] = False
     return proj_dict
 
 
@@ -70,6 +71,8 @@ def bitbucket_populate(proj_dict, bitbucket_url):
     open_issues_info = requests.get(open_issues_api, params=payload).json()
     if not open_issues_info['error']:
         proj_dict['open_issues_count'] = open_issues_info['count']
+    proj_dict['github_url'] = False
+    proj_dict['bitbucket_url'] = True
     return proj_dict
 
 def get_total_downloads(pypi_result):
@@ -81,7 +84,7 @@ def python_three_check(pypi):
     return python_three in pypi['info']['classifiers']
 
 
-def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=None):
+def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=None, mailing_list_url=None):
     project = Project.query.filter_by(pypi_url=pypi_url).first()
     if project:
         return None
@@ -97,9 +100,12 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
         if github_match_regex.search(pypi_info["info"]['home_page']):
             github_url = pypi_info["info"]['home_page']
             proj_dict = github_populate(proj_dict, github_url)
-        if bitbucket_match_regex.search(pypi_info['info']['home_page']):
+        elif bitbucket_match_regex.search(pypi_info['info']['home_page']):
             bitbucket_url = pypi_info['info']['home_page']
             proj_dict = bitbucket_populate(proj_dict, bitbucket_url)
+        else:
+            proj_dict["github_url"] = False
+            proj_dict["bitbucket_url"] = False
 
     proj_dict['name'] = pypi_info['info']['name']
     proj_dict['current_version'] = pypi_info['info']['version']
@@ -107,9 +113,11 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
     proj_dict['summary'] = pypi_info['info']['summary']
     proj_dict['downloads_count'] = get_total_downloads(pypi_info)
     proj_dict['python_three_compatible'] = python_three_check(pypi_info)
+    print(proj_dict['name'])
+    version_release_string = pypi_info['releases'][proj_dict['current_version']][0]['upload_time']
+    proj_dict['current_version_release'] = datetime.strptime(version_release_string, "%Y-%m-%dT%H:%M:%S")
     proj_dict['status'] = False
-
-
+    proj_dict['date_added'] = datetime.today()
 
     if docs_url:
         proj_dict['docs_url'] = docs_url
@@ -119,6 +127,7 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
             proj_dict['docs_url'] = pypi_info['info']['docs_url']
 
     proj_dict['pypi_url'] = pypi_url
-
+    if not proj_dict["mailing_list"]:
+        proj_dict["mailing_list"] = mailing_list_url
     project = Project(**proj_dict)
     return project

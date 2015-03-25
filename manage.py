@@ -79,7 +79,7 @@ def seed_db(file):
             project = create_project(pypi_url=str(list[0]), github_url=str(list[1]), bitbucket_url=str(list[2]))
             if project:
                 db.session.add(project)
-            db.session.commit()
+        db.session.commit()
 
 
 if __name__ == '__main__':
