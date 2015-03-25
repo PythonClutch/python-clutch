@@ -127,7 +127,6 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
             proj_dict['docs_url'] = pypi_info['info']['docs_url']
 
     proj_dict['pypi_url'] = pypi_url
-    if not proj_dict["mailing_list"]:
-        proj_dict["mailing_list"] = mailing_list_url
+    proj_dict['mailing_list_url'] = mailing_list_url
     project = Project(**proj_dict)
     return project

@@ -1,6 +1,7 @@
 import requests
 import re
 import math
+import os
 from datetime import datetime
 from .extensions import db
 from .importer import get_total_downloads, parse_github_url, parse_bitbucket_url
@@ -12,6 +13,10 @@ github_match_regex = re.compile('((http(s)*://)*github.com/)')
 
 bitbucket_search_regex = re.compile('bitbucket.org/(.*)')
 bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
+
+
+gitkey = os.environ['GITKEY']
+auth=(gitkey, 'x-oauth-basic')
 
 def update_projects(projects):
     for project in projects:
@@ -40,7 +45,7 @@ def update_pypi(project):
 
 def update_github(project):
     github_api, project_stub = parse_github_url(project.git_url)
-    github_info = requests.get(github_api).json()
+    github_info = requests.get(github_api, auth=auth).json()
     project.forks_count = github_info['forks_count']
     project.starred_count = github_info['stargazers_count']
     project.watchers_count = github_info['watchers_count']
