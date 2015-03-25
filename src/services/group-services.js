@@ -32,6 +32,10 @@ app.factory('groupServices', ['$http', '$log',
         return get('/api/v1/groups/' + groupId);
       },
 
+      listCats: function () {
+        return get('/api/v1/categories')
+      }
+
     };
   }
 ]);

@@ -10,7 +10,7 @@ app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $lo
 	        return $location.path() === '/';
 	      }
 	      
-	      return stringUtil.startsWith($location.path(), path);
+	      return stringUtil.isOnly($location.path(), path);
 	    }
 
 	};

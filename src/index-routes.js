@@ -16,6 +16,11 @@ app.config(['$routeProvider', function ($routeProvider) {
           return groupServices.list();
         }
       ],
+      categories: ['groupServices',
+        function(groupServices) {
+          return groupServices.listCats();
+        }
+      ],
       setProj: ['homeFactory',
         function(homeFactory) {
           homeFactory.setProjects();

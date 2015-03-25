@@ -3,6 +3,20 @@
 		return {
 			restrict: 'E',
 			templateUrl: 'static/home/home-categories/home-categories.html'
+			// resolve: {
+			//   groups: ['groupServices',
+		 //        function(groupServices) {
+		 //          return groupServices.list();
+		 //        }
+		 //      ],
+		 //      categories: ['groupServices',
+		 //        function(groupServices) {
+		 //          return groupServices.listCats();
+		 //        }
+		 //      ],
+		 //    },
+		 //    controller: 'CategoryCtrl',
+		 //    controllerAs: 'vm'
 		};
 	});
 

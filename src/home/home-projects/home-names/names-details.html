@@ -4,13 +4,11 @@
 	<div class="home-project-basic-info flex-row">
 		<h4 class="home-project-name"><a href="#/home/projects/{{project.id}}">{{project.name}}</a></h4>
 		<div class="home-project-basic-info-right">
-			<div class="home-project-basic-info-icon home-project-basic-info-like"><i ng-click="vm.like()" ng-class="{ 'fa-heart' : vm.likedHeart }" class="fa fa-heart-o"></i>##</div>
-			<div class="home-project-basic-info-icon home-project-basic-info-comment"><i class="fa fa-comment-o"></i>##</div>
+			<div class="home-project-basic-info-icon home-project-basic-info-like"><i ng-click="vm.like(project.id)" ng-class="{ 'fa-heart' : vm.likedHeart }" class="fa fa-heart-o"></i>{{project.user_likes.length || 0}}</div>
+			<div class="home-project-basic-info-icon home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{project.comments.length || 0}}</div>
+			<div class="home-project-basic-info-icon home-project-basic-info-check"><i ng-class="{ 'fa-check-square-o' : project.python_three_compatible, 'fa-square-o' : !project.python_three_compatible }" class="fa"></i><p>Py3</p></div>
 			<div class="home-project-basic-info-icon home-project-basic-info-score"><i class="fa fa-calculator"></i></i>##</div>
-<!-- 			<div class="home-project-basic-info-more"></div> -->
-<!-- 			<label for="names-details-checkbox" class="home-project-basic-info-icon home-project-basic-info-plus "> -->
-				<i ng-click="vm.checkBox()" class="home-project-basic-info-icon home-project-basic-info-plus fa fa-plus"></i>
-<!-- 			</label> -->
+			<i ng-class="{'rotate-plus' : vm.rotate}" ng-click="vm.checkBox()" class="home-project-basic-info-icon home-project-basic-info-plus fa fa-plus"></i>
 		</div>
 	</div>
 	<div class="home-project-details-div">
@@ -35,7 +33,6 @@
 			</div>
 		</div>
 		<div class="home-project-details home-project-pypi">
-<!-- 			<input class="more-info-input" id="more-info-pypi" type="checkbox"> -->
 			<div class="home-project-pypi-header-div">	
 				<div class="home-project-header-top">
 					<h3>PyPi</h3>
@@ -56,6 +53,7 @@
 			</div>
 		</div>
 		<div class="home-project-details home-project-github">
+			<input class="gh-checkbox" type="checkbox">
 			<div class="home-project-github-header-div">
 				<div class="home-project-header-top">
 					<h3>GitHub</h3>
@@ -65,10 +63,10 @@
 				<div class="home-project-header-bottom">
 					<h5>{{project.forks_count}} Forks</h5>
 					<h5>{{project.open_issues_count}} Issues</h5>
-					<label ng-click="vm.ghInfo()" class="more-info-label" for="more-info-github">VIEW MORE <i ng-class="{ 'fa-angle-up': vm.ghMoreInfo, 'fa-angle-down': !vm.ghMoreInfo}" class="fa"></i></label>					
+					<label ng-click="vm.ghInfo()" class="more-info-label">VIEW MORE <i ng-class="{ 'fa-angle-up': vm.ghMoreInfo, 'fa-angle-down': !vm.ghMoreInfo}" class="fa"></i></label>					
 				</div>
 			</div>
-			<div ng-show="vm.ghMoreInfo" class="home-project-content">
+			<div class="home-project-content home-project-content-gh">
 				<section class="gray-line"></section>
 				<div class="home-project-content-sizer">
 					<div class="home-project-content-div">

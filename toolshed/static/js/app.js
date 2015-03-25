@@ -56,6 +56,11 @@ app.config(['$routeProvider', function ($routeProvider) {
           return groupServices.list();
         }
       ],
+      categories: ['groupServices',
+        function(groupServices) {
+          return groupServices.listCats();
+        }
+      ],
       setProj: ['homeFactory',
         function(homeFactory) {
           homeFactory.setProjects();
@@ -94,11 +99,6 @@ app.config(['$routeProvider', function ($routeProvider) {
 $(function () {
 	$('.home-project-basic-info-plus').onclick = function () {
 		console.log('hey')
-		var height = $('.push').css('height');
-		console.log(height);
-		// $('.push').css({
-		// 	'height': 
-		// })
 	};
 });
 app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory', 'projectFactory',
@@ -273,9 +273,13 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/home/groups/:groupid', routeDefinition);
 
 }]);
-app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups',
-	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups) {
+app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
+	'categories',
+	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories) {
 	var self = this;
+
+	self.categories = categories;
+	console.log(categories);
 
 	self.projects = projects;
 
@@ -304,22 +308,25 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
       return activeRoute.isActive(path);
     };
 
+    self.rotate = appearFactory.rotate();
+
     self.checkBox = function () {
     	appearFactory.checkBox();
+    	self.rotate = appearFactory.rotate();
 	};
 
 	self.likedHeart = false;
 
-	self.like = function () {
+	self.like = function (id) {
 		self.likedHeart = true;
 		var target = $(event.target);
-		console.log(target);
 		if (target.hasClass('fa-heart-o')) {
 			target.removeClass('fa-heart-o');		
 		} else {
 			target.addClass('fa-heart-o');
 			self.likedHeart = false;
 		}
+		projectServices.like(id);
 	};
 
 	var pf = projectFactory;
@@ -380,34 +387,6 @@ $(function () {
 	}
 
 });
-app.controller('NavCtrl', ['$location', function ($location) {
-
-	var self = this;
-
-	self.toProject = function () {
-		console.log('works');
-		if (window.location.href === 'http://localhost:5000/#/home') {
-			console.log('true');
-			window.location.href = 'http://localhost:5000/#/home' + '/projects';
-		}
-	};
-
-	console.log('is this real life?');
-
-	self.isActive = function (path) {
-	  // The default route is a special case.
-	  if (path === '/') {
-	    return $location.path() === '/';
-	  }
-
-	  return function () {
-	  	// $location.path() = $location.path() || '';
-        return $location.path().slice(0, path.length) === path;
-	  };
-	};
-
-}]);
-
 app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, projectFactory) {
 
 	var self = this;
@@ -451,6 +430,34 @@ app.config(['$routeProvider', function($routeProvider) {
 
 
 
+app.controller('NavCtrl', ['$location', function ($location) {
+
+	var self = this;
+
+	self.toProject = function () {
+		console.log('works');
+		if (window.location.href === 'http://localhost:5000/#/home') {
+			console.log('true');
+			window.location.href = 'http://localhost:5000/#/home' + '/projects';
+		}
+	};
+
+	console.log('is this real life?');
+
+	self.isActive = function (path) {
+	  // The default route is a special case.
+	  if (path === '/') {
+	    return $location.path() === '/';
+	  }
+
+	  return function () {
+	  	// $location.path() = $location.path() || '';
+        return $location.path().slice(0, path.length) === path;
+	  };
+	};
+
+}]);
+
 app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $location) {
 
 	'use strict';
@@ -463,7 +470,7 @@ app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $lo
 	        return $location.path() === '/';
 	      }
 	      
-	      return stringUtil.startsWith($location.path(), path);
+	      return stringUtil.isOnly($location.path(), path);
 	    }
 
 	};
@@ -474,15 +481,34 @@ app.factory('appearFactory', function () {
 	'use strict';
 
 	var target;
+	var targetScore;
+	var rotated = false;
 
 	return {
 
+		rotate: function () {
+			return rotated;
+		},
+
 		checkBox: function (target) {
 			target = $(event.target).parent().parent().parent().find('.names-details-checkbox');
+			targetScore = $(event.target).parent().find('.home-project-basic-info-score');
+			console.log(targetScore);
 			if (target.prop('checked')) {
 				target.prop('checked', false);
+				// targetScore.css({
+				// 	'margin-right': 0
+				// });
 			} else {
 				target.prop('checked', true);
+				// targetScore.css({
+				// 	'margin-right': '10px'
+				// });
+			}
+			if (rotated === true) {
+				rotated = false;
+			} else {
+				rotated = true;
 			}
 		}
 
@@ -522,6 +548,10 @@ app.factory('groupServices', ['$http', '$log',
       getByGroupId: function (groupId) {
         return get('/api/v1/groups/' + groupId);
       },
+
+      listCats: function () {
+        return get('/api/v1/categories')
+      }
 
     };
   }
@@ -568,6 +598,7 @@ app.factory('projectFactory', function () {
 
 	var pyMoreInfo = false;
 	var ghMoreInfo = false;
+	var target;
 
 	return {
 
@@ -584,7 +615,7 @@ app.factory('projectFactory', function () {
 				pyMoreInfo = false;
 			} else {
 				pyMoreInfo = true;
-			}	
+			};
 		},
 
 		ghInfo: function () {
@@ -593,6 +624,12 @@ app.factory('projectFactory', function () {
 			} else {
 				ghMoreInfo = true;
 			}
+			target = $(event.target).parent().parent().parent().find('.gh-checkbox');
+			if (target.prop('checked')) {
+				target.prop('checked', false);
+			} else {
+				target.prop('checked', true);
+			};
 		}
 
 	};
@@ -632,6 +669,10 @@ app.factory('projectServices', ['$http', '$log',
         return get('/api/v1/projects/' + projectId);
       },
 
+      like: function (projectId) {
+        return post('/api/v1/likes/projects/' + projectId)
+      }
+
     };
   }
 ]);
@@ -639,9 +680,9 @@ app.factory('projectServices', ['$http', '$log',
 // A little string utility... no biggie
 app.factory('stringUtil', function() {
     return {
-        startsWith: function(str, subStr) {
+        isOnly: function(str, subStr) {
             str = str || '';
-            return str.slice(0, subStr.length) === subStr;
+            return str === subStr;
         }
     };
 });
@@ -781,6 +822,20 @@ app.controller('Error404Ctrl', ['$location', function ($location) {
 		return {
 			restrict: 'E',
 			templateUrl: 'static/home/home-categories/home-categories.html'
+			// resolve: {
+			//   groups: ['groupServices',
+		 //        function(groupServices) {
+		 //          return groupServices.list();
+		 //        }
+		 //      ],
+		 //      categories: ['groupServices',
+		 //        function(groupServices) {
+		 //          return groupServices.listCats();
+		 //        }
+		 //      ],
+		 //    },
+		 //    controller: 'CategoryCtrl',
+		 //    controllerAs: 'vm'
 		};
 	});
 
@@ -833,6 +888,11 @@ app.config(['$routeProvider', function ($routeProvider) {
       groups: ['groupServices',
         function(groupServices) {
           return groupServices.list();
+        }
+      ],
+      categories: ['groupServices',
+        function(groupServices) {
+          return groupServices.listCats();
         }
       ],
       changeToCat: ['homeFactory',
@@ -915,7 +975,16 @@ app.controller('hpCtrl', function () {
 	app.directive('namesDetails', function() {
 	  return {
 	    restrict: 'E',
-	    templateUrl: 'static/home/home-projects/home-names/names-details.html'
+	    templateUrl: 'static/home/home-projects/home-names/names-details.html',
+	    // resolve: {
+	    //   projects: ['projectServices',
+	    //     function(projectServices) {
+	    //       return projectServices.list();
+	    //     }
+	    //   ]
+	    // },
+	    // controller: 'hnCtrl',
+	    // controllerAs: 'vm'
 	  };
 	});
 
@@ -1543,19 +1612,31 @@ app.controller('hgCtrl', ['group', function (group) {
 
 
 }]);
-app.controller('hnCtrl', function () {
-	// var self = this;
+app.controller('hnCtrl', ['projects', 'appearFactory', 'projectFactory', function (projects, appearFactory, projectFactory) {
+	var self = this;
 
-	// self.byNames = true;
+	self.projects = projects;
 
-	// self.setGroups = function () {
-	// 	self.byNames = false;
-	// 	console.log('hefy')
-	// }
+	self.checkBox = function () {
+    	appearFactory.checkBox();
+	};
 
-	// self.setNames = function () {
-	// 	self.byNames = true;
-	// 	console.log('hey')
-	// }
-});
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
+
+
+}]);
 //# sourceMappingURL=app.js.map

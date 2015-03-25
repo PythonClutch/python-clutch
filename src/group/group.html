@@ -7,14 +7,14 @@
 		<a href="#/home/categories">
 			<p>category ></p>
 		</a>
-		<a href="#/group">{{vm.group.name}}</a>
+		<p>{{vm.group.name}}</p>
 	</div>
 
 
 
 	<div class="project-header">
 		<div class="projectname-user-div">
-			<h1>{{vm.project.name}}</h1>
+			<h1>{{vm.group.name}}</h1>
 		</div>
 		<div class="home-project-basic-info-right flex-row">
 			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-like"><i ng-click="vm.like()" ng-class="{ 'fa-heart' : vm.likedHeart }" class="fa fa-heart-o"></i>##</div>
@@ -32,7 +32,7 @@
 
 
 	<ul>
-		<li class="home-project-li" dir-paginate="project in vm.projects | itemsPerPage: 1" pagination-id="group-projects">
+		<li class="home-project-li" dir-paginate="project in vm.group.projects | itemsPerPage: 1" pagination-id="group-projects">
 			<names-details class="name-details"></names-details>
 		</li>
 	</ul>
