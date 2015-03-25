@@ -279,7 +279,7 @@ def like_project(id):
     user = User.query.filter_by(github_name=user_name).first()
     new_like = Like(user_id=user.id,
                      project_id=project.id)
-    user.like.append(new_like)
+    user.likes.append(new_like)
     db.session.add(new_like)
     db.session.commit()
     return success_response(single_like_schema, new_like)

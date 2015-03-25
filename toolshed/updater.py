@@ -26,6 +26,8 @@ def update_pypi(project):
     pypi_info = requests.get(project.pypi_url + "/json").json()
     project.current_version =  pypi_info['info']['version']
     project.website = pypi_info['info']['home_page']
+    version_release_string = pypi_info['releases'][project.current_version][0]['upload_time']
+    project.current_version_release = datetime.strptime(version_release_string, "%Y-%m-%dT%H:%M:%S")
     project.current_version = pypi_info['info']['version'],
     project.summary = pypi_info['info']['summary']
     project.downloads_count = get_total_downloads(pypi_info)
@@ -69,6 +71,7 @@ def log_project(project):
     proj_log["contributors_count"] = project.contributors_count
     proj_log["previous_score"] = project.score
     proj_log["log_date"] = datetime.today()
+    proj_log["current_version_release"] = project.current_version_release
     project_log = ProjectLog(**proj_log)
     project.logs.append(project_log)
     db.session.add(project_log)
@@ -89,7 +92,7 @@ def update_projects_score(projects):
 
     def raw_pypi_score(project):
         num_download = project.downloads_count
-        time_delta = project.last_version_release - datetime.now()
+        time_delta = project.current_version_release - datetime.now()
         days_since_last_release = time_delta.days
         pypi_score = num_download * math.exp(-1 * days_since_last_release * pypi_lambda)
         return pypi_score

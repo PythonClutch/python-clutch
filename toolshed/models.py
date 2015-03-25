@@ -23,7 +23,7 @@ class User(db.Model):
 
     comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id",
                                cascade="all,delete")
-    like = db.relationship("Like", backref="user", lazy="dynamic", foreign_keys="Like.user_id",
+    likes = db.relationship("Like", backref="user", lazy="dynamic", foreign_keys="Like.user_id",
                            cascade="all,delete")
 
     submissions = db.relationship("Project", backref="submitted_by",
@@ -61,6 +61,7 @@ class Project(db.Model):
     watchers_count = db.Column(db.Integer)
     watchers_url = db.Column(db.String)
     current_version = db.Column(db.String(20))
+    current_version_release = db.Column(db.DateTime)
     last_commit = db.Column(db.DateTime)
     first_commit = db.Column(db.DateTime)
     open_issues_count = db.Column(db.Integer)
@@ -70,6 +71,8 @@ class Project(db.Model):
     python_three_compatible = db.Column(db.Boolean)
     date_added = db.Column(db.Date)
     score = db.Column(db.Float)
+    github_url = db.Column(db.Boolean)
+    bitbucket_url = db.Column(db.Boolean)
     website = db.Column(db.String(400))
     git_url = db.Column(db.String(400))
     pypi_url = db.Column(db.String(400))
@@ -79,7 +82,6 @@ class Project(db.Model):
     starred_url = db.Column(db.String)
     open_issues_url = db.Column(db.String(400))
     docs_url = db.Column(db.String(400))
-    last_version_release = db.Column(db.DateTime)
 
     submitted_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
@@ -139,6 +141,7 @@ class ProjectLog(db.Model):
     starred_count = db.Column(db.Integer)
     watchers_count = db.Column(db.Integer)
     current_version = db.Column(db.String(20))
+    current_version_release = db.Column(db.DateTime)
     last_commit = db.Column(db.DateTime)
     open_issues_count = db.Column(db.Integer)
     downloads_count = db.Column(db.Integer)
@@ -245,9 +248,10 @@ class CommentSchema(Schema):
 
 class UserSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
+    likes = fields.Nested(LikeSchema, many=True)
 
     class Meta:
-        fields = ("id", "github_name", "github_url", "email", "comments")
+        fields = ("id", "github_name", "github_url", "email", "comments", "likes")
 
 
 class LikeSchema(Schema):
