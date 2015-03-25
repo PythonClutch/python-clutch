@@ -408,12 +408,6 @@ li.number-li a {
   .home-project-li a:hover {
     color: black; }
 
-.home-project-basic-info-right i.rotate-plus {
-  -webkit-transform: rotate(45deg) translate(-90%, 25%);
-  transform: rotate(45deg) translate(-90%, 25%);
-  transition: all .2s;
-  margin-right: -5px; }
-
 .home-project-name {
   margin: 23px 0 0 27px;
   font-size: 30px;
