@@ -77,7 +77,7 @@ def get_pending_submissions(id):
         pending = Project.query.filter_by(submitted_by_id=user.id).filter_by(status=False).all()
         return success_response(all_projects_schema, pending)
     else:
-        return failure_repsonse("No pending submissions.")
+        return failure_response("No pending submissions.")
 
 
 @api.route("/users/<int:id>/submissions")
@@ -87,18 +87,35 @@ def get_submissions(id):
         submissions = Project.query.filter_by(submitted_by_id=user.id).filter_by(status=True).all()
         return success_response(all_projects_schema, submissions)
     else:
-        return failure_repsonse("No submissions.")
+        return failure_response("No submissions.")
 
 
 # project routes
 
 @api.route("/projects")
 def projects():
-    projects = Project.query.all()
+    projects = Project.query.order_by(Project.name)
     if projects:
         return success_response(all_projects_schema, projects)
     else:
         return failure_response("There are no projects.", 404)
+
+
+@api.route("/projects/newest")
+def newest_projects():
+    projects = Project.query.order_by(Project.date_added)
+    if projects:
+        return success_response(all_projects_schema, projects)
+    else:
+        return failure_response("There are no projects.", 404)
+
+
+@api.route("/projects/popular")
+def popular_projects():
+    projects = Project.query.order_by(Project.score)
+    if projects:
+        return success_response(all_projects_schema, projects)
+    
 
 
 @api.route("/projects/<int:id>")
