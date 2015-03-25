@@ -1,5 +1,6 @@
 import requests
 import re
+import math
 from datetime import datetime
 from .extensions import db
 from .importer import get_total_downloads, parse_github_url, parse_bitbucket_url
@@ -75,15 +76,22 @@ def log_project(project):
 
 
 def update_projects_score(projects):
+    github_lambda = 0.05
+    pypi_lambda = 0.05
+
     def raw_github_score(project):
         num_forks = project.forks_count
         num_watch = project.watchers_count
-        github_score = (num_forks + num_watch)
+        time_delta = project.last_commit - datetime.now()
+        days_since_last_commit = time_delta.days
+        github_score = (num_forks + num_watch) * math.exp(-1 * days_since_last_commit * github_lambda)
         return github_score
 
     def raw_pypi_score(project):
         num_download = project.downloads_count
-        pypi_score = num_download
+        time_delta = project.last_version_release - datetime.now()
+        days_since_last_release = time_delta.days
+        pypi_score = num_download * math.exp(-1 * days_since_last_release * pypi_lambda)
         return pypi_score
 
     def get_best_pypi(projects):
