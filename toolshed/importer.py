@@ -51,6 +51,8 @@ def github_populate(proj_dict, github_url):
     proj_dict['forks_url'] = github_url + "/network"
     proj_dict['starred_url'] = github_url + "/stargazers"
     proj_dict['open_issues_url'] = github_url + "/issues"
+    proj_dict['github_url'] = True
+    proj_dict['bitbucket_url'] = False
     return proj_dict
 
 
@@ -69,6 +71,8 @@ def bitbucket_populate(proj_dict, bitbucket_url):
     open_issues_info = requests.get(open_issues_api, params=payload).json()
     if not open_issues_info['error']:
         proj_dict['open_issues_count'] = open_issues_info['count']
+    proj_dict['github_url'] = False
+    proj_dict['bitbucket_url'] = True
     return proj_dict
 
 def get_total_downloads(pypi_result):
@@ -96,9 +100,12 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
         if github_match_regex.search(pypi_info["info"]['home_page']):
             github_url = pypi_info["info"]['home_page']
             proj_dict = github_populate(proj_dict, github_url)
-        if bitbucket_match_regex.search(pypi_info['info']['home_page']):
+        elif bitbucket_match_regex.search(pypi_info['info']['home_page']):
             bitbucket_url = pypi_info['info']['home_page']
             proj_dict = bitbucket_populate(proj_dict, bitbucket_url)
+    else:
+        proj_dict["github_url"] = False
+        proj_dict["bitbucket_url"] = False
 
     proj_dict['name'] = pypi_info['info']['name']
     proj_dict['current_version'] = pypi_info['info']['version']
