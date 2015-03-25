@@ -107,6 +107,8 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
     proj_dict['summary'] = pypi_info['info']['summary']
     proj_dict['downloads_count'] = get_total_downloads(pypi_info)
     proj_dict['python_three_compatible'] = python_three_check(pypi_info)
+    version_release_string = pypi_info['releases'][proj_dict['current_version']][0]['upload_time']
+    proj_dict['last_version_release'] = datetime.strptime(version_release_string, "%Y-%m-%dT%H:%M:%S")
     proj_dict['status'] = False
 
 
