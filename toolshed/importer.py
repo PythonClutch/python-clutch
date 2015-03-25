@@ -84,7 +84,7 @@ def python_three_check(pypi):
     return python_three in pypi['info']['classifiers']
 
 
-def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=None):
+def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=None, mailing_list_url=None):
     project = Project.query.filter_by(pypi_url=pypi_url).first()
     if project:
         return None
@@ -103,9 +103,9 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
         elif bitbucket_match_regex.search(pypi_info['info']['home_page']):
             bitbucket_url = pypi_info['info']['home_page']
             proj_dict = bitbucket_populate(proj_dict, bitbucket_url)
-    else:
-        proj_dict["github_url"] = False
-        proj_dict["bitbucket_url"] = False
+        else:
+            proj_dict["github_url"] = False
+            proj_dict["bitbucket_url"] = False
 
     proj_dict['name'] = pypi_info['info']['name']
     proj_dict['current_version'] = pypi_info['info']['version']
@@ -113,6 +113,7 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
     proj_dict['summary'] = pypi_info['info']['summary']
     proj_dict['downloads_count'] = get_total_downloads(pypi_info)
     proj_dict['python_three_compatible'] = python_three_check(pypi_info)
+    print(proj_dict['name'])
     version_release_string = pypi_info['releases'][proj_dict['current_version']][0]['upload_time']
     proj_dict['current_version_release'] = datetime.strptime(version_release_string, "%Y-%m-%dT%H:%M:%S")
     proj_dict['status'] = False
@@ -126,6 +127,7 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
             proj_dict['docs_url'] = pypi_info['info']['docs_url']
 
     proj_dict['pypi_url'] = pypi_url
-
+    if not proj_dict["mailing_list"]:
+        proj_dict["mailing_list"] = mailing_list_url
     project = Project(**proj_dict)
     return project

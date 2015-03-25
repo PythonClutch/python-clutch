@@ -15,10 +15,14 @@ bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
 
 def update_projects(projects):
     for project in projects:
+        print(project)
+        print(project.github_url)
         log_project(project)
         update_pypi(project)
-        if project.git_url:
+        if project.github_url:
             update_github(project)
+        elif project.bitbucket_url:
+            update_bitbucket(project)
     return print("Update Complete.")
 
 
@@ -35,7 +39,7 @@ def update_pypi(project):
 
 
 def update_github(project):
-    github_api, project_stub = parse_github_url(project.github_url)
+    github_api, project_stub = parse_github_url(project.git_url)
     github_info = requests.get(github_api).json()
     project.forks_count = github_info['forks_count']
     project.starred_count = github_info['stargazers_count']
@@ -46,7 +50,7 @@ def update_github(project):
 
 
 def update_bitbucket(project):
-    bitbucket_api, project_stub = parse_bitbucket_url(project.bitbucket_url)
+    bitbucket_api, project_stub = parse_bitbucket_url(project.git_url)
     bitbucket_info = requests.get(bitbucket_api).json()
     open_issues_api = bitbucket_api + "issues"
     payload = {'status': "open"}
