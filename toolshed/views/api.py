@@ -149,7 +149,7 @@ def make_project():
 
 
 @api.route("/projects/logs")
-def project_logs():
+def projects_logs():
     projects = Project.query.all()
     if projects:
         return success_response(all_projects_with_logs, projects)
@@ -158,7 +158,7 @@ def project_logs():
 
 
 @api.route("/projects/<int:id>/logs")
-def project(id):
+def project_logs(id):
     project = Project.query.get(id)
     if project:
         return success_response(single_project_schema, project)
@@ -167,6 +167,7 @@ def project(id):
 
 
 # Category routes
+
 
 @api.route("/groups")
 def all_groups():
