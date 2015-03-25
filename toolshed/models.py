@@ -79,6 +79,7 @@ class Project(db.Model):
     starred_url = db.Column(db.String)
     open_issues_url = db.Column(db.String(400))
     docs_url = db.Column(db.String(400))
+    last_version_release = db.Column(db.DateTime)
 
     submitted_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
