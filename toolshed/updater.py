@@ -2,26 +2,21 @@ import requests
 import re
 from datetime import datetime
 from .extensions import db
-from .importer import get_total_downloads, parse_github_url
+from .importer import get_total_downloads, parse_github_url, parse_bitbucket_url
 from .models import ProjectLog, Project
 
 
 github_search_regex = re.compile('github.com/(.*)')
 github_match_regex = re.compile('((http(s)*://)*github.com/)')
 
-
-# def difference_check(project_info, api_info):
-#     if project_info != api_info:
-#         project_info = api_info
-#         db.session.commit()
-
-
+bitbucket_search_regex = re.compile('bitbucket.org/(.*)')
+bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
 
 def update_projects(projects):
     for project in projects:
         log_project(project)
         update_pypi(project)
-        if project.github_url:
+        if project.git_url:
             update_github(project)
     return print("Update Complete.")
 
@@ -47,6 +42,20 @@ def update_github(project):
     db.session.commit()
 
 
+def update_bitbucket(project):
+    bitbucket_api, project_stub = parse_bitbucket_url(project.bitbucket_url)
+    bitbucket_info = requests.get(bitbucket_api).json()
+    open_issues_api = bitbucket_api + "issues"
+    payload = {'status': "open"}
+    project.forks_count = bitbucket_info['forks_count']
+    project.watchers_count = bitbucket_info['followers_count']
+    project.last_commit = bitbucket_info['last_updated']
+    open_issues_info = requests.get(open_issues_api, params=payload).json()
+    if not open_issues_info['error']:
+        project.open_issues_count = open_issues_info['count']
+    db.session.commit()
+
+
 def log_project(project):
     proj_log = {}
     proj_log["forks_count"] = project.forks_count
@@ -57,7 +66,7 @@ def log_project(project):
     proj_log["open_issues_count"] = project.open_issues_count
     proj_log["downloads_count"] = project.downloads_count
     proj_log["contributors_count"] = project.contributors_count
-    proj_log["score"] = project.score
+    proj_log["previous_score"] = project.score
     proj_log["log_date"] = datetime.today()
     project_log = ProjectLog(**proj_log)
     project.logs.append(project_log)
@@ -69,9 +78,7 @@ def update_projects_score(projects):
     def raw_github_score(project):
         num_forks = project.forks_count
         num_watch = project.watchers_count
-        num_cont = project.contributors_count
-        num_stars = project.starred_count
-        github_score = (num_forks + num_watch + num_cont + num_stars)
+        github_score = (num_forks + num_watch)
         return github_score
 
     def raw_pypi_score(project):
@@ -103,4 +110,6 @@ def update_projects_score(projects):
                 project.score = score
         db.session.commit()
     set_scores(projects)
+
+
 

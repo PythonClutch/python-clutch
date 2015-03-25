@@ -110,6 +110,15 @@ class Project(db.Model):
             return arrow_age.humanize()
 
     @property
+    def first_commit_display(self):
+        if not self.first_commit:
+            return None
+        else:
+            first_string = str(self.first_commit)
+            arrow_first_commit = arrow.get(first_string)
+            return arrow_first_commit.humanize()
+
+    @property
     def last_commit_display(self):
         if not self.last_commit:
             return None
@@ -268,7 +277,7 @@ class ProjectSchema(Schema):
                   "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
                   "group_id", "category_id", "comments", "user_likes", "age_display",
-                  "last_commit_display", "logs", "date_added")
+                  "last_commit_display", "logs", "date_added", "first_commit_display")
 
 
 class GroupSchema(Schema):

@@ -47,7 +47,6 @@ def github_populate(proj_dict, github_url):
     proj_dict['open_issues_count'] = github_info['open_issues_count']
     contributors = requests.get(github_info['contributors_url'], auth=auth).json()
     proj_dict['contributors_count'] = len(contributors)
-    proj_dict['date_added'] = datetime.today()
     proj_dict['contributors_url'] = github_info['contributors_url']
     proj_dict['forks_url'] = github_url + "/network"
     proj_dict['starred_url'] = github_url + "/stargazers"
@@ -108,8 +107,7 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
     proj_dict['downloads_count'] = get_total_downloads(pypi_info)
     proj_dict['python_three_compatible'] = python_three_check(pypi_info)
     proj_dict['status'] = False
-
-
+    proj_dict['date_added'] = datetime.today()
 
     if docs_url:
         proj_dict['docs_url'] = docs_url

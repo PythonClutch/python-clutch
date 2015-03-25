@@ -1,7 +1,7 @@
 import json
 from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
-                      Group, GroupSchema, LikeSchema, LogSchema)
+                      Group, GroupSchema, LikeSchema,ProjectLog, LogSchema)
 from flask import Blueprint, jsonify, request, abort, url_for
 from ..extensions import db
 from .toolshed import require_login, current_user
@@ -149,19 +149,20 @@ def make_project():
 
 
 @api.route("/projects/logs")
-def projects_logs():
-    projects = Project.query.all()
-    if projects:
-        return success_response(all_projects_with_logs, projects)
+def logs():
+    all_the_logs = ProjectLog.query.all()
+    if all_the_logs:
+        return success_response(all_logs_schema, all_the_logs)
     else:
         return failure_response("There are no projects", 404)
 
 
 @api.route("/projects/<int:id>/logs")
 def project_logs(id):
-    project = Project.query.get(id)
-    if project:
-        return success_response(single_project_schema, project)
+    desired_project = Project.query.get(id)
+    desired_logs = desired_project.logs
+    if desired_logs:
+        return success_response(all_logs_schema, desired_logs)
     else:
         return failure_response("There was no such project.", 404)
 
@@ -308,15 +309,3 @@ def get_project_likes(id):
         return success_response(all_likes_schema, project.user_likes)
     else:
         return failure_response("Project has no likes.", 404)
-
-
-@api.route("/projects/update")
-def update_call():
-    projects = Project.query.all()
-    update_projects(projects)
-    return success_response()
-
-
-@api.route("/projects/dump", methods=["POST"])
-def projects_seed():
-    urls_json = request.get_json()
