@@ -4,6 +4,7 @@ app.factory('projectFactory', function () {
 
 	var pyMoreInfo = false;
 	var ghMoreInfo = false;
+	var target;
 
 	return {
 
@@ -20,7 +21,7 @@ app.factory('projectFactory', function () {
 				pyMoreInfo = false;
 			} else {
 				pyMoreInfo = true;
-			}	
+			};
 		},
 
 		ghInfo: function () {
@@ -29,6 +30,12 @@ app.factory('projectFactory', function () {
 			} else {
 				ghMoreInfo = true;
 			}
+			target = $(event.target).parent().parent().parent().find('.gh-checkbox');
+			if (target.prop('checked')) {
+				target.prop('checked', false);
+			} else {
+				target.prop('checked', true);
+			};
 		}
 
 	};

@@ -440,6 +440,26 @@ li.number-li a {
   .home-project-basic-info-icon i {
     color: #12897D; }
 
+.home-project-basic-info-comment i {
+  margin-top: -1px; }
+
+.home-project-basic-info-check {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
+
+.home-project-basic-info-check i {
+  padding-top: 1px; }
+
 .home-project-basic-info-right {
   width: 42%;
   margin-right: 25px;
@@ -458,7 +478,8 @@ li.number-li a {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap; }
   .home-project-basic-info-right .fa {
-    margin-right: 5px; }
+    margin-right: 5px;
+    transition: all .2s; }
 
 .home-project-details-div {
   padding-bottom: 1px;
@@ -486,6 +507,9 @@ li.number-li a {
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap; }
+
+.home-project-content-gh {
+  display: none; }
 
 .more-info-label {
   text-align: right;
@@ -681,6 +705,13 @@ li.number-li a {
 .more-info-input {
   visibility: hidden;
   position: absolute; }
+
+.gh-checkbox {
+  visibility: hidden;
+  position: absolute; }
+
+.gh-checkbox:checked ~ .home-project-content-gh {
+  display: block; }
 
 .project-info {
   background: #e1e1e1;
@@ -1109,9 +1140,6 @@ header {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap; }
 
-.nav-login-a {
-  display: none; }
-
 .nav-search-bar {
   position: relative; }
 
@@ -1239,7 +1267,24 @@ footer a {
   margin-bottom: 13px; }
 
 .home-project-basic-info-right-group-details {
-  width: 35%; }
+  width: 42%; }
 
 .home-project-basic-info-right-group-details .home-project-basic-info-score {
   margin-right: 25px; }
+
+.home-group-basic-info-right-category {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
+
+.home-project-details-div-li-cat {
+  background: white; }

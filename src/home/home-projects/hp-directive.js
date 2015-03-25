@@ -9,7 +9,16 @@
 	app.directive('namesDetails', function() {
 	  return {
 	    restrict: 'E',
-	    templateUrl: 'static/home/home-projects/home-names/names-details.html'
+	    templateUrl: 'static/home/home-projects/home-names/names-details.html',
+	    // resolve: {
+	    //   projects: ['projectServices',
+	    //     function(projectServices) {
+	    //       return projectServices.list();
+	    //     }
+	    //   ]
+	    // },
+	    // controller: 'hnCtrl',
+	    // controllerAs: 'vm'
 	  };
 	});
 

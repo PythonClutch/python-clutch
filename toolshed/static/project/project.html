@@ -7,7 +7,7 @@
 		<a href="#/home/categories">
 			<p>category ></p>
 		</a>
-		<a href="#/group">group ></a>
+		<a href="#/home/groups/{{vm.project.group_id}}">group ></a>
 		<p>{{vm.project.name}}</p>
 	</div>
 
@@ -16,11 +16,11 @@
 	<div class="project-header">
 		<div class="projectname-user-div">
 			<h1>{{vm.project.name}}</h1>
-			<h3>by username</h3>
 		</div>
 		<div class="home-project-basic-info-right flex-row">
-			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-like"><i ng-click="vm.like()" ng-class="{ 'fa-heart' : vm.likedHeart }" class="fa fa-heart-o"></i>##</div>
-			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-comment"><i class="fa fa-comment-o"></i>##</div>
+			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-like"><i ng-click="vm.like()" ng-class="{ 'fa-heart' : vm.likedHeart }" class="fa fa-heart-o"></i>{{vm.project.user_likes.length || 0}}</div>
+			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{vm.project.comments.length || 0}}</div>
+			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-check"><i ng-class="{ 'fa-check-square-o' : project.python_three_compatible, 'fa-square-o' : !project.python_three_compatible }" class="fa"></i><p>Py3</p></div>
 			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-score"><i class="fa fa-calculator"></i></i>##</div>
 		</div>		
 	</div>

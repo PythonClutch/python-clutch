@@ -7,14 +7,14 @@
 		<a href="#/home/categories">
 			<p>category ></p>
 		</a>
-		<a href="#/group">{{vm.group.name}}</a>
+		<p>{{vm.group.name}}</p>
 	</div>
 
 
 
 	<div class="project-header">
 		<div class="projectname-user-div">
-			<h1>{{vm.project.name}}</h1>
+			<h1>{{vm.group.name}}</h1>
 		</div>
 		<div class="home-project-basic-info-right flex-row">
 			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-like"><i ng-click="vm.like()" ng-class="{ 'fa-heart' : vm.likedHeart }" class="fa fa-heart-o"></i>##</div>
@@ -30,7 +30,24 @@
 	<div class="graph"></div>
 
 
-	<div class="project-info">
+
+	<ul>
+		<li class="home-project-li" dir-paginate="project in vm.group.projects | itemsPerPage: 1" pagination-id="group-projects">
+			<names-details class="name-details"></names-details>
+		</li>
+	</ul>
+
+	<div class="pagination-div">
+		<p ng-show="{{vm.projects.length}} > 5">5 of {{vm.projects.length}}</p>
+		<p ng-show="{{vm.projects.length}} < 5">{{vm.projects.length}} of {{vm.projects.length}}</p>
+		<dir-pagination-controls pagination-id="group-projects"></dir-pagination-controls>
+	</div>
+
+
+
+
+
+<!-- 	<div class="project-info">
 		<div class="project-details-div">
 			<div class="home-project-details home-project-links">
 				<div class="flex-row home-project-links-div-sizer">
@@ -53,7 +70,6 @@
 				</div>
 			</div>
 			<div class="home-project-details home-project-pypi">
-	<!-- 			<input class="more-info-input" id="more-info-pypi" type="checkbox"> -->
 				<div class="home-project-pypi-header-div">	
 					<div class="home-project-header-top">
 						<h3>PyPi</h3>
@@ -106,5 +122,5 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 </div>

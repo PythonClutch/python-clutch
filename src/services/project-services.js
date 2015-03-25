@@ -32,6 +32,10 @@ app.factory('projectServices', ['$http', '$log',
         return get('/api/v1/projects/' + projectId);
       },
 
+      like: function (projectId) {
+        return post('/api/v1/likes/projects/' + projectId)
+      }
+
     };
   }
 ]);
