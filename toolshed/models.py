@@ -83,6 +83,7 @@ class Project(db.Model):
     website = db.Column(db.String(400))
     git_url = db.Column(db.String(400))
     pypi_url = db.Column(db.String(400))
+    pypi_stub = db.Column(db.String(100))
     contributors_url = db.Column(db.String(400))
     mailing_list_url = db.Column(db.String(400))
     forks_url = db.Column(db.String(400))

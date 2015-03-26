@@ -12,6 +12,8 @@ github_match_regex = re.compile('((http(s)*://)*github.com/)')
 bitbucket_search_regex = re.compile('bitbucket.org/(.*)')
 bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
 
+pypi_search_regex = re.compile('((http(s)*://)*pypi.python.org/pypi)')
+
 
 gitkey = os.environ['GITKEY']
 auth=(gitkey, 'x-oauth-basic')
@@ -31,6 +33,14 @@ def parse_bitbucket_url(bitbucket_url):
     if bitbucket_stub[-1] == "/":
         bitbucket_stub = bitbucket_stub[:-1:]
     return (bitbucket_api_base + bitbucket_stub), bitbucket_stub
+
+
+def parse_pypi_url(pypi_url):
+    pypi_stub = pypi_search_regex.search(pypi_url).groups()[0]
+    if pypi_stub[-1] == "/":
+        pypi_stub = pypi_stub[:-1:]
+    return pypi_stub
+
 
 
 def github_populate(proj_dict, github_url):
@@ -63,7 +73,7 @@ def bitbucket_populate(proj_dict, bitbucket_url):
     payload = {'status': "open"}
     proj_dict['forks_count'] = bitbucket_info['forks_count']
     proj_dict['git_url'] = bitbucket_url
-    proj_dict['project_stub'] = bitbucket_info['slug']
+    proj_dict['project_stub'] = project_stub
     proj_dict['watchers_count'] = bitbucket_info['followers_count']
     proj_dict['last_commit'] = bitbucket_info['last_updated']
     proj_dict['first_commit'] = bitbucket_info['created_on']
@@ -80,9 +90,10 @@ def release_parse(pypi_result):
     return sum([sum(list) for list in total_list]), len(total_list)
 
 def python_three_check(pypi):
-    python_three = "Programming Language :: Python :: 3"
-    return python_three in pypi['info']['classifiers']
-
+    py3_match_regex = re.compile('Programming Language :: Python :: 3(.*)')
+    data = pypi['info']['classifiers']
+    checker = [print("passed") for snippet in data if py3_match_regex.search(snippet) is not None]
+    return "passed" in checker
 
 def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=None, mailing_list_url=None):
     project = Project.query.filter_by(pypi_url=pypi_url).first()
@@ -128,5 +139,6 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
 
     proj_dict['pypi_url'] = pypi_url
     proj_dict['mailing_list_url'] = mailing_list_url
+    proj_dict['pypi_stub'] = parse_pypi_url(pypi_url)
     project = Project(**proj_dict)
     return project
