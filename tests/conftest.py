@@ -45,7 +45,7 @@ def user(db):
 
 @pytest.fixture
 def project(db):
-    project = create_project("https://pypi.python.org/pypi/pandas", github_url="https://github.com/pydata/pandas")
+    project = create_project("https://pypi.python.org/pypi/pandas", source_url="https://github.com/pydata/pandas")
     db.session.add(project)
     db.session.commit()
     return project
