@@ -79,20 +79,20 @@ def log_project(project):
 
 
 def update_projects_score(projects):
-    github_lambda = 0.005
-    pypi_lambda = 0.005
+    github_lambda = 0.05
+    pypi_lambda = 0.05
 
     def raw_github_score(project):
         num_forks = project.forks_count
         num_watch = project.watchers_count
-        time_delta = project.last_commit - datetime.now()
+        time_delta = datetime.now() - project.last_commit
         days_since_last_commit = time_delta.days
         github_score = (num_forks + num_watch) * math.exp(-1 * days_since_last_commit * github_lambda)
         return github_score
 
     def raw_pypi_score(project):
         num_download = project.downloads_count
-        time_delta = project.current_version_release - datetime.now()
+        time_delta = datetime.now() - project.current_version_release
         days_since_last_release = time_delta.days
         pypi_score = num_download * math.exp(-1 * days_since_last_release * pypi_lambda)
         return pypi_score
