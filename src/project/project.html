@@ -19,8 +19,8 @@
 		</div>
 		<div class="home-project-basic-info-right flex-row">
 			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-like"><i ng-click="vm.like()" ng-class="{ 'fa-heart' : vm.likedHeart }" class="fa fa-heart-o"></i>{{vm.project.user_likes.length || 0}}</div>
-			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{vm.project.comments.length || 0}}</div>
-			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-check"><i ng-class="{ 'fa-check-square-o' : project.python_three_compatible, 'fa-square-o' : !project.python_three_compatible }" class="fa"></i><p>Py3</p></div>
+			<a href="#/home/projects/{{vm.project.id}}"><div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{vm.project.comments.length || 0}}</div></a>
+			<a href="#/home/projects/{{vm.project.pypi_url}}"><div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-check"><i ng-class="{ 'fa-check-square-o' : project.python_three_compatible, 'fa-square-o' : !project.python_three_compatible }" class="fa"></i><p>Py3</p></div></a>
 			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-score"><i class="fa fa-calculator"></i></i>##</div>
 		</div>		
 	</div>
@@ -80,7 +80,7 @@
 					<div class="home-project-header-top">
 						<h3>GitHub</h3>
 						
-						<a class="link" href="{{vm.project.github_url}}"><i class="fa fa-github"></i><p>gh repo</p></a>
+						<a class="link" href="{{vm.project.git_url}}"><i class="fa fa-github"></i><p>gh repo</p></a>
 					</div>
 					<div class="home-project-header-bottom">
 						<h5>{{vm.project.forks_count}} Forks</h5>

@@ -41,7 +41,7 @@ app.factory('projectServices', ['$http', '$log',
       },
 
       addComment: function (projectId, comment) {
-        return post('/api/v1/projects/' + projectId +'comments', comment);
+        return post('/api/v1/projects/' + projectId +'/comments', comment);
       }
 
     };

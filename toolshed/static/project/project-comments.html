@@ -24,8 +24,8 @@
 		</li>
 	</ul>
 
-	<form class="comment-form" action="">
-		<input class="comment-form-textarea" type="textarea">
+	<form class="comment-form" ng-submit="vm.addComment()">
+		<input class="comment-form-textarea" ng-model="vm.comment.text" type="textarea">
 		<input class="submit-button" type="submit" value="Post Comment">
 	</form>
 

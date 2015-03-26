@@ -1,4 +1,4 @@
-app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, projectFactory) {
+app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', function (project, projectFactory, projectServices) {
 
 	var self = this;
 
@@ -19,5 +19,14 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, p
 		pf.ghInfo();
 		self.ghMoreInfo = pf.byGh();
 	};
+
+	self.comment = {};
 	
+	self.addComment = function () {
+		console.log(self.comment);
+		console.log(self.project.id);
+		projectServices.addComment(self.project.id, self.comment);
+		self.comment = {};
+	};
+
 }]);

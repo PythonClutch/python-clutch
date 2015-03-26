@@ -259,16 +259,37 @@ app.config(['$routeProvider', function ($routeProvider) {
   });
 
 }]);
-app.controller('FooterCtrl', function () {
-	
-});
-app.controller('GroupCtrl', ['projects', 'group', function (projects, group) {
+app.controller('GroupCtrl', ['projects', 'group', 'projectFactory', 'appearFactory', function (projects, group, projectFactory, appearFactory) {
 	var self = this;
 
 	self.projects = projects;
 
 	self.group = group;
 	
+	console.log(group.projects);
+
+	self.rotate = appearFactory.rotate();
+
+    self.checkBox = function () {
+    	appearFactory.checkBox();
+    	self.rotate = appearFactory.rotate();
+	};
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
 }]);
 app.config(['$routeProvider', function($routeProvider) {    
     var routeDefinition = {
@@ -304,6 +325,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 	self.projects = projects;
 
 	self.groups = groups;
+	console.log(groups);
 
 	self.byProjects = homeFactory.byProjects();
 
@@ -407,6 +429,9 @@ $(function () {
 	}
 
 });
+app.controller('FooterCtrl', function () {
+	
+});
 app.controller('NavCtrl', ['$location', 'userServices', function ($location, userServices) {
 
 	var self = this;
@@ -417,13 +442,19 @@ app.controller('NavCtrl', ['$location', 'userServices', function ($location, use
 
 	function checkLogIn () {
 		userServices.currentUser().then(function (result) {
-			console.log('hm')
 			self.currentUser = result;
-			if (self.currentUser.status === "success") {
-				self.loggedIn = true;
+			if (self.currentUser) {
+				console.log('one');
+				if (self.currentUser.status === "success") {
+					self.loggedIn = true;
+				} else {
+					self.loggedIn = false;
+				}
 			} else {
 				self.loggedIn = false;
 			}
+		}, function (err) {
+			self.loggedIn = false;
 		});
 	}
 
@@ -435,7 +466,7 @@ app.controller('NavCtrl', ['$location', 'userServices', function ($location, use
 
 }]);
 
-app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, projectFactory) {
+app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', function (project, projectFactory, projectServices) {
 
 	var self = this;
 
@@ -456,7 +487,16 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, p
 		pf.ghInfo();
 		self.ghMoreInfo = pf.byGh();
 	};
+
+	self.comment = {};
 	
+	self.addComment = function () {
+		console.log(self.comment);
+		console.log(self.project.id);
+		projectServices.addComment(self.project.id, self.comment);
+		self.comment = {};
+	};
+
 }]);
 (function () {
 	app.directive('projectComments', function() {
@@ -521,7 +561,6 @@ app.factory('appearFactory', function () {
 		checkBox: function (target) {
 			target = $(event.target).parent().parent().parent().find('.names-details-checkbox');
 			targetScore = $(event.target).parent().find('.home-project-basic-info-score');
-			console.log(targetScore);
 			if (target.prop('checked')) {
 				target.prop('checked', false);
 				// targetScore.css({
@@ -710,7 +749,7 @@ app.factory('projectServices', ['$http', '$log',
       },
 
       addComment: function (projectId, comment) {
-        return post('/api/v1/projects/' + projectId +'comments', comment);
+        return post('/api/v1/projects/' + projectId +'/comments', comment);
       }
 
     };
@@ -726,8 +765,8 @@ app.factory('stringUtil', function() {
         }
     };
 });
-app.factory('userServices', ['$http', '$q', '$log',
-    function($http, $q, $log) {
+app.factory('userServices', ['$http', '$q',
+    function($http, $q) {
         function get(url) {
           return processAjaxPromise($http.get(url));
         }
@@ -743,7 +782,7 @@ app.factory('userServices', ['$http', '$q', '$log',
             return result.data;
           })
           .catch(function(error) {
-            $log.log(error);
+            console.log(error);
           });
         }
 

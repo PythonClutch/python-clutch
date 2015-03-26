@@ -1,5 +1,5 @@
-app.factory('userServices', ['$http', '$q', '$log',
-    function($http, $q, $log) {
+app.factory('userServices', ['$http', '$q',
+    function($http, $q) {
         function get(url) {
           return processAjaxPromise($http.get(url));
         }
@@ -15,7 +15,7 @@ app.factory('userServices', ['$http', '$q', '$log',
             return result.data;
           })
           .catch(function(error) {
-            $log.log(error);
+            console.log(error);
           });
         }
 

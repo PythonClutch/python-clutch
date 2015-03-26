@@ -250,7 +250,7 @@ input, textarea {
   color: white; }
 
 .home-project-search-holder-div {
-  width: 49.903%;
+  width: 89.06%;
   height: 41px;
   position: relative; }
 
@@ -259,6 +259,8 @@ input, textarea {
   height: 100%; }
 
 .home-project-search-div {
+  width: 55.34%;
+  margin: 0 auto;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -274,13 +276,10 @@ input, textarea {
 
 .home-project-i-div {
   height: 41px;
-  width: 5.51%;
-  position: relative;
+  width: 10.94%;
   background: #acabab; }
   .home-project-i-div i {
-    position: absolute;
-    right: 40%;
-    top: 10px;
+    margin-top: 10px;
     color: #e1e1e1;
     font-size: 20px; }
 
@@ -448,10 +447,14 @@ li.number-li a {
 .home-project-basic-info {
   height: 79px; }
 
-.home-project-basic-info-icon {
-  margin-top: 28px; }
-  .home-project-basic-info-icon i {
+div.home-project-basic-info-icon, .home-project-basic-info-icon {
+  margin-top: 28px;
+  color: black; }
+  div.home-project-basic-info-icon i, .home-project-basic-info-icon i {
     color: #12897D; }
+
+div.home-project-basic-info-icon .fa {
+  cursor: pointer; }
 
 .home-project-basic-info-comment i {
   margin-top: -1px; }
@@ -1358,6 +1361,13 @@ footer a {
 
 .home-project-basic-info-right-group-details .home-project-basic-info-score {
   margin-right: 25px; }
+
+.group-container .project-header .home-project-basic-info-right .group-page-icon i.fa {
+  cursor: initial;
+  color: black; }
+.group-container .project-header .home-project-basic-info-right .group-page-icon i.fa-calculator {
+  color: #12897D;
+  cursor: pointer; }
 
 .home-group-basic-info-right-category {
   display: -webkit-flex;

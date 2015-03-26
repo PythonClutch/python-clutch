@@ -9,6 +9,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 	self.projects = projects;
 
 	self.groups = groups;
+	console.log(groups);
 
 	self.byProjects = homeFactory.byProjects();
 

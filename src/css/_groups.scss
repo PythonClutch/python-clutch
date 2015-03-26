@@ -28,6 +28,17 @@
 // 	margin: 0 auto;
 // }
 
+.group-container .project-header .home-project-basic-info-right .group-page-icon {
+	i.fa {
+		cursor: initial;
+		color: black;	
+	}
+	i.fa-calculator {
+		color: $base-color;
+		cursor: pointer; 
+	} 
+}
+
 
 
 
