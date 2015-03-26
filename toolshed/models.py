@@ -154,7 +154,7 @@ class ProjectLog(db.Model):
     open_issues_count = db.Column(db.Integer)
     downloads_count = db.Column(db.Integer)
     contributors_count = db.Column(db.Integer)
-    log_date = db.Column(db.Date)
+    log_date = db.Column(db.DateTime)
     likes_count = db.Column(db.Integer)
     previous_score = db.Column(db.Float)
 
@@ -192,6 +192,20 @@ class Comment(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
+
+    @property
+    def user_avatar(self):
+        return self.user.avatar_url
+
+    @property
+    def user_name(self):
+        return self.user.github_name
+
+    @property
+    def created_display(self):
+        created_string = str(self.created)
+        arrow_created = arrow.get(created_string)
+        return arrow_created.humanize()
 
     def __repr__(self):
         return "Comment: {}".format(self.text)
@@ -250,8 +264,8 @@ the ability to display the api endpoints.
 
 class CommentSchema(Schema):
     class Meta:
-        fields = ("id", "text", "created", "user_id",
-                  "project_id")
+        fields = ("id", "text", "created_display", "user_id",
+                  "project_id", "user_avatar", "user_name")
 
 
 class LikeSchema(Schema):
