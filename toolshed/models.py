@@ -1,6 +1,9 @@
 from .extensions import db, bcrypt, login_manager
 from marshmallow import Schema, fields, ValidationError
 from flask.ext.login import UserMixin
+from flask.ext.sqlalchemy import BaseQuery
+from sqlalchemy_searchable import SearchQueryMixin
+from sqlalchemy_utils.types import TSVectorType
 import arrow
 
 
@@ -68,7 +71,13 @@ class Like(db.Model):
         return "{} likes {}".format(self.user.github_name, self.project.name)
 
 
+class ProjectQuery(BaseQuery, SearchQueryMixin):
+    pass
+
 class Project(db.Model):
+
+    query_class = ProjectQuery
+    search_vector = db.Column(TSVectorType('name', 'summary'))
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     status = db.Column(db.Boolean)
     name = db.Column(db.String(255), nullable=False, unique=True)
@@ -208,7 +217,13 @@ class Comment(db.Model):
         return "Comment: {}".format(self.text)
 
 
+class GroupQuery(BaseQuery, SearchQueryMixin):
+    pass
+
+
 class Group(db.Model):
+    query_class = GroupQuery
+    search_vector = db.Column(TSVectorType('name'))
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
 
@@ -219,7 +234,13 @@ class Group(db.Model):
         return "Group: {}".format(self.name)
 
 
+class CategoryQuery(BaseQuery, SearchQueryMixin):
+    pass
+
+
 class Category(db.Model):
+    query_class = CategoryQuery
+    search_vector = db.Column(TSVectorType('name'))
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
 
@@ -322,3 +343,12 @@ class CategorySchema(Schema):
 
     class Meta:
         fields = ("id", "name", "groups")
+
+
+class SearchSchema(Schema):
+    groups = fields.Nested(GroupSchema, many=True)
+    categories = fields.Nested(CategorySchema, many=True)
+    projects = fields.Nested(ProjectSchema, many=True)
+
+    class Meta:
+        fields = ("query", "groups", "categories", "projects")
