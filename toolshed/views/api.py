@@ -1,8 +1,9 @@
 import json
 from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
-                      Group, GroupSchema, LikeSchema,ProjectLog, LogSchema)
-from flask import Blueprint, jsonify, request, abort, url_for
+                      Group, GroupSchema, LikeSchema,ProjectLog, LogSchema,
+                      SearchSchema)
+from flask import Blueprint, jsonify, request
 from ..extensions import db
 from .toolshed import require_login, current_user
 from datetime import datetime
@@ -31,6 +32,9 @@ single_like_schema = LikeSchema()
 all_likes_schema = LikeSchema(many=True)
 all_logs_schema = LogSchema(many=True)
 single_log_schema = LogSchema()
+search_schema = SearchSchema()
+
+
 
 # response functions
 
@@ -329,3 +333,25 @@ def get_project_likes(id):
         return success_response(all_likes_schema, project.user_likes)
     else:
         return failure_response("Project has no likes.", 404)
+
+
+#Search Bar Routes
+
+@api.route("/search")
+def search():
+    text = request.args.get('q')
+    if text:
+        categories = Category.query.search(text).all()
+        groups = Group.query.search(text).all()
+        projects = Project.query.search(text).all()
+        query_dict = {"query": text, "categories": categories, "projects": projects,
+                      "groups": groups}
+        return success_response(search_schema, query_dict)
+    else:
+        return failure_response("You must enter a query.", 400)
+
+
+
+
+
+

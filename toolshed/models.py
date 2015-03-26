@@ -1,6 +1,9 @@
 from .extensions import db, bcrypt, login_manager
 from marshmallow import Schema, fields, ValidationError
 from flask.ext.login import UserMixin
+from flask.ext.sqlalchemy import BaseQuery
+from sqlalchemy_searchable import SearchQueryMixin
+from sqlalchemy_utils.types import TSVectorType
 import arrow
 
 
@@ -36,6 +39,17 @@ class User(db.Model):
                                    lazy="dynamic", cascade="all,delete",
                                    foreign_keys="Project.submitted_by_id")
 
+
+    @property
+    def pending_submissions(self):
+        return Project.query.filter_by(submitted_by_id=self.id).filter_by(status=False).all()
+
+
+    @property
+    def complete_submissions(self):
+        return Project.query.filter_by(submitted_by_id=self.id).filter_by(status=True).all()
+
+
     def __repr__(self):
         return "User: {}".format(self.github_name)
 
@@ -57,7 +71,13 @@ class Like(db.Model):
         return "{} likes {}".format(self.user.github_name, self.project.name)
 
 
+class ProjectQuery(BaseQuery, SearchQueryMixin):
+    pass
+
 class Project(db.Model):
+
+    query_class = ProjectQuery
+    search_vector = db.Column(TSVectorType('name', 'summary'))
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     status = db.Column(db.Boolean)
     name = db.Column(db.String(255), nullable=False, unique=True)
@@ -83,6 +103,7 @@ class Project(db.Model):
     website = db.Column(db.String(400))
     git_url = db.Column(db.String(400))
     pypi_url = db.Column(db.String(400))
+    pypi_stub = db.Column(db.String(100))
     contributors_url = db.Column(db.String(400))
     mailing_list_url = db.Column(db.String(400))
     forks_url = db.Column(db.String(400))
@@ -193,11 +214,31 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
 
+    @property
+    def user_avatar(self):
+        return self.user.avatar_url
+
+    @property
+    def user_name(self):
+        return self.user.github_name
+
+    @property
+    def created_display(self):
+        created_string = str(self.created)
+        arrow_created = arrow.get(created_string)
+        return arrow_created.humanize()
+
     def __repr__(self):
         return "Comment: {}".format(self.text)
 
 
+class GroupQuery(BaseQuery, SearchQueryMixin):
+    pass
+
+
 class Group(db.Model):
+    query_class = GroupQuery
+    search_vector = db.Column(TSVectorType('name'))
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
 
@@ -208,7 +249,13 @@ class Group(db.Model):
         return "Group: {}".format(self.name)
 
 
+class CategoryQuery(BaseQuery, SearchQueryMixin):
+    pass
+
+
 class Category(db.Model):
+    query_class = CategoryQuery
+    search_vector = db.Column(TSVectorType('name'))
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
 
@@ -250,23 +297,13 @@ the ability to display the api endpoints.
 
 class CommentSchema(Schema):
     class Meta:
-        fields = ("id", "text", "created", "user_id",
-                  "project_id")
+        fields = ("id", "text", "created_display", "user_id",
+                  "project_id", "user_avatar", "user_name")
 
 
 class LikeSchema(Schema):
     class Meta:
         fields = ("id", "user_id", "project_id", "user_name", "project_name")
-
-
-class UserSchema(Schema):
-    comments = fields.Nested(CommentSchema, many=True)
-    likes = fields.Nested(LikeSchema, many=True)
-
-    class Meta:
-        fields = ("id", "github_name", "github_url", "email", "comments",
-        "likes", "public_repos", "avatar_url", "linkedin_url", "portfolio_url")
-
 
 
 class LogSchema(Schema):
@@ -296,6 +333,19 @@ class ProjectSchema(Schema):
                   "github_url", "bitbucket_url")
 
 
+class UserSchema(Schema):
+    comments = fields.Nested(CommentSchema, many=True)
+    likes = fields.Nested(LikeSchema, many=True)
+    pending_submissions = fields.Nested(ProjectSchema, many=True)
+    completed_submissions = fields.Nested(ProjectSchema, many=True)
+
+    class Meta:
+        fields = ("id", "github_name", "github_url", "email", "comments",
+        "likes", "public_repos", "avatar_url", "linkedin_url", "portfolio_url",
+        "pending_submissions", "completed_submissions")
+
+
+
 class GroupSchema(Schema):
     projects = fields.Nested(ProjectSchema, many=True)
 
@@ -308,3 +358,12 @@ class CategorySchema(Schema):
 
     class Meta:
         fields = ("id", "name", "groups")
+
+
+class SearchSchema(Schema):
+    groups = fields.Nested(GroupSchema, many=True)
+    categories = fields.Nested(CategorySchema, many=True)
+    projects = fields.Nested(ProjectSchema, many=True)
+
+    class Meta:
+        fields = ("query", "groups", "categories", "projects")
