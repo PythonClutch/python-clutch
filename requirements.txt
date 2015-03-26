@@ -18,6 +18,7 @@ Flask-Admin==1.1.0
 Flask-SQLAlchemy==2.0
 SQLAlchemy==0.9.8
 psycopg2==2.6
+SQLAlchemy-Searchable
 
 # Migrations
 git+https://github.com/miguelgrinberg/Flask-Migrate
