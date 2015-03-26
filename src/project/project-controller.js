@@ -1,4 +1,5 @@
-app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', function (project, projectFactory, projectServices) {
+app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory',
+	function (project, projectFactory, projectServices, user, likeFactory) {
 
 	var self = this;
 
@@ -27,6 +28,14 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', f
 		console.log(self.project.id);
 		projectServices.addComment(self.project.id, self.comment);
 		self.comment = {};
+	};
+
+	self.like = function (proj, likes) {
+		likeFactory.like(proj, likes, user);	
+	};
+
+	self.checkLike = function (project) {
+		return likeFactory.checkLike(project, user);
 	};
 
 }]);

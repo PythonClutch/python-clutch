@@ -5,15 +5,15 @@
 	<div class="account-links-div">
 		<div class="account-info-links">
 			<i class="fa fa-github"></i>
-			<a href="">GitHub Page</a>
+			<a href="{{vm.user.github_url}}">GitHub Page</a>
 		</div>
 		<div class="account-info-links">
 			<i class="fa fa-linkedin-square"></i>
-			<a href="">LinkedIn Page</a>
+			<a href="{{vm.user.linkedin_url}}">LinkedIn Page</a>
 		</div>
 		<div class="account-info-links">
 			<i class="fa fa-rss-square"></i>
-			<a href="">Blog</a>
+			<a href="{{vm.user.portfolio_url}}">Blog</a>
 		</div>
 	</div>
 </div>
@@ -27,8 +27,8 @@
 
 <div class="account-info-numbers">
 	<div>
-		<h4>GitHub Forks</h4>
-		<h5>##</h5>
+		<h4>Public Repos</h4>
+		<h5>{{vm.user.public_repos}}</h5>
 	</div>
 	<div>
 		<h4>Submitted Resources</h4>

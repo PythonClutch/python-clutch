@@ -1,6 +1,6 @@
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
-	'categories',
-	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories) {
+	'categories', 'user', 'likeFactory',
+	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories, user, likeFactory) {
 	var self = this;
 
 	self.categories = categories;
@@ -41,18 +41,12 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
     	self.rotate = appearFactory.rotate();
 	};
 
-	self.likedHeart = false;
+	self.like = function (proj, likes) {
+		likeFactory.like(proj, likes, user);	
+	};
 
-	self.like = function (id) {
-		self.likedHeart = true;
-		var target = $(event.target);
-		if (target.hasClass('fa-heart-o')) {
-			target.removeClass('fa-heart-o');		
-		} else {
-			target.addClass('fa-heart-o');
-			self.likedHeart = false;
-		}
-		projectServices.like(id);
+	self.checkLike = function (project) {
+		return likeFactory.checkLike(project, user);
 	};
 
 	var pf = projectFactory;

@@ -63,6 +63,11 @@ app.config(['$routeProvider', function ($routeProvider) {
           return groupServices.listCats();
         }
       ],
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       setProj: ['homeFactory',
         function(homeFactory) {
           homeFactory.setProjects();
@@ -314,9 +319,12 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/home/groups/:groupid', routeDefinition);
 
 }]);
+app.controller('FooterCtrl', function () {
+	
+});
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
-	'categories',
-	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories) {
+	'categories', 'user', 'likeFactory',
+	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories, user, likeFactory) {
 	var self = this;
 
 	self.categories = categories;
@@ -357,18 +365,12 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
     	self.rotate = appearFactory.rotate();
 	};
 
-	self.likedHeart = false;
+	self.like = function (proj, likes) {
+		likeFactory.like(proj, likes, user);	
+	};
 
-	self.like = function (id) {
-		self.likedHeart = true;
-		var target = $(event.target);
-		if (target.hasClass('fa-heart-o')) {
-			target.removeClass('fa-heart-o');		
-		} else {
-			target.addClass('fa-heart-o');
-			self.likedHeart = false;
-		}
-		projectServices.like(id);
+	self.checkLike = function (project) {
+		return likeFactory.checkLike(project, user);
 	};
 
 	var pf = projectFactory;
@@ -429,9 +431,6 @@ $(function () {
 	}
 
 });
-app.controller('FooterCtrl', function () {
-	
-});
 app.controller('NavCtrl', ['$location', 'userServices', function ($location, userServices) {
 
 	var self = this;
@@ -466,7 +465,8 @@ app.controller('NavCtrl', ['$location', 'userServices', function ($location, use
 
 }]);
 
-app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', function (project, projectFactory, projectServices) {
+app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory',
+	function (project, projectFactory, projectServices, user, likeFactory) {
 
 	var self = this;
 
@@ -497,6 +497,14 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', f
 		self.comment = {};
 	};
 
+	self.like = function (proj, likes) {
+		likeFactory.like(proj, likes, user);	
+	};
+
+	self.checkLike = function (project) {
+		return likeFactory.checkLike(project, user);
+	};
+
 }]);
 (function () {
 	app.directive('projectComments', function() {
@@ -512,6 +520,11 @@ app.config(['$routeProvider', function($routeProvider) {
       controller: 'ProjectCtrl',
       controllerAs: 'vm',
       resolve: {
+        user: ['userServices',
+          function(userServices) {
+            return userServices.currentUser();
+          }
+        ],
         project: ['$route', 'projectServices',
           function($route, projectServices) {
             var routeParams = $route.current.params;
@@ -663,6 +676,49 @@ app.factory('homeFactory', function () {
 	};
 
 });
+app.factory('likeFactory', ['projectServices', function (projectServices) {
+
+	'use strict';
+
+	return {
+		like: function (proj, likes, user) {
+			self.likedHeart = true;
+
+			var target = $(event.target);
+			var likedId;
+			var checkUserMatch = function () {
+				for (var i = likes.length - 1; i >= 0; i--) {
+					if (likes[i].user_id === user.data.id) {
+						likedId = likes[i].id;
+						console.log(likedId);
+						return true;
+					} else {
+						return false;
+					}
+				};
+			};
+			if (checkUserMatch()) {
+				target.addClass('fa-heart-o');	
+				projectServices.removeLike(likedId);	
+			} else {
+				target.removeClass('fa-heart-o');
+				target.addClass('fa-heart');
+				projectServices.like(proj.id);
+			}
+		},
+
+		checkLike: function (project, user) {
+			for (var i = project.user_likes.length - 1; i >= 0; i--) {
+				if (project.user_likes[i].user_id === user.data.id) {
+					return true;
+				} else {
+					return false;
+				}
+			};
+		}
+	};
+
+}]);
 app.factory('projectFactory', function () {
 
 	'use strict';
@@ -736,12 +792,24 @@ app.factory('projectServices', ['$http', '$log',
         return get('/api/v1/projects');
       },
 
+      listNewest: function () {
+        return get('/api/v1/projects/newest');
+      },
+
+      listPopular: function () {
+        return get('/api/v1/projects/popular');
+      },
+
       getByProjectId: function(projectId) {
         return get('/api/v1/projects/' + projectId);
       },
 
       like: function (projectId) {
         return post('/api/v1/likes/projects/' + projectId);
+      },
+
+      removeLike: function (likedId) {
+        return remove('/api/v1/likes/' + likedId)
       },
 
       addProject: function (project) {
@@ -786,6 +854,8 @@ app.factory('userServices', ['$http', '$q',
           });
         }
 
+        var currentUser;
+
         return {
             list: function() {
                 return get('/api/v1/users');
@@ -800,7 +870,8 @@ app.factory('userServices', ['$http', '$q',
             },
 
             currentUser: function() {
-                return get('/api/v1/user');
+                currentUser = currentUser || get('/api/v1/user');
+                return currentUser;
             },
 
             // login: function (user) {
@@ -978,8 +1049,9 @@ app.controller('Error404Ctrl', ['$location', function ($location) {
 		 //        }
 		 //      ],
 		 //    },
-		 //    controller: 'CategoryCtrl',
-		 //    controllerAs: 'vm'
+		    // controller: 'CategoryCtrl',
+		    // controllerAs: 'vm',
+
 		};
 	});
 
@@ -993,7 +1065,10 @@ app.controller('Error404Ctrl', ['$location', function ($location) {
 	app.directive('categoryDetails', function () {
 		return {
 			restrict: 'E',
-			templateUrl: 'static/home/home-categories/category-details/category-details.html'
+			templateUrl: 'static/home/home-categories/category-details/category-details.html',
+			// scope: {category: '='},
+			// controller: 'testctrl',
+			// controllerAs: 'vm'
 		};
 	});
 
@@ -1050,10 +1125,22 @@ app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
   .when('/home/categories', homePage);
 }]);
-app.controller('hpCtrl', function () {
+app.controller('hpCtrl', ['projectServices', function (projectServices) {
 	var self = this;
 
 	self.byNames = true;
+
+	self.newestProjects;
+
+	self.popularProjects;
+
+	projectServices.listNewest().then(function (result){
+		self.newestProjects = result;
+	});
+
+	projectServices.listPopular().then(function (result){
+		self.popularProjects = result;
+	});
 
 	self.setGroups = function () {
 		self.byNames = false;
@@ -1078,12 +1165,22 @@ app.controller('hpCtrl', function () {
 		$(event.target).addClass('fa-dot-circle-o');
 	}
 
+	self.list = false;
+	self.popular = true;
+	self.newest = false;
+
 	self.setPopular = function () {
 		selectedClass();
+		self.popular = true;
+		self.newest = false;
+		self.list = false;
 		$('#project-popular-radio').prop('checked', true);
 	};
 
 	self.setNewest = function () {
+		self.popular = false;
+		self.newest = true;
+		self.list = false;
 		selectedClass();
 		$('#project-newest-radio').prop('checked', true);
 	};
@@ -1094,6 +1191,9 @@ app.controller('hpCtrl', function () {
 	};
 
 	self.setList = function () {
+		self.popular = false;
+		self.newest = false;
+		self.list = true;
 		selectedClass();
 		$('#project-list-radio').prop('checked', true);
 	};
@@ -1107,7 +1207,7 @@ app.controller('hpCtrl', function () {
 
 
 
-});
+}]);
 (function () {
 	app.directive('homeNames', function() {
 	  return {

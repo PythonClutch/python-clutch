@@ -19,6 +19,8 @@ app.factory('userServices', ['$http', '$q',
           });
         }
 
+        var currentUser;
+
         return {
             list: function() {
                 return get('/api/v1/users');
@@ -33,7 +35,8 @@ app.factory('userServices', ['$http', '$q',
             },
 
             currentUser: function() {
-                return get('/api/v1/user');
+                currentUser = currentUser || get('/api/v1/user');
+                return currentUser;
             },
 
             // login: function (user) {

@@ -4,6 +4,11 @@ app.config(['$routeProvider', function($routeProvider) {
       controller: 'ProjectCtrl',
       controllerAs: 'vm',
       resolve: {
+        user: ['userServices',
+          function(userServices) {
+            return userServices.currentUser();
+          }
+        ],
         project: ['$route', 'projectServices',
           function($route, projectServices) {
             var routeParams = $route.current.params;
