@@ -2,7 +2,9 @@
 """Extensions module."""
 
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy_searchable import make_searchable
 db = SQLAlchemy()
+make_searchable()
 
 
 from flask.ext.migrate import Migrate
