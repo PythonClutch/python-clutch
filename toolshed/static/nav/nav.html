@@ -1,4 +1,3 @@
-<!-- 	<a class="header" ng-class="{active: vm.isActive('/main') || vm.isActive('/')}" href="#/main">Home</a> -->
 <div class="nav-logo">
 	<a ng-click="vm.toProject()" class="nav-home-a" href="#/home/projects">
 		<img class="nav-logo-img" src="static/img/logo-1.png" alt="">
@@ -6,17 +5,13 @@
 	</a>
 </div>
 
-<div class="nav-right">
-	<!-- <a class="header-left header-users-button" ng-class="{active: vm.isActive('/register')}" ng-href="#/register">submit</a> -->
-	<div class="nav-account">
-		<a href="#/account">My Account</a>
-		<!-- <a ng-controller="LoginCtrl as login" ng-show"true" ng-class="{active: vm.isActive('/login')}" ng-click="login.showTrue()">Login</a> -->
-		<a class="nav-login-a" href="">login</a>
-<!-- 		<p class="logged-in-user" ng-show="true">{{</p> -->
-	</div>
+<input id="header-checkbox" type="checkbox">
+<div ng-controller="NavCtrl as vm" class="nav-right">
 	<a href="#/submit">Submit Project</a>
+	<a ng-show="vm.loggedIn" href="#/account">My Account</a>
+	<a ng-show="!vm.loggedIn" ng-click="vm.checkUser()" class="nav-login-a" href="github/login">Login</a>
 	<div class="nav-search-bar">
 		<input type="search" id="nav-search" placeholder="Search">
-		<i class="fa fa-search"></i>
+		<label class="header-checkbox-label" for="header-checkbox"><i class="fa fa-search"></i></label>
 	</div>
 </div>

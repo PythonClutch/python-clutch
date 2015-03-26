@@ -1,50 +1,68 @@
-<span class="submit-span" ng-click="vm.setNew()">new</span>
-<span class="submit-span" ng-click="vm.setPending()">pending</span>
+<section class="home-set-section">
+	<a class="home-set-a home-set-a-projects" ng-class="{ active: vm.isActive('/submit/new') || vm.isActive('/submit/edit') || vm.isActive('/submit') }" ng-click="vm.setNew()" href="#/submit/new">New</a>
+	<a class="home-set-a" ng-class="{ active: vm.isActive('/submit/pending') }" ng-click="vm.setPending()" href="#/submit/pending">Pending</a>
+</section>
 
-<form ng-show="vm.byNew">
-	<new-project></new-project>
-	<input type="submit" value="Submit Project">
-</form>
+<div class="submit-wrapper container-width">
+	<form ng-submit="vm.createProject()" ng-show="vm.byNew">
+		<new-project></new-project>
+		<input class="submit-button" type="submit" value="Submit">
+	</form>
 
-<ul ng-show="!vm.byNew">
-	<a href="">edit</a>
-	<li>
-		<div class="pending-div">
-			<h6>Name:</h6>
-			<p class="pending-p"></p>
-		</div>
-		<div class="pending-div">
-			<h6>GitHub URL:</h6>
-			<p class="pending-p"></p>
-		</div>
-		<div class="pending-div">
-			<h6>PyPi URL</h6>
-			<p class="pending-p"></p>
-		</div>
-		<div class="pending-div">
-			<h6>Website</h6>
-			<p class="pending-p"></p>
-		</div>
-		<div class="pending-div">
-			<h6>Documenation</h6>
-			<p class="pending-p"></p>
-		</div>
-		<div class="pending-div">
-			<h6>Source Code</h6>
-			<p class="pending-p"></p>
-		</div>
-		<div class="pending-div">
-			<h6>Mailing List</h6>
-			<p class="pending-p"></p>
-		</div>
-		<div class="pending-div">
-			<h6>Category</h6>
-			<p class="pending-p"></p>
-			<h6>Group</h6>
-			<p class="pending-p"></p>
-		</div>
-	</li>
-</ul>
-
+	<ul class="pending-project-ul" ng-show="!vm.byNew">
+		<li class="pending-project-li">
+<!-- 			<div class="pending-div">
+				<h6>Name:</h6>
+				<p class="pending-p"></p>
+			</div> -->
+			<div class="pending-div">
+				<h6>GitHub URL:</h6>
+				<p class="pending-p"></p>
+			</div>
+			<div class="pending-div">
+				<h6>Bitbucket URL:</h6>
+				<p class="pending-p"></p>
+			</div>
+			<div class="pending-div">
+				<h6>PyPi URL:</h6>
+				<p class="pending-p"></p>
+			</div>
+<!-- 			<div class="pending-div">
+				<h6>Website URL:</h6>
+				<p class="pending-p"></p>
+			</div> -->
+			<div class="pending-div">
+				<h6>PyPi Documenation URL:</h6>
+				<p class="pending-p"></p>
+			</div>
+<!-- 			<div class="pending-div">
+				<h6>Source Code URL:</h6>
+				<p class="pending-p"></p>
+			</div> -->
+			<div class="pending-div">
+				<h6>Mailing List URL:</h6>
+				<p class="pending-p"></p>
+			</div>
+<!-- 			<div class="pending-div">
+				<h6>Category:</h6>
+				<p class="pending-p"></p>
+			</div> -->
+<!-- 			<div class="pending-div">
+				<h6>Group:</h6>
+				<p class="pending-p"></p>
+			</div> -->
+			<div class="pending-div">
+				<h6>Date Submitted:</h6>
+				<p class="pending-p"></p>
+			</div>		
+			<a class="link" href="#/submit/new">
+				<div class="edit-div edit-div-submit">
+					<p>Edit</p>
+					<i class="fa fa-pencil"></i>
+				</div>
+			</a>
+		</li>
+	</ul>
+</div>
 
 

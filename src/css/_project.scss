@@ -42,6 +42,7 @@
 	flex-direction: column;
 	justify-content: center;
 	flex-wrap: wrap;
+	margin-top: 70px; 
 }
 
 .project-links-div {
@@ -49,7 +50,7 @@
 	flex-direction: row;
 	justify-content: flex-left;
 	flex-wrap: wrap;
-	margin-top: 20px; 
+	padding-top: 20px; 
 }
 
 .project-links-div a {
@@ -57,26 +58,100 @@
 }
 
 .projectname-user-div h1 {
+	text-transform: capitalize;
 	font-size: 32px; 
 }
 
 .projectname-user-div h3 {
+	margin-top: 5px; 
 	font-size: 16px; 
 }
 
 .project-details {
-	margin: 13px 0 24px;
+	margin: 24px 0 26px;
 	width: 100%; 
-	font-size: 24px; 
+	font-size: 18px; 
 }
 
 .home-project-basic-info-icon-gh {
 	margin-top: 13px;
 }
 
+/////////////////////////////////////////////////////////////
+// COMMENTS
+/////////////////////////////////////////////////////////////
 
+.comments {
+	margin-top: 41px; 
+	width: 100%; 
+}
 
+.comments-header-div {
+	font-size: 26px; 
+	i.fa {
+		margin-right: 13px; 
+		font-size: 26px; 
+	}
+}
 
+.comments-ul {
+	margin: 28px 0;
+	li {
+		margin: 13px 0;
+		width: 100%;
+		img {
+			margin-right: 13px; 
+			height: 70px;
+			width: 70px;
+			float: left;
+		}
+	} 
+}
+
+.comment-content {
+	padding: 10px 0 13px 13px; 
+	background: $light-gray; 
+	width: 100%;
+	margin: -70px 13px 0 83px; 
+	
+	float: right;
+}
+
+.comment-content-heading {
+	font-size: 18px; 
+	p:first-of-type {
+		font-weight: 700;
+		margin-right: 5px;  
+	}
+}
+
+.comment-content-section {
+	margin-top: 8px; 
+}
+
+.comment-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	position: relative;
+	input.submit-button {
+		// width: 197px;
+		position: absolute;
+		right: 13px;
+		top: 88px;
+	}
+}
+
+.comment-form-textarea {
+	margin: 0 13px 0 83px; 
+	height: 60px;
+	&:focus {
+		// height: 13px; 
+		background: white;
+		border: 1px solid $light-gray;  
+	}
+}
 
 
 

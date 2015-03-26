@@ -17,7 +17,7 @@ header {
 // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#12897d', endColorstr='#e602c088',GradientType=1 );
 	color: white; 
 	z-index: 1; 
-	position: absolute;
+	// position: absolute;
 	font-family: 'Source Sans Pro', sans-serif; 
 }
 
@@ -62,8 +62,7 @@ header {
 }
 
 .nav-right {
-	width: 36%;
-	height: 30px;
+	width: 375px;
 	margin: 20px;
 	display: flex;
 	flex-direction: row;
@@ -78,19 +77,21 @@ header {
 	flex-wrap: wrap;
 }
 
-.nav-login-a {
-	display: none;
-}
-
 .nav-search-bar {
 	position: relative;
+	i.fa {
+		cursor: pointer;
+	}
 }
 
 .nav-search-bar input {
+	visibility: hidden;
+	width: 20px;
 	background: transparent;
 	border: 2px solid white;  
 	color: white; 
 	padding: 1px 2px 3px; 
+	outline: none;
 }
 
 .nav-search-bar input::-webkit-input-placeholder {
@@ -119,9 +120,17 @@ header {
 	color: white; 
 }
 
-/////////////// COMMENT /////////////////////////////////////
+/////////////// TRANSITION SEARCH BAR /////////////////////////////////////
 
+#header-checkbox {
+	position: absolute;
+	visibility: hidden;
+}
 
+#header-checkbox:checked ~ .nav-right .nav-search-bar input {
+	visibility: visible;
+	width: 120px;
+}
 
 
 
