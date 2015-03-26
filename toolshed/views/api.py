@@ -54,6 +54,24 @@ def get_user():
     else:
         return failure_response("User not logged in", 401)
 
+@api.route('/user', methods=["POST"])
+def update_user():
+    name = current_user()
+    user = User.query.filter_by(github_name=name).first()
+    if user:
+        urls = request.get_json()
+        def update_user(some_user, portfolio_url=None, linkedin_url=None):
+            if linkedin_url:
+                some_user.linkedin_url = linkedin_url
+            if portfolio_url:
+                some_user.portfolio_url = portfolio_url
+            db.session.commit()
+        update_user(user, **urls)
+        return success_response(single_user_schema, user)
+    else:
+        failure_response("You are not logged in", 401)
+
+
 
 @api.route("/users")
 def users():
