@@ -1,9 +1,10 @@
 import requests
 import re
 import math
+import os
 from datetime import datetime
 from .extensions import db
-from .importer import get_total_downloads, parse_github_url, parse_bitbucket_url
+from .importer import release_parse, parse_github_url, parse_bitbucket_url
 from .models import ProjectLog, Project
 
 
@@ -13,10 +14,12 @@ github_match_regex = re.compile('((http(s)*://)*github.com/)')
 bitbucket_search_regex = re.compile('bitbucket.org/(.*)')
 bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
 
+
+gitkey = os.environ['GITKEY']
+auth=(gitkey, 'x-oauth-basic')
+
 def update_projects(projects):
     for project in projects:
-        print(project)
-        print(project.github_url)
         log_project(project)
         update_pypi(project)
         if project.github_url:
@@ -32,15 +35,15 @@ def update_pypi(project):
     project.website = pypi_info['info']['home_page']
     version_release_string = pypi_info['releases'][project.current_version][0]['upload_time']
     project.current_version_release = datetime.strptime(version_release_string, "%Y-%m-%dT%H:%M:%S")
-    project.current_version = pypi_info['info']['version'],
+    project.current_version = pypi_info['info']['version']
     project.summary = pypi_info['info']['summary']
-    project.downloads_count = get_total_downloads(pypi_info)
+    project.downloads_count, project.release_count = release_parse(pypi_info)
     db.session.commit()
 
 
 def update_github(project):
     github_api, project_stub = parse_github_url(project.git_url)
-    github_info = requests.get(github_api).json()
+    github_info = requests.get(github_api, auth=auth).json()
     project.forks_count = github_info['forks_count']
     project.starred_count = github_info['stargazers_count']
     project.watchers_count = github_info['watchers_count']
@@ -72,6 +75,7 @@ def log_project(project):
     proj_log["last_commit"] = project.last_commit
     proj_log["open_issues_count"] = project.open_issues_count
     proj_log["downloads_count"] = project.downloads_count
+    proj_log["release_count"] = project.release_count
     proj_log["contributors_count"] = project.contributors_count
     proj_log["previous_score"] = project.score
     proj_log["log_date"] = datetime.today()
