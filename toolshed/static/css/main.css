@@ -52,7 +52,7 @@ body, html {
   min-height: 100%;
   margin: -190px auto -117px;
   background: rgba(255, 255, 255, 0.77);
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.77) 0%, #ffffff 190px, #ffffff 100%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.77) 0%, #ffffff 80px, #ffffff 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 ); }
   .root-content a {
     text-decoration: none; }
@@ -1108,8 +1108,7 @@ header {
   margin-top: 26px; }
 
 .nav-right {
-  width: 400px;
-  height: 30px;
+  width: 375px;
   margin: 20px;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1140,12 +1139,17 @@ header {
 
 .nav-search-bar {
   position: relative; }
+  .nav-search-bar i.fa {
+    cursor: pointer; }
 
 .nav-search-bar input {
+  visibility: hidden;
+  width: 20px;
   background: transparent;
   border: 2px solid white;
   color: white;
-  padding: 1px 2px 3px; }
+  padding: 1px 2px 3px;
+  outline: none; }
 
 .nav-search-bar input::-webkit-input-placeholder {
   color: white;
@@ -1166,6 +1170,14 @@ header {
   top: 3px;
   right: 5px;
   color: white; }
+
+#header-checkbox {
+  position: absolute;
+  visibility: hidden; }
+
+#header-checkbox:checked ~ .nav-right .nav-search-bar input {
+  visibility: visible;
+  width: 120px; }
 
 .push {
   height: 55%; }
@@ -1286,3 +1298,37 @@ footer a {
 
 .home-project-details-div-li-cat {
   background: white; }
+
+@media screen and (max-width: 751px) {
+  .nav-right {
+    width: 250px; }
+  #header-checkbox:checked ~ .nav-right a {
+    display: none; }
+  #header-checkbox:checked ~ .nav-right {
+    width: 120px; } }
+
+@media screen and (max-width: 626px) {
+  .nav-right {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    height: 100px;
+    width: 120px; }
+  #header-checkbox:checked ~ .nav-right a {
+    display: none; }
+  #header-checkbox:checked ~ .nav-right {
+    width: 120px; }
+  .nav-search-bar input {
+    visibility: visible;
+    width: 120px; }
+  .root-content {
+    margin-top: -140px; } }

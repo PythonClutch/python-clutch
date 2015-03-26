@@ -5,12 +5,13 @@
 	</a>
 </div>
 
+<input id="header-checkbox" type="checkbox">
 <div ng-controller="NavCtrl as vm" class="nav-right">
 	<a href="#/submit">Submit Project</a>
 	<a ng-show="vm.loggedIn" href="#/account">My Account</a>
 	<a ng-show="!vm.loggedIn" ng-click="vm.checkUser()" class="nav-login-a" href="github/login">Login</a>
 	<div class="nav-search-bar">
 		<input type="search" id="nav-search" placeholder="Search">
-		<i class="fa fa-search"></i>
+		<label class="header-checkbox-label" for="header-checkbox"><i class="fa fa-search"></i></label>
 	</div>
 </div>
