@@ -258,9 +258,6 @@ app.config(['$routeProvider', function ($routeProvider) {
   });
 
 }]);
-app.controller('FooterCtrl', function () {
-	
-});
 app.controller('GroupCtrl', ['projects', 'group', function (projects, group) {
 	var self = this;
 
@@ -292,6 +289,9 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/home/groups/:groupid', routeDefinition);
 
 }]);
+app.controller('FooterCtrl', function () {
+	
+});
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
 	'categories',
 	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories) {
