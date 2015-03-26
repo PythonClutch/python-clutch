@@ -95,28 +95,40 @@ def python_three_check(pypi):
     checker = [print("passed") for snippet in data if py3_match_regex.search(snippet) is not None]
     return "passed" in checker
 
-def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=None, mailing_list_url=None):
+def parse_source(source_url, proj_dict):
+    if github_match_regex.search(source_url):
+        github_url = source_url
+        proj_dict = github_populate(proj_dict, github_url)
+        return proj_dict
+    elif bitbucket_match_regex.search(source_url):
+        bitbucket_url = source_url
+        proj_dict = bitbucket_populate(proj_dict, bitbucket_url)
+        return proj_dict
+
+
+def create_project(pypi_url=None, source_url=None, docs_url=None, mailing_list_url=None, github_url=None, bitbucket_url=None):
     project = Project.query.filter_by(pypi_url=pypi_url).first()
-    if project:
+    if project or not pypi_url:
         return None
     proj_dict = {}
     pypi_api = pypi_url + "/json"
     pypi_info = requests.get(pypi_api).json()
 
-    if github_url:
-        proj_dict = github_populate(proj_dict, github_url)
+    if source_url:
+        source_url = source_url
+    elif github_url:
+        source_url = github_url
     elif bitbucket_url:
-        proj_dict = bitbucket_populate(proj_dict, bitbucket_url)
+        source_url = bitbucket_url
     elif pypi_info["info"]['home_page']:
         if github_match_regex.search(pypi_info["info"]['home_page']):
-            github_url = pypi_info["info"]['home_page']
-            proj_dict = github_populate(proj_dict, github_url)
+            source_url = pypi_info["info"]['home_page']
         elif bitbucket_match_regex.search(pypi_info['info']['home_page']):
-            bitbucket_url = pypi_info['info']['home_page']
-            proj_dict = bitbucket_populate(proj_dict, bitbucket_url)
-        else:
-            proj_dict["github_url"] = False
-            proj_dict["bitbucket_url"] = False
+            source_url = pypi_info['info']['home_page']
+
+    if source_url:
+        proj_dict = parse_source(source_url, proj_dict)
+
 
     proj_dict['name'] = pypi_info['info']['name']
     proj_dict['current_version'] = pypi_info['info']['version']
@@ -124,7 +136,6 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
     proj_dict['summary'] = pypi_info['info']['summary']
     proj_dict['downloads_count'], proj_dict['release_count'] = release_parse(pypi_info)
     proj_dict['python_three_compatible'] = python_three_check(pypi_info)
-    print(proj_dict['name'])
     version_release_string = pypi_info['releases'][proj_dict['current_version']][0]['upload_time']
     proj_dict['current_version_release'] = datetime.strptime(version_release_string, "%Y-%m-%dT%H:%M:%S")
     proj_dict['status'] = False

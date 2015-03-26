@@ -159,6 +159,8 @@ def make_project():
     if not project:
         return failure_response("This project already exists.", 409)
     user_name = current_user()
+    if not user_name:
+        return failure_response("You must log in to post projects.", 407)
     user = User.query.filter_by(github_name=user_name).first()
     project.submitted_by_id = user.id
     user.submissions.append(project)
