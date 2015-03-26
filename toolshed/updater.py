@@ -78,7 +78,7 @@ def log_project(project):
     proj_log["release_count"] = project.release_count
     proj_log["contributors_count"] = project.contributors_count
     proj_log["previous_score"] = project.score
-    proj_log["log_date"] = datetime.today()
+    proj_log["log_date"] = datetime.utcnow()
     proj_log["current_version_release"] = project.current_version_release
     project_log = ProjectLog(**proj_log)
     project.logs.append(project_log)

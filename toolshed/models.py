@@ -154,7 +154,7 @@ class ProjectLog(db.Model):
     open_issues_count = db.Column(db.Integer)
     downloads_count = db.Column(db.Integer)
     contributors_count = db.Column(db.Integer)
-    log_date = db.Column(db.Date)
+    log_date = db.Column(db.DateTime)
     likes_count = db.Column(db.Integer)
     previous_score = db.Column(db.Float)
 
