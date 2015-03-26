@@ -20,6 +20,8 @@ class User(db.Model):
     github_url = db.Column(db.String(400))
     email = db.Column(db.String(255))
     avatar_url = db.Column(db.String(255))
+    linkedin_url = db.Column(db.String(255))
+    portfolio_url = db.Column(db.String(255))
 
     comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id",
                                cascade="all,delete")
@@ -62,6 +64,7 @@ class Project(db.Model):
     watchers_url = db.Column(db.String)
     current_version = db.Column(db.String(20))
     current_version_release = db.Column(db.DateTime)
+    release_count = db.Column(db.Integer)
     last_commit = db.Column(db.DateTime)
     first_commit = db.Column(db.DateTime)
     open_issues_count = db.Column(db.Integer)
@@ -142,6 +145,7 @@ class ProjectLog(db.Model):
     watchers_count = db.Column(db.Integer)
     current_version = db.Column(db.String(20))
     current_version_release = db.Column(db.DateTime)
+    release_count = db.Column(db.Integer)
     last_commit = db.Column(db.DateTime)
     open_issues_count = db.Column(db.Integer)
     downloads_count = db.Column(db.Integer)

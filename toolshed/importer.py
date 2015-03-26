@@ -75,9 +75,9 @@ def bitbucket_populate(proj_dict, bitbucket_url):
     proj_dict['bitbucket_url'] = True
     return proj_dict
 
-def get_total_downloads(pypi_result):
+def release_parse(pypi_result):
     total_list = [[item['downloads'] for item in pypi_result['releases'][key]] for key in pypi_result['releases']]
-    return sum([sum(list) for list in total_list])
+    return sum([sum(list) for list in total_list]), len(total_list)
 
 def python_three_check(pypi):
     python_three = "Programming Language :: Python :: 3"
@@ -111,7 +111,7 @@ def create_project(pypi_url=None, github_url=None, bitbucket_url=None, docs_url=
     proj_dict['current_version'] = pypi_info['info']['version']
     proj_dict['website'] = pypi_info['info']['home_page']
     proj_dict['summary'] = pypi_info['info']['summary']
-    proj_dict['downloads_count'] = get_total_downloads(pypi_info)
+    proj_dict['downloads_count'], proj_dict['release_count'] = release_parse(pypi_info)
     proj_dict['python_three_compatible'] = python_three_check(pypi_info)
     print(proj_dict['name'])
     version_release_string = pypi_info['releases'][proj_dict['current_version']][0]['upload_time']
