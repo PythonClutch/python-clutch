@@ -20,6 +20,7 @@ class User(db.Model):
     github_url = db.Column(db.String(400))
     email = db.Column(db.String(255))
     avatar_url = db.Column(db.String(255))
+    public_repos = db.Column(db.Integer)
 
     comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id",
                                cascade="all,delete")
@@ -256,7 +257,8 @@ class UserSchema(Schema):
     likes = fields.Nested(LikeSchema, many=True)
 
     class Meta:
-        fields = ("id", "github_name", "github_url", "email", "comments", "likes")
+        fields = ("id", "github_name", "github_url", "email", "comments",
+        "likes", "public_repos", "avatar_url")
 
 
 
@@ -283,7 +285,8 @@ class ProjectSchema(Schema):
                   "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
                   "group_id", "category_id", "comments", "user_likes", "age_display",
-                  "last_commit_display", "logs", "date_added", "first_commit_display")
+                  "last_commit_display", "logs", "date_added", "first_commit_display",
+                  "github_url", "bitbucket_url")
 
 
 class GroupSchema(Schema):
