@@ -36,6 +36,17 @@ class User(db.Model):
                                    lazy="dynamic", cascade="all,delete",
                                    foreign_keys="Project.submitted_by_id")
 
+
+    @property
+    def pending_submissions(self):
+        return Project.query.filter_by(submitted_by_id=self.id).filter_by(status=False).all()
+
+
+    @property
+    def complete_submissions(self):
+        return Project.query.filter_by(submitted_by_id=self.id).filter_by(status=True).all()
+
+
     def __repr__(self):
         return "User: {}".format(self.github_name)
 
@@ -259,16 +270,6 @@ class LikeSchema(Schema):
         fields = ("id", "user_id", "project_id", "user_name", "project_name")
 
 
-class UserSchema(Schema):
-    comments = fields.Nested(CommentSchema, many=True)
-    likes = fields.Nested(LikeSchema, many=True)
-
-    class Meta:
-        fields = ("id", "github_name", "github_url", "email", "comments",
-        "likes", "public_repos", "avatar_url", "linkedin_url", "portfolio_url")
-
-
-
 class LogSchema(Schema):
     class Meta:
         fields = ("id", "project_id", "forks_count", "starred_count",
@@ -294,6 +295,19 @@ class ProjectSchema(Schema):
                   "group_id", "category_id", "comments", "user_likes", "age_display",
                   "last_commit_display", "logs", "date_added", "first_commit_display",
                   "github_url", "bitbucket_url")
+
+
+class UserSchema(Schema):
+    comments = fields.Nested(CommentSchema, many=True)
+    likes = fields.Nested(LikeSchema, many=True)
+    pending_submissions = fields.Nested(ProjectSchema, many=True)
+    completed_submissions = fields.Nested(ProjectSchema, many=True)
+
+    class Meta:
+        fields = ("id", "github_name", "github_url", "email", "comments",
+        "likes", "public_repos", "avatar_url", "linkedin_url", "portfolio_url",
+        "pending_submissions", "completed_submissions")
+
 
 
 class GroupSchema(Schema):
