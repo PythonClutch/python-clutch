@@ -83,6 +83,20 @@ b {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap; }
 
+.flex-start-row {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
+
 .submit-button {
   font-size: 16px;
   font-weight: 700;
@@ -265,7 +279,7 @@ input, textarea {
   background: #acabab; }
   .home-project-i-div i {
     position: absolute;
-    right: 30%;
+    right: 40%;
     top: 10px;
     color: #e1e1e1;
     font-size: 20px; }
@@ -785,6 +799,69 @@ li.number-li a {
 .home-project-basic-info-icon-gh {
   margin-top: 13px; }
 
+.comments {
+  margin-top: 41px;
+  width: 100%; }
+
+.comments-header-div {
+  font-size: 26px; }
+  .comments-header-div i.fa {
+    margin-right: 13px;
+    font-size: 26px; }
+
+.comments-ul {
+  margin: 28px 0; }
+  .comments-ul li {
+    margin: 13px 0;
+    width: 100%; }
+    .comments-ul li img {
+      margin-right: 13px;
+      height: 70px;
+      width: 70px;
+      float: left; }
+
+.comment-content {
+  padding: 10px 0 13px 13px;
+  background: #e1e1e1;
+  width: 100%;
+  margin: -70px 13px 0 83px;
+  float: right; }
+
+.comment-content-heading {
+  font-size: 18px; }
+  .comment-content-heading p:first-of-type {
+    font-weight: 700;
+    margin-right: 5px; }
+
+.comment-content-section {
+  margin-top: 8px; }
+
+.comment-form {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  position: relative; }
+  .comment-form input.submit-button {
+    position: absolute;
+    right: 13px;
+    top: 88px; }
+
+.comment-form-textarea {
+  margin: 0 13px 0 83px;
+  height: 60px; }
+  .comment-form-textarea:focus {
+    background: white;
+    border: 1px solid #e1e1e1; }
+
 .account-set {
   padding-top: 41px;
   position: relative; }
@@ -1108,7 +1185,7 @@ header {
   margin-top: 26px; }
 
 .nav-right {
-  width: 400px;
+  width: 375px;
   height: 30px;
   margin: 20px;
   display: -webkit-flex;

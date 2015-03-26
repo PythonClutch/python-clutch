@@ -77,9 +77,81 @@
 	margin-top: 13px;
 }
 
+/////////////////////////////////////////////////////////////
+// COMMENTS
+/////////////////////////////////////////////////////////////
 
+.comments {
+	margin-top: 41px; 
+	width: 100%; 
+}
 
+.comments-header-div {
+	font-size: 26px; 
+	i.fa {
+		margin-right: 13px; 
+		font-size: 26px; 
+	}
+}
 
+.comments-ul {
+	margin: 28px 0;
+	li {
+		margin: 13px 0;
+		width: 100%;
+		img {
+			margin-right: 13px; 
+			height: 70px;
+			width: 70px;
+			float: left;
+		}
+	} 
+}
+
+.comment-content {
+	padding: 10px 0 13px 13px; 
+	background: $light-gray; 
+	width: 100%;
+	margin: -70px 13px 0 83px; 
+	
+	float: right;
+}
+
+.comment-content-heading {
+	font-size: 18px; 
+	p:first-of-type {
+		font-weight: 700;
+		margin-right: 5px;  
+	}
+}
+
+.comment-content-section {
+	margin-top: 8px; 
+}
+
+.comment-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	position: relative;
+	input.submit-button {
+		// width: 197px;
+		position: absolute;
+		right: 13px;
+		top: 88px;
+	}
+}
+
+.comment-form-textarea {
+	margin: 0 13px 0 83px; 
+	height: 60px;
+	&:focus {
+		// height: 13px; 
+		background: white;
+		border: 1px solid $light-gray;  
+	}
+}
 
 
 

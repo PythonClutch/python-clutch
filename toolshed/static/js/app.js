@@ -83,11 +83,11 @@ app.config(['$routeProvider', function ($routeProvider) {
   // .when('/home/categories', homePage)
   // .when('/projects', homePage)
   // .when('/home/category', homePage)
-  .when('/group', {   
-    templateUrl: 'static/group/group.html',
-    controller: 'GroupCtrl',
-    controllerAs: 'vm'
-  });
+  // .when('/group', {   
+  //   templateUrl: 'static/group/group.html',
+  //   controller: 'GroupCtrl',
+  //   controllerAs: 'vm'
+  // });
   // .when('/project', {   
   //   templateUrl: 'static/project/project.html',
   //   controller: 'ProjectCtrl',
@@ -99,7 +99,8 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 
 $(function () {
-	$('.home-project-basic-info-plus').onclick = function () {
+	// console.log(document.querySelector('.comment-content-section'))
+	$('.comment-content-section').onclick = function () {
 		console.log('hey')
 	};
 });
@@ -434,6 +435,57 @@ app.controller('NavCtrl', ['$location', 'userServices', function ($location, use
 
 }]);
 
+app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, projectFactory) {
+
+	var self = this;
+
+	self.project = project;
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
+	
+}]);
+(function () {
+	app.directive('projectComments', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/project/project-comments.html'
+	  };
+	});
+})();
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/project/project.html',
+      controller: 'ProjectCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        project: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getByProjectId(routeParams.projectid);
+          }]
+      }
+    };
+
+    $routeProvider.when('/home/projects/:projectid', routeDefinition);
+
+}]);
+
+
+
 app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $location) {
 
 	'use strict';
@@ -655,6 +707,10 @@ app.factory('projectServices', ['$http', '$log',
 
       addProject: function (project) {
         return post('/api/v1/projects', project);
+      },
+
+      addComment: function (projectId, comment) {
+        return post('/api/v1/projects/' + projectId +'comments', comment);
       }
 
     };
@@ -718,49 +774,6 @@ app.factory('userServices', ['$http', '$q', '$log',
         };
     }
 ]);
-app.controller('ProjectCtrl', ['project', 'projectFactory', function (project, projectFactory) {
-
-	var self = this;
-
-	self.project = project;
-
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-	
-}]);
-app.config(['$routeProvider', function($routeProvider) {    
-    var routeDefinition = {
-      templateUrl: 'static/project/project.html',
-      controller: 'ProjectCtrl',
-      controllerAs: 'vm',
-      resolve: {
-        project: ['$route', 'projectServices',
-          function($route, projectServices) {
-            var routeParams = $route.current.params;
-            return projectServices.getByProjectId(routeParams.projectid);
-          }]
-      }
-    };
-
-    $routeProvider.when('/home/projects/:projectid', routeDefinition);
-
-}]);
-
-
-
 app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices',
 	function (activeRoute, submitFactory, groupServices, projectServices) {
 
