@@ -41,11 +41,11 @@ app.config(['$routeProvider', function ($routeProvider) {
   // .when('/home/categories', homePage)
   // .when('/projects', homePage)
   // .when('/home/category', homePage)
-  .when('/group', {   
-    templateUrl: 'static/group/group.html',
-    controller: 'GroupCtrl',
-    controllerAs: 'vm'
-  });
+  // .when('/group', {   
+  //   templateUrl: 'static/group/group.html',
+  //   controller: 'GroupCtrl',
+  //   controllerAs: 'vm'
+  // });
   // .when('/project', {   
   //   templateUrl: 'static/project/project.html',
   //   controller: 'ProjectCtrl',

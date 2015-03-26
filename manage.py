@@ -77,8 +77,9 @@ def seed_db(file):
             for url in row:
                 list.append(url)
             project = create_project(pypi_url=str(list[0]), github_url=str(list[1]), bitbucket_url=str(list[2]))
-            db.session.add(project)
-            db.session.commit()
+            if project:
+                db.session.add(project)
+        db.session.commit()
 
 
 if __name__ == '__main__':

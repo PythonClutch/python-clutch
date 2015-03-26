@@ -62,7 +62,7 @@
 						<a class="link" href="{{vm.project.pypi_url}}"><i class="fa fa-code"></i><p>pypi name</p></a>
 					</div>
 					<div class="home-project-header-bottom home-project-header-bottom-pypi">
-						<h5>Version <b>{{vm.project.current_version}}</b> Released on date</h5>
+						<h5>Version <b>{{vm.project.current_version}}</b> Released {{vm.project.last_commit_display}}</h5>
 						<div class="home-project-header-bottom-downloads">
 							<i class="fa fa-download"></i>
 							<h5>{{vm.project.downloads_count}} Downloads</h5>
@@ -72,7 +72,7 @@
 				<div class="home-project-content home-project-content-pypi">
 					<h6 class="home-project-content-header"><b>##</b> Release(s)</h6>
 					<h6 class="home-project-content-header"><b>1st</b> Release on date</h6>
-					<h6 class="home-project-content-header"><b>##</b> Depending Projects</h6>
+					<h6 class="home-project-content-header"><b ng-show="vm.project.python_three_compatible">Yes</b><b ng-show="!vm.project.python_three_compatible">No</b> Python3 Compatibility</h6>
 				</div>
 			</div>
 			<div class="home-project-details home-project-github">
@@ -98,7 +98,7 @@
 						</div>
 						<div class="home-project-content-div home-project-content-div-gh">
 							<h6 class="home-project-content-header">Last commit:</h6>
-							<p class="home-project-content-p">{{vm.project.last_commit}}</p>
+							<p class="home-project-content-p">{{vm.project.last_commit_display}}</p>
 						</div>
 						<div class="home-project-content-div home-project-content-div-gh">
 							<h6 class="home-project-content-header">First commit:</h6>
@@ -109,4 +109,12 @@
 			</div>
 		</div>
 	</div>
+
+
+
+	<project-comments></project-comments>
+
+
+
+
 </div>

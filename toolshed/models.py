@@ -21,9 +21,15 @@ class User(db.Model):
     email = db.Column(db.String(255))
     avatar_url = db.Column(db.String(255))
 
+    public_repos = db.Column(db.Integer)
+
+    linkedin_url = db.Column(db.String(255))
+    portfolio_url = db.Column(db.String(255))
+
+
     comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id",
                                cascade="all,delete")
-    like = db.relationship("Like", backref="user", lazy="dynamic", foreign_keys="Like.user_id",
+    likes = db.relationship("Like", backref="user", lazy="dynamic", foreign_keys="Like.user_id",
                            cascade="all,delete")
 
     submissions = db.relationship("Project", backref="submitted_by",
@@ -61,6 +67,8 @@ class Project(db.Model):
     watchers_count = db.Column(db.Integer)
     watchers_url = db.Column(db.String)
     current_version = db.Column(db.String(20))
+    current_version_release = db.Column(db.DateTime)
+    release_count = db.Column(db.Integer)
     last_commit = db.Column(db.DateTime)
     first_commit = db.Column(db.DateTime)
     open_issues_count = db.Column(db.Integer)
@@ -69,7 +77,9 @@ class Project(db.Model):
     contributors_count = db.Column(db.Integer)
     python_three_compatible = db.Column(db.Boolean)
     date_added = db.Column(db.Date)
-    score = db.Column(db.Integer)
+    score = db.Column(db.Float)
+    github_url = db.Column(db.Boolean)
+    bitbucket_url = db.Column(db.Boolean)
     website = db.Column(db.String(400))
     git_url = db.Column(db.String(400))
     pypi_url = db.Column(db.String(400))
@@ -110,6 +120,15 @@ class Project(db.Model):
             return arrow_age.humanize()
 
     @property
+    def first_commit_display(self):
+        if not self.first_commit:
+            return None
+        else:
+            first_string = str(self.first_commit)
+            arrow_first_commit = arrow.get(first_string)
+            return arrow_first_commit.humanize()
+
+    @property
     def last_commit_display(self):
         if not self.last_commit:
             return None
@@ -129,13 +148,15 @@ class ProjectLog(db.Model):
     starred_count = db.Column(db.Integer)
     watchers_count = db.Column(db.Integer)
     current_version = db.Column(db.String(20))
+    current_version_release = db.Column(db.DateTime)
+    release_count = db.Column(db.Integer)
     last_commit = db.Column(db.DateTime)
     open_issues_count = db.Column(db.Integer)
     downloads_count = db.Column(db.Integer)
     contributors_count = db.Column(db.Integer)
     log_date = db.Column(db.Date)
     likes_count = db.Column(db.Integer)
-    previous_score = db.Column(db.Integer)
+    previous_score = db.Column(db.Float)
 
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
 
@@ -233,16 +254,19 @@ class CommentSchema(Schema):
                   "project_id")
 
 
-class UserSchema(Schema):
-    comments = fields.Nested(CommentSchema, many=True)
-
-    class Meta:
-        fields = ("id", "github_name", "github_url", "email", "comments")
-
-
 class LikeSchema(Schema):
     class Meta:
         fields = ("id", "user_id", "project_id", "user_name", "project_name")
+
+
+class UserSchema(Schema):
+    comments = fields.Nested(CommentSchema, many=True)
+    likes = fields.Nested(LikeSchema, many=True)
+
+    class Meta:
+        fields = ("id", "github_name", "github_url", "email", "comments",
+        "likes", "public_repos", "avatar_url", "linkedin_url", "portfolio_url")
+
 
 
 class LogSchema(Schema):
@@ -268,7 +292,8 @@ class ProjectSchema(Schema):
                   "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
                   "group_id", "category_id", "comments", "user_likes", "age_display",
-                  "last_commit_display", "logs", "date_added")
+                  "last_commit_display", "logs", "date_added", "first_commit_display",
+                  "github_url", "bitbucket_url")
 
 
 class GroupSchema(Schema):

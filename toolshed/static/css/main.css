@@ -52,8 +52,7 @@ body, html {
   min-height: 100%;
   margin: -190px auto -117px;
   background: rgba(255, 255, 255, 0.77);
-  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0.77)), color-stop(19%, #ffffff), color-stop(100%, #ffffff));
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.77) 0%, #ffffff 19%, #ffffff 100%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.77) 0%, #ffffff 80px, #ffffff 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 ); }
   .root-content a {
     text-decoration: none; }
@@ -80,6 +79,20 @@ b {
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
   justify-content: space-between;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
+
+.flex-start-row {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap; }
@@ -266,7 +279,7 @@ input, textarea {
   background: #acabab; }
   .home-project-i-div i {
     position: absolute;
-    right: 30%;
+    right: 40%;
     top: 10px;
     color: #e1e1e1;
     font-size: 20px; }
@@ -408,12 +421,6 @@ li.number-li a {
   .home-project-li a:hover {
     color: black; }
 
-.home-project-basic-info-right i.rotate-plus {
-  -webkit-transform: rotate(45deg) translate(-90%, 25%);
-  transform: rotate(45deg) translate(-90%, 25%);
-  transition: all .2s;
-  margin-right: -5px; }
-
 .home-project-name {
   margin: 23px 0 0 27px;
   font-size: 30px;
@@ -489,7 +496,7 @@ li.number-li a {
 
 .home-project-details-div {
   padding-bottom: 1px;
-  visibility: hidden;
+  opacity: 0;
   height: 0;
   background: transparent;
   width: 97.38%;
@@ -704,9 +711,8 @@ li.number-li a {
   cursor: pointer; }
 
 .names-details-checkbox:checked ~ .home-project-details-div {
-  visibility: visible;
-  height: 100%;
-  transition: all 1s; }
+  opacity: 1;
+  height: 100%; }
 
 .more-info-input {
   visibility: hidden;
@@ -792,6 +798,69 @@ li.number-li a {
 
 .home-project-basic-info-icon-gh {
   margin-top: 13px; }
+
+.comments {
+  margin-top: 41px;
+  width: 100%; }
+
+.comments-header-div {
+  font-size: 26px; }
+  .comments-header-div i.fa {
+    margin-right: 13px;
+    font-size: 26px; }
+
+.comments-ul {
+  margin: 28px 0; }
+  .comments-ul li {
+    margin: 13px 0;
+    width: 100%; }
+    .comments-ul li img {
+      margin-right: 13px;
+      height: 70px;
+      width: 70px;
+      float: left; }
+
+.comment-content {
+  padding: 10px 0 13px 13px;
+  background: #e1e1e1;
+  width: 100%;
+  margin: -70px 13px 0 83px;
+  float: right; }
+
+.comment-content-heading {
+  font-size: 18px; }
+  .comment-content-heading p:first-of-type {
+    font-weight: 700;
+    margin-right: 5px; }
+
+.comment-content-section {
+  margin-top: 8px; }
+
+.comment-form {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  position: relative; }
+  .comment-form input.submit-button {
+    position: absolute;
+    right: 13px;
+    top: 88px; }
+
+.comment-form-textarea {
+  margin: 0 13px 0 83px;
+  height: 60px; }
+  .comment-form-textarea:focus {
+    background: white;
+    border: 1px solid #e1e1e1; }
 
 .account-set {
   padding-top: 41px;
@@ -1116,8 +1185,7 @@ header {
   margin-top: 26px; }
 
 .nav-right {
-  width: 400px;
-  height: 30px;
+  width: 375px;
   margin: 20px;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1148,12 +1216,17 @@ header {
 
 .nav-search-bar {
   position: relative; }
+  .nav-search-bar i.fa {
+    cursor: pointer; }
 
 .nav-search-bar input {
+  visibility: hidden;
+  width: 20px;
   background: transparent;
   border: 2px solid white;
   color: white;
-  padding: 1px 2px 3px; }
+  padding: 1px 2px 3px;
+  outline: none; }
 
 .nav-search-bar input::-webkit-input-placeholder {
   color: white;
@@ -1175,8 +1248,16 @@ header {
   right: 5px;
   color: white; }
 
+#header-checkbox {
+  position: absolute;
+  visibility: hidden; }
+
+#header-checkbox:checked ~ .nav-right .nav-search-bar input {
+  visibility: visible;
+  width: 120px; }
+
 .push {
-  height: 30%; }
+  height: 55%; }
 
 footer {
   height: 117px;
@@ -1294,3 +1375,37 @@ footer a {
 
 .home-project-details-div-li-cat {
   background: white; }
+
+@media screen and (max-width: 751px) {
+  .nav-right {
+    width: 250px; }
+  #header-checkbox:checked ~ .nav-right a {
+    display: none; }
+  #header-checkbox:checked ~ .nav-right {
+    width: 120px; } }
+
+@media screen and (max-width: 626px) {
+  .nav-right {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    height: 100px;
+    width: 120px; }
+  #header-checkbox:checked ~ .nav-right a {
+    display: none; }
+  #header-checkbox:checked ~ .nav-right {
+    width: 120px; }
+  .nav-search-bar input {
+    visibility: visible;
+    width: 120px; }
+  .root-content {
+    margin-top: -140px; } }

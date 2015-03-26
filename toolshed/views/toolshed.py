@@ -28,6 +28,7 @@ def get_github_token(token=None):
 
 
 def current_user():
+    print(github.get('/user'))
     me = github.get('/user')
     return me.data['name']
 
@@ -77,12 +78,10 @@ def github_authorized():
         user = User(github_name = me.data['name'],
                     email = me.data['email'],
                     github_url = me.data['html_url'],
-                    avatar_url = me.data['avatar_url'])
+                    avatar_url = me.data['avatar_url'],
+                    public_repos = me.data['public_reposs'])
         db.session.add(user)
         db.session.commit()
 
     flash('You were signed in as %s' % repr(me.data['name']))
     return redirect(next_url)
-
-
-

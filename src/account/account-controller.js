@@ -1,10 +1,12 @@
-app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory', 'projectFactory',
-	function (activeRoute, accountFactory, appearFactory, projectFactory) {
+app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory', 'projectFactory', 'user',
+	function (activeRoute, accountFactory, appearFactory, projectFactory, user) {
 	var self = this;
 
 	self.byInfo = accountFactory.byInfo();
 
 	self.byEdit = accountFactory.byEdit();
+
+	self.user = user.data;
 
 	self.setInfo = function () {
 		accountFactory.setInfo();
