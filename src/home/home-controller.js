@@ -44,8 +44,19 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
     	self.rotate = appearFactory.rotate();
 	};
 
+	// self.likeNumber = projects;
+	// console.log(self.likeNumber)
+
 	self.like = function (proj, likes) {
-		likeFactory.like(proj, likes, user);	
+		// self.likeNumber = proj.user_likes;
+		// console.log(self.likeNumber);
+		likeFactory.like(proj, likes, user);
+		// projectServices.like(proj.id).then(function (array) {
+		// 	console.log(array);
+		// 	// console.log(self.likeNumber);
+		// 	// self.likeNumber
+		// })	
+		self.checkLike(proj);
 	};
 
 	self.checkLike = function (project) {

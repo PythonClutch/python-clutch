@@ -372,8 +372,19 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
     	self.rotate = appearFactory.rotate();
 	};
 
+	// self.likeNumber = projects;
+	// console.log(self.likeNumber)
+
 	self.like = function (proj, likes) {
-		likeFactory.like(proj, likes, user);	
+		// self.likeNumber = proj.user_likes;
+		// console.log(self.likeNumber);
+		likeFactory.like(proj, likes, user);
+		// projectServices.like(proj.id).then(function (array) {
+		// 	console.log(array);
+		// 	// console.log(self.likeNumber);
+		// 	// self.likeNumber
+		// })	
+		self.checkLike(proj);
 	};
 
 	self.checkLike = function (project) {
@@ -693,10 +704,12 @@ app.factory('likeFactory', ['projectServices', function (projectServices) {
 
 			var target = $(event.target);
 			var likedId;
+			var likeArray = likes;
 			var checkUserMatch = function () {
-				for (var i = likes.length - 1; i >= 0; i--) {
-					if (likes[i].user_id === user.data.id) {
-						likedId = likes[i].id;
+				for (var i = likeArray.length - 1; i >= 0; i--) {
+					if (likeArray[i].user_id === user.data.id) {
+						likedId = likeArray[i].id;
+						// likeArray.push({'user_id': user.data.id})
 						console.log(likedId);
 						return true;
 					} else {
@@ -704,13 +717,23 @@ app.factory('likeFactory', ['projectServices', function (projectServices) {
 					}
 				};
 			};
+			var likeAmount = likeArray.length;
 			if (checkUserMatch()) {
 				target.addClass('fa-heart-o');	
-				projectServices.removeLike(likedId);	
+				likeAmount -= 1
+				target.parent().find('p').text(likeAmount);
+				projectServices.removeLike(likedId).then(function (array) {
+					likeArray.pop(array);
+				})	
 			} else {
 				target.removeClass('fa-heart-o');
 				target.addClass('fa-heart');
-				projectServices.like(proj.id);
+				console.log(likes);
+				likeAmount += 1
+				target.parent().find('p').text(likeAmount);
+				projectServices.like(proj.id).then(function (array) {
+					likeArray.push(array);
+				})
 			}
 		},
 
