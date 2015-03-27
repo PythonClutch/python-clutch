@@ -179,31 +179,36 @@ class ProjectLog(db.Model):
     likes_count = db.Column(db.Integer)
     previous_score = db.Column(db.Float)
 
+
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
 
     @property
-    def stars_difference(self):
-        return Project.query.get(self.project_id) - self.starred_count
-
-    @property
     def forks_difference(self):
-        return Project.query.get(self.project_id) - self.forks_count
+        if self.forks_count:
+            project = Project.query.get(self.project_id)
+            return project.forks_count - self.forks_count
+        return None
 
     @property
     def watchers_difference(self):
-        return Project.query.get(self.project_id) - self.watchers_count
+        if self.watchers_count:
+            project = Project.query.get(self.project_id)
+            return project.watchers_count - self.watchers_count
+        return None
 
     @property
     def download_difference(self):
-        return Project.query.get(self.project_id) - self.downloads_count
-
-    @property
-    def contributor_difference(self):
-        return Project.query.get(self.project_id) - self.contributors_count
+        if self.downloads_count:
+            project = Project.query.get(self.project_id)
+            return project.downloads_count - self.downloads_count
+        return None
 
     @property
     def likes_difference(self):
-        return Project.query.get(self.project_id) - self.contributors_count
+        if self.contributors_count:
+            project = Project.query.get(self.project_id)
+            return project.number_of_likes - self.likes_count
+        return None
 
 
 class Comment(db.Model):
@@ -244,6 +249,12 @@ class Group(db.Model):
 
     projects = db.relationship("Project", backref="group", lazy="dynamic", foreign_keys="Project.group_id")
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
+
+    @property
+    def average_score(self):
+        scores = [project.score for project in self.projects]
+        average_score = sum(scores) / len(scores)
+        return average_score
 
     def __repr__(self):
         return "Group: {}".format(self.name)
@@ -311,8 +322,8 @@ class LogSchema(Schema):
         fields = ("id", "project_id", "forks_count", "starred_count",
                   "current_version", "last_commit", "open_issues_count",
                   "downloads_count", "contributors_count", "log_date",
-                  "stars_difference", "forks_difference", "watchers_difference",
-                  "download_difference", "contributor_difference", "likes_difference")
+                   "forks_difference", "watchers_difference",
+                  "download_difference", "likes_difference")
 
 
 class ProjectSchema(Schema):
@@ -329,8 +340,9 @@ class ProjectSchema(Schema):
                   "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
                   "group_id", "category_id", "comments", "user_likes", "age_display",
-                  "last_commit_display", "logs", "date_added", "first_commit_display",
-                  "github_url", "bitbucket_url")
+                  "last_commit_display", "date_added", "first_commit_display",
+                  "github_url", "bitbucket_url", "pypi_stub", "logs",
+                  "score")
 
 
 class UserSchema(Schema):
@@ -350,7 +362,7 @@ class GroupSchema(Schema):
     projects = fields.Nested(ProjectSchema, many=True)
 
     class Meta:
-        fields = ("id", "name", "projects", "category_id")
+        fields = ("id", "name", "projects", "category_id", "average_score")
 
 
 class CategorySchema(Schema):
