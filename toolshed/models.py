@@ -330,7 +330,7 @@ class ProjectSchema(Schema):
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
                   "group_id", "category_id", "comments", "user_likes", "age_display",
                   "last_commit_display", "logs", "date_added", "first_commit_display",
-                  "github_url", "bitbucket_url")
+                  "github_url", "bitbucket_url", "pypi_stub")
 
 
 class UserSchema(Schema):

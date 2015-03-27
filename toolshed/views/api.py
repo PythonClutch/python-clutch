@@ -337,6 +337,15 @@ def get_project_likes(id):
 
 #Search Bar Routes
 
+
+class Search:
+    def __init__(self, query, categories, projects, groups):
+        self.query = query
+        self.categories = categories
+        self.projects = projects
+        self.groups = groups
+
+
 @api.route("/search")
 def search():
     text = request.args.get('q')
@@ -344,14 +353,13 @@ def search():
         categories = Category.query.search(text).all()
         groups = Group.query.search(text).all()
         projects = Project.query.search(text).all()
-        query_dict = {"query": text, "categories": categories, "projects": projects,
-                      "groups": groups}
-        return success_response(search_schema, query_dict)
+
+        search = Search(query=text,
+                            categories=categories,
+                            groups=groups,
+                            projects=projects)
+        return success_response(search_schema, search)
     else:
         return failure_response("You must enter a query.", 400)
-
-
-
-
 
 
