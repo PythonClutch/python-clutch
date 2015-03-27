@@ -1,4 +1,5 @@
 import json
+import vincent
 from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
                       Group, GroupSchema, LikeSchema,ProjectLog, LogSchema,
@@ -8,7 +9,7 @@ from ..extensions import db
 from .toolshed import require_login, current_user
 from datetime import datetime
 from ..importer import create_project
-from ..updater import update_projects
+
 
 
 api = Blueprint('api', __name__)
@@ -335,7 +336,7 @@ def get_project_likes(id):
         return failure_response("Project has no likes.", 404)
 
 
-#Search Bar Routes
+# Search Bar Routes
 
 @api.route("/search")
 def search():
@@ -351,7 +352,22 @@ def search():
         return failure_response("You must enter a query.", 400)
 
 
+# Magic Visualization Routes
 
+@api.route("/projects/<int:id>/graph")
+def graph(id):
+    project = Project.query.get_or_404(id)
+    if project.logs:
+        logs = project.logs
+        vega_graph = vincent.Visualization()
+        dates = [log.log_date for log in logs]
+        scores = [log.previous_score for log in logs]
+        index = [num for num in range(len(scores))]
+        data = vincent.Data.from_mult_iters(idx=index, dates=dates, scores=scores)
+        vega_graph.data.append(data)
+        return jsonify({"status": "success", "data": results})
+    else:
+        return failure_response("No history for this project", 404)
 
 
 
