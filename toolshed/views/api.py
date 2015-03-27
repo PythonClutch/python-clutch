@@ -335,7 +335,7 @@ def get_project_likes(id):
         return failure_response("Project has no likes.", 404)
 
 
-#Search Bar Routes
+# Search Bar Routes
 
 
 class Search:
@@ -355,11 +355,9 @@ def search():
         projects = Project.query.search(text).all()
 
         search = Search(query=text,
-                            categories=categories,
-                            groups=groups,
-                            projects=projects)
+                        categories=categories,
+                        groups=groups,
+                        projects=projects)
         return success_response(search_schema, search)
     else:
         return failure_response("You must enter a query.", 400)
-
-
