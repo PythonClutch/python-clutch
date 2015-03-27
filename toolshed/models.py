@@ -250,6 +250,12 @@ class Group(db.Model):
     projects = db.relationship("Project", backref="group", lazy="dynamic", foreign_keys="Project.group_id")
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
 
+    @property
+    def average_score(self):
+        scores = [project.score for project in self.projects]
+        average_score = sum(scores) / len(scores)
+        return average_score
+
     def __repr__(self):
         return "Group: {}".format(self.name)
 
@@ -335,7 +341,8 @@ class ProjectSchema(Schema):
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
                   "group_id", "category_id", "comments", "user_likes", "age_display",
                   "last_commit_display", "date_added", "first_commit_display",
-                  "github_url", "bitbucket_url", "pypi_stub", "logs")
+                  "github_url", "bitbucket_url", "pypi_stub", "logs",
+                  "score")
 
 
 class UserSchema(Schema):
@@ -355,7 +362,7 @@ class GroupSchema(Schema):
     projects = fields.Nested(ProjectSchema, many=True)
 
     class Meta:
-        fields = ("id", "name", "projects", "category_id")
+        fields = ("id", "name", "projects", "category_id", "average_score")
 
 
 class CategorySchema(Schema):
