@@ -80,6 +80,7 @@ def log_project(project):
     proj_log["previous_score"] = project.score
     proj_log["log_date"] = datetime.utcnow()
     proj_log["current_version_release"] = project.current_version_release
+    proj_log["likes_count"] = project.number_of_likes
     project_log = ProjectLog(**proj_log)
     project.logs.append(project_log)
     db.session.add(project_log)
