@@ -8,13 +8,19 @@ app.controller('NavCtrl', ['$location', 'userServices', function ($location, use
 
 	function checkLogIn () {
 		userServices.currentUser().then(function (result) {
-			console.log('hm')
 			self.currentUser = result;
-			if (self.currentUser.status === "success") {
-				self.loggedIn = true;
+			if (self.currentUser) {
+				console.log('one');
+				if (self.currentUser.status === "success") {
+					self.loggedIn = true;
+				} else {
+					self.loggedIn = false;
+				}
 			} else {
 				self.loggedIn = false;
 			}
+		}, function (err) {
+			self.loggedIn = false;
 		});
 	}
 

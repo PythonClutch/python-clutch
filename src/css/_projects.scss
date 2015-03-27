@@ -6,6 +6,7 @@
 	width: 100%;
 	background: $light-gray;
 	margin: 13px auto; 
+	z-index: 5; 
 }
 
 .home-project-li a {
@@ -51,11 +52,24 @@
 	height: 79px;
 }
 
+div.home-project-basic-info-icon,
 .home-project-basic-info-icon {
 	margin-top: 28px; 
+	color: black;
 	i {
 		color: $base-color; 
 	}
+}
+
+.home-project-basic-info-like {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+div.home-project-basic-info-icon .fa {
+	cursor: pointer;
 }
 
 .home-project-basic-info-comment i {
@@ -94,11 +108,12 @@
 
 .home-project-details-div {
 	padding-bottom: 1px; 
-	opacity: 0; 
+	visibility: hidden;
 	height: 0;
 	background: transparent;
 	width: 97.38%;
-	margin: 0 auto;   
+	margin: 0 auto; 
+	z-index: 1;   
 }
 
 .home-project-content-p {
@@ -158,6 +173,7 @@
 	background: white; 
 	margin: 13px auto;
 	padding: 28px 20px 28px; 
+	z-index: 1; 
 }
 
 .home-project-header-top {
@@ -228,6 +244,7 @@
 	color: $base-color;
 	font-size: 22px; 
 	padding-top: 28px;  
+	z-index: -4 
 }
 
 .home-project-links-div-sizer {
@@ -303,7 +320,7 @@
 }
 
 .names-details-checkbox:checked ~ .home-project-details-div {
-	opacity: 1;
+	visibility: visible;
 	height: 100%;
 	// margin-top: 80px;
 	// transition: visibility 1s, height 1s, z-index .01s ease-in 1s;

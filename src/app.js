@@ -10,3 +10,8 @@ app.config(['$routeProvider', function ($routeProvider) {
     templateUrl: 'static/errors/404/error-404.html'
   });
 }]);
+
+
+// searchChange = function () {
+// 	console.log('changed')
+// }

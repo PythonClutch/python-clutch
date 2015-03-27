@@ -1,7 +1,20 @@
-app.controller('hpCtrl', function () {
+app.controller('hpCtrl', ['projectServices', function (projectServices) {
 	var self = this;
 
 	self.byNames = true;
+
+	self.search = function () {
+		self.searchClicked = false;
+		$(event.target).closest('body').find('.home-project-search').val(self.navSearcher);
+	};
+
+	projectServices.listNewest().then(function (result){
+		self.newestProjects = result;
+	});
+
+	projectServices.list().then(function (result){
+		self.listProjects = result;
+	});
 
 	self.setGroups = function () {
 		self.byNames = false;
@@ -26,12 +39,22 @@ app.controller('hpCtrl', function () {
 		$(event.target).addClass('fa-dot-circle-o');
 	}
 
+	self.list = false;
+	self.popular = true;
+	self.newest = false;
+
 	self.setPopular = function () {
 		selectedClass();
+		self.popular = true;
+		self.newest = false;
+		self.list = false;
 		$('#project-popular-radio').prop('checked', true);
 	};
 
 	self.setNewest = function () {
+		self.popular = false;
+		self.newest = true;
+		self.list = false;
 		selectedClass();
 		$('#project-newest-radio').prop('checked', true);
 	};
@@ -42,6 +65,9 @@ app.controller('hpCtrl', function () {
 	};
 
 	self.setList = function () {
+		self.popular = false;
+		self.newest = false;
+		self.list = true;
 		selectedClass();
 		$('#project-list-radio').prop('checked', true);
 	};
@@ -55,4 +81,4 @@ app.controller('hpCtrl', function () {
 
 
 
-});
+}]);

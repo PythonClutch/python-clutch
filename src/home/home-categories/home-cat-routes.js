@@ -21,6 +21,11 @@ app.config(['$routeProvider', function ($routeProvider) {
           return groupServices.listCats();
         }
       ],
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToCat: ['homeFactory',
         function(homeFactory) {
           homeFactory.setCategories();

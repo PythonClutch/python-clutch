@@ -250,7 +250,7 @@ input, textarea {
   color: white; }
 
 .home-project-search-holder-div {
-  width: 49.903%;
+  width: 89.06%;
   height: 41px;
   position: relative; }
 
@@ -259,6 +259,8 @@ input, textarea {
   height: 100%; }
 
 .home-project-search-div {
+  width: 55.34%;
+  margin: 0 auto;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -274,13 +276,10 @@ input, textarea {
 
 .home-project-i-div {
   height: 41px;
-  width: 5.51%;
-  position: relative;
+  width: 10.94%;
   background: #acabab; }
   .home-project-i-div i {
-    position: absolute;
-    right: 40%;
-    top: 10px;
+    margin-top: 10px;
     color: #e1e1e1;
     font-size: 20px; }
 
@@ -389,6 +388,7 @@ input, textarea {
   font-size: 20px; }
 
 .pagination li {
+  z-index: 8;
   margin: 0 1px;
   height: 35px;
   width: 48px;
@@ -396,7 +396,8 @@ input, textarea {
   font-weight: 700;
   font-size: 20px;
   padding-top: 13px;
-  color: black; }
+  color: black;
+  cursor: pointer; }
   .pagination li a i.fa {
     font-size: 18px; }
   .pagination li.active {
@@ -414,7 +415,8 @@ li.number-li a {
 .home-project-li {
   width: 100%;
   background: #e1e1e1;
-  margin: 13px auto; }
+  margin: 13px auto;
+  z-index: 5; }
 
 .home-project-li a {
   color: #12897D; }
@@ -448,10 +450,28 @@ li.number-li a {
 .home-project-basic-info {
   height: 79px; }
 
-.home-project-basic-info-icon {
-  margin-top: 28px; }
-  .home-project-basic-info-icon i {
+div.home-project-basic-info-icon, .home-project-basic-info-icon {
+  margin-top: 28px;
+  color: black; }
+  div.home-project-basic-info-icon i, .home-project-basic-info-icon i {
     color: #12897D; }
+
+.home-project-basic-info-like {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
+
+div.home-project-basic-info-icon .fa {
+  cursor: pointer; }
 
 .home-project-basic-info-comment i {
   margin-top: -1px; }
@@ -496,11 +516,12 @@ li.number-li a {
 
 .home-project-details-div {
   padding-bottom: 1px;
-  opacity: 0;
+  visibility: hidden;
   height: 0;
   background: transparent;
   width: 97.38%;
-  margin: 0 auto; }
+  margin: 0 auto;
+  z-index: 1; }
 
 .home-project-content-p {
   font-size: 12px;
@@ -561,7 +582,8 @@ li.number-li a {
 .home-project-details {
   background: white;
   margin: 13px auto;
-  padding: 28px 20px 28px; }
+  padding: 28px 20px 28px;
+  z-index: 1; }
 
 .home-project-header-top {
   display: -webkit-flex;
@@ -650,7 +672,8 @@ li.number-li a {
   height: 27px;
   color: #12897D;
   font-size: 22px;
-  padding-top: 28px; }
+  padding-top: 28px;
+  z-index: -4; }
 
 .home-project-links-div-sizer {
   width: 100%;
@@ -711,7 +734,7 @@ li.number-li a {
   cursor: pointer; }
 
 .names-details-checkbox:checked ~ .home-project-details-div {
-  opacity: 1;
+  visibility: visible;
   height: 100%; }
 
 .more-info-input {
@@ -1358,6 +1381,13 @@ footer a {
 
 .home-project-basic-info-right-group-details .home-project-basic-info-score {
   margin-right: 25px; }
+
+.group-container .project-header .home-project-basic-info-right .group-page-icon i.fa {
+  cursor: initial;
+  color: black; }
+.group-container .project-header .home-project-basic-info-right .group-page-icon i.fa-calculator {
+  color: #12897D;
+  cursor: pointer; }
 
 .home-group-basic-info-right-category {
   display: -webkit-flex;
