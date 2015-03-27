@@ -25,12 +25,12 @@ app.config(['$routeProvider', function ($routeProvider) {
         }
       ]
     }
-  }
+  };
   
   $routeProvider
   .when('/submit', submitPage)
   .when('/submit/new', submitPage)
-  .when('/submit/pending', pendingPage)
+  .when('/submit/pending', pendingPage);
   // .when('/account/edit', {
   //   templateUrl: 'static/account/account.html',
   //   controller: 'SubmitCtrl',

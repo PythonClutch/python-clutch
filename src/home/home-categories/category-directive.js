@@ -15,8 +15,9 @@
 		 //        }
 		 //      ],
 		 //    },
-		 //    controller: 'CategoryCtrl',
-		 //    controllerAs: 'vm'
+		    // controller: 'CategoryCtrl',
+		    // controllerAs: 'vm',
+
 		};
 	});
 
@@ -30,7 +31,10 @@
 	app.directive('categoryDetails', function () {
 		return {
 			restrict: 'E',
-			templateUrl: 'static/home/home-categories/category-details/category-details.html'
+			templateUrl: 'static/home/home-categories/category-details/category-details.html',
+			// scope: {category: '='},
+			// controller: 'testctrl',
+			// controllerAs: 'vm'
 		};
 	});
 

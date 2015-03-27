@@ -8,7 +8,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     resolve: {
       projects: ['projectServices',
         function(projectServices) {
-          return projectServices.list();
+          return projectServices.listPopular();
         }
       ],
       groups: ['groupServices',
@@ -19,6 +19,11 @@ app.config(['$routeProvider', function ($routeProvider) {
       categories: ['groupServices',
         function(groupServices) {
           return groupServices.listCats();
+        }
+      ],
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
         }
       ],
       setProj: ['homeFactory',

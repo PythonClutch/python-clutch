@@ -1,5 +1,5 @@
-app.factory('userServices', ['$http', '$q', '$log',
-    function($http, $q, $log) {
+app.factory('userServices', ['$http', '$q',
+    function($http, $q) {
         function get(url) {
           return processAjaxPromise($http.get(url));
         }
@@ -11,13 +11,15 @@ app.factory('userServices', ['$http', '$q', '$log',
         }
         function processAjaxPromise(p) {
           return p.then(function(result) {
-            console.log(result.data)
+            console.log(result.data);
             return result.data;
           })
           .catch(function(error) {
-            $log.log(error);
+            console.log(error);
           });
         }
+
+        var currentUser;
 
         return {
             list: function() {
@@ -33,7 +35,8 @@ app.factory('userServices', ['$http', '$q', '$log',
             },
 
             currentUser: function() {
-                return get('/api/v1/user');
+                currentUser = currentUser || get('/api/v1/user');
+                return currentUser;
             },
 
             // login: function (user) {
