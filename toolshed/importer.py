@@ -92,7 +92,7 @@ def release_parse(pypi_result):
 def python_three_check(pypi):
     py3_match_regex = re.compile('Programming Language :: Python :: 3(.*)')
     data = pypi['info']['classifiers']
-    checker = [print("passed") for snippet in data if py3_match_regex.search(snippet) is not None]
+    checker = ["passed" for snippet in data if py3_match_regex.search(snippet) is not None]
     return "passed" in checker
 
 def parse_source(source_url, proj_dict):
@@ -131,6 +131,7 @@ def create_project(pypi_url=None, source_url=None, docs_url=None, mailing_list_u
 
 
     proj_dict['name'] = pypi_info['info']['name']
+    print(proj_dict['name'])
     proj_dict['current_version'] = pypi_info['info']['version']
     proj_dict['website'] = pypi_info['info']['home_page']
     proj_dict['summary'] = pypi_info['info']['summary']
