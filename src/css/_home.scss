@@ -84,7 +84,7 @@
 }
 
 .home-project-search-holder-div {
-	width: 49.903%;
+	width: 89.06%;
 	height: 41px;
 	position: relative;
 }
@@ -95,6 +95,8 @@
 }
 
 .home-project-search-div {
+	width: 55.34%;
+	margin: 0 auto;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -103,13 +105,12 @@
 
 .home-project-i-div {
 	height: 41px;
-	width: 5.51%;
-	position: relative;
+	width: 10.94%;
+	// position: relative;
 	background: $dark-gray;
 	i {
-		position: absolute;
-		right: 40%;
-		top: 10px; 
+		// position: absolute;
+		margin-top: 10px; 
 		color: $light-gray; 
 		font-size: 20px; 
 	}
@@ -211,6 +212,7 @@
 }
 
 .pagination li {
+	z-index: 8; 
 	margin: 0 1px; 
 	height: 35px;
 	width: 48px;
@@ -219,6 +221,7 @@
 	font-size: 20px;
 	padding-top: 13px; 
 	color: black; 
+	cursor: pointer;
 	a i.fa {
 		font-size: 18px; 
 	}  

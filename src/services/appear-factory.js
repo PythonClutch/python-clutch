@@ -15,7 +15,6 @@ app.factory('appearFactory', function () {
 		checkBox: function (target) {
 			target = $(event.target).parent().parent().parent().find('.names-details-checkbox');
 			targetScore = $(event.target).parent().find('.home-project-basic-info-score');
-			console.log(targetScore);
 			if (target.prop('checked')) {
 				target.prop('checked', false);
 				// targetScore.css({

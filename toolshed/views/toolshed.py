@@ -81,7 +81,7 @@ def github_authorized():
                     email = me.data['email'],
                     github_url = me.data['html_url'],
                     avatar_url = me.data['avatar_url'],
-                    public_repos = me.data['public_reposs'])
+                    public_repos = me.data['public_repos'])
         db.session.add(user)
         db.session.commit()
 
