@@ -1,6 +1,9 @@
 from .extensions import db, bcrypt, login_manager
 from marshmallow import Schema, fields, ValidationError
 from flask.ext.login import UserMixin
+from flask.ext.sqlalchemy import BaseQuery
+from sqlalchemy_searchable import SearchQueryMixin
+from sqlalchemy_utils.types import TSVectorType
 import arrow
 
 
@@ -68,7 +71,13 @@ class Like(db.Model):
         return "{} likes {}".format(self.user.github_name, self.project.name)
 
 
+class ProjectQuery(BaseQuery, SearchQueryMixin):
+    pass
+
 class Project(db.Model):
+
+    query_class = ProjectQuery
+    search_vector = db.Column(TSVectorType('name', 'summary'))
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     status = db.Column(db.Boolean)
     name = db.Column(db.String(255), nullable=False, unique=True)
@@ -94,6 +103,7 @@ class Project(db.Model):
     website = db.Column(db.String(400))
     git_url = db.Column(db.String(400))
     pypi_url = db.Column(db.String(400))
+    pypi_stub = db.Column(db.String(100))
     contributors_url = db.Column(db.String(400))
     mailing_list_url = db.Column(db.String(400))
     forks_url = db.Column(db.String(400))
@@ -169,31 +179,36 @@ class ProjectLog(db.Model):
     likes_count = db.Column(db.Integer)
     previous_score = db.Column(db.Float)
 
+
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
 
     @property
-    def stars_difference(self):
-        return Project.query.get(self.project_id) - self.starred_count
-
-    @property
     def forks_difference(self):
-        return Project.query.get(self.project_id) - self.forks_count
+        if self.forks_count:
+            project = Project.query.get(self.project_id)
+            return project.forks_count - self.forks_count
+        return None
 
     @property
     def watchers_difference(self):
-        return Project.query.get(self.project_id) - self.watchers_count
+        if self.watchers_count:
+            project = Project.query.get(self.project_id)
+            return project.watchers_count - self.watchers_count
+        return None
 
     @property
     def download_difference(self):
-        return Project.query.get(self.project_id) - self.downloads_count
-
-    @property
-    def contributor_difference(self):
-        return Project.query.get(self.project_id) - self.contributors_count
+        if self.downloads_count:
+            project = Project.query.get(self.project_id)
+            return project.downloads_count - self.downloads_count
+        return None
 
     @property
     def likes_difference(self):
-        return Project.query.get(self.project_id) - self.contributors_count
+        if self.contributors_count:
+            project = Project.query.get(self.project_id)
+            return project.number_of_likes - self.likes_count
+        return None
 
 
 class Comment(db.Model):
@@ -222,18 +237,36 @@ class Comment(db.Model):
         return "Comment: {}".format(self.text)
 
 
+class GroupQuery(BaseQuery, SearchQueryMixin):
+    pass
+
+
 class Group(db.Model):
+    query_class = GroupQuery
+    search_vector = db.Column(TSVectorType('name'))
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
 
     projects = db.relationship("Project", backref="group", lazy="dynamic", foreign_keys="Project.group_id")
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
 
+    @property
+    def average_score(self):
+        scores = [project.score for project in self.projects]
+        average_score = sum(scores) / len(scores)
+        return average_score
+
     def __repr__(self):
         return "Group: {}".format(self.name)
 
 
+class CategoryQuery(BaseQuery, SearchQueryMixin):
+    pass
+
+
 class Category(db.Model):
+    query_class = CategoryQuery
+    search_vector = db.Column(TSVectorType('name'))
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
 
@@ -289,8 +322,8 @@ class LogSchema(Schema):
         fields = ("id", "project_id", "forks_count", "starred_count",
                   "current_version", "last_commit", "open_issues_count",
                   "downloads_count", "contributors_count", "log_date",
-                  "stars_difference", "forks_difference", "watchers_difference",
-                  "download_difference", "contributor_difference", "likes_difference")
+                   "forks_difference", "watchers_difference",
+                  "download_difference", "likes_difference")
 
 
 class ProjectSchema(Schema):
@@ -307,8 +340,22 @@ class ProjectSchema(Schema):
                   "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
                   "group_id", "category_id", "comments", "user_likes", "age_display",
-                  "last_commit_display", "logs", "date_added", "first_commit_display",
-                  "github_url", "bitbucket_url")
+                  "last_commit_display", "date_added", "first_commit_display",
+                  "github_url", "bitbucket_url", "pypi_stub", "logs",
+                  "score")
+
+
+class UserSchema(Schema):
+    comments = fields.Nested(CommentSchema, many=True)
+    likes = fields.Nested(LikeSchema, many=True)
+    pending_submissions = fields.Nested(ProjectSchema, many=True)
+    completed_submissions = fields.Nested(ProjectSchema, many=True)
+
+    class Meta:
+        fields = ("id", "github_name", "github_url", "email", "comments",
+        "likes", "public_repos", "avatar_url", "linkedin_url", "portfolio_url",
+        "pending_submissions", "completed_submissions")
+
 
 
 class UserSchema(Schema):
@@ -328,7 +375,7 @@ class GroupSchema(Schema):
     projects = fields.Nested(ProjectSchema, many=True)
 
     class Meta:
-        fields = ("id", "name", "projects", "category_id")
+        fields = ("id", "name", "projects", "category_id", "average_score")
 
 
 class CategorySchema(Schema):
@@ -336,3 +383,12 @@ class CategorySchema(Schema):
 
     class Meta:
         fields = ("id", "name", "groups")
+
+
+class SearchSchema(Schema):
+    groups = fields.Nested(GroupSchema, many=True)
+    categories = fields.Nested(CategorySchema, many=True)
+    projects = fields.Nested(ProjectSchema, many=True)
+
+    class Meta:
+        fields = ("query", "groups", "categories", "projects")

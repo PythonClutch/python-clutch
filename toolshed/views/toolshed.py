@@ -28,9 +28,11 @@ def get_github_token(token=None):
 
 
 def current_user():
-    print(github.get('/user'))
-    me = github.get('/user')
-    return me.data['name']
+    if 'github_token' in session:
+        me = github.get('/user')
+        return me.data['name']
+    else:
+        return None
 
 
 def require_login(view):
