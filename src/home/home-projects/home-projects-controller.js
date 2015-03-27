@@ -3,16 +3,17 @@ app.controller('hpCtrl', ['projectServices', function (projectServices) {
 
 	self.byNames = true;
 
-	self.newestProjects;
-
-	self.popularProjects;
+	self.search = function () {
+		self.searchClicked = false;
+		$(event.target).closest('body').find('.home-project-search').val(self.navSearcher);
+	};
 
 	projectServices.listNewest().then(function (result){
 		self.newestProjects = result;
 	});
 
-	projectServices.listPopular().then(function (result){
-		self.popularProjects = result;
+	projectServices.list().then(function (result){
+		self.listProjects = result;
 	});
 
 	self.setGroups = function () {

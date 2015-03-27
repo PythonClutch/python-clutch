@@ -11,7 +11,7 @@ app.factory('userServices', ['$http', '$q',
         }
         function processAjaxPromise(p) {
           return p.then(function(result) {
-            console.log(result.data)
+            console.log(result.data);
             return result.data;
           })
           .catch(function(error) {

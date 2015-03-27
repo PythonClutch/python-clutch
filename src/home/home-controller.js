@@ -4,12 +4,21 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 	var self = this;
 
 	self.categories = categories;
-	console.log(categories);
 
 	self.projects = projects;
 
 	self.groups = groups;
-	console.log(groups);
+
+	self.projectNumber = projects.length;
+
+	self.searchChange = function () {
+		var paragraphAmt = $(event.target).closest('home-names').find('.pagination-div p');
+		if ($(event.target).val() !== '') {
+			paragraphAmt.hide();
+		} else {
+			paragraphAmt.show();
+		}
+	}	
 
 	self.byProjects = homeFactory.byProjects();
 
@@ -23,14 +32,8 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 		self.byProjects = homeFactory.byProjects();
 	};
 
-	// self.toProject = function () {
-	// 	if (window.location.href === 'http://localhost:5000/#/home') {
-	// 		window.location.href = 'http://localhost:5000/#/home' + '/projects';
-	// 	};
-	// }
 
     self.isActive = function (path) {
-      // The default route is a special case.
       return activeRoute.isActive(path);
     };
 

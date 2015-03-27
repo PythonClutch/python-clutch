@@ -11,6 +11,10 @@ app.config(['$routeProvider', function ($routeProvider) {
   });
 }]);
 
+
+// searchChange = function () {
+// 	console.log('changed')
+// }
 app.controller('IndexCtrl', function () {
 	console.log($('.home-project-search'));
 
@@ -50,7 +54,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     resolve: {
       projects: ['projectServices',
         function(projectServices) {
-          return projectServices.list();
+          return projectServices.listPopular();
         }
       ],
       groups: ['groupServices',
@@ -264,6 +268,9 @@ app.config(['$routeProvider', function ($routeProvider) {
   });
 
 }]);
+app.controller('FooterCtrl', function () {
+	
+});
 app.controller('GroupCtrl', ['projects', 'group', 'projectFactory', 'appearFactory', function (projects, group, projectFactory, appearFactory) {
 	var self = this;
 
@@ -319,21 +326,27 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/home/groups/:groupid', routeDefinition);
 
 }]);
-app.controller('FooterCtrl', function () {
-	
-});
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
 	'categories', 'user', 'likeFactory',
 	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories, user, likeFactory) {
 	var self = this;
 
 	self.categories = categories;
-	console.log(categories);
 
 	self.projects = projects;
 
 	self.groups = groups;
-	console.log(groups);
+
+	self.projectNumber = projects.length;
+
+	self.searchChange = function () {
+		var paragraphAmt = $(event.target).closest('home-names').find('.pagination-div p');
+		if ($(event.target).val() !== '') {
+			paragraphAmt.hide();
+		} else {
+			paragraphAmt.show();
+		}
+	}	
 
 	self.byProjects = homeFactory.byProjects();
 
@@ -347,14 +360,8 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 		self.byProjects = homeFactory.byProjects();
 	};
 
-	// self.toProject = function () {
-	// 	if (window.location.href === 'http://localhost:5000/#/home') {
-	// 		window.location.href = 'http://localhost:5000/#/home' + '/projects';
-	// 	};
-	// }
 
     self.isActive = function (path) {
-      // The default route is a special case.
       return activeRoute.isActive(path);
     };
 
@@ -809,7 +816,7 @@ app.factory('projectServices', ['$http', '$log',
       },
 
       removeLike: function (likedId) {
-        return remove('/api/v1/likes/' + likedId)
+        return remove('/api/v1/likes/' + likedId);
       },
 
       addProject: function (project) {
@@ -846,7 +853,7 @@ app.factory('userServices', ['$http', '$q',
         }
         function processAjaxPromise(p) {
           return p.then(function(result) {
-            console.log(result.data)
+            console.log(result.data);
             return result.data;
           })
           .catch(function(error) {
@@ -893,19 +900,17 @@ app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', '
 
 	self.newProject = {};
 
-	self.categories;
-
 	groupServices.listCats().then(function (result) {
 		self.categories = result;
 		console.log(result);
-	})
+	});
 
 	self.createProject = function () {
 		console.log(self.newProject);
 		projectServices.addProject(self.newProject);
 		self.newProject = {};
 		console.log(self.newProject);
-	}
+	};
 
 	self.setNew = function () {
 		self.byNew = true;
@@ -973,12 +978,12 @@ app.config(['$routeProvider', function ($routeProvider) {
         }
       ]
     }
-  }
+  };
   
   $routeProvider
   .when('/submit', submitPage)
   .when('/submit/new', submitPage)
-  .when('/submit/pending', pendingPage)
+  .when('/submit/pending', pendingPage);
   // .when('/account/edit', {
   //   templateUrl: 'static/account/account.html',
   //   controller: 'SubmitCtrl',
@@ -1081,11 +1086,6 @@ app.controller('Error404Ctrl', ['$location', function ($location) {
 })();
 app.controller('CategoryCtrl', ['appearFactory', function (appearFactory) {
 	var self = this;
-
-	self.categories = [{
-			'name': 'peter',
-	
-		}]
 	
 	self.checkBox = function () {
     	appearFactory.checkBox();
@@ -1114,6 +1114,11 @@ app.config(['$routeProvider', function ($routeProvider) {
           return groupServices.listCats();
         }
       ],
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToCat: ['homeFactory',
         function(homeFactory) {
           homeFactory.setCategories();
@@ -1130,16 +1135,17 @@ app.controller('hpCtrl', ['projectServices', function (projectServices) {
 
 	self.byNames = true;
 
-	self.newestProjects;
-
-	self.popularProjects;
+	self.search = function () {
+		self.searchClicked = false;
+		$(event.target).closest('body').find('.home-project-search').val(self.navSearcher);
+	};
 
 	projectServices.listNewest().then(function (result){
 		self.newestProjects = result;
 	});
 
-	projectServices.listPopular().then(function (result){
-		self.popularProjects = result;
+	projectServices.list().then(function (result){
+		self.listProjects = result;
 	});
 
 	self.setGroups = function () {

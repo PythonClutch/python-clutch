@@ -45,7 +45,7 @@ app.factory('projectServices', ['$http', '$log',
       },
 
       removeLike: function (likedId) {
-        return remove('/api/v1/likes/' + likedId)
+        return remove('/api/v1/likes/' + likedId);
       },
 
       addProject: function (project) {
