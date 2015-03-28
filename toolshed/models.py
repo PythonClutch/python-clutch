@@ -323,7 +323,7 @@ class LogSchema(Schema):
                   "current_version", "last_commit", "open_issues_count",
                   "downloads_count", "contributors_count", "log_date",
                    "forks_difference", "watchers_difference",
-                  "download_difference", "likes_difference")
+                  "download_difference", "likes_difference", "previous_score")
 
 
 class ProjectSchema(Schema):

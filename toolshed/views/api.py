@@ -369,15 +369,27 @@ def search():
 @api.route("/projects/<int:id>/graph")
 def graph(id):
     project = Project.query.get_or_404(id)
-    if project.logs:
+    logs = project.logs
+    log_number = len([1 for log in logs])
+    if project.logs and log_number > 1:
         logs = project.logs
-        vega_graph = vincent.Visualization()
-        dates = [log.log_date for log in logs]
-        scores = [log.previous_score for log in logs]
-        index = [num for num in range(len(scores))]
-        data = vincent.Data.from_mult_iters(idx=index, dates=dates, scores=scores)
-        vega_graph.data.append(data)
-        return jsonify({"status": "success", "data": results})
+
+        x = [datetime.combine(log.log_date, datetime.min.time()).timestamp() * 1000
+                 for log in logs]
+        y = [log.previous_score for log in logs]
+
+        multi_iter = {'x': x,
+                     'data': y}
+        line = vincent.Line(multi_iter, iter_idx='x')
+        line.axis_titles(x='Date', y='Score')
+        line.scales['x'] = vincent.Scale(name='x', type='time', range='width',
+                                         domain=vincent.DataRef(data='table', field="data.idx"))
+        line.scales['y'] = vincent.Scale(name='y', range='height', nice=True,
+                                         domain=vincent.DataRef(data='table', field="data.val"))
+        line.data['table'].format = {"type": "json", "parse": {"x": "date"}}
+
+
+        return line.to_json()
     else:
         return failure_response("No history for this project", 404)
 
