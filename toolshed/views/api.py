@@ -244,7 +244,7 @@ def group_projects(id):
 def all_categories():
     categories = Category.query.all()
     if categories:
-        return page_response(all_projects_schema, categories, page, per_page, Category)
+        return success_response(all_categories_schema, categories)
     else:
         return failure_response("There are no categories.", 404)
 
