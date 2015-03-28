@@ -115,7 +115,12 @@ and get back:
 }
 ```
 #### POST to ```/projects/87/comments```
-
+Send: 
+```
+{
+    "text": "Hey, I thought this project was really useful!"
+}
+```
 Get back:
 ```
 {
