@@ -17,6 +17,9 @@ class MyView(ModelView):
         if not self.is_accessible():
             return redirect(url_for('login', next=request.url))
 
+class ProjectsView(MyView):
+    column_list = ("status", "name", "summary", "pypi_url", "git_url", "category")
+
 
 class MyAdminIndexView(AdminIndexView):
     @expose('/')
