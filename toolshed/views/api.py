@@ -339,24 +339,18 @@ def get_project_likes(id):
 
 
 class Search:
-    def __init__(self, query, categories, projects, groups):
+    def __init__(self, query, projects):
         self.query = query
-        self.categories = categories
         self.projects = projects
-        self.groups = groups
 
 
 @api.route("/search")
 def search():
     text = request.args.get('q')
     if text:
-        categories = Category.query.search(text).all()
-        groups = Group.query.search(text).all()
         projects = Project.query.search(text).all()
 
         search = Search(query=text,
-                        categories=categories,
-                        groups=groups,
                         projects=projects)
         return success_response(search_schema, search)
     else:
