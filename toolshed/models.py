@@ -335,6 +335,10 @@ class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
     user_likes = fields.Nested(LikeSchema, many=True)
     logs = fields.Nested(LogSchema, many=True)
+    score = fields.Method("round_score")
+
+    def round_score(self, obj):
+        return round(obj.score, 4)
 
     class Meta:
         fields = ("id", "status", "name", "summary", "forks_count",
@@ -378,6 +382,10 @@ class UserSchema(Schema):
 
 class GroupSchema(Schema):
     projects = fields.Nested(ProjectSchema, many=True)
+    average_score = fields.Method("round_score")
+
+    def round_score(self, obj):
+        return round(obj.average_score, 4)
 
     class Meta:
         fields = ("id", "name", "projects", "category_id", "average_score")
