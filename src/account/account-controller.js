@@ -8,6 +8,10 @@ app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory',
 
 	self.user = user.data;
 
+	self.postEdit = function () {
+		console.log('post');
+	}
+
 	self.setInfo = function () {
 		accountFactory.setInfo();
 		self.byInfo = accountFactory.byInfo();

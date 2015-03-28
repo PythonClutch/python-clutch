@@ -6,6 +6,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     controller: 'SubmitCtrl',
     controllerAs: 'vm',
     resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToNew: ['submitFactory',
         function(submitFactory) {
           submitFactory.setNew();
@@ -19,6 +24,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     controller: 'SubmitCtrl',
     controllerAs: 'vm',
     resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToPen: ['submitFactory',
         function(submitFactory) {
           submitFactory.setPending();

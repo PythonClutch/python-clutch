@@ -9,7 +9,8 @@
 		<input class="submit-button" type="submit" value="Submit">
 	</form>
 
-	<ul class="pending-project-ul" ng-show="!vm.byNew">
+	<h1 class="no-projects-header" ng-show="!vm.byNew && (user.pending_submissions === undefined) ">No Pending Projects</h1>
+	<ul class="pending-project-ul" ng-show="!vm.byNew && !(user.pending_submissions === undefined) ">
 		<li class="pending-project-li">
 <!-- 			<div class="pending-div">
 				<h6>Name:</h6>

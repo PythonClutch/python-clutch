@@ -123,6 +123,10 @@ app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory',
 
 	self.user = user.data;
 
+	self.postEdit = function () {
+		console.log('post');
+	}
+
 	self.setInfo = function () {
 		accountFactory.setInfo();
 		self.byInfo = accountFactory.byInfo();
@@ -365,26 +369,15 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
       return activeRoute.isActive(path);
     };
 
-    self.rotate = appearFactory.rotate();
+    // self.rotate = appearFactory.rotate();
 
-    self.checkBox = function () {
-    	appearFactory.checkBox();
-    	self.rotate = appearFactory.rotate();
-	};
-
-	// self.likeNumber = projects;
-	// console.log(self.likeNumber)
+ //    self.checkBox = function () {
+ //    	appearFactory.checkBox();
+ //    	self.rotate = appearFactory.rotate();
+	// };
 
 	self.like = function (proj, likes) {
-		// self.likeNumber = proj.user_likes;
-		// console.log(self.likeNumber);
-		likeFactory.like(proj, likes, user);
-		// projectServices.like(proj.id).then(function (array) {
-		// 	console.log(array);
-		// 	// console.log(self.likeNumber);
-		// 	// self.likeNumber
-		// })	
-		self.checkLike(proj);
+		likeFactory.like(proj, likes, user);	
 	};
 
 	self.checkLike = function (project) {
@@ -581,11 +574,16 @@ app.factory('appearFactory', function () {
 
 	var target;
 	var targetScore;
-	var rotated = false;
+	var rotated = true;
+	function rotateThis () {
+		rotated = true;
+	}
+	setInterval(rotateThis, 5000);
 
 	return {
 
 		rotate: function () {
+			console.log(rotated);
 			return rotated;
 		},
 
@@ -603,7 +601,7 @@ app.factory('appearFactory', function () {
 				// 	'margin-right': '10px'
 				// });
 			}
-			if (rotated === true) {
+			if (target.prop('checked')) {
 				rotated = false;
 			} else {
 				rotated = true;
@@ -914,12 +912,14 @@ app.factory('userServices', ['$http', '$q',
         };
     }
 ]);
-app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices',
-	function (activeRoute, submitFactory, groupServices, projectServices) {
+app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user',
+	function (activeRoute, submitFactory, groupServices, projectServices, user) {
 
 	var self = this;
 
 	self.byNew = true;
+	self.user = user;
+	console.log(user.pending_submissions);
 
 	self.newProject = {};
 
@@ -982,6 +982,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     controller: 'SubmitCtrl',
     controllerAs: 'vm',
     resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToNew: ['submitFactory',
         function(submitFactory) {
           submitFactory.setNew();
@@ -995,6 +1000,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     controller: 'SubmitCtrl',
     controllerAs: 'vm',
     resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToPen: ['submitFactory',
         function(submitFactory) {
           submitFactory.setPending();
@@ -1153,14 +1163,16 @@ app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
   .when('/home/categories', homePage);
 }]);
-app.controller('hpCtrl', ['projectServices', function (projectServices) {
+app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectServices, appearFactory) {
 	var self = this;
 
 	self.byNames = true;
 
-	self.search = function () {
-		self.searchClicked = false;
-		$(event.target).closest('body').find('.home-project-search').val(self.navSearcher);
+	self.rotate = appearFactory.rotate();
+
+	self.checkBox = function () {
+    	appearFactory.checkBox();
+    	self.rotate = appearFactory.rotate();
 	};
 
 	projectServices.listNewest().then(function (result){
@@ -1258,6 +1270,8 @@ app.controller('hpCtrl', ['projectServices', function (projectServices) {
 	    // },
 	    // controller: 'hnCtrl',
 	    // controllerAs: 'vm'
+	    controller: 'hpCtrl',
+	    controllerAs: 'hp'
 	  };
 	});
 
@@ -1271,7 +1285,9 @@ app.controller('hpCtrl', ['projectServices', function (projectServices) {
 	app.directive('groupDetails', function() {
 	  return {
 	    restrict: 'E',
-	    templateUrl: 'static/home/home-projects/home-groups/group-details.html'
+	    templateUrl: 'static/home/home-projects/home-groups/group-details.html',
+	    controller: 'hpCtrl',
+	    controllerAs: 'hp'
 	  };
 	});	
 

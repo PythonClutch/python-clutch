@@ -1,11 +1,13 @@
-app.controller('hpCtrl', ['projectServices', function (projectServices) {
+app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectServices, appearFactory) {
 	var self = this;
 
 	self.byNames = true;
 
-	self.search = function () {
-		self.searchClicked = false;
-		$(event.target).closest('body').find('.home-project-search').val(self.navSearcher);
+	self.rotate = appearFactory.rotate();
+
+	self.checkBox = function () {
+    	appearFactory.checkBox();
+    	self.rotate = appearFactory.rotate();
 	};
 
 	projectServices.listNewest().then(function (result){

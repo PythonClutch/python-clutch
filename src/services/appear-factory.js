@@ -4,11 +4,16 @@ app.factory('appearFactory', function () {
 
 	var target;
 	var targetScore;
-	var rotated = false;
+	var rotated = true;
+	function rotateThis () {
+		rotated = true;
+	}
+	setInterval(rotateThis, 5000);
 
 	return {
 
 		rotate: function () {
+			console.log(rotated);
 			return rotated;
 		},
 
@@ -26,7 +31,7 @@ app.factory('appearFactory', function () {
 				// 	'margin-right': '10px'
 				// });
 			}
-			if (rotated === true) {
+			if (target.prop('checked')) {
 				rotated = false;
 			} else {
 				rotated = true;

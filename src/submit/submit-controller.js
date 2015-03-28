@@ -1,9 +1,11 @@
-app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices',
-	function (activeRoute, submitFactory, groupServices, projectServices) {
+app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user',
+	function (activeRoute, submitFactory, groupServices, projectServices, user) {
 
 	var self = this;
 
 	self.byNew = true;
+	self.user = user;
+	console.log(user.pending_submissions);
 
 	self.newProject = {};
 
