@@ -39,6 +39,10 @@ app.factory('userServices', ['$http', '$q',
                 return currentUser;
             },
 
+            addUserUrls: function(urls) {
+                return post('/api/v1/user', urls)
+            },
+
             // login: function (user) {
             //     // console.log(user);
             //     return post('/api/login', user)

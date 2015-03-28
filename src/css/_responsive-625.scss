@@ -4,45 +4,47 @@
 // HEADER
 /////////////////////////////////////////////////////////////
 
-.nav-right {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	height: 100px;
-	width: 120px;
-}
 
-#header-checkbox:checked ~ .nav-right a {
-	display: none;
-}
-
-#header-checkbox:checked ~ .nav-right {
-	width: 120px;
-}
-
-.nav-search-bar input {
-	visibility: visible;
-	width: 120px;
-}
 
 /////////////////////////////////////////////////////////////
 // DEFAULTS
 /////////////////////////////////////////////////////////////
 
-.root-content {
-	margin-top: -140px; 
+.container-width {
+	width: 90%;
 }
 
+.push {
+	height: 80%;
+}
 
+/////////////////////////////////////////////////////////////
+// PROJECTS
+/////////////////////////////////////////////////////////////
 
+.pagination-div p {
+	display: none;
+}
 
+.home-filters-div {
+	width: 130%;
+	margin-left: -15%; 
+}
 
+.home-project-content-pypi {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	text-align: left;
+}
 
-
-
-
-
+.home-project-links-div {
+	font-size: 18px;
+	i.fa {
+		font-size: 18px; 
+	} 
+}
 
 
 /////////////// COMMENT /////////////////////////////////////
@@ -58,7 +60,19 @@
 
 
 
-
+// .footer-div {
+// 	display: flex;
+// 	flex-direction: column;
+// 	justify-content: space-between;
+// 	flex-wrap: wrap;
+// 	input {
+// 		margin: 25px auto -10px; 
+// 	}
+// 	.footer-links {
+// 		margin: 24px auto 0;
+// 		width: 65%;
+// 	}
+// }
 
 
 

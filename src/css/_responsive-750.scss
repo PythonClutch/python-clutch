@@ -5,31 +5,118 @@
 /////////////////////////////////////////////////////////////
 
 .nav-right {
-	width: 250px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	height: 100px;
+	width: 120px;
 }
 
-#header-checkbox:checked ~ .nav-right a {
-	display: none;
-}
+// #header-checkbox:checked ~ .nav-right a {
+// 	display: none;
+// }
 
 #header-checkbox:checked ~ .nav-right {
 	width: 120px;
 }
 
+.nav-search-bar input {
+	visibility: visible;
+	width: 120px;
+}
 
+/////////////////////////////////////////////////////////////
+// DEFAULTS
+/////////////////////////////////////////////////////////////
 
+.root-content {
+	margin-top: -140px; 
+}
 
+/////////////////////////////////////////////////////////////
+// PROJECTS
+/////////////////////////////////////////////////////////////
 
+.home-project-basic-info-right {
+	width: 18%;
+	.home-project-basic-info-like,
+	a:nth-child(-n+3) {
+		display: none;
+	}
+}
 
+.home-project-links-div-sizer {
+	height: 22px; 
+}
 
+.home-project-links-div {
+	font-size: 18px;
+	i.fa {
+		font-size: 18px; 
+	} 
+}
 
+.home-project-basic-info-right-group-details {
+	.home-project-basic-info-comment,
+	.home-project-basic-info-check {
+		display: none;
+	}
+}
 
+.home-filters-div {
+	width: 110%;
+	margin-left: -5%; 
+}
 
+.home-project-header-bottom {
+	font-size: 20px; 
+}
 
+.project-header {
+	.home-project-basic-info-right {
+		width: 55%;
+		a:nth-child(-n+3) {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			flex-wrap: wrap;
+		}
+	}
+}
 
+/////////////////////////////////////////////////////////////
+// FOOTER
+/////////////////////////////////////////////////////////////
 
+.footer-div {
+	input {
+		margin-left: 5%; 
+		width: 25%;
+	}
+	.footer-links {
+		margin-right: 5%; 
+	}
+}
 
+/////////////////////////////////////////////////////////////
+// ACCOUNT
+/////////////////////////////////////////////////////////////
 
+.account-info-numbers {
+	font-size: 24px;
+	div:first-of-type {
+		margin-right: 20%; 
+	} 
+}
+
+/////////////////////////////////////////////////////////////
+// GROUP
+/////////////////////////////////////////////////////////////
+
+.home-project-basic-info-group {
+	
+}
 
 /////////////// COMMENT /////////////////////////////////////
 

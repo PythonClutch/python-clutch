@@ -1,16 +1,13 @@
-app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices',
-	function (activeRoute, submitFactory, groupServices, projectServices) {
+app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user',
+	function (activeRoute, submitFactory, groupServices, projectServices, user) {
 
 	var self = this;
 
 	self.byNew = true;
+	self.user = user.data;
+	console.log(user.data.pending_submissions);
 
 	self.newProject = {};
-
-	groupServices.listCats().then(function (result) {
-		self.categories = result;
-		console.log(result);
-	});
 
 	self.createProject = function () {
 		console.log(self.newProject);

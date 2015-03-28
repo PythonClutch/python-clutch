@@ -64,20 +64,38 @@
 
 .pending-div {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: flex-start;
 	flex-wrap: wrap;
+	margin-bottom: 4%; 
+	p {
+		overflow: scroll;
+		height: 18px; 
+	}
 	&:last-of-type {
-		h6 {
+		// h6 {
 			margin-bottom: 2%;	
-		}
+		// }
 	}
 }
 
 .pending-div h6 {
-	width: 120px;
-	margin-bottom: 4%;  
+	width: 200px;
+	 
 	font-size: 14px; 
+}
+
+.pending-div-date {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-row;
+	flex-wrap: wrap;
+	h6 {
+		width: 105px;
+	}
+	p {
+		font-size: 14px; 
+	}
 }
 
 .edit-div-submit {
@@ -87,6 +105,10 @@
 	flex-wrap: wrap;
 	top: 4%;
 	right: 4%;
+}
+
+.no-projects-header {
+	font-size: 32px; 
 }
 
 

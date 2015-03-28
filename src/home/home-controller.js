@@ -37,26 +37,15 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
       return activeRoute.isActive(path);
     };
 
-    self.rotate = appearFactory.rotate();
+    // self.rotate = appearFactory.rotate();
 
-    self.checkBox = function () {
-    	appearFactory.checkBox();
-    	self.rotate = appearFactory.rotate();
-	};
-
-	// self.likeNumber = projects;
-	// console.log(self.likeNumber)
+ //    self.checkBox = function () {
+ //    	appearFactory.checkBox();
+ //    	self.rotate = appearFactory.rotate();
+	// };
 
 	self.like = function (proj, likes) {
-		// self.likeNumber = proj.user_likes;
-		// console.log(self.likeNumber);
-		likeFactory.like(proj, likes, user);
-		// projectServices.like(proj.id).then(function (array) {
-		// 	console.log(array);
-		// 	// console.log(self.likeNumber);
-		// 	// self.likeNumber
-		// })	
-		self.checkLike(proj);
+		likeFactory.like(proj, likes, user);	
 	};
 
 	self.checkLike = function (project) {
