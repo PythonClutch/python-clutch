@@ -9,6 +9,7 @@ from .toolshed import require_login, current_user
 from datetime import datetime
 from ..importer import create_project
 from ..updater import update_projects
+from math import ceil
 
 
 api = Blueprint('api', __name__)
@@ -41,6 +42,31 @@ search_schema = SearchSchema()
 def success_response(schema, data):
     results = schema.dump(data)
     return jsonify({"status": "success", "data": results.data})
+
+
+def page_response(schema, data, page, per_page, table):
+    results = schema.dump(data)
+    total = len(table.query.all())
+    total_pages = ceil(total / per_page)
+    if page == 1:
+        links = {"Next page": str(request.url_root)+"api/v1/projects/" +
+        str(page + 1) + "/" + str(per_page)}
+    elif page < total_pages:
+        links = {
+        "Previous Page": str(request.url_root)+"api/v1/projects/" +
+        str(page - 1) + "/" + str(per_page),
+        "Next page": str(request.url_root)+"api/v1/projects/" +
+        str(page + 1) + "/" + str(per_page)
+        }
+    elif page == total_pages:
+        links = {
+        "Previous Page": str(request.url_root)+"api/v1/projects/" +
+        str(page - 1) + "/" + str(per_page)
+        }
+
+    return jsonify({"status": "success", "data": results.data,
+                    "page": {"current": page, "per_page": per_page,
+                    "total pages": total_pages, "links": links}})
 
 
 def failure_response(reason, code):
@@ -117,11 +143,11 @@ def get_submissions(id):
 
 # project routes
 
-@api.route("/projects")
-def projects():
-    projects = Project.query.order_by(Project.name)
+@api.route("/projects/<int:page>/<int:per_page>")
+def projects(page=1, per_page=20):
+    projects = Project.query.order_by(Project.name).paginate(page, per_page, False).items
     if projects:
-        return success_response(all_projects_schema, projects)
+        return page_response(all_projects_schema, projects, page, per_page, Project)
     else:
         return failure_response("There are no projects.", 404)
 
@@ -130,7 +156,7 @@ def projects():
 def newest_projects():
     projects = Project.query.order_by(Project.date_added)
     if projects:
-        return success_response(all_projects_schema, projects)
+        return page_response(all_projects_schema, projects, page, per_page, Project)
     else:
         return failure_response("There are no projects.", 404)
 
@@ -139,7 +165,7 @@ def newest_projects():
 def popular_projects():
     projects = Project.query.order_by(Project.score)
     if projects:
-        return success_response(all_projects_schema, projects)
+        return return page_response(all_projects_schema, projects, page, per_page, Project)
 
 
 
@@ -198,7 +224,7 @@ def project_logs(id):
 def all_groups():
     groups = Group.query.all()
     if groups:
-        return success_response(all_groups_schema, groups)
+        return page_response(all_projects_schema, groups, page, per_page, Group)
     else:
         return failure_response("There are no groups.", 404)
 
