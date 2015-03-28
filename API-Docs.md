@@ -25,8 +25,8 @@
 | GET         | ```/api/v1/users/<int:id>/likes```               | Get the likes for a user with user_id == id                   |
 | GET         | ```/api/v1/projects/<int:id>/likes```            | Get the likes for a project with project_id == id             |
 | POST        | ```/api/v1/projects```                           | Submit a new project                                          |
-| GET         | ```/api/v1/search?q="<word>"```                  | Search database for any projects, categories, or groups, and  |
-|             |                                                  | returns them all.                                             |
+| GET         | ```/api/v1/search?q="<word>"```                  | Search database for any projects, categories, or groups, and returns them all. |
+| GET         | ```/api/v1/projects/<int:id>/graph```            | Get a Vega object for a project's score graph               |
 
 ## Example usage
 
