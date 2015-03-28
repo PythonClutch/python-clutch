@@ -3,6 +3,7 @@
 | HTTP Method | URL                                              |  Action                                                       |
 |-------------|--------------------------------------------------|---------------------------------------------------------------|
 | GET         | ```/api/v1/user```                               | Get the current user                                          |
+| GET         | ```/api/v1/user/pending_submissions```           | Get the current user's pending submissions                    |
 | GET         | ```/api/v1/users```                              | Get a list of all users                                       |
 | GET         | ```/api/v1/users/<int:id>```                     | Get user with user_id == id                                   |
 | GET         | ```/api/v1/users/<int:id>/pending_submissions``` | Get a user's (user_id == id) pending submissions              |
@@ -819,5 +820,125 @@ Get back:
     "query": "\"web\""
   },
   "status": "success"
+}
+```
+
+#### GET ```/projects/6/graph```
+Get back:
+```
+{
+  "axes": [
+    {
+      "scale": "x",
+      "title": "Date",
+      "type": "x"
+    },
+    {
+      "scale": "y",
+      "title": "Score",
+      "type": "y"
+    }
+  ],
+  "data": [
+    {
+      "format": {
+        "parse": {
+          "x": "date"
+        },
+        "type": "json"
+      },
+      "name": "table",
+      "values": [
+        {
+          "col": "data",
+          "idx": 1427428800000.0,
+          "val": 0.20317241291064
+        },
+        {
+          "col": "data",
+          "idx": 1427428800000.0,
+          "val": 0.20317241291064
+        },
+        {
+          "col": "data",
+          "idx": 1427515200000.0,
+          "val": 0.301870917288644
+        }
+      ]
+    }
+  ],
+  "height": 500,
+  "legends": [],
+  "marks": [
+    {
+      "from": {
+        "data": "table",
+        "transform": [
+          {
+            "keys": [
+              "data.col"
+            ],
+            "type": "facet"
+          }
+        ]
+      },
+      "marks": [
+        {
+          "properties": {
+            "enter": {
+              "stroke": {
+                "field": "data.col",
+                "scale": "color"
+              },
+              "strokeWidth": {
+                "value": 2
+              },
+              "x": {
+                "field": "data.idx",
+                "scale": "x"
+              },
+              "y": {
+                "field": "data.val",
+                "scale": "y"
+              }
+            }
+          },
+          "type": "line"
+        }
+      ],
+      "type": "group"
+    }
+  ],
+  "padding": "auto",
+  "scales": [
+    {
+      "domain": {
+        "data": "table",
+        "field": "data.idx"
+      },
+      "name": "x",
+      "range": "width",
+      "type": "time"
+    },
+    {
+      "domain": {
+        "data": "table",
+        "field": "data.val"
+      },
+      "name": "y",
+      "nice": true,
+      "range": "height"
+    },
+    {
+      "domain": {
+        "data": "table",
+        "field": "data.col"
+      },
+      "name": "color",
+      "range": "category20",
+      "type": "ordinal"
+    }
+  ],
+  "width": 960
 }
 ```
