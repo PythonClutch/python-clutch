@@ -389,7 +389,7 @@ def graph(id):
         line.data['table'].format = {"type": "json", "parse": {"x": "date"}}
 
 
-        return line.to_json()
+        return jsonify({"status": "success", "data": line.grammar()})
     else:
         return failure_response("No history for this project", 404)
 
