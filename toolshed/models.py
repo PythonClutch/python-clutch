@@ -253,8 +253,11 @@ class Group(db.Model):
     @property
     def average_score(self):
         scores = [project.score for project in self.projects]
-        average_score = sum(scores) / len(scores)
-        return average_score
+        if scores:
+            average_score = sum(scores) / len(scores)
+            return average_score
+        else:
+            return 0
 
     def __repr__(self):
         return "Group: {}".format(self.name)
