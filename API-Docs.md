@@ -3,6 +3,7 @@
 | HTTP Method | URL                                              |  Action                                                       |
 |-------------|--------------------------------------------------|---------------------------------------------------------------|
 | GET         | ```/api/v1/user```                               | Get the current user                                          |
+| GET         | ```/api/v1/user/pending_submissions```           | Get the current user's pending submissions                    |
 | GET         | ```/api/v1/users```                              | Get a list of all users                                       |
 | GET         | ```/api/v1/users/<int:id>```                     | Get user with user_id == id                                   |
 | GET         | ```/api/v1/users/<int:id>/pending_submissions``` | Get a user's (user_id == id) pending submissions              |
