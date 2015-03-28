@@ -323,7 +323,7 @@ class LogSchema(Schema):
                   "current_version", "last_commit", "open_issues_count",
                   "downloads_count", "contributors_count", "log_date",
                    "forks_difference", "watchers_difference",
-                  "download_difference", "likes_difference")
+                  "download_difference", "likes_difference", "release_count")
 
 
 class ProjectSchema(Schema):
@@ -342,7 +342,7 @@ class ProjectSchema(Schema):
                   "group_id", "category_id", "comments", "user_likes", "age_display",
                   "last_commit_display", "date_added", "first_commit_display",
                   "github_url", "bitbucket_url", "pypi_stub", "logs",
-                  "score")
+                  "score", "release_count")
 
 
 class UserSchema(Schema):
