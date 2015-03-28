@@ -290,6 +290,9 @@ input, textarea {
   font-size: 20px;
   color: #acabab; }
 
+div.hfGroup {
+  width: 32%; }
+
 .home-project-search::-webkit-input-placeholder {
   padding: 0 0 6px;
   color: #acabab;
@@ -410,7 +413,10 @@ input, textarea {
     margin: 17px; }
 
 li.number-li a {
-  margin-left: 18px; }
+  text-align: center; }
+  li.number-li a h6 {
+    width: 100%;
+    margin-top: -20px; }
 
 .home-project-li {
   width: 100%;
@@ -1408,6 +1414,9 @@ footer a {
 
 .home-project-details-div-li-cat {
   background: white; }
+
+.hp-filter-list {
+  margin: 0 auto; }
 
 @media screen and (max-width: 751px) {
   .nav-right {

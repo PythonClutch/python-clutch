@@ -81,8 +81,8 @@ app.config(['$routeProvider', function ($routeProvider) {
   };
 
   $routeProvider
-  .when('/', homePage)
-  .when('/home', homePage)
+  // .when('/', homePage)
+  // .when('/home', homePage)
   .when('/home/projects', homePage)
   .when('/submit', {
     templateUrl: 'static/submit/submit.html',
@@ -1119,6 +1119,8 @@ app.controller('Error404Ctrl', ['$location', function ($location) {
 })();
 app.controller('CategoryCtrl', ['appearFactory', function (appearFactory) {
 	var self = this;
+
+	self.rotate = appearFactory.rotate();
 	
 	self.checkBox = function () {
     	appearFactory.checkBox();
@@ -1161,6 +1163,8 @@ app.config(['$routeProvider', function ($routeProvider) {
   };
 
   $routeProvider
+  .when('/', homePage)
+  .when('/home', homePage)
   .when('/home/categories', homePage);
 }]);
 app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectServices, appearFactory) {

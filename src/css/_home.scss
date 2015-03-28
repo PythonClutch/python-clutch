@@ -124,6 +124,10 @@
 	color: $dark-gray;  
 }
 
+div.hfGroup {
+	width: 32%;
+}
+
 /////////// SEARCH BAR PLACEHOLDER ////////////////////////////////
 
 .home-project-search::-webkit-input-placeholder {
@@ -240,7 +244,11 @@
 }
 
 li.number-li a {
-	margin-left: 18px; 
+	text-align: center;
+	h6 {
+		width: 100%;
+		margin-top: -20px;
+	}
 }
 
 

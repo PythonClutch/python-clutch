@@ -35,8 +35,8 @@ app.config(['$routeProvider', function ($routeProvider) {
   };
 
   $routeProvider
-  .when('/', homePage)
-  .when('/home', homePage)
+  // .when('/', homePage)
+  // .when('/home', homePage)
   .when('/home/projects', homePage)
   .when('/submit', {
     templateUrl: 'static/submit/submit.html',
