@@ -6,7 +6,7 @@ from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 from toolshed.models import AdminAccount, Project
-from toolshed.updater import update_projects, update_projects_score
+from toolshed.updater import update_projects, update_projects_score, log_project
 from toolshed import create_app, db
 from toolshed.importer import create_project
 
@@ -62,6 +62,9 @@ def update():
 @manager.command
 def update_score():
     projects = Project.query.all()
+    for project in projects:
+        log_project(project)
+
     update_projects_score(projects)
     return "Scores updated."
 
