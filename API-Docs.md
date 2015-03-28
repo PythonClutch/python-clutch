@@ -114,6 +114,24 @@ and get back:
     "status": "success"
 }
 ```
+#### POST to ```/projects/87/comments```
+
+Get back:
+```
+{
+  "data": {
+    "created_display": "just now",
+    "id": 1,
+    "project_id": 87,
+    "text": "Hey, I thought this project was really useful!",
+    "user_avatar": "https://avatars.githubusercontent.com/u/10367555?v=3",
+    "user_id": 1,
+    "user_name": "Gordon Fierce"
+  },
+  "status": "success"
+}
+```
+
 
 #### GET to ```/search?q="web"```
 ```
