@@ -6,7 +6,7 @@
 			<div class="home-project-basic-info-icon home-project-basic-info-like"><i ng-click="vm.like(project, project.user_likes)" ng-class="{ 'fa-heart' : vm.checkLike(project), 'fa-heart-o' : !vm.checkLike(project) }" class="fa"></i><p>{{project.user_likes.length || 0}}</p></div>
 			<a href="#/home/projects/{{project.id}}"><div class="home-project-basic-info-icon home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{project.comments.length || 0}}</div></a>
 			<a href="{{project.pypi_url}}"><div class="home-project-basic-info-icon home-project-basic-info-check"><i ng-class="{ 'fa-check-square-o' : project.python_three_compatible, 'fa-square-o' : !project.python_three_compatible }" class="fa"></i><p>Py3</p></div></a>
-			<div class="home-project-basic-info-icon home-project-basic-info-score"><i class="fa fa-calculator"></i></i>##</div>
+			<div class="home-project-basic-info-icon home-project-basic-info-score"><i class="fa fa-calculator"></i></i>{{project.score}}</div>
 			<i ng-class="{'fa-times' : !hp.rotate, 'fa-plus': hp.rotate}" ng-click="hp.checkBox()" class="home-project-basic-info-icon home-project-basic-info-plus fa"></i>
 		</div>
 	</div>
