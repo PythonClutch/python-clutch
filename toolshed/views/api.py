@@ -59,6 +59,22 @@ def get_user():
     else:
         return failure_response("User not logged in", 401)
 
+
+@api.route('/user/pending_submissions')
+def get_user_pending():
+    name = current_user()
+    if name:
+        user = User.query.filter_by(github_name=name).first()
+        if user.submissions:
+            pending = Project.query.filter_by(submitted_by_id=user.id).filter_by(status=False).all()
+            return success_response(all_projects_schema, pending)
+        else:
+            return failure_response("No pending submissions.", 404)
+    else:
+        return failure_response("User not logged in", 401)
+
+
+
 @api.route('/user', methods=["POST"])
 def update_user():
     name = current_user()
