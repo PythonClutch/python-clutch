@@ -44,4 +44,4 @@ Flask-Script
 arrow
 
 #Graph
-vincent==0.4.4
+git+https://github.com/gordonfierce/vincent
