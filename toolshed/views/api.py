@@ -213,7 +213,7 @@ def project_logs(id):
 
 @api.route("/groups")
 def all_groups():
-    groups = Group.query.all()
+    groups = Group.query.order_by(Group.name).all()
     if groups:
         return success_response(all_groups_schema, groups)
     else:
@@ -233,7 +233,7 @@ def group_projects(id):
 
 @api.route("/categories")
 def all_categories():
-    categories = Category.query.all()
+    categories = Category.query.order_by(Category.name).all()
     if categories:
         return success_response(all_categories_schema, categories)
     else:
