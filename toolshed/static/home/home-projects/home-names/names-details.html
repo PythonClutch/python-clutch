@@ -71,7 +71,7 @@
 				<div class="home-project-content-sizer">
 					<div class="home-project-content-div">
 						<h6 class="home-project-content-header"><b>{{project.watchers_count}}</b> Watchers</h6>
-						<h6 class="home-project-content-header"><b>High</b> Developer Activity</h6>
+<!-- 						<h6 class="home-project-content-header"><b>High</b> Developer Activity</h6> -->
 						<h6 ng-show="!project.bitbucket_url" class="home-project-content-header"><b>{{project.contributors_count}}</b> Contributors</h6>
 					</div>
 					<div class="home-project-content-div home-project-content-div-gh">
@@ -80,7 +80,7 @@
 					</div>
 					<div class="home-project-content-div home-project-content-div-gh">
 						<h6 class="home-project-content-header">First commit:</h6>
-						<p class="home-project-content-p">{{project.first_commit}}</p>
+						<p class="home-project-content-p">{{project.first_commit_display}}</p>
 					</div>
 				</div>
 			</div>
