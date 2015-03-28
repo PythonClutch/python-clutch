@@ -827,118 +827,121 @@ Get back:
 Get back:
 ```
 {
-  "axes": [
-    {
-      "scale": "x",
-      "title": "Date",
-      "type": "x"
-    },
-    {
-      "scale": "y",
-      "title": "Score",
-      "type": "y"
-    }
-  ],
-  "data": [
-    {
-      "format": {
-        "parse": {
-          "x": "date"
-        },
-        "type": "json"
+  "data": {
+    "axes": [
+      {
+        "scale": "x",
+        "title": "Date",
+        "type": "x"
       },
-      "name": "table",
-      "values": [
-        {
-          "col": "data",
-          "idx": 1427428800000.0,
-          "val": 0.20317241291064
+      {
+        "scale": "y",
+        "title": "Score",
+        "type": "y"
+      }
+    ],
+    "data": [
+      {
+        "format": {
+          "parse": {
+            "x": "date"
+          },
+          "type": "json"
         },
-        {
-          "col": "data",
-          "idx": 1427428800000.0,
-          "val": 0.20317241291064
-        },
-        {
-          "col": "data",
-          "idx": 1427515200000.0,
-          "val": 0.301870917288644
-        }
-      ]
-    }
-  ],
-  "height": 500,
-  "legends": [],
-  "marks": [
-    {
-      "from": {
-        "data": "table",
-        "transform": [
+        "name": "table",
+        "values": [
           {
-            "keys": [
-              "data.col"
-            ],
-            "type": "facet"
+            "col": "data",
+            "idx": 1427428800000.0,
+            "val": 0.20317241291064
+          },
+          {
+            "col": "data",
+            "idx": 1427428800000.0,
+            "val": 0.20317241291064
+          },
+          {
+            "col": "data",
+            "idx": 1427515200000.0,
+            "val": 0.301870917288644
           }
         ]
-      },
-      "marks": [
-        {
-          "properties": {
-            "enter": {
-              "stroke": {
-                "field": "data.col",
-                "scale": "color"
-              },
-              "strokeWidth": {
-                "value": 2
-              },
-              "x": {
-                "field": "data.idx",
-                "scale": "x"
-              },
-              "y": {
-                "field": "data.val",
-                "scale": "y"
-              }
+      }
+    ],
+    "height": 500,
+    "legends": [],
+    "marks": [
+      {
+        "from": {
+          "data": "table",
+          "transform": [
+            {
+              "keys": [
+                "data.col"
+              ],
+              "type": "facet"
             }
-          },
-          "type": "line"
-        }
-      ],
-      "type": "group"
-    }
-  ],
-  "padding": "auto",
-  "scales": [
-    {
-      "domain": {
-        "data": "table",
-        "field": "data.idx"
+          ]
+        },
+        "marks": [
+          {
+            "properties": {
+              "enter": {
+                "stroke": {
+                  "field": "data.col",
+                  "scale": "color"
+                },
+                "strokeWidth": {
+                  "value": 2
+                },
+                "x": {
+                  "field": "data.idx",
+                  "scale": "x"
+                },
+                "y": {
+                  "field": "data.val",
+                  "scale": "y"
+                }
+              }
+            },
+            "type": "line"
+          }
+        ],
+        "type": "group"
+      }
+    ],
+    "padding": "auto",
+    "scales": [
+      {
+        "domain": {
+          "data": "table",
+          "field": "data.idx"
+        },
+        "name": "x",
+        "range": "width",
+        "type": "time"
       },
-      "name": "x",
-      "range": "width",
-      "type": "time"
-    },
-    {
-      "domain": {
-        "data": "table",
-        "field": "data.val"
+      {
+        "domain": {
+          "data": "table",
+          "field": "data.val"
+        },
+        "name": "y",
+        "nice": true,
+        "range": "height"
       },
-      "name": "y",
-      "nice": true,
-      "range": "height"
-    },
-    {
-      "domain": {
-        "data": "table",
-        "field": "data.col"
-      },
-      "name": "color",
-      "range": "category20",
-      "type": "ordinal"
-    }
-  ],
-  "width": 960
+      {
+        "domain": {
+          "data": "table",
+          "field": "data.col"
+        },
+        "name": "color",
+        "range": "category20",
+        "type": "ordinal"
+      }
+    ],
+    "width": 960
+  },
+  "status": "success"
 }
 ```
