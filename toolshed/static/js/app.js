@@ -113,8 +113,8 @@ $(function () {
 		console.log('hey')
 	};
 });
-app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory', 'projectFactory', 'user',
-	function (activeRoute, accountFactory, appearFactory, projectFactory, user) {
+app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory', 'projectFactory', 'user', 'userServices',
+	function (activeRoute, accountFactory, appearFactory, projectFactory, user, userServices) {
 	var self = this;
 
 	self.byInfo = accountFactory.byInfo();
@@ -123,8 +123,13 @@ app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory',
 
 	self.user = user.data;
 
+	self.accountUrls = {};
+
 	self.postEdit = function () {
 		console.log('post');
+		console.log(self.accountUrls);
+		userServices.addUserUrls(self.accountUrls);
+		self.accountUrls = {};
 	}
 
 	self.setInfo = function () {
@@ -583,7 +588,6 @@ app.factory('appearFactory', function () {
 	return {
 
 		rotate: function () {
-			console.log(rotated);
 			return rotated;
 		},
 
@@ -635,6 +639,9 @@ app.factory('groupServices', ['$http', '$log',
       });
     }
 
+    var groups;
+    var categories;
+
     return {
 
       list: function () {
@@ -646,11 +653,13 @@ app.factory('groupServices', ['$http', '$log',
       },
 
       listGroups: function () {
-        return get('/api/v1/groups')
+        groups = groups || get('/api/v1/groups');
+        return groups;
       },
 
       listCats: function () {
-        return get('/api/v1/categories')
+        categories = categories || get('/api/v1/categories');
+        return categories;
       }
 
     };
@@ -814,18 +823,25 @@ app.factory('projectServices', ['$http', '$log',
       });
     }
 
+    var projects;
+    var projectsNewest;
+    var projectsPopular;
+
     return {
 
       list: function () {
-        return get('/api/v1/projects');
+        projects = projects || get('/api/v1/projects');
+        return projects;
       },
 
       listNewest: function () {
-        return get('/api/v1/projects/newest');
+        projectsNewest = projectsNewest || get('/api/v1/projects/newest');
+        return projectsNewest;
       },
 
       listPopular: function () {
-        return get('/api/v1/projects/popular');
+        projectsPopular = projectsPopular || get('/api/v1/projects/popular');
+        return projectsPopular;
       },
 
       getByProjectId: function(projectId) {
@@ -902,6 +918,10 @@ app.factory('userServices', ['$http', '$q',
                 return currentUser;
             },
 
+            addUserUrls: function(urls) {
+                return post('/api/v1/user', urls)
+            },
+
             // login: function (user) {
             //     // console.log(user);
             //     return post('/api/login', user)
@@ -918,15 +938,10 @@ app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', '
 	var self = this;
 
 	self.byNew = true;
-	self.user = user;
-	console.log(user.pending_submissions);
+	self.user = user.data;
+	console.log(user.data.pending_submissions);
 
 	self.newProject = {};
-
-	groupServices.listCats().then(function (result) {
-		self.categories = result;
-		console.log(result);
-	});
 
 	self.createProject = function () {
 		console.log(self.newProject);

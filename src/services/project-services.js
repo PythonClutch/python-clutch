@@ -22,18 +22,25 @@ app.factory('projectServices', ['$http', '$log',
       });
     }
 
+    var projects;
+    var projectsNewest;
+    var projectsPopular;
+
     return {
 
       list: function () {
-        return get('/api/v1/projects');
+        projects = projects || get('/api/v1/projects');
+        return projects;
       },
 
       listNewest: function () {
-        return get('/api/v1/projects/newest');
+        projectsNewest = projectsNewest || get('/api/v1/projects/newest');
+        return projectsNewest;
       },
 
       listPopular: function () {
-        return get('/api/v1/projects/popular');
+        projectsPopular = projectsPopular || get('/api/v1/projects/popular');
+        return projectsPopular;
       },
 
       getByProjectId: function(projectId) {

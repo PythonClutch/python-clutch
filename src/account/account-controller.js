@@ -1,5 +1,5 @@
-app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory', 'projectFactory', 'user',
-	function (activeRoute, accountFactory, appearFactory, projectFactory, user) {
+app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory', 'projectFactory', 'user', 'userServices',
+	function (activeRoute, accountFactory, appearFactory, projectFactory, user, userServices) {
 	var self = this;
 
 	self.byInfo = accountFactory.byInfo();
@@ -8,8 +8,13 @@ app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory',
 
 	self.user = user.data;
 
+	self.accountUrls = {};
+
 	self.postEdit = function () {
 		console.log('post');
+		console.log(self.accountUrls);
+		userServices.addUserUrls(self.accountUrls);
+		self.accountUrls = {};
 	}
 
 	self.setInfo = function () {

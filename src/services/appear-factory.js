@@ -13,7 +13,6 @@ app.factory('appearFactory', function () {
 	return {
 
 		rotate: function () {
-			console.log(rotated);
 			return rotated;
 		},
 
