@@ -42,3 +42,6 @@ Flask-Script
 
 # Time Management
 arrow
+
+#Graph
+vincent==0.4.4
