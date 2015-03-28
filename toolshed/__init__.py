@@ -3,9 +3,10 @@ from flask import Flask, render_template
 from . import models
 from .extensions import db, migrate, config, oauth, assets, login_manager, bcrypt
 from .views.toolshed import toolshed
-from .views.toolshed_admin import toolshed_admin, MyAdminIndexView, MyView
+from .views.toolshed_admin import toolshed_admin, MyAdminIndexView, MyView, ProjectView
 from .views.api import api
 from flask_admin import Admin
+
 
 
 SQLALCHEMY_DATABASE_URI = "postgres://localhost/toolshed"

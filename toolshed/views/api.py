@@ -46,26 +46,40 @@ def success_response(schema, data):
 
 def page_response(schema, data, page, per_page, table):
     results = schema.dump(data)
-    total = len(table.query.all())
+    total = len(table.query.filter(Project.status=="True").all())
     total_pages = ceil(total / per_page)
-    if page == 1:
-        links = {"Next page": str(request.url_root)+"api/v1/projects/" +
-        str(page + 1) + "/" + str(per_page)}
-    elif page < total_pages:
+    first_page = 1
+    if page == first_page and total_pages > first_page:
         links = {
-        "Previous Page": str(request.url_root)+"api/v1/projects/" +
-        str(page - 1) + "/" + str(per_page),
-        "Next page": str(request.url_root)+"api/v1/projects/" +
+        "current page": str(request.url_root)+"api/v1/projects/" +
+        str(page) + "/" + str(per_page),
+        "next page": str(request.url_root)+"api/v1/projects/" +
         str(page + 1) + "/" + str(per_page)
         }
-    elif page == total_pages:
+    elif page < total_pages:
         links = {
-        "Previous Page": str(request.url_root)+"api/v1/projects/" +
-        str(page - 1) + "/" + str(per_page)
+        "previous Page": str(request.url_root)+"api/v1/projects/" +
+        str(page - 1) + "/" + str(per_page),
+        "current page": str(request.url_root)+"api/v1/projects/" +
+        str(page) + "/" + str(per_page),
+        "next page": str(request.url_root)+"api/v1/projects/" +
+        str(page + 1) + "/" + str(per_page)
+        }
+    elif page > first_page:
+        links = {
+        "previous Page": str(request.url_root)+"api/v1/projects/" +
+        str(page - 1) + "/" + str(per_page),
+        "current page url": str(request.url_root)+"api/v1/projects/" +
+        str(page) + "/" + str(per_page)
+        }
+    elif page == first_page and total_pages == first_page:
+        links = {
+            "Current page": str(request.url_root)+"api/v1/projects/" +
+        str(page) + "/" + str(per_page)
         }
 
     return jsonify({"status": "success", "data": results.data,
-                    "page": {"current": page, "per_page": per_page,
+                    "page": {"current page": page, "per_page": per_page,
                     "total pages": total_pages, "links": links}})
 
 
@@ -145,27 +159,27 @@ def get_submissions(id):
 
 @api.route("/projects/<int:page>/<int:per_page>")
 def projects(page=1, per_page=20):
-    projects = Project.query.order_by(Project.name).paginate(page, per_page, False).items
+    projects = Project.query.order_by(Project.name).filter(Project.status=="True").paginate(page, per_page, False).items
     if projects:
         return page_response(all_projects_schema, projects, page, per_page, Project)
     else:
         return failure_response("There are no projects.", 404)
 
 
-@api.route("/projects/newest")
-def newest_projects():
-    projects = Project.query.order_by(Project.date_added)
+@api.route("/projects/newest/<int:page>/<int:per_page>")
+def newest_projects(page=1, per_page=20):
+    projects = Project.query.order_by(Project.date_added).paginate(page, per_page, False).items
     if projects:
         return page_response(all_projects_schema, projects, page, per_page, Project)
     else:
         return failure_response("There are no projects.", 404)
 
 
-@api.route("/projects/popular")
-def popular_projects():
-    projects = Project.query.order_by(Project.score)
+@api.route("/projects/popular/<int:page>/<int:per_page>")
+def popular_projects(page=1, per_page=20):
+    projects = Project.query.order_by(Project.score).paginate(page, per_page, False).items
     if projects:
-        return return page_response(all_projects_schema, projects, page, per_page, Project)
+        return page_response(all_projects_schema, projects, page, per_page, Project)
 
 
 
@@ -220,11 +234,11 @@ def project_logs(id):
 # Group routes
 
 
-@api.route("/groups")
-def all_groups():
-    groups = Group.query.all()
+@api.route("/groups/<int:page>/<int:per_page>")
+def all_groups(page=1, per_page=20):
+    groups = Group.query.order_by(Group.name).paginate(page, per_page, False).items
     if groups:
-        return page_response(all_projects_schema, groups, page, per_page, Group)
+        return page_response(all_groups_schema, groups, page, per_page, Group)
     else:
         return failure_response("There are no groups.", 404)
 

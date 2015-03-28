@@ -4,6 +4,8 @@ from flask_admin.contrib.sqla import ModelView
 from .. import models
 from ..forms import AdminLogin
 from flask.ext.login import login_user, logout_user, login_required, current_user
+from flask_admin.actions import action
+from ..models import Project
 
 
 toolshed_admin = Blueprint("toolshed_admin", __name__)
