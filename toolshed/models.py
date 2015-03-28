@@ -323,7 +323,9 @@ class LogSchema(Schema):
                   "current_version", "last_commit", "open_issues_count",
                   "downloads_count", "contributors_count", "log_date",
                    "forks_difference", "watchers_difference",
-                  "download_difference", "likes_difference", "previous_score")
+                  "download_difference", "likes_difference", "release_count",
+                  "previous_score")
+
 
 
 class ProjectSchema(Schema):
@@ -342,7 +344,20 @@ class ProjectSchema(Schema):
                   "group_id", "category_id", "comments", "user_likes", "age_display",
                   "last_commit_display", "date_added", "first_commit_display",
                   "github_url", "bitbucket_url", "pypi_stub", "logs",
-                  "score")
+                  "score", "release_count")
+
+
+class UserSchema(Schema):
+    comments = fields.Nested(CommentSchema, many=True)
+    likes = fields.Nested(LikeSchema, many=True)
+    pending_submissions = fields.Nested(ProjectSchema, many=True)
+    completed_submissions = fields.Nested(ProjectSchema, many=True)
+
+    class Meta:
+        fields = ("id", "github_name", "github_url", "email", "comments",
+        "likes", "public_repos", "avatar_url", "linkedin_url", "portfolio_url",
+        "pending_submissions", "completed_submissions")
+
 
 
 class UserSchema(Schema):

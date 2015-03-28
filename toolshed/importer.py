@@ -12,7 +12,7 @@ github_match_regex = re.compile('((http(s)*://)*github.com/)')
 bitbucket_search_regex = re.compile('bitbucket.org/(.*)')
 bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
 
-pypi_search_regex = re.compile('((http(s)*://)*pypi.python.org/pypi)')
+pypi_search_regex = re.compile('((http(s)*://)*pypi.python.org/pypi/(.*))')
 
 
 gitkey = os.environ['GITKEY']
@@ -36,7 +36,7 @@ def parse_bitbucket_url(bitbucket_url):
 
 
 def parse_pypi_url(pypi_url):
-    pypi_stub = pypi_search_regex.search(pypi_url).groups()[0]
+    pypi_stub = pypi_search_regex.search(pypi_url).groups()[-1]
     if pypi_stub[-1] == "/":
         pypi_stub = pypi_stub[:-1:]
     return pypi_stub
@@ -107,13 +107,14 @@ def parse_source(source_url, proj_dict):
 
 
 def create_project(pypi_url=None, source_url=None, docs_url=None, mailing_list_url=None, github_url=None, bitbucket_url=None):
-    project = Project.query.filter_by(pypi_url=pypi_url).first()
-    if project or not pypi_url:
+    if not pypi_url:
         return None
-    proj_dict = {}
     pypi_api = pypi_url + "/json"
     pypi_info = requests.get(pypi_api).json()
-
+    project = Project.query.filter_by(name=pypi_info['info']['name']).first()
+    if project:
+        return None
+    proj_dict = {}
     if source_url:
         source_url = source_url
     elif github_url:
@@ -126,8 +127,12 @@ def create_project(pypi_url=None, source_url=None, docs_url=None, mailing_list_u
         elif bitbucket_match_regex.search(pypi_info['info']['home_page']):
             source_url = pypi_info['info']['home_page']
 
+
     if source_url:
         proj_dict = parse_source(source_url, proj_dict)
+    else:
+        proj_dict['github_url'] = False
+        proj_dict['bitbucket_url'] = False
 
 
     proj_dict['name'] = pypi_info['info']['name']

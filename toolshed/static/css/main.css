@@ -415,7 +415,8 @@ li.number-li a {
 .home-project-li {
   width: 100%;
   background: #e1e1e1;
-  margin: 13px auto; }
+  margin: 13px auto;
+  z-index: 5; }
 
 .home-project-li a {
   color: #12897D; }
@@ -454,6 +455,20 @@ div.home-project-basic-info-icon, .home-project-basic-info-icon {
   color: black; }
   div.home-project-basic-info-icon i, .home-project-basic-info-icon i {
     color: #12897D; }
+
+.home-project-basic-info-like {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
 
 div.home-project-basic-info-icon .fa {
   cursor: pointer; }
@@ -501,11 +516,12 @@ div.home-project-basic-info-icon .fa {
 
 .home-project-details-div {
   padding-bottom: 1px;
-  opacity: 0;
+  visibility: hidden;
   height: 0;
   background: transparent;
   width: 97.38%;
-  margin: 0 auto; }
+  margin: 0 auto;
+  z-index: 1; }
 
 .home-project-content-p {
   font-size: 12px;
@@ -566,7 +582,8 @@ div.home-project-basic-info-icon .fa {
 .home-project-details {
   background: white;
   margin: 13px auto;
-  padding: 28px 20px 28px; }
+  padding: 28px 20px 28px;
+  z-index: 1; }
 
 .home-project-header-top {
   display: -webkit-flex;
@@ -655,7 +672,8 @@ div.home-project-basic-info-icon .fa {
   height: 27px;
   color: #12897D;
   font-size: 22px;
-  padding-top: 28px; }
+  padding-top: 28px;
+  z-index: -4; }
 
 .home-project-links-div-sizer {
   width: 100%;
@@ -716,7 +734,7 @@ div.home-project-basic-info-icon .fa {
   cursor: pointer; }
 
 .names-details-checkbox:checked ~ .home-project-details-div {
-  opacity: 1;
+  visibility: visible;
   height: 100%; }
 
 .more-info-input {
