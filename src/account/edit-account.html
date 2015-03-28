@@ -1,4 +1,4 @@
-<form class="account-links-edit">
+<form ng-submit="vm.postEdit()" class="account-links-edit">
 	<h2>{{vm.user.github_name}}</h2>
 <!-- 	<div class="edit-img-div">
 		<img class="chosen-avatar" src="#" alt="">
@@ -8,11 +8,11 @@
 	<div class="account-links-div">
 		<div class="account-info-links">
 			<i class="fa fa-linkedin-square"></i>
-			<input type="text">
+			<input ng-model="vm.accountUrls.linkedin_url" type="url">
 		</div>
 		<div class="account-info-links">
 			<i class="fa fa-rss-square"></i>
-			<input type="text">
+			<input ng-model="vm.accountUrls.portfolio_url" type="url">
 		</div>
 	</div>
 	<input class="submit-button" type="submit" value="Submit">

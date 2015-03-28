@@ -12,7 +12,7 @@ github_match_regex = re.compile('((http(s)*://)*github.com/)')
 bitbucket_search_regex = re.compile('bitbucket.org/(.*)')
 bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
 
-pypi_search_regex = re.compile('((http(s)*://)*pypi.python.org/pypi)')
+pypi_search_regex = re.compile('((http(s)*://)*pypi.python.org/pypi/(.*))')
 
 
 gitkey = os.environ['GITKEY']
@@ -36,7 +36,7 @@ def parse_bitbucket_url(bitbucket_url):
 
 
 def parse_pypi_url(pypi_url):
-    pypi_stub = pypi_search_regex.search(pypi_url).groups()[0]
+    pypi_stub = pypi_search_regex.search(pypi_url).groups()[-1]
     if pypi_stub[-1] == "/":
         pypi_stub = pypi_stub[:-1:]
     return pypi_stub

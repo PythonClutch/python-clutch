@@ -1,4 +1,5 @@
 import json
+import vincent
 from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
                       Group, GroupSchema, LikeSchema,ProjectLog, LogSchema,
@@ -8,7 +9,7 @@ from ..extensions import db
 from .toolshed import require_login, current_user
 from datetime import datetime
 from ..importer import create_project
-from ..updater import update_projects
+
 
 
 api = Blueprint('api', __name__)
@@ -355,3 +356,38 @@ def search():
         return success_response(search_schema, search)
     else:
         return failure_response("You must enter a query.", 400)
+
+
+# Magic Visualization Routes
+
+@api.route("/projects/<int:id>/graph")
+def graph(id):
+    project = Project.query.get_or_404(id)
+    logs = project.logs
+    log_number = len([1 for log in logs])
+    if project.logs and log_number > 1:
+        logs = project.logs
+
+        x = [datetime.combine(log.log_date, datetime.min.time()).timestamp() * 1000
+                 for log in logs]
+        y = [log.previous_score for log in logs]
+
+        multi_iter = {'x': x,
+                     'data': y}
+        line = vincent.Line(multi_iter, iter_idx='x')
+        line.axis_titles(x='Date', y='Score')
+        line.scales['x'] = vincent.Scale(name='x', type='time', range='width',
+                                         domain=vincent.DataRef(data='table', field="data.idx"))
+        line.scales['y'] = vincent.Scale(name='y', range='height', nice=True,
+                                         domain=vincent.DataRef(data='table', field="data.val"))
+        line.data['table'].format = {"type": "json", "parse": {"x": "date"}}
+
+
+        return line.to_json()
+    else:
+        return failure_response("No history for this project", 404)
+
+
+
+
+

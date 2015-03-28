@@ -22,6 +22,9 @@ app.factory('groupServices', ['$http', '$log',
       });
     }
 
+    var groups;
+    var categories;
+
     return {
 
       list: function () {
@@ -33,11 +36,13 @@ app.factory('groupServices', ['$http', '$log',
       },
 
       listGroups: function () {
-        return get('/api/v1/groups')
+        groups = groups || get('/api/v1/groups');
+        return groups;
       },
 
       listCats: function () {
-        return get('/api/v1/categories')
+        categories = categories || get('/api/v1/categories');
+        return categories;
       }
 
     };

@@ -81,8 +81,8 @@ app.config(['$routeProvider', function ($routeProvider) {
   };
 
   $routeProvider
-  .when('/', homePage)
-  .when('/home', homePage)
+  // .when('/', homePage)
+  // .when('/home', homePage)
   .when('/home/projects', homePage)
   .when('/submit', {
     templateUrl: 'static/submit/submit.html',
@@ -113,8 +113,8 @@ $(function () {
 		console.log('hey')
 	};
 });
-app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory', 'projectFactory', 'user',
-	function (activeRoute, accountFactory, appearFactory, projectFactory, user) {
+app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory', 'projectFactory', 'user', 'userServices',
+	function (activeRoute, accountFactory, appearFactory, projectFactory, user, userServices) {
 	var self = this;
 
 	self.byInfo = accountFactory.byInfo();
@@ -122,6 +122,15 @@ app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory',
 	self.byEdit = accountFactory.byEdit();
 
 	self.user = user.data;
+
+	self.accountUrls = {};
+
+	self.postEdit = function () {
+		console.log('post');
+		console.log(self.accountUrls);
+		userServices.addUserUrls(self.accountUrls);
+		self.accountUrls = {};
+	}
 
 	self.setInfo = function () {
 		accountFactory.setInfo();
@@ -365,26 +374,15 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
       return activeRoute.isActive(path);
     };
 
-    self.rotate = appearFactory.rotate();
+    // self.rotate = appearFactory.rotate();
 
-    self.checkBox = function () {
-    	appearFactory.checkBox();
-    	self.rotate = appearFactory.rotate();
-	};
-
-	// self.likeNumber = projects;
-	// console.log(self.likeNumber)
+ //    self.checkBox = function () {
+ //    	appearFactory.checkBox();
+ //    	self.rotate = appearFactory.rotate();
+	// };
 
 	self.like = function (proj, likes) {
-		// self.likeNumber = proj.user_likes;
-		// console.log(self.likeNumber);
-		likeFactory.like(proj, likes, user);
-		// projectServices.like(proj.id).then(function (array) {
-		// 	console.log(array);
-		// 	// console.log(self.likeNumber);
-		// 	// self.likeNumber
-		// })	
-		self.checkLike(proj);
+		likeFactory.like(proj, likes, user);	
 	};
 
 	self.checkLike = function (project) {
@@ -581,7 +579,11 @@ app.factory('appearFactory', function () {
 
 	var target;
 	var targetScore;
-	var rotated = false;
+	var rotated = true;
+	function rotateThis () {
+		rotated = true;
+	}
+	setInterval(rotateThis, 5000);
 
 	return {
 
@@ -603,7 +605,7 @@ app.factory('appearFactory', function () {
 				// 	'margin-right': '10px'
 				// });
 			}
-			if (rotated === true) {
+			if (target.prop('checked')) {
 				rotated = false;
 			} else {
 				rotated = true;
@@ -637,6 +639,9 @@ app.factory('groupServices', ['$http', '$log',
       });
     }
 
+    var groups;
+    var categories;
+
     return {
 
       list: function () {
@@ -648,11 +653,13 @@ app.factory('groupServices', ['$http', '$log',
       },
 
       listGroups: function () {
-        return get('/api/v1/groups')
+        groups = groups || get('/api/v1/groups');
+        return groups;
       },
 
       listCats: function () {
-        return get('/api/v1/categories')
+        categories = categories || get('/api/v1/categories');
+        return categories;
       }
 
     };
@@ -816,18 +823,25 @@ app.factory('projectServices', ['$http', '$log',
       });
     }
 
+    var projects;
+    var projectsNewest;
+    var projectsPopular;
+
     return {
 
       list: function () {
-        return get('/api/v1/projects');
+        projects = projects || get('/api/v1/projects');
+        return projects;
       },
 
       listNewest: function () {
-        return get('/api/v1/projects/newest');
+        projectsNewest = projectsNewest || get('/api/v1/projects/newest');
+        return projectsNewest;
       },
 
       listPopular: function () {
-        return get('/api/v1/projects/popular');
+        projectsPopular = projectsPopular || get('/api/v1/projects/popular');
+        return projectsPopular;
       },
 
       getByProjectId: function(projectId) {
@@ -904,6 +918,10 @@ app.factory('userServices', ['$http', '$q',
                 return currentUser;
             },
 
+            addUserUrls: function(urls) {
+                return post('/api/v1/user', urls)
+            },
+
             // login: function (user) {
             //     // console.log(user);
             //     return post('/api/login', user)
@@ -914,19 +932,16 @@ app.factory('userServices', ['$http', '$q',
         };
     }
 ]);
-app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices',
-	function (activeRoute, submitFactory, groupServices, projectServices) {
+app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user',
+	function (activeRoute, submitFactory, groupServices, projectServices, user) {
 
 	var self = this;
 
 	self.byNew = true;
+	self.user = user.data;
+	console.log(user.data.pending_submissions);
 
 	self.newProject = {};
-
-	groupServices.listCats().then(function (result) {
-		self.categories = result;
-		console.log(result);
-	});
 
 	self.createProject = function () {
 		console.log(self.newProject);
@@ -982,6 +997,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     controller: 'SubmitCtrl',
     controllerAs: 'vm',
     resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToNew: ['submitFactory',
         function(submitFactory) {
           submitFactory.setNew();
@@ -995,6 +1015,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     controller: 'SubmitCtrl',
     controllerAs: 'vm',
     resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
       changeToPen: ['submitFactory',
         function(submitFactory) {
           submitFactory.setPending();
@@ -1109,6 +1134,8 @@ app.controller('Error404Ctrl', ['$location', function ($location) {
 })();
 app.controller('CategoryCtrl', ['appearFactory', function (appearFactory) {
 	var self = this;
+
+	self.rotate = appearFactory.rotate();
 	
 	self.checkBox = function () {
     	appearFactory.checkBox();
@@ -1151,16 +1178,20 @@ app.config(['$routeProvider', function ($routeProvider) {
   };
 
   $routeProvider
+  .when('/', homePage)
+  .when('/home', homePage)
   .when('/home/categories', homePage);
 }]);
-app.controller('hpCtrl', ['projectServices', function (projectServices) {
+app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectServices, appearFactory) {
 	var self = this;
 
 	self.byNames = true;
 
-	self.search = function () {
-		self.searchClicked = false;
-		$(event.target).closest('body').find('.home-project-search').val(self.navSearcher);
+	self.rotate = appearFactory.rotate();
+
+	self.checkBox = function () {
+    	appearFactory.checkBox();
+    	self.rotate = appearFactory.rotate();
 	};
 
 	projectServices.listNewest().then(function (result){
@@ -1258,6 +1289,8 @@ app.controller('hpCtrl', ['projectServices', function (projectServices) {
 	    // },
 	    // controller: 'hnCtrl',
 	    // controllerAs: 'vm'
+	    controller: 'hpCtrl',
+	    controllerAs: 'hp'
 	  };
 	});
 
@@ -1271,7 +1304,9 @@ app.controller('hpCtrl', ['projectServices', function (projectServices) {
 	app.directive('groupDetails', function() {
 	  return {
 	    restrict: 'E',
-	    templateUrl: 'static/home/home-projects/home-groups/group-details.html'
+	    templateUrl: 'static/home/home-projects/home-groups/group-details.html',
+	    controller: 'hpCtrl',
+	    controllerAs: 'hp'
 	  };
 	});	
 

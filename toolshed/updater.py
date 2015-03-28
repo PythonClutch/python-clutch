@@ -88,8 +88,8 @@ def log_project(project):
 
 
 def update_projects_score(projects):
-    github_lambda = 0.05
-    pypi_lambda = 0.05
+    github_lambda = 0.005
+    pypi_lambda = 0.005
 
     def raw_github_score(project):
         num_forks = project.forks_count
@@ -125,9 +125,9 @@ def update_projects_score(projects):
             if project.git_url:
                 git_score = raw_github_score(project) / best_github
                 score = score + git_score
-                project.score = score
+                project.score = score / 2
             else:
-                project.score = score
+                project.score = score / 2
         db.session.commit()
     set_scores(projects)
 

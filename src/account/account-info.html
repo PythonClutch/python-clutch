@@ -1,7 +1,7 @@
 <h2>{{vm.user.github_name}}</h2>
 
 <div class="account-links">
-	<img src="" alt="">
+	<img src="{{vm.user.user_avatar}}" alt="">
 	<div class="account-links-div">
 		<div class="account-info-links">
 			<i class="fa fa-github"></i>
@@ -32,7 +32,7 @@
 	</div>
 	<div>
 		<h4>Submitted Resources</h4>
-		<h5>##</h5>
+		<h5>{{vm.user.completed_submissions.length}}</h5>
 	</div>
 
 </div>
