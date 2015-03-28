@@ -3,7 +3,7 @@ from flask import Flask, render_template
 from . import models
 from .extensions import db, migrate, config, oauth, assets, login_manager, bcrypt
 from .views.toolshed import toolshed
-from .views.toolshed_admin import toolshed_admin, MyAdminIndexView, MyView
+from .views.toolshed_admin import toolshed_admin, MyAdminIndexView, MyView, ProjectsView
 from .views.api import api
 from flask_admin import Admin
 
@@ -33,7 +33,7 @@ def create_app():
     login_manager.login_view = 'toolshed_admin.login'
     admin.add_view(MyView(models.User, db.session, category="Account"))
     admin.add_view(MyView(models.AdminAccount, db.session, category="Account"))
-    admin.add_view(MyView(models.Project, db.session, category="Libraries"))
+    admin.add_view(ProjectsView(models.Project, db.session, category="Libraries"))
     admin.add_view(MyView(models.ProjectLog, db.session, category="Libraries"))
     admin.add_view(MyView(models.Category, db.session, category="Libraries"))
     admin.add_view(MyView(models.Comment, db.session, category="Libraries"))
