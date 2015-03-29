@@ -12,7 +12,7 @@ from ..importer import create_project
 from toolshed import mail
 from flask_mail import Message
 from datetime import datetime
-
+from ..updater import score_multiplier
 
 
 
@@ -411,7 +411,7 @@ def graph(id):
         line.scales['x'] = vincent.Scale(name='x', type='time', range='width',
                                          domain=vincent.DataRef(data='table', field="data.idx"))
         line.scales['y'] = vincent.Scale(name='y', range='height', nice=True,
-                                         domain=[0, 1])
+                                         domain=[0, score_multiplier])
         line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
         line.axes['y'].ticks = 3
         line.axes['x'].ticks = 7
@@ -458,7 +458,7 @@ def graph_group(id):
         line.scales['x'] = vincent.Scale(name='x', type='time', range='width',
                                          domain=vincent.DataRef(data='table', field="data.idx"))
         line.scales['y'] = vincent.Scale(name='y', range='height', nice=True,
-                                         domain=[0, 1])
+                                         domain=[0, score_multiplier])
         line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
         line.axes['y'].ticks = 3
         line.axes['x'].ticks = 7
