@@ -5,10 +5,14 @@ from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Group, GroupSchema, LikeSchema,ProjectLog, LogSchema,
                       SearchSchema)
 from flask import Blueprint, jsonify, request
-from ..extensions import db
+from ..extensions import db, mail
 from .toolshed import require_login, current_user
 from datetime import datetime
 from ..importer import create_project
+from toolshed import mail
+from flask_mail import Message
+from datetime import datetime
+
 
 
 
@@ -182,6 +186,12 @@ def make_project():
     project.submitted_by_id = user.id
     user.submissions.append(project)
     db.session.add(project)
+    message = Message("New Submission",
+                      sender="pythonclutch@gmail.com",
+                      recipients=["pythonclutch@gmail.com"])
+    message.body = "Hello, there has been a new project submitted. It is called " + project.name +"" \
+                           " and was submitted by, " + user.github_name + " at " + str(datetime.utcnow()) + "."
+    mail.send(message)
     db.session.commit()
     return success_response(single_project_schema, project)
 
