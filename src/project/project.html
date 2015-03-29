@@ -37,20 +37,20 @@
 			<div class="home-project-details home-project-links">
 				<div class="flex-row home-project-links-div-sizer">
 					<div class="home-project-links-div">
-						<i class="fa fa-link"></i>
-						<a class="link" href="{{vm.project.website}}">Website</a>
+						<i ng-class="{ noLink : vm.project.website === null }" class="fa fa-link"></i>
+						<a ng-class="{ noLink : vm.project.website === null }" class="link" href="{{vm.project.website}}">Website</a>
 					</div>
 					<div class="home-project-links-div">
-						<i class="fa fa-file-o"></i>
-						<a class="link" href="{{vm.project.docs_url}}">PyDocs</a>
+						<i ng-class="{ noLink : vm.project.docs_url === null }" class="fa fa-file-o"></i>
+						<a ng-class="{ noLink : vm.project.docs_url === null }" class="link" href="{{vm.project.docs_url}}">PyDocs</a>
 					</div>
 					<div class="home-project-links-div">
-						<i class="fa fa-code"></i>
-						<a class="link" href="{{vm.project.github_url}}">Source Code</a>
+						<i ng-class="{ noLink : vm.project.github_url === null }" class="fa fa-code"></i>
+						<a ng-class="{ noLink : vm.project.github_url === null }" class="link" href="{{vm.project.github_url}}">Source Code</a>
 					</div>
 					<div class="home-project-links-div">
-						<i class="fa fa-envelope-o"></i>
-						<a class="link" href="{{vm.project.mailing_list_url}}">Mailing List</a>
+						<i ng-class="{ noLink : vm.project.mailing_list_url === null }" class="fa fa-envelope-o"></i>
+						<a ng-class="{ noLink : vm.project.mailing_list_url === null }" class="link" href="{{vm.project.mailing_list_url}}">Mailing List</a>
 					</div>
 				</div>
 			</div>
@@ -70,7 +70,7 @@
 					</div>
 				</div>
 				<div class="home-project-content home-project-content-pypi">
-					<h6 class="home-project-content-header"><b>##</b> Release(s)</h6>
+					<h6 class="home-project-content-header"><b>{{vm.project.release_count}}</b> Release(s)</h6>
 					<h6 class="home-project-content-header"><b>1st</b> Release on date</h6>
 					<h6 class="home-project-content-header"><b ng-show="vm.project.python_three_compatible">Yes</b><b ng-show="!vm.project.python_three_compatible">No</b> Python3 Compatibility</h6>
 				</div>
