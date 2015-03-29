@@ -409,7 +409,7 @@ def graph(id):
         line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
         line.axes['y'].ticks = 3
         line.axes['x'].ticks = 7
-        line.marks['group'].marks[0].properties.enter["interpolate"] = {"value": "monotone"}
+        # line.marks['group'].marks[0].properties.enter["interpolate"] = {"value": "monotone"}
         # marks[0].properties.update.fill.value
 
 
@@ -420,6 +420,49 @@ def graph(id):
         return failure_response("No history for this project", 404)
 
 
+@api.route("/groups/<int:id>/graph")
+def graph_group(id):
+    group = Group.query.get_or_404(id)
+    log_list = [proj.logs.all() for proj in group.projects.all()]
+    scores = []
+    for item in log_list:
+        for log in item:
+            scores.append((log.log_date, log.previous_score))
 
+    date_set = {item[0] for item in scores}
+    avg_scores = []
+    for date in date_set:
+        date_scores = [item[1] for item in scores if item[0] == date]
+        score_avg = sum(date_scores)/len(date_scores)
+        avg_scores.append((date, score_avg))
+
+
+    if len(avg_scores) > 1:
+        avg_scores.sort(key=lambda x: x[0])
+
+        x = [datetime.combine(item[0], datetime.min.time()).timestamp() * 1000
+                 for item in avg_scores]
+        y = [item[1] for item in avg_scores]
+
+        multi_iter = {'x': x,
+                     'data': y}
+        line = vincent.Line(multi_iter, iter_idx='x')
+
+        line.scales['x'] = vincent.Scale(name='x', type='time', range='width',
+                                         domain=vincent.DataRef(data='table', field="data.idx"))
+        line.scales['y'] = vincent.Scale(name='y', range='height', nice=True,
+                                         domain=[0, 1])
+        line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
+        line.axes['y'].ticks = 3
+        line.axes['x'].ticks = 7
+        # line.marks['group'].marks[0].properties.enter["interpolate"] = {"value": "monotone"}
+        # marks[0].properties.update.fill.value
+
+
+
+
+        return jsonify({"status": "success", "data": line.grammar()})
+    else:
+        return failure_response("No history for this group", 404)
 
 
