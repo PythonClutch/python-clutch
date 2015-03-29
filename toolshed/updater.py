@@ -32,6 +32,16 @@ except:
     source_weight = 0.5
 
 
+def update_single_project(project):
+    update_pypi(project)
+    if project.github_url:
+        update_github(project)
+    elif project.bitbucket_url:
+        update_bitbucket(project)
+    return print("Update Complete.")
+
+
+
 def update_projects(projects):
     for project in projects:
         log_project(project)

@@ -28,18 +28,21 @@
 // 	margin: 0 auto;
 // }
 
-.group-container .project-header .home-project-basic-info-right .group-page-icon {
-	i.fa {
-		cursor: initial;
-		color: black;	
+.group-container .project-header .home-project-basic-info-right {
+	width: 14%;
+	.group-page-icon {
+		text-align: right;
+		width: 100%;
+		i.fa {
+			cursor: initial;
+			color: black;	
+		}
+		i.fa-calculator {
+			color: $base-color;
+			cursor: pointer; 
+		} 
 	}
-	i.fa-calculator {
-		color: $base-color;
-		cursor: pointer; 
-	} 
 }
-
-
 
 
 

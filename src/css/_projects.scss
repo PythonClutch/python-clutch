@@ -88,7 +88,7 @@ div.home-project-basic-info-icon .fa {
 }
 
 .home-project-basic-info-right {
-	width: 42%;
+	width: 48%;
 	margin-right: 25px; 
 	font-size: 24px; 
 	position: relative;
@@ -113,7 +113,7 @@ div.home-project-basic-info-icon .fa {
 	background: transparent;
 	width: 97.38%;
 	margin: 0 auto; 
-	z-index: 1;   
+	z-index: 1;  
 }
 
 .home-project-content-p {
@@ -168,12 +168,42 @@ div.home-project-basic-info-icon .fa {
 // THREE BLOCK DETAILS
 /////////////////////////////////////////////////////////////
 
+// .home-project-details {
+// 	// width: 100%;
+// 	background: white; 
+// 	margin: 13px auto;
+// 	padding: 28px 20px 28px; 
+// 	z-index: 1; 
+// 	&:first-of-type {
+// 		margin-top: 0; 
+// 		height: 27px;
+// 		p {
+// 			height: 0;
+// 			font-size: 26px; 
+// 			text-align: left; 
+// 		}
+// 	} 
+// }
+
 .home-project-details {
 	// width: 100%;
 	background: white; 
 	margin: 13px auto;
 	padding: 28px 20px 28px; 
 	z-index: 1; 
+	&:first-of-type {
+		margin-top: 0; 
+	}
+}
+
+.home-project-details-summary {
+	min-height: 27px;
+	p {
+		// height: 0;
+		font-size: 26px; 
+		text-align: left; 
+		// overflow: scroll;
+	}	
 }
 
 .home-project-header-top {
@@ -239,7 +269,6 @@ div.home-project-basic-info-icon .fa {
 /////////////// FIRST BLOCK /////////////////////////////////////
 
 .home-project-links {
-	margin-top: 0; 
 	height: 27px;
 	color: $base-color;
 	font-size: 22px; 

@@ -13,7 +13,7 @@ app.config(['$routeProvider', function ($routeProvider) {
       ],
       groups: ['groupServices',
         function(groupServices) {
-          return groupServices.list();
+          return groupServices.listGroups();
         }
       ],
       categories: ['groupServices',
@@ -35,9 +35,10 @@ app.config(['$routeProvider', function ($routeProvider) {
   };
 
   $routeProvider
-  // .when('/', homePage)
-  // .when('/home', homePage)
+  .when('/', homePage)
+  .when('/home', homePage)
   .when('/home/projects', homePage)
+  // .when('/home/search', homePage)
   .when('/submit', {
     templateUrl: 'static/submit/submit.html',
     controller: 'SubmitCtrl',
