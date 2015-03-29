@@ -185,9 +185,10 @@ div.hfGroup {
 }
 
 .home-project-filter p {
-	margin-top: 4px; 
-	margin-left: 6px;
+	padding-top: 4px; 
+	padding-left: 6px;
 	font-weight: 300;  
+	cursor: pointer;
 }
 
 /////////////////////////////////////////////////////////////
@@ -226,8 +227,9 @@ div.hfGroup {
 	padding-top: 13px; 
 	color: black; 
 	cursor: pointer;
-	a i.fa {
+	i.fa {
 		font-size: 18px; 
+		margin-left: 16px; 
 	}  
 	&.active {
 		background: $base-color; 
@@ -243,11 +245,10 @@ div.hfGroup {
 	}
 }
 
-li.number-li a {
+li.number-li {
 	text-align: center;
 	h6 {
 		width: 100%;
-		margin-top: -20px;
 	}
 }
 

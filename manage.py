@@ -7,7 +7,7 @@ from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 from toolshed.models import AdminAccount, Project
 from toolshed.updater import update_projects, update_projects_score, log_project
-from toolshed import create_app, db
+from toolshed import create_app, db, models
 from toolshed.importer import create_project
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -27,7 +27,7 @@ def make_shell_context():
         in the context of the app
     """
 
-    return dict(app=app, db=db)
+    return dict(app=app, db=db, models=models)
 
 
 @manager.command
