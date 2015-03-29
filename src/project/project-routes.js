@@ -13,11 +13,20 @@ app.config(['$routeProvider', function($routeProvider) {
           function($route, projectServices) {
             var routeParams = $route.current.params;
             return projectServices.getByProjectId(routeParams.projectid);
-          }]
+          }
+        ],
+        graph: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getGraphByProjectId(routeParams.projectid);
+          }
+        ],
       }
     };
 
-    $routeProvider.when('/home/projects/:projectid', routeDefinition);
+    $routeProvider
+    .when('/projects/:projectid', routeDefinition)
+    .when('/home/projects/:projectid', routeDefinition);
 
 }]);
 

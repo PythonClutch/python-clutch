@@ -42,3 +42,5 @@ Flask-Script
 
 # Time Management
 arrow
+
+git+https://github.com/gordonfierce/vincent

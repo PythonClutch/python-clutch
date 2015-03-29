@@ -17,14 +17,14 @@
 	</div>
 
 	<div ng-class="{ hfGroup : !hp.byNames }"  class="home-filters-child home-project-filter">
-		<label for="hp-filter-popular">
+		<label ng-click="hp.setPopular()" for="hp-filter-popular">
 			<input class="project-radio" id="project-popular-radio" name="filter" type="radio" checked />
-			<i ng-click="hp.setPopular()" class="fa fa-dot-circle-o"></i>
+			<i class="fa fa-dot-circle-o"></i>
 			<p>Popular</p>
 		</label>
-		<label ng-show="hp.byNames" for="hp-filter-newest">
+		<label ng-click="hp.setNewest()" ng-show="hp.byNames" for="hp-filter-newest">
 			<input class="project-radio" id="project-newest-radio" name="filter" type="radio">
-			<i ng-click="hp.setNewest()" class="fa fa-circle-o"></i>
+			<i class="fa fa-circle-o"></i>
 			<p>Newest</p>
 		</label>
 	<!-- 	<label for="hp-filter-trending">
@@ -32,9 +32,9 @@
 			<i ng-click="hp.setTrending()" class="fa fa-circle-o"></i>
 			<p>Trending</p>		
 		</label> -->
-		<label for="hp-filter-list">
+		<label ng-click="hp.setList()" for="hp-filter-list">
 			<input class="project-radio" id="project-list-radio" name="filter" type="radio">
-			<i ng-click="hp.setList()" class="fa fa-circle-o"></i>
+			<i class="fa fa-circle-o"></i>
 			<p>List (A-Z)</p>		
 		</label>
 	</div>

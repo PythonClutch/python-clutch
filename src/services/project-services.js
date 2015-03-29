@@ -25,12 +25,17 @@ app.factory('projectServices', ['$http', '$log',
     var projects;
     var projectsNewest;
     var projectsPopular;
+    var searchedProjects;
 
     return {
 
       list: function () {
         projects = projects || get('/api/v1/projects');
         return projects;
+      },
+
+      getGraphByProjectId: function (projectId) {
+        return get('/api/v1/projects/' + projectId + '/graph');
       },
 
       listNewest: function () {
@@ -61,6 +66,11 @@ app.factory('projectServices', ['$http', '$log',
 
       addComment: function (projectId, comment) {
         return post('/api/v1/projects/' + projectId +'/comments', comment);
+      },
+
+      searchProjects: function (word) {
+        console.log(word);
+        return get('/api/v1/search?q="' + word + '"');
       }
 
     };

@@ -253,8 +253,11 @@ class Group(db.Model):
     @property
     def average_score(self):
         scores = [project.score for project in self.projects]
-        average_score = sum(scores) / len(scores)
-        return average_score
+        if scores:
+            average_score = sum(scores) / len(scores)
+            return average_score
+        else:
+            return 0
 
     def __repr__(self):
         return "Group: {}".format(self.name)
@@ -332,6 +335,13 @@ class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
     user_likes = fields.Nested(LikeSchema, many=True)
     logs = fields.Nested(LogSchema, many=True)
+    score = fields.Method("round_score")
+
+    def round_score(self, obj):
+        if obj.score:
+            return round(obj.score, 4)
+        else:
+            return 0
 
     class Meta:
         fields = ("id", "status", "name", "summary", "forks_count",
@@ -375,6 +385,13 @@ class UserSchema(Schema):
 
 class GroupSchema(Schema):
     projects = fields.Nested(ProjectSchema, many=True)
+    average_score = fields.Method("round_score")
+
+    def round_score(self, obj):
+        if obj.average_score:
+            return round(obj.average_score, 4)
+        else:
+            return 0
 
     class Meta:
         fields = ("id", "name", "projects", "category_id", "average_score")
