@@ -339,7 +339,7 @@ class ProjectSchema(Schema):
 
     def round_score(self, obj):
         if obj.score:
-            return round(obj.score, 4)
+            return round(obj.score, 3)
         else:
             return 0
 
@@ -389,7 +389,7 @@ class GroupSchema(Schema):
 
     def round_score(self, obj):
         if obj.average_score:
-            return round(obj.average_score, 4)
+            return round(obj.average_score, 3)
         else:
             return 0
 

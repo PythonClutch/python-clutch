@@ -18,6 +18,16 @@ bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
 gitkey = os.environ['GITKEY']
 auth=(gitkey, 'x-oauth-basic')
 
+
+def update_single_project(project):
+    update_pypi(project)
+    if project.github_url:
+        update_github(project)
+    elif project.bitbucket_url:
+        update_bitbucket(project)
+    return print("Update Complete.")
+
+
 def update_projects(projects):
     for project in projects:
         log_project(project)
