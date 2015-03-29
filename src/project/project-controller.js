@@ -1,9 +1,11 @@
-app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory',
-	function (project, projectFactory, projectServices, user, likeFactory) {
+app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory', 'graph',
+	function (project, projectFactory, projectServices, user, likeFactory, graph) {
 
 	var self = this;
 
 	self.project = project;
+
+	self.graph = graph;
 
 	var pf = projectFactory;
 
@@ -21,12 +23,27 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 		self.ghMoreInfo = pf.byGh();
 	};
 
+	self.comments = project.comments;
+	console.log(self.comments);
+
 	self.comment = {};
+
+	console.log(user);
 	
 	self.addComment = function () {
 		console.log(self.comment);
 		console.log(self.project.id);
 		projectServices.addComment(self.project.id, self.comment);
+		var tempComment = {
+			'created_display': 'seconds ago',
+			'project_id': project.id,
+			'text': self.comment.text,
+			'user_avatar': user.data.avatar_url,
+			'user_id': user.data.id,
+			'user_name': user.data.github_name
+		}
+		self.comments.push(tempComment);
+		console.log(self.comments);
 		self.comment = {};
 	};
 
@@ -37,5 +54,19 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 	self.checkLike = function (project) {
 		return likeFactory.checkLike(project, user);
 	};
+
+	function parse(spec) {
+		vg.parse.spec(spec, function(chart) { 
+			// function graphing (argument) {
+			// 	// body...
+			// }
+			chart({el:".graph"}).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update(); 
+			if (window.innerWidth < 400) {
+				chart({el:".graph"}).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
+			}
+		});
+	}
+	parse(graph);
+
 
 }]);

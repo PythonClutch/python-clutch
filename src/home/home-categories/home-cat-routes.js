@@ -13,7 +13,7 @@ app.config(['$routeProvider', function ($routeProvider) {
       ],
       groups: ['groupServices',
         function(groupServices) {
-          return groupServices.list();
+          return groupServices.listGroups();
         }
       ],
       categories: ['groupServices',
@@ -35,7 +35,6 @@ app.config(['$routeProvider', function ($routeProvider) {
   };
 
   $routeProvider
-  .when('/', homePage)
-  .when('/home', homePage)
+
   .when('/home/categories', homePage);
 }]);

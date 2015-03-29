@@ -11,6 +11,15 @@ app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $lo
 	      }
 	      
 	      return stringUtil.isOnly($location.path(), path);
+	    },
+
+	    startsWith: function (path) {
+	      // The default route is a special case.
+	      if (path === '/') {
+	        return $location.path() === '/';
+	      }
+	      
+	      return stringUtil.startsWith($location.path(), path);
 	    }
 
 	};

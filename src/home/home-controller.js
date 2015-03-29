@@ -1,13 +1,19 @@
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
-	'categories', 'user', 'likeFactory',
-	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories, user, likeFactory) {
+	'categories', 'user', 'likeFactory', 'appearFactory',
+	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories, user, likeFactory, appearFactory) {
 	var self = this;
 
 	self.categories = categories;
 
 	self.projects = projects;
 
+	self.changeTrue = function () {
+		appearFactory.changeTrue();
+	}
+
 	self.groups = groups;
+
+	console.log(categories)
 
 	self.projectNumber = projects.length;
 
@@ -36,6 +42,10 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
     self.isActive = function (path) {
       return activeRoute.isActive(path);
     };
+
+    self.startsWith = function (path) {
+      return activeRoute.startsWith(path);
+    }
 
     // self.rotate = appearFactory.rotate();
 
@@ -66,6 +76,13 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 	self.ghInfo = function () {
 		pf.ghInfo();
 		self.ghMoreInfo = pf.byGh();
+	};
+
+	self.searchClicked = true;
+
+	self.checkSearch = function () {
+		self.searchClicked = false;
+		$(event.target).parent().find('.home-project-search').focus();
 	};
 
 }]);

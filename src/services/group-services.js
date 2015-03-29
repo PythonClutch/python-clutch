@@ -27,10 +27,6 @@ app.factory('groupServices', ['$http', '$log',
 
     return {
 
-      list: function () {
-        return get('/api/v1/groups');
-      },
-
       getByGroupId: function (groupId) {
         return get('/api/v1/groups/' + groupId);
       },

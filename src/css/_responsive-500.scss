@@ -1,0 +1,99 @@
+@media screen and (max-width: 501px) {
+	
+/////////////////////////////////////////////////////////////
+// HEADER
+/////////////////////////////////////////////////////////////
+
+.nav-logo {
+	width: 100%;
+	margin: 45px auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+	h2 {
+		margin-left: 25px; 
+	}
+}
+
+.nav-right {
+	margin: 0 auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	width: 90%;
+	position: absolute;
+	height: 10px;
+	top: 20px;
+	left: 5%;
+}
+
+.nav-search-bar input {
+	visibility: hidden;
+	width: 20px;
+}
+
+/////////////////////////////////////////////////////////////
+// DEFAULTS
+/////////////////////////////////////////////////////////////
+
+.root-content {
+	margin-top: -140px; 
+}
+
+/////////////////////////////////////////////////////////////
+// HOME
+/////////////////////////////////////////////////////////////
+
+#header-checkbox:checked ~ .nav-right {
+	width: 90%;
+}
+
+.home-set-a {
+	padding: 15px 9%;
+}
+
+.home-filters-div {
+	width: 156%;
+	margin-left: -28%; 
+}
+
+/////////////// COMMENT /////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
