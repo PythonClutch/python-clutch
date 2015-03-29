@@ -399,6 +399,7 @@ def graph(id):
         line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
         line.axes['y'].ticks = 3
         line.axes['x'].ticks = 7
+        line.viewport = [420, 420]
 
 
 
