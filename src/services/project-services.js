@@ -33,6 +33,10 @@ app.factory('projectServices', ['$http', '$log',
         return projects;
       },
 
+      getGraphByProjectId: function (projectId) {
+        return get('/api/v1/projects/' + projectId + '/graph');
+      },
+
       listNewest: function () {
         projectsNewest = projectsNewest || get('/api/v1/projects/newest');
         return projectsNewest;

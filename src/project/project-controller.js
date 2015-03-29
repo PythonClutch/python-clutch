@@ -1,9 +1,11 @@
-app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory',
-	function (project, projectFactory, projectServices, user, likeFactory) {
+app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory', 'graph',
+	function (project, projectFactory, projectServices, user, likeFactory, graph) {
 
 	var self = this;
 
 	self.project = project;
+
+	self.graph = graph;
 
 	var pf = projectFactory;
 
@@ -37,5 +39,14 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 	self.checkLike = function (project) {
 		return likeFactory.checkLike(project, user);
 	};
+
+	function parse(spec) {
+		vg.parse.spec(spec, function(chart) { 
+			chart({el:".graph"}).height(210).renderer("svg").update(); 
+		});
+	}
+	parse(graph);
+
+
 
 }]);

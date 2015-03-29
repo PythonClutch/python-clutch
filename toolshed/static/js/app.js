@@ -277,9 +277,6 @@ app.config(['$routeProvider', function ($routeProvider) {
   });
 
 }]);
-app.controller('FooterCtrl', function () {
-	
-});
 app.controller('GroupCtrl', ['projects', 'group', 'projectFactory', 'appearFactory', function (projects, group, projectFactory, appearFactory) {
 	var self = this;
 
@@ -335,6 +332,9 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/home/groups/:groupid', routeDefinition);
 
 }]);
+app.controller('FooterCtrl', function () {
+	
+});
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
 	'categories', 'user', 'likeFactory',
 	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories, user, likeFactory) {
@@ -481,12 +481,14 @@ app.controller('NavCtrl', ['$location', 'userServices', function ($location, use
 
 }]);
 
-app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory',
-	function (project, projectFactory, projectServices, user, likeFactory) {
+app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory', 'graph',
+	function (project, projectFactory, projectServices, user, likeFactory, graph) {
 
 	var self = this;
 
 	self.project = project;
+
+	self.graph = graph;
 
 	var pf = projectFactory;
 
@@ -521,6 +523,15 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 		return likeFactory.checkLike(project, user);
 	};
 
+	function parse(spec) {
+		vg.parse.spec(spec, function(chart) { 
+			chart({el:".graph"}).height(210).renderer("svg").update(); 
+		});
+	}
+	parse(graph);
+
+
+
 }]);
 (function () {
 	app.directive('projectComments', function() {
@@ -545,7 +556,14 @@ app.config(['$routeProvider', function($routeProvider) {
           function($route, projectServices) {
             var routeParams = $route.current.params;
             return projectServices.getByProjectId(routeParams.projectid);
-          }]
+          }
+        ],
+        graph: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getGraphByProjectId(routeParams.projectid);
+          }
+        ],
       }
     };
 
@@ -832,6 +850,10 @@ app.factory('projectServices', ['$http', '$log',
       list: function () {
         projects = projects || get('/api/v1/projects');
         return projects;
+      },
+
+      getGraphByProjectId: function (projectId) {
+        return get('/api/v1/projects/' + projectId + '/graph');
       },
 
       listNewest: function () {
