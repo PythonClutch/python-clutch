@@ -13,6 +13,7 @@ flask-marshmallow==0.4.0
 Flask-Bcrypt==0.6.2
 Flask-Login==0.2.11
 Flask-Admin==1.1.0
+Flask-Mail==0.9.1
 
 # Database
 Flask-SQLAlchemy==2.0

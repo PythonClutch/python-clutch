@@ -5,10 +5,14 @@ from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Group, GroupSchema, LikeSchema,ProjectLog, LogSchema,
                       SearchSchema)
 from flask import Blueprint, jsonify, request
-from ..extensions import db
+from ..extensions import db, mail
 from .toolshed import require_login, current_user
 from datetime import datetime
 from ..importer import create_project
+from toolshed import mail
+from flask_mail import Message
+from datetime import datetime
+
 
 
 
@@ -154,7 +158,7 @@ def newest_projects():
 
 @api.route("/projects/popular")
 def popular_projects():
-    projects = Project.query.order_by(Project.score)
+    projects = Project.query.order_by(Project.score.desc())
     if projects:
         return success_response(all_projects_schema, projects)
 
@@ -182,6 +186,12 @@ def make_project():
     project.submitted_by_id = user.id
     user.submissions.append(project)
     db.session.add(project)
+    message = Message("New Submission",
+                      sender="pythonclutch@gmail.com",
+                      recipients=["pythonclutch@gmail.com"])
+    message.body = "Hello, there has been a new project submitted. It is called " + project.name +"" \
+                           " and was submitted by, " + user.github_name + " at " + str(datetime.utcnow()) + "."
+    mail.send(message)
     db.session.commit()
     return success_response(single_project_schema, project)
 
@@ -399,7 +409,7 @@ def graph(id):
         line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
         line.axes['y'].ticks = 3
         line.axes['x'].ticks = 7
-        
+
 
 
 
