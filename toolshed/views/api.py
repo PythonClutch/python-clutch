@@ -382,7 +382,7 @@ def graph(id):
     logs = project.logs
     log_number = len([1 for log in logs])
     if project.logs and log_number > 1:
-        logs = project.logs
+        logs = project.logs.order_by(ProjectLog.log_date)
 
         x = [datetime.combine(log.log_date, datetime.min.time()).timestamp() * 1000
                  for log in logs]
@@ -399,6 +399,8 @@ def graph(id):
         line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
         line.axes['y'].ticks = 3
         line.axes['x'].ticks = 7
+        line.marks['group'].marks[0].properties.enter["interpolate"] = {"value": "monotone"}
+        # marks[0].properties.update.fill.value
 
 
 
