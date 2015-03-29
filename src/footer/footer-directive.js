@@ -16,7 +16,7 @@
 	app.directive('contact', function() {
 	  return {
 	    restrict: 'E',
-	    templateUrl: 'static/footer/footer-pages/about.html'
+	    templateUrl: 'static/footer/footer-pages/contact.html'
 	  };
 	});
 })();

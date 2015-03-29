@@ -405,8 +405,8 @@ class CategorySchema(Schema):
 
 
 class SearchSchema(Schema):
-    # groups = fields.Nested(GroupSchema, many=True)
-    # categories = fields.Nested(CategorySchema, many=True)
+    groups = fields.Nested(GroupSchema, many=True)
+    categories = fields.Nested(CategorySchema, many=True)
     projects = fields.Nested(ProjectSchema, many=True)
 
     class Meta:
