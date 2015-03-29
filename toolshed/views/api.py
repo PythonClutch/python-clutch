@@ -59,6 +59,22 @@ def get_user():
     else:
         return failure_response("User not logged in", 401)
 
+
+@api.route('/user/pending_submissions')
+def get_user_pending():
+    name = current_user()
+    if name:
+        user = User.query.filter_by(github_name=name).first()
+        if user.submissions:
+            pending = Project.query.filter_by(submitted_by_id=user.id).filter_by(status=False).all()
+            return success_response(all_projects_schema, pending)
+        else:
+            return failure_response("No pending submissions.", 404)
+    else:
+        return failure_response("User not logged in", 401)
+
+
+
 @api.route('/user', methods=["POST"])
 def update_user():
     name = current_user()
@@ -197,7 +213,7 @@ def project_logs(id):
 
 @api.route("/groups")
 def all_groups():
-    groups = Group.query.all()
+    groups = Group.query.order_by(Group.name).all()
     if groups:
         return success_response(all_groups_schema, groups)
     else:
@@ -217,7 +233,7 @@ def group_projects(id):
 
 @api.route("/categories")
 def all_categories():
-    categories = Category.query.all()
+    categories = Category.query.order_by(Category.name).all()
     if categories:
         return success_response(all_categories_schema, categories)
     else:
@@ -375,15 +391,19 @@ def graph(id):
         multi_iter = {'x': x,
                      'data': y}
         line = vincent.Line(multi_iter, iter_idx='x')
-        line.axis_titles(x='Date', y='Score')
+
         line.scales['x'] = vincent.Scale(name='x', type='time', range='width',
                                          domain=vincent.DataRef(data='table', field="data.idx"))
         line.scales['y'] = vincent.Scale(name='y', range='height', nice=True,
-                                         domain=vincent.DataRef(data='table', field="data.val"))
-        line.data['table'].format = {"type": "json", "parse": {"x": "date"}}
+                                         domain=[0, 1])
+        line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
+        line.axes['y'].ticks = 3
+        line.axes['x'].ticks = 7
+        
 
 
-        return line.to_json()
+
+        return jsonify({"status": "success", "data": line.grammar()})
     else:
         return failure_response("No history for this project", 404)
 

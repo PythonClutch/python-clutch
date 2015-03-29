@@ -12,7 +12,12 @@ app.factory('appearFactory', function () {
 
 	return {
 
+		screenWidth: function () {
+			console.log($(window).width());
+		},
+
 		rotate: function () {
+			console.log(rotated);
 			return rotated;
 		},
 
@@ -35,6 +40,10 @@ app.factory('appearFactory', function () {
 			} else {
 				rotated = true;
 			}
+		},
+
+		changeTrue: function () {
+			rotated = true;
 		}
 
 	};

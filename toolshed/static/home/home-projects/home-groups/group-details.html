@@ -3,7 +3,7 @@
 <div class="home-project-basic-info flex-row">
 	<h4 class="home-project-name"><a href="#/home/groups/{{group.id}}">{{group.name}}</a></h4>
 	<div class="home-project-basic-info-right home-group-basic-info-right">
-		<div class="home-project-basic-info-icon home-project-basic-info-score"><i class="fa fa-calculator"></i></i>##</div>
+		<div class="home-project-basic-info-icon home-project-basic-info-score"><i class="fa fa-calculator"></i></i>{{group.average_score}}</div>
 		<i ng-class="{'fa-times' : !hp.rotate, 'fa-plus': hp.rotate}" ng-click="hp.checkBox()" class="home-project-basic-info-icon home-project-basic-info-plus fa"></i>
 	</div>
 </div>

@@ -18,8 +18,15 @@
 	</li>
 </ul>
 
+<ul ng-show="hp.search">
+	<li class="home-project-li" dir-paginate="project in vm.projects | filter:searchText | itemsPerPage: 5 " pagination-id="name">
+		<names-details class="name-details"></names-details>
+	</li>
+</ul>
+
 <div class="pagination-div">
 	<p ng-show="{{vm.projects.length}} > 5">5 of {{vm.projectNumber}}</p>
 	<p ng-show="{{vm.projects.length}} < 5">{{vm.projectNumber}} of {{vm.projectNumber}}</p>
-	<dir-pagination-controls pagination-id="name" max-size="6"></dir-pagination-controls>
+	<dir-pagination-controls ng-show="hp.mobile" pagination-id="name" max-size="6"></dir-pagination-controls>
+	<dir-pagination-controls ng-show="!hp.mobile" pagination-id="name" max-size="6"></dir-pagination-controls>
 </div>
