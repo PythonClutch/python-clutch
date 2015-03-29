@@ -9,6 +9,7 @@ from flask_admin.babel import lazy_gettext, ngettext
 from flask_admin.contrib.sqla.tools import get_query_for_ids
 from flask import flash
 from ..updater import update_single_project
+from ..models import Project
 
 toolshed_admin = Blueprint("toolshed_admin", __name__)
 
@@ -27,7 +28,7 @@ class ProjectView(ModelView):
 
     column_searchable_list = ('name', 'summary', 'score')
 
-    column_list = ("status", "name", "summary", "pypi_url", "git_url", "category", "score")
+    column_list = ("status", "name", "summary", "pypi_url", "git_url", "category", "score", "group")
 
     def is_accessible(self):
         return current_user.is_authenticated()
@@ -63,7 +64,7 @@ class ProjectView(ModelView):
 
         def update(project):
             update_single_project(project)
-            self.session.commit
+            self.session.commit()
             return True
 
         for project in query.all():
@@ -73,6 +74,7 @@ class ProjectView(ModelView):
 
         flash(ngettext('Record was successfully updated.',
                            '%(count)s records were successfully updated.', count, count=count))
+
 
 
 
