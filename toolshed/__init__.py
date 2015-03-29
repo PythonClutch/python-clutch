@@ -1,7 +1,7 @@
 from flask import Flask, render_template
-
+import os
 from . import models
-from .extensions import db, migrate, config, oauth, assets, login_manager, bcrypt
+from .extensions import db, migrate, config, oauth, assets, login_manager, bcrypt, mail
 from .views.toolshed import toolshed
 from .views.toolshed_admin import toolshed_admin, MyAdminIndexView, MyView, ProjectsView
 from .views.api import api
@@ -11,6 +11,13 @@ from flask_admin import Admin
 SQLALCHEMY_DATABASE_URI = "postgres://localhost/toolshed"
 DEBUG = True
 SECRET_KEY = 'development-key'
+
+MAIL_SERVER = 'smtp.googlemail.com'
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 
 
 def create_app():
@@ -27,6 +34,7 @@ def create_app():
     migrate.init_app(app, db)
     oauth.init_app(app)
     assets.init_app(app)
+    mail.init_app(app)
 
     bcrypt.init_app(app)
     login_manager.init_app(app)
@@ -39,5 +47,6 @@ def create_app():
     admin.add_view(MyView(models.Comment, db.session, category="Libraries"))
     admin.add_view(MyView(models.Group, db.session, category="Libraries"))
     admin.add_view(MyView(models.Like, db.session, category="Libraries"))
+
 
     return app
