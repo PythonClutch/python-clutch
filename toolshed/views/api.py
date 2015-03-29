@@ -1,4 +1,4 @@
-import json
+import os
 import vincent
 from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
@@ -39,6 +39,12 @@ all_logs_schema = LogSchema(many=True)
 single_log_schema = LogSchema()
 search_schema = SearchSchema()
 
+
+# grab line_style from env
+try:
+    line_style = os.environ['LINE_STYLE']
+except:
+    line_style = None
 
 
 # response functions
@@ -411,7 +417,8 @@ def graph(id):
         line.axes['x'].ticks = 7
         # line.marks['group'].marks[0].properties.enter["interpolate"] = {"value": "monotone"}
         # marks[0].properties.update.fill.value
-
+        if line_style:
+            line.marks['group'].marks[0].properties.enter.interpolate = vincent.ValueRef(value=line_style)
 
 
 
@@ -455,9 +462,9 @@ def graph_group(id):
         line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
         line.axes['y'].ticks = 3
         line.axes['x'].ticks = 7
-        # line.marks['group'].marks[0].properties.enter["interpolate"] = {"value": "monotone"}
-        # marks[0].properties.update.fill.value
 
+        if line_style:
+            line.marks['group'].marks[0].properties.enter.interpolate = vincent.ValueRef(value=line_style)
 
 
 
