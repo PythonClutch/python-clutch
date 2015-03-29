@@ -502,8 +502,7 @@ def graph_group_diff(id):
     group = Group.query.get_or_404(id)
     projects = group.projects.all()
     projects.sort(key=lambda x: x.score)
-    data = {'x': [project.name for project in projects],
-            'y': [project.score for project in projects]}
+    data = {project.name: project.score for project in projects}
     bar_graph = vincent.Bar(data)
 
     return bar_graph.to_json()
