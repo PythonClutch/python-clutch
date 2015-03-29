@@ -1,7 +1,7 @@
 <div class="home-project-search-div">
 	<div class="home-project-search-holder-div">
-		<input ng-click="hp.checkSearch()" class="home-project-search search" type="search">
-		<p ng-click="hp.checkSearch()" ng-show="hp.searchClicked" for="search-projects-checkbox">Search Projects</p>
+		<input ng-click="vm.checkSearch()" ng-model="searchText.name" ng-keyup="vm.searchChange()" class="home-project-search search" type="search">
+		<p ng-click="vm.checkSearch()" ng-show="vm.searchClicked" for="search-projects-checkbox">Search</p>
 	</div>
 	<div class="home-project-i-div">
 		<i class="fa fa-search"></i>

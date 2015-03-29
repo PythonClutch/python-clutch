@@ -281,6 +281,54 @@ app.config(['$routeProvider', function ($routeProvider) {
 app.controller('FooterCtrl', function () {
 	
 });
+app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 
+	function (group, projectFactory, appearFactory) {
+	var self = this;
+	self.group = group;
+	
+	console.log(group.projects);
+
+	self.rotate = appearFactory.rotate();
+
+    self.checkBox = function () {
+    	appearFactory.checkBox();
+    	self.rotate = appearFactory.rotate();
+	};
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
+}]);
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/group/group.html',
+      controller: 'GroupCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        group: ['$route', 'groupServices',
+          function($route, groupServices) {
+            var routeParams = $route.current.params;
+            return groupServices.getByGroupId(routeParams.groupid);
+          }
+        ]
+      }
+    };
+
+    $routeProvider.when('/home/groups/:groupid', routeDefinition);
+
+}]);
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
 	'categories', 'user', 'likeFactory', 'appearFactory',
 	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories, user, likeFactory, appearFactory) {
@@ -358,6 +406,13 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 		self.ghMoreInfo = pf.byGh();
 	};
 
+	self.searchClicked = true;
+
+	self.checkSearch = function () {
+		self.searchClicked = false;
+		$(event.target).parent().find('.home-project-search').focus();
+	};
+
 }]);
 (function () {
 	'use strict';
@@ -400,54 +455,6 @@ $(function () {
 	}
 
 });
-app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 
-	function (group, projectFactory, appearFactory) {
-	var self = this;
-	self.group = group;
-	
-	console.log(group.projects);
-
-	self.rotate = appearFactory.rotate();
-
-    self.checkBox = function () {
-    	appearFactory.checkBox();
-    	self.rotate = appearFactory.rotate();
-	};
-
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-}]);
-app.config(['$routeProvider', function($routeProvider) {    
-    var routeDefinition = {
-      templateUrl: 'static/group/group.html',
-      controller: 'GroupCtrl',
-      controllerAs: 'vm',
-      resolve: {
-        group: ['$route', 'groupServices',
-          function($route, groupServices) {
-            var routeParams = $route.current.params;
-            return groupServices.getByGroupId(routeParams.groupid);
-          }
-        ]
-      }
-    };
-
-    $routeProvider.when('/home/groups/:groupid', routeDefinition);
-
-}]);
 app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 	function ($location, userServices, projectServices) {
 
@@ -489,6 +496,98 @@ app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 	checkLogIn();
 
 }]);
+
+app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory', 'graph',
+	function (project, projectFactory, projectServices, user, likeFactory, graph) {
+
+	var self = this;
+
+	self.project = project;
+
+	self.graph = graph;
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
+
+	self.comment = {};
+	
+	self.addComment = function () {
+		console.log(self.comment);
+		console.log(self.project.id);
+		projectServices.addComment(self.project.id, self.comment);
+		self.comment = {};
+	};
+
+	self.like = function (proj, likes) {
+		likeFactory.like(proj, likes, user);	
+	};
+
+	self.checkLike = function (project) {
+		return likeFactory.checkLike(project, user);
+	};
+
+	function parse(spec) {
+		vg.parse.spec(spec, function(chart) { 
+			console.log(document.querySelector('.graph').offsetWidth);
+			chart({el:".graph"}).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update(); 
+		});
+	}
+	parse(graph);
+
+
+}]);
+(function () {
+	app.directive('projectComments', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/project/project-comments.html'
+	  };
+	});
+})();
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/project/project.html',
+      controller: 'ProjectCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        user: ['userServices',
+          function(userServices) {
+            return userServices.currentUser();
+          }
+        ],
+        project: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getByProjectId(routeParams.projectid);
+          }
+        ],
+        graph: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getGraphByProjectId(routeParams.projectid);
+          }
+        ],
+      }
+    };
+
+    $routeProvider.when('/home/projects/:projectid', routeDefinition);
+
+}]);
+
+
 
 app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $location) {
 
@@ -779,6 +878,10 @@ app.factory('projectServices', ['$http', '$log',
         return projects;
       },
 
+      getGraphByProjectId: function (projectId) {
+        return get('/api/v1/projects/' + projectId + '/graph');
+      },
+
       listNewest: function () {
         projectsNewest = projectsNewest || get('/api/v1/projects/newest');
         return projectsNewest;
@@ -882,81 +985,6 @@ app.factory('userServices', ['$http', '$q',
         };
     }
 ]);
-app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory',
-	function (project, projectFactory, projectServices, user, likeFactory) {
-
-	var self = this;
-
-	self.project = project;
-
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-
-	self.comment = {};
-	
-	self.addComment = function () {
-		console.log(self.comment);
-		console.log(self.project.id);
-		projectServices.addComment(self.project.id, self.comment);
-		self.comment = {};
-	};
-
-	self.like = function (proj, likes) {
-		likeFactory.like(proj, likes, user);	
-	};
-
-	self.checkLike = function (project) {
-		return likeFactory.checkLike(project, user);
-	};
-
-}]);
-(function () {
-	app.directive('projectComments', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/project/project-comments.html'
-	  };
-	});
-})();
-app.config(['$routeProvider', function($routeProvider) {    
-    var routeDefinition = {
-      templateUrl: 'static/project/project.html',
-      controller: 'ProjectCtrl',
-      controllerAs: 'vm',
-      resolve: {
-        user: ['userServices',
-          function(userServices) {
-            return userServices.currentUser();
-          }
-        ],
-        project: ['$route', 'projectServices',
-          function($route, projectServices) {
-            var routeParams = $route.current.params;
-            return projectServices.getByProjectId(routeParams.projectid);
-          }
-        ]
-      }
-    };
-
-    $routeProvider.when('/home/projects/:projectid', routeDefinition);
-
-}]);
-
-
-
 app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user',
 	function (activeRoute, submitFactory, groupServices, projectServices, user) {
 
@@ -1225,7 +1253,7 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
 	// 	console.log(screenWidth);
 	// };
 
-	appearFactory.checkWidth();
+	// appearFactory.checkWidth();
 
 
 
@@ -1372,6 +1400,43 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
 	  };
 	});		
 })();
+app.factory('homeFactory', function () {
+
+	// var self = this;
+
+	// self.byProjects = true;
+
+	// self.setProjects = function () {
+	// 	self.byProjects = true;
+	// }
+
+	// self.setCategories = function () {
+	// 	console.log('cats')
+	// 	self.byProjects = false;
+	// 	console.log('cats')
+	// 	console.log(self.byProjects)
+	// }
+
+	var byProjects = true;
+
+	'use strict';
+
+	return {
+		byProjects: function () {
+			return byProjects;
+		},
+
+		setProjects: function () {
+			byProjects = true;
+		},
+
+		setCategories: function () {
+			byProjects = false;
+		}
+
+	};
+
+});
 /**
  * dirPagination - AngularJS module for paginating (almost) anything.
  *
@@ -1886,43 +1951,6 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
         };
     }
 })();
-app.factory('homeFactory', function () {
-
-	// var self = this;
-
-	// self.byProjects = true;
-
-	// self.setProjects = function () {
-	// 	self.byProjects = true;
-	// }
-
-	// self.setCategories = function () {
-	// 	console.log('cats')
-	// 	self.byProjects = false;
-	// 	console.log('cats')
-	// 	console.log(self.byProjects)
-	// }
-
-	var byProjects = true;
-
-	'use strict';
-
-	return {
-		byProjects: function () {
-			return byProjects;
-		},
-
-		setProjects: function () {
-			byProjects = true;
-		},
-
-		setCategories: function () {
-			byProjects = false;
-		}
-
-	};
-
-});
 app.factory('submitFactory', function () {
 
 	'use strict';

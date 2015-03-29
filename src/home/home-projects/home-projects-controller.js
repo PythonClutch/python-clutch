@@ -17,7 +17,7 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
 	// 	console.log(screenWidth);
 	// };
 
-	appearFactory.checkWidth();
+	// appearFactory.checkWidth();
 
 
 

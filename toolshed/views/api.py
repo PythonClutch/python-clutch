@@ -1,4 +1,5 @@
 import json
+import vincent
 from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
                       Group, GroupSchema, LikeSchema,ProjectLog, LogSchema,
@@ -8,7 +9,7 @@ from ..extensions import db
 from .toolshed import require_login, current_user
 from datetime import datetime
 from ..importer import create_project
-from ..updater import update_projects
+
 
 
 api = Blueprint('api', __name__)
@@ -57,6 +58,22 @@ def get_user():
         return success_response(single_user_schema, user)
     else:
         return failure_response("User not logged in", 401)
+
+
+@api.route('/user/pending_submissions')
+def get_user_pending():
+    name = current_user()
+    if name:
+        user = User.query.filter_by(github_name=name).first()
+        if user.submissions:
+            pending = Project.query.filter_by(submitted_by_id=user.id).filter_by(status=False).all()
+            return success_response(all_projects_schema, pending)
+        else:
+            return failure_response("No pending submissions.", 404)
+    else:
+        return failure_response("User not logged in", 401)
+
+
 
 @api.route('/user', methods=["POST"])
 def update_user():
@@ -196,7 +213,7 @@ def project_logs(id):
 
 @api.route("/groups")
 def all_groups():
-    groups = Group.query.all()
+    groups = Group.query.order_by(Group.name).all()
     if groups:
         return success_response(all_groups_schema, groups)
     else:
@@ -216,7 +233,7 @@ def group_projects(id):
 
 @api.route("/categories")
 def all_categories():
-    categories = Category.query.all()
+    categories = Category.query.order_by(Category.name).all()
     if categories:
         return success_response(all_categories_schema, categories)
     else:
@@ -339,25 +356,54 @@ def get_project_likes(id):
 
 
 class Search:
-    def __init__(self, query, categories, projects, groups):
+    def __init__(self, query, projects):
         self.query = query
-        self.categories = categories
         self.projects = projects
-        self.groups = groups
 
 
 @api.route("/search")
 def search():
     text = request.args.get('q')
     if text:
-        categories = Category.query.search(text).all()
-        groups = Group.query.search(text).all()
         projects = Project.query.search(text).all()
 
         search = Search(query=text,
-                        categories=categories,
-                        groups=groups,
                         projects=projects)
         return success_response(search_schema, search)
     else:
         return failure_response("You must enter a query.", 400)
+
+
+# Magic Visualization Routes
+
+@api.route("/projects/<int:id>/graph")
+def graph(id):
+    project = Project.query.get_or_404(id)
+    logs = project.logs
+    log_number = len([1 for log in logs])
+    if project.logs and log_number > 1:
+        logs = project.logs
+
+        x = [datetime.combine(log.log_date, datetime.min.time()).timestamp() * 1000
+                 for log in logs]
+        y = [log.previous_score for log in logs]
+
+        multi_iter = {'x': x,
+                     'data': y}
+        line = vincent.Line(multi_iter, iter_idx='x')
+        line.axis_titles(x='Date', y='Score')
+        line.scales['x'] = vincent.Scale(name='x', type='time', range='width',
+                                         domain=vincent.DataRef(data='table', field="data.idx"))
+        line.scales['y'] = vincent.Scale(name='y', range='height', nice=True,
+                                         domain=vincent.DataRef(data='table', field="data.val"))
+        line.data['table'].format = {"type": "json", "parse": {"x": "date"}}
+
+
+        return jsonify({"status": "success", "data": line.grammar()})
+    else:
+        return failure_response("No history for this project", 404)
+
+
+
+
+

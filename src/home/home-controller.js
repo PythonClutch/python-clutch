@@ -75,4 +75,11 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 		self.ghMoreInfo = pf.byGh();
 	};
 
+	self.searchClicked = true;
+
+	self.checkSearch = function () {
+		self.searchClicked = false;
+		$(event.target).parent().find('.home-project-search').focus();
+	};
+
 }]);

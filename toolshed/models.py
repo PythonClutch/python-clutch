@@ -253,8 +253,11 @@ class Group(db.Model):
     @property
     def average_score(self):
         scores = [project.score for project in self.projects]
-        average_score = sum(scores) / len(scores)
-        return average_score
+        if scores:
+            average_score = sum(scores) / len(scores)
+            return average_score
+        else:
+            return 0
 
     def __repr__(self):
         return "Group: {}".format(self.name)
@@ -323,13 +326,22 @@ class LogSchema(Schema):
                   "current_version", "last_commit", "open_issues_count",
                   "downloads_count", "contributors_count", "log_date",
                    "forks_difference", "watchers_difference",
-                  "download_difference", "likes_difference")
+                  "download_difference", "likes_difference", "release_count",
+                  "previous_score")
+
 
 
 class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
     user_likes = fields.Nested(LikeSchema, many=True)
     logs = fields.Nested(LogSchema, many=True)
+    score = fields.Method("round_score")
+
+    def round_score(self, obj):
+        if obj.score:
+            return round(obj.score, 4)
+        else:
+            return 0
 
     class Meta:
         fields = ("id", "status", "name", "summary", "forks_count",
@@ -342,7 +354,7 @@ class ProjectSchema(Schema):
                   "group_id", "category_id", "comments", "user_likes", "age_display",
                   "last_commit_display", "date_added", "first_commit_display",
                   "github_url", "bitbucket_url", "pypi_stub", "logs",
-                  "score")
+                  "score", "release_count")
 
 
 class UserSchema(Schema):
@@ -373,6 +385,13 @@ class UserSchema(Schema):
 
 class GroupSchema(Schema):
     projects = fields.Nested(ProjectSchema, many=True)
+    average_score = fields.Method("round_score")
+
+    def round_score(self, obj):
+        if obj.average_score:
+            return round(obj.average_score, 4)
+        else:
+            return 0
 
     class Meta:
         fields = ("id", "name", "projects", "category_id", "average_score")
@@ -386,9 +405,9 @@ class CategorySchema(Schema):
 
 
 class SearchSchema(Schema):
-    groups = fields.Nested(GroupSchema, many=True)
-    categories = fields.Nested(CategorySchema, many=True)
+    # groups = fields.Nested(GroupSchema, many=True)
+    # categories = fields.Nested(CategorySchema, many=True)
     projects = fields.Nested(ProjectSchema, many=True)
 
     class Meta:
-        fields = ("query", "groups", "categories", "projects")
+        fields = ("query", "projects")

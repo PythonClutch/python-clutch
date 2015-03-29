@@ -772,10 +772,13 @@ div.home-project-basic-info-icon .fa {
   margin: 0 auto; }
 
 .graph {
+  height: 250px;
   width: 100%;
-  margin: 0 auto;
-  background: lightpink;
-  height: 150px; }
+  margin: 0 auto; }
+  .graph div.vega {
+    height: 230px; }
+  .graph svg.marks {
+    height: 240px; }
 
 .project-header {
   margin-top: 13px; }
