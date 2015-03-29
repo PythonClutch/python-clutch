@@ -26,7 +26,7 @@ class MyView(ModelView):
 
 class ProjectView(ModelView):
 
-    column_searchable_list = ('name', 'summary', 'score')
+    column_searchable_list = ('name', 'summary')
 
     column_list = ("status", "name", "summary", "pypi_url", "git_url", "category", "score", "group")
 
