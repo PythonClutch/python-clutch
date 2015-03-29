@@ -1629,8 +1629,12 @@ footer a {
     width: 156%;
     margin-left: -28%; } }
 
-.site-map-bottom-div {
+.footer-pages {
   padding-top: 28px; }
+
+.site-map-bottom-div {
+  width: 83.8%;
+  margin: 0 auto; }
   .site-map-bottom-div h1 {
     font-size: 30px;
     font-weight: 700;
@@ -1640,3 +1644,31 @@ footer a {
   width: 30%;
   margin: 0 1.6667%; }
 
+.about-description, .developer-descriptions {
+  width: 48%; }
+
+.about-description {
+  max-width: 350px; }
+
+.about-heading {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 28px; }
+
+.developer {
+  margin-bottom: 28px;
+  width: 100%; }
+  .developer h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 4px; }
+  .developer img {
+    margin-top: 4px;
+    width: 100px;
+    height: 100px;
+    border-radius: 2px;
+    margin-right: 15px;
+    float: left; }
+
+.developer-links {
+  margin-top: 10px; }
