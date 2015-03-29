@@ -25,7 +25,7 @@ app.config(['$routeProvider', function ($routeProvider) {
   };
 
   $routeProvider
-  .when('/sitemap', page)
+  .when('/projectindex', page)
   .when('/about', page)
   .when('/contact', page)
 }]);

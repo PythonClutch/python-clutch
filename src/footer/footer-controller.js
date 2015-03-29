@@ -14,7 +14,7 @@ app.controller('FooterCtrl', ['projectServices', 'groupServices', function (proj
 	})
 
 	self.bySiteMap = function () {
-		if (window.location.hash === '#/sitemap') {
+		if (window.location.hash === '#/projectindex') {
 			return true;
 		} else {
 			return false;
