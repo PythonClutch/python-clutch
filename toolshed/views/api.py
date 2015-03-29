@@ -391,12 +391,15 @@ def graph(id):
         multi_iter = {'x': x,
                      'data': y}
         line = vincent.Line(multi_iter, iter_idx='x')
-        line.axis_titles(x='Date', y='Score')
+
         line.scales['x'] = vincent.Scale(name='x', type='time', range='width',
                                          domain=vincent.DataRef(data='table', field="data.idx"))
         line.scales['y'] = vincent.Scale(name='y', range='height', nice=True,
-                                         domain=vincent.DataRef(data='table', field="data.val"))
-        line.data['table'].format = {"type": "json", "parse": {"x": "date"}}
+                                         domain=[0, 1])
+        line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
+        line.axes['y'].ticks = 3
+        line.axes['x'].ticks = 7
+
 
 
         return jsonify({"status": "success", "data": line.grammar()})
