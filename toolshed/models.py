@@ -338,7 +338,10 @@ class ProjectSchema(Schema):
     score = fields.Method("round_score")
 
     def round_score(self, obj):
-        return round(obj.score, 4)
+        if obj.score:
+            return round(obj.score, 4)
+        else:
+            return 0
 
     class Meta:
         fields = ("id", "status", "name", "summary", "forks_count",
@@ -385,7 +388,10 @@ class GroupSchema(Schema):
     average_score = fields.Method("round_score")
 
     def round_score(self, obj):
-        return round(obj.average_score, 4)
+        if obj.average_score:
+            return round(obj.average_score, 4)
+        else:
+            return 0
 
     class Meta:
         fields = ("id", "name", "projects", "category_id", "average_score")
