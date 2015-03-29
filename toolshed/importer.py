@@ -158,5 +158,6 @@ def create_project(pypi_url=None, git_url=None, docs_url=None, mailing_list_url=
     proj_dict['pypi_url'] = pypi_url
     proj_dict['mailing_list_url'] = mailing_list_url
     proj_dict['pypi_stub'] = parse_pypi_url(pypi_url)
+    proj_dict['score'] = 0
     project = Project(**proj_dict)
     return project
