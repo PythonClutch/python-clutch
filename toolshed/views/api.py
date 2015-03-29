@@ -220,7 +220,6 @@ def project_logs(id):
 
 # Group routes
 
-
 @api.route("/groups")
 def all_groups():
     groups = Group.query.order_by(Group.name).all()

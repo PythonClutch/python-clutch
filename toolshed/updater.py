@@ -4,7 +4,7 @@ import math
 import os
 from datetime import datetime
 from .extensions import db
-from .importer import release_parse, parse_github_url, parse_bitbucket_url
+from .importer import release_parse, parse_github_url, parse_bitbucket_url, parse_pypi_url
 from .models import ProjectLog, Project
 
 
@@ -49,6 +49,7 @@ def update_pypi(project):
     project.current_version = pypi_info['info']['version']
     project.summary = pypi_info['info']['summary']
     project.downloads_count, project.release_count = release_parse(pypi_info)
+    project.pypi_stub = parse_pypi_url(project.pypi_url)
     db.session.commit()
 
 
