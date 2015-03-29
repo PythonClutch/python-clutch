@@ -35,7 +35,6 @@ app.config(['$routeProvider', function ($routeProvider) {
   };
 
   $routeProvider
-  .when('/', homePage)
-  .when('/home', homePage)
+
   .when('/home/categories', homePage);
 }]);

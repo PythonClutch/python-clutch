@@ -1,10 +1,18 @@
-app.controller('NavCtrl', ['$location', 'userServices', function ($location, userServices) {
+app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
+	function ($location, userServices, projectServices) {
 
 	var self = this;
 
 	self.loggedIn = true;
 
 	self.currentUser;
+
+	self.word = '';
+
+	self.searchProjects = function () {
+		console.log(self.word);
+		console.log('searching');
+	}
 
 	function checkLogIn () {
 		userServices.currentUser().then(function (result) {

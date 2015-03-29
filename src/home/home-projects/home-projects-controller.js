@@ -5,6 +5,22 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
 
 	self.rotate = appearFactory.rotate();
 
+	// function checkRotate () {
+	// 	self.rotate = appearFactory.rotate();
+	// }
+
+	// setInterval(checkRotate, 1000);
+
+	self.mobile = true;
+
+	// function screenWidth () {
+	// 	console.log(screenWidth);
+	// };
+
+	appearFactory.checkWidth();
+
+
+
 	self.checkBox = function () {
     	appearFactory.checkBox();
     	self.rotate = appearFactory.rotate();
@@ -28,6 +44,7 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
 
 	function selectedClass () {
 		var closest = $(event.target).parent().parent().children();
+		console.log(closest);
 		closest.each(function () {
 			var fa = $(this).find('.fa');
 			$(this).find('.fa').removeClass('fa-dot-circle-o');
@@ -37,19 +54,21 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
 				fa.addClass('fa-circle-o');
 			}
 		});
-		$(event.target).removeClass('fa-circle-o');
-		$(event.target).addClass('fa-dot-circle-o');
+		$(event.target).parent().find('.fa').removeClass('fa-circle-o');
+		$(event.target).parent().find('.fa').addClass('fa-dot-circle-o');
 	}
 
 	self.list = false;
 	self.popular = true;
 	self.newest = false;
+	self.searched = false;
 
 	self.setPopular = function () {
 		selectedClass();
 		self.popular = true;
 		self.newest = false;
 		self.list = false;
+		self.searched = false;
 		$('#project-popular-radio').prop('checked', true);
 	};
 
@@ -57,9 +76,14 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
 		self.popular = false;
 		self.newest = true;
 		self.list = false;
+		self.searched = false;
 		selectedClass();
 		$('#project-newest-radio').prop('checked', true);
 	};
+
+	self.setSearch = function () {
+		console.log('eh');
+	}
 
 	self.setTrending = function () {
 		selectedClass();

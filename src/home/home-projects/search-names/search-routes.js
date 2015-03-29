@@ -6,9 +6,14 @@ app.config(['$routeProvider', function ($routeProvider) {
     controller: 'HomeCtrl',
     controllerAs: 'vm',
     resolve: {
-      projects: ['projectServices',
-        function(projectServices) {
-          return projectServices.listPopular();
+      projects: ['$route', 'projectServices',
+        function($route, projectServices) {
+          var routeParams = $route.current.params;
+          var allSearch;
+          return projectServices.searchProjects(routeParams.word).then(function (results) {
+            console.log(results.projects);
+            return results.projects;
+          });
         }
       ],
       groups: ['groupServices',
@@ -35,15 +40,15 @@ app.config(['$routeProvider', function ($routeProvider) {
   };
 
   $routeProvider
-  .when('/', homePage)
-  .when('/home', homePage)
-  .when('/home/projects', homePage)
-  // .when('/home/search', homePage)
-  .when('/submit', {
-    templateUrl: 'static/submit/submit.html',
-    controller: 'SubmitCtrl',
-    controllerAs: 'vm'
-  })
+  // .when('/', homePage)
+  // .when('/home', homePage)
+  // .when('/home/projects', homePage)
+  .when('/home/search/:word', homePage)
+  // .when('/submit', {
+  //   templateUrl: 'static/submit/submit.html',
+  //   controller: 'SubmitCtrl',
+  //   controllerAs: 'vm'
+  // })
   // .when('/home/categories', homePage)
   // .when('/projects', homePage)
   // .when('/home/category', homePage)

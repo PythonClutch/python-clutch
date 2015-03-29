@@ -13,7 +13,8 @@ app.config(['$routeProvider', function($routeProvider) {
           function($route, projectServices) {
             var routeParams = $route.current.params;
             return projectServices.getByProjectId(routeParams.projectid);
-          }]
+          }
+        ]
       }
     };
 

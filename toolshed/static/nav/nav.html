@@ -12,7 +12,8 @@
 	<a ng-show="vm.loggedIn" href="logout">Logout</a>
 	<a ng-show="!vm.loggedIn" ng-click="vm.checkUser()" class="nav-login-a" href="github/login">Login</a>
 	<div ng-controller="hpCtrl as hp" class="nav-search-bar">
-		<input type="search" id="nav-search" placeholder="Search">
+		<input ng-model="vm.word" type="search" id="nav-search" placeholder="Search">
 		<label class="header-checkbox-label" for="header-checkbox"><i class="fa fa-search"></i></label>
+		<a href='#/home/search/{{vm.word}}'><i ng-click="vm.searchProjects()" class="clickable-fa fa fa-search"></i></a>
 	</div>
 </div>

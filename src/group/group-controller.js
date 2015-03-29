@@ -1,8 +1,6 @@
-app.controller('GroupCtrl', ['projects', 'group', 'projectFactory', 'appearFactory', function (projects, group, projectFactory, appearFactory) {
+app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 
+	function (group, projectFactory, appearFactory) {
 	var self = this;
-
-	self.projects = projects;
-
 	self.group = group;
 	
 	console.log(group.projects);

@@ -1,13 +1,20 @@
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
-	'categories', 'user', 'likeFactory',
-	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories, user, likeFactory) {
+	'categories', 'user', 'likeFactory', 'appearFactory',
+	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories, user, likeFactory, appearFactory) {
 	var self = this;
 
 	self.categories = categories;
 
+	console.log(projects);
+
 	self.projects = projects;
 
+	self.changeTrue = function () {
+		appearFactory.changeTrue();
+	}
+
 	self.groups = groups;
+
 
 	self.projectNumber = projects.length;
 

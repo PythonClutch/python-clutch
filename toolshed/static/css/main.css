@@ -352,9 +352,10 @@ div.hfGroup {
   flex-wrap: wrap; }
 
 .home-project-filter p {
-  margin-top: 4px;
-  margin-left: 6px;
-  font-weight: 300; }
+  padding-top: 4px;
+  padding-left: 6px;
+  font-weight: 300;
+  cursor: pointer; }
 
 .pagination {
   display: -webkit-flex;
@@ -401,8 +402,9 @@ div.hfGroup {
   padding-top: 13px;
   color: black;
   cursor: pointer; }
-  .pagination li a i.fa {
-    font-size: 18px; }
+  .pagination li i.fa {
+    font-size: 18px;
+    margin-left: 16px; }
   .pagination li.active {
     background: #12897D;
     color: white; }
@@ -412,11 +414,10 @@ div.hfGroup {
     color: black;
     margin: 17px; }
 
-li.number-li a {
+li.number-li {
   text-align: center; }
-  li.number-li a h6 {
-    width: 100%;
-    margin-top: -20px; }
+  li.number-li h6 {
+    width: 100%; }
 
 .home-project-li {
   width: 100%;
@@ -1201,7 +1202,8 @@ header {
 .nav-right a {
   text-decoration: none;
   color: white;
-  font-size: 16px; }
+  font-size: 16px;
+  height: 20px; }
   .nav-right a:hover {
     color: black; }
 
@@ -1281,6 +1283,9 @@ header {
   padding: 1px 2px 3px;
   outline: none; }
 
+#nav-search::-webkit-search-decoration, #nav-search::-webkit-search-cancel-button, #nav-search::-webkit-search-results-button, #nav-search::-webkit-search-results-decoration {
+  display: none; }
+
 .nav-search-bar input::-webkit-input-placeholder {
   color: white;
   font-size: 12px; }
@@ -1301,6 +1306,12 @@ header {
   right: 5px;
   color: white; }
 
+.header-checkbox-label i {
+  z-index: 4; }
+
+.clickable-fa {
+  z-index: 3; }
+
 #header-checkbox {
   position: absolute;
   visibility: hidden; }
@@ -1308,6 +1319,9 @@ header {
 #header-checkbox:checked ~ .nav-right .nav-search-bar input {
   visibility: visible;
   width: 120px; }
+
+#header-checkbox:checked ~ .nav-right .header-checkbox-label i {
+  z-index: 2; }
 
 .push {
   height: 55%; }
@@ -1531,4 +1545,57 @@ footer a {
   .home-project-links-div {
     font-size: 18px; }
     .home-project-links-div i.fa {
-      font-size: 18px; } }
+      font-size: 18px; }
+  .pending-project-li {
+    width: 88%;
+    margin: 0 auto 2%; } }
+
+@media screen and (max-width: 501px) {
+  .nav-logo {
+    width: 100%;
+    margin: 45px auto;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap; }
+    .nav-logo h2 {
+      margin-left: 25px; }
+  .nav-right {
+    margin: 0 auto;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    width: 90%;
+    position: absolute;
+    height: 10px;
+    top: 20px;
+    left: 5%; }
+  .nav-search-bar input {
+    visibility: hidden;
+    width: 20px; }
+  .root-content {
+    margin-top: -140px; }
+  #header-checkbox:checked ~ .nav-right {
+    width: 90%; }
+  .home-set-a {
+    padding: 15px 9%; }
+  .home-filters-div {
+    width: 156%;
+    margin-left: -28%; } }
