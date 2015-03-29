@@ -10,8 +10,7 @@ app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 	self.word = '';
 
 	self.searchProjects = function () {
-		console.log(self.word);
-		console.log('searching');
+		window.location.hash = "home/search/" + self.word;
 	}
 
 	function checkLogIn () {

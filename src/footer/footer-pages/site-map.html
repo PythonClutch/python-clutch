@@ -1,0 +1,30 @@
+<div class="site-map-top-div">
+	<div>
+	<h1>Groups</h1>
+	<ul>
+		<li ng-repeat="group in vm.groups">
+			
+		</li>
+	</ul>
+	</div>
+</div>
+<div class="site-map-bottom-div">
+	<h1>Projects</h1>
+	<div class="site-map-projects flex-row">
+		<ul class="site-map-ul">
+			<li class="site-map-li site-map-first-li" ng-repeat="project in vm.projects | slice:0:69 ">
+				<h2><a class="link" href="#/projects/{{project.id}}">{{project.name}}-</a>{{project.summary}}</h2>		
+			</li>
+		</ul>
+		<ul class="site-map-ul">
+			<li class="site-map-li site-map-second-li" ng-repeat="project in vm.projects | slice:70:139 ">
+				<h2><a class="link" href="#/projects/{{project.id}}">{{project.name}}-</a>{{project.summary}}</h2>
+			</li>
+		</ul>
+		<ul class="site-map-ul">
+			<li class="site-map-li site-map-third-li" ng-repeat="project in vm.projects | slice:140:209 ">
+				<h2><a class="link" href="#/projects/{{project.id}}">{{project.name}}-</a>{{project.summary}}</h2>
+			</li>
+		</ul>
+	</div>
+</div>

@@ -24,7 +24,9 @@ app.config(['$routeProvider', function($routeProvider) {
       }
     };
 
-    $routeProvider.when('/home/projects/:projectid', routeDefinition);
+    $routeProvider
+    .when('/projects/:projectid', routeDefinition)
+    .when('/home/projects/:projectid', routeDefinition);
 
 }]);
 

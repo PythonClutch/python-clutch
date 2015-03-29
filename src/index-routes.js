@@ -13,7 +13,7 @@ app.config(['$routeProvider', function ($routeProvider) {
       ],
       groups: ['groupServices',
         function(groupServices) {
-          return groupServices.list();
+          return groupServices.listGroups();
         }
       ],
       categories: ['groupServices',

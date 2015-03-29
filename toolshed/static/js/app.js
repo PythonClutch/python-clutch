@@ -59,7 +59,7 @@ app.config(['$routeProvider', function ($routeProvider) {
       ],
       groups: ['groupServices',
         function(groupServices) {
-          return groupServices.list();
+          return groupServices.listGroups();
         }
       ],
       categories: ['groupServices',
@@ -278,9 +278,98 @@ app.config(['$routeProvider', function ($routeProvider) {
   });
 
 }]);
-app.controller('FooterCtrl', function () {
-	
-});
+app.controller('FooterCtrl', ['projectServices', 'groupServices', function (projectServices, groupServices) {
+	var self = this;
+
+	projectServices.list().then(function (result) {
+		self.projects = result;
+	});
+
+	groupServices.listCats().then(function (result) {
+		self.categories = result;
+	})
+
+	groupServices.listGroups().then(function (result) {
+		self.groups = result;
+	})
+
+	self.bySiteMap = function () {
+		if (window.location.hash === '#/sitemap') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	self.byAbout = function () {
+		if (window.location.hash === '#/about') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	self.byContact = function () {
+		if (window.location.hash === '#/contact') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+}]);
+(function () {
+	app.directive('siteMap', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/footer/footer-pages/site-map.html'
+	  };
+	});
+
+	app.directive('about', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/footer/footer-pages/about.html'
+	  };
+	});
+
+	app.directive('contact', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/footer/footer-pages/about.html'
+	  };
+	});
+})();
+app.config(['$routeProvider', function ($routeProvider) {
+  'use strict';
+
+  var page = {
+    templateUrl: 'static/footer/footer-pages/footer-pages.html',
+    controller: 'FooterCtrl',
+    controllerAs: 'vm',
+    // resolve: {
+		  // projects: ['projectServices',
+	   //      function(projectServices) {
+	   //        return projectServices.list();
+	   //      }
+	   //  ],
+    //   groups: ['groupServices',
+    //     function(groupServices) {
+    //       return groupServices.list();
+    //     }
+    //   ],
+    //   categories: ['groupServices',
+    //     function(groupServices) {
+    //       return groupServices.listCats();
+    //     }
+    //   ]
+    // }
+  };
+
+  $routeProvider
+  .when('/sitemap', page)
+  .when('/about', page)
+  .when('/contact', page)
+}]);
 app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 
 	function (group, projectFactory, appearFactory) {
 	var self = this;
@@ -336,8 +425,6 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 
 	self.categories = categories;
 
-	console.log(projects);
-
 	self.projects = projects;
 
 	self.changeTrue = function () {
@@ -346,6 +433,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 
 	self.groups = groups;
 
+	console.log(categories)
 
 	self.projectNumber = projects.length;
 
@@ -374,6 +462,10 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
     self.isActive = function (path) {
       return activeRoute.isActive(path);
     };
+
+    self.startsWith = function (path) {
+      return activeRoute.startsWith(path);
+    }
 
     // self.rotate = appearFactory.rotate();
 
@@ -467,8 +559,7 @@ app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 	self.word = '';
 
 	self.searchProjects = function () {
-		console.log(self.word);
-		console.log('searching');
+		window.location.hash = "home/search/" + self.word;
 	}
 
 	function checkLogIn () {
@@ -541,8 +632,13 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 
 	function parse(spec) {
 		vg.parse.spec(spec, function(chart) { 
-			console.log(document.querySelector('.graph').offsetWidth);
+			// function graphing (argument) {
+			// 	// body...
+			// }
 			chart({el:".graph"}).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update(); 
+			if (window.innerWidth < 400) {
+				chart({el:".graph"}).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
+			}
 		});
 	}
 	parse(graph);
@@ -583,7 +679,9 @@ app.config(['$routeProvider', function($routeProvider) {
       }
     };
 
-    $routeProvider.when('/home/projects/:projectid', routeDefinition);
+    $routeProvider
+    .when('/projects/:projectid', routeDefinition)
+    .when('/home/projects/:projectid', routeDefinition);
 
 }]);
 
@@ -602,6 +700,15 @@ app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $lo
 	      }
 	      
 	      return stringUtil.isOnly($location.path(), path);
+	    },
+
+	    startsWith: function (path) {
+	      // The default route is a special case.
+	      if (path === '/') {
+	        return $location.path() === '/';
+	      }
+	      
+	      return stringUtil.startsWith($location.path(), path);
 	    }
 
 	};
@@ -658,6 +765,11 @@ app.factory('appearFactory', function () {
 	};
 
 });
+app.filter('slice', function() {
+  return function(arr, start, end) {
+    return (arr || []).slice(start, end);
+  };
+});
 app.factory('groupServices', ['$http', '$log',
   function($http, $log) {
 
@@ -686,10 +798,6 @@ app.factory('groupServices', ['$http', '$log',
     var categories;
 
     return {
-
-      list: function () {
-        return get('/api/v1/groups');
-      },
 
       getByGroupId: function (groupId) {
         return get('/api/v1/groups/' + groupId);
@@ -927,6 +1035,11 @@ app.factory('stringUtil', function() {
         isOnly: function(str, subStr) {
             str = str || '';
             return str === subStr;
+        },
+        
+        startsWith: function(str, subStr) {
+            str = str || '';
+            return str.slice(0, subStr.length) === subStr;
         }
     };
 });
@@ -1209,7 +1322,7 @@ app.config(['$routeProvider', function ($routeProvider) {
       ],
       groups: ['groupServices',
         function(groupServices) {
-          return groupServices.list();
+          return groupServices.listGroups();
         }
       ],
       categories: ['groupServices',
@@ -2034,7 +2147,6 @@ app.config(['$routeProvider', function ($routeProvider) {
       projects: ['$route', 'projectServices',
         function($route, projectServices) {
           var routeParams = $route.current.params;
-          var allSearch;
           return projectServices.searchProjects(routeParams.word).then(function (results) {
             console.log(results.projects);
             return results.projects;

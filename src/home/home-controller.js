@@ -5,8 +5,6 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 
 	self.categories = categories;
 
-	console.log(projects);
-
 	self.projects = projects;
 
 	self.changeTrue = function () {
@@ -15,6 +13,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 
 	self.groups = groups;
 
+	console.log(categories)
 
 	self.projectNumber = projects.length;
 
@@ -43,6 +42,10 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
     self.isActive = function (path) {
       return activeRoute.isActive(path);
     };
+
+    self.startsWith = function (path) {
+      return activeRoute.startsWith(path);
+    }
 
     // self.rotate = appearFactory.rotate();
 

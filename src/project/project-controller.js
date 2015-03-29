@@ -42,8 +42,13 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 
 	function parse(spec) {
 		vg.parse.spec(spec, function(chart) { 
-			console.log(document.querySelector('.graph').offsetWidth);
+			// function graphing (argument) {
+			// 	// body...
+			// }
 			chart({el:".graph"}).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update(); 
+			if (window.innerWidth < 400) {
+				chart({el:".graph"}).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
+			}
 		});
 	}
 	parse(graph);

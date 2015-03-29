@@ -2,10 +2,10 @@
 	<input class="donate-button" type="button" value="DONATE">
 
 	<div class="footer-links flex-row">
-		<a href="#/about">About</a>
-		<a href="#/contact">Contact</a>
-		<a href="#/sitemap">Site Map</a>
-		<a class="footer-links-github" href="#/about">
+		<a ng-click="vm.setAbout()" href="#/about">About</a>
+		<a ng-click="vm.setContact()" href="#/contact">Contact</a>
+		<a ng-click="vm.setSiteMap()" href="#/sitemap">Site Map</a>
+		<a class="footer-links-github" href="https://github.com/Python-toolshed/python-toolshed">
 			<i class="fa fa-github-square"></i>
 			<p>GitHub</p>
 		</a>
