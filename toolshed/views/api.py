@@ -472,4 +472,39 @@ def graph_group(id):
     else:
         return failure_response("No history for this group", 404)
 
+@api.route("/scoredist")
+def graph_distribution():
+    projects = Project.query.all()
+    scores = [project.score for project in projects]
+    maximum_value = max(scores)
+    minimum_value = min(scores)
+    bin_number = 30
+    bin_width = (maximum_value - minimum_value) / bin_number
+    x = []
+    y = []
+    curr_bin = minimum_value
+    for _ in range(bin_number):
+        count = len([score for score in scores
+                    if score > curr_bin
+                    if score < curr_bin + bin_width])
+        x.append(curr_bin)
+        y.append(count)
+        curr_bin += bin_width
+
+    data = {'x': x,
+            'y': y}
+    bar = vincent.Bar(data, iter_idx='x')
+
+    return bar.to_json()
+
+@api.route("/groups/<int:id>/binned")
+def graph_group_diff(id):
+    group = Group.query.get_or_404(id)
+    projects = group.projects.all()
+    projects.sort(key=lambda x: x.score)
+    data = {'x': [project.name for project in projects],
+            'y': [project.score for project in projects]}
+    bar_graph = vincent.Bar(data)
+
+    return bar_graph.to_json()
 
