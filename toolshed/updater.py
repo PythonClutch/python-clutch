@@ -18,6 +18,16 @@ bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
 gitkey = os.environ['GITKEY']
 auth=(gitkey, 'x-oauth-basic')
 
+try:
+    github_lambda = os.environ['GITHUB_LAMBDA']
+    pypi_lambda = os.environ['PYPI_LAMBDA']
+    score_multiplier = os.environ['SCORE_SCALE']
+except:
+    github_lambda = 0.005
+    pypi_lambda = 0.005
+    score_multiplier = 1
+
+
 def update_projects(projects):
     for project in projects:
         log_project(project)
@@ -89,9 +99,7 @@ def log_project(project):
 
 
 def update_projects_score(projects):
-    github_lambda = 0.005
-    pypi_lambda = 0.005
-
+    
     def raw_github_score(project):
         num_forks = project.forks_count
         num_watch = project.watchers_count
@@ -126,9 +134,9 @@ def update_projects_score(projects):
             if project.git_url:
                 git_score = raw_github_score(project) / best_github
                 score = score + git_score
-                project.score = score / 2
+                project.score = (score / 2) * score_multiplier
             else:
-                project.score = score / 2
+                project.score = (score / 2) * score_multiplier
         db.session.commit()
     set_scores(projects)
 
