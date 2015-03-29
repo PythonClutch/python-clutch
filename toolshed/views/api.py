@@ -154,7 +154,7 @@ def newest_projects():
 
 @api.route("/projects/popular")
 def popular_projects():
-    projects = Project.query.order_by(Project.score)
+    projects = Project.query.order_by(Project.score.desc())
     if projects:
         return success_response(all_projects_schema, projects)
 
@@ -399,7 +399,7 @@ def graph(id):
         line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
         line.axes['y'].ticks = 3
         line.axes['x'].ticks = 7
-        
+
 
 
 
