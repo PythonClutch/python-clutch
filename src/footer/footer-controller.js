@@ -3,15 +3,18 @@ app.controller('FooterCtrl', ['projectServices', 'groupServices', function (proj
 
 	projectServices.list().then(function (result) {
 		self.projects = result;
+		self.firstColumn = Math.ceil(result.length/3);
+		self.firstColumnPlus = self.firstColumn + 1;
+		self.secondColumn = Math.ceil(result.length/1.5);
+		self.secondColumnPlus = self.secondColumn + 1;
+		self.thirdColumn = result.length;
 	});
 
-	groupServices.listCats().then(function (result) {
-		self.categories = result;
-	})
-
-	groupServices.listGroups().then(function (result) {
-		self.groups = result;
-	})
+	// self.firstColumn = function () {
+	// 	return function () {
+	// 		self.projects
+	// 	}
+	// }
 
 	self.setPage = function () {
 		console.log('top')
