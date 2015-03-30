@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 import os
 import csv
+import random
+import datetime
+from faker import Factory
+
+fake = Factory.create()
 
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
-from toolshed.models import AdminAccount, Project
+from toolshed.models import AdminAccount, Project, ProjectLog
 from toolshed.updater import update_projects, update_projects_score, log_project
 from toolshed import create_app, db, models
 from toolshed.importer import create_project
@@ -59,6 +64,7 @@ def update():
     update_projects(projects)
     return "Projects updated."
 
+
 @manager.command
 def update_score():
     projects = Project.query.all()
@@ -67,6 +73,21 @@ def update_score():
 
     update_projects_score(projects)
     return "Scores updated."
+
+
+@manager.command
+def fake_some_logs():
+    projects = Project.query.all()
+    for project in projects:
+        for _ in range(0, random.randrange(2, 7)):
+            log = ProjectLog()
+            log.previous_score = random.uniform(0, 1)
+            rand_date = random.choice(range(10, 30))
+            log.log_date = datetime.date(2015, 3, rand_date)
+            log.project_id = project.id
+            db.session.add(log)
+
+    db.session.commit()
 
 
 @manager.command
