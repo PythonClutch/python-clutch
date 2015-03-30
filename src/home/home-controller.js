@@ -8,6 +8,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 	self.projects = projects;
 
 	self.changeTrue = function () {
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
 		appearFactory.changeTrue();
 	}
 
@@ -27,6 +28,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 	}	
 
 	self.setPage = function () {
+		console.log('top')
 		$('html, body').animate({ scrollTop: 0 }, 'fast');
 	}
 

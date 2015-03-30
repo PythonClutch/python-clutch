@@ -233,7 +233,6 @@ div.home-project-basic-info-icon .fa {
 	flex-direction: row;
 	justify-content: flex-start;
 	flex-wrap: wrap;
-	width: 120px;
 	&:hover {
 		color: black; 
 		i {
@@ -353,33 +352,18 @@ div.home-project-basic-info-icon .fa {
 	cursor: pointer;
 }
 
-.names-details-checkbox:checked ~ .home-project-details-div {
+.names-details-checkbox:checked ~ .home-project-details-div-projects {
 	position: relative;
 	visibility: visible;
 	height: 100%;
 	width: 97.38%;
 	margin-top: 0;  
-	transition: margin-top .2s ease-out;
+	transition: margin-top .15s ease-out;
 }
 
-.names-details-checkbox:checked ~ .home-project-details-div .home-project-details:nth-child(4) {
+.names-details-checkbox:checked ~ .home-project-details-div .home-project-details{
 	opacity: 1;
-	transition: all .3s ease-out .1s;
-}
-
-.names-details-checkbox:checked ~ .home-project-details-div .home-project-details:nth-child(3) {
-	opacity: 1;
-	transition: all .3s ease-out .1s;
-}
-
-.names-details-checkbox:checked ~ .home-project-details-div .home-project-details:nth-child(2) {
-	opacity: 1;
-	transition: all .3s ease-out .1s;
-}
-
-.names-details-checkbox:checked ~ .home-project-details-div .home-project-details:nth-child(1) {
-	opacity: 1;
-	transition:all .3s ease-out .1s;
+	transition: all .25s ease-out .08s;
 }
 
 .more-info-input {

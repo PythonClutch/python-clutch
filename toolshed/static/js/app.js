@@ -294,8 +294,9 @@ app.controller('FooterCtrl', ['projectServices', 'groupServices', function (proj
 	})
 
 	self.setPage = function () {
+		console.log('top')
 		$('html, body').animate({ scrollTop: 0 }, 'fast');
-	}
+	};
 
 	self.bySiteMap = function () {
 		if (window.location.hash === '#/projectindex') {
@@ -374,58 +375,6 @@ app.config(['$routeProvider', function ($routeProvider) {
   .when('/about', page)
   .when('/contact', page)
 }]);
-app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 
-	function (group, projectFactory, appearFactory) {
-	var self = this;
-	self.group = group;
-	
-	console.log(group.projects);
-
-	self.rotate = appearFactory.rotate();
-
-    self.checkBox = function () {
-    	appearFactory.checkBox();
-    	self.rotate = appearFactory.rotate();
-	};
-
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.setPage = function () {
-		$('html, body').animate({ scrollTop: 0 }, 'fast');
-	}
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-}]);
-app.config(['$routeProvider', function($routeProvider) {    
-    var routeDefinition = {
-      templateUrl: 'static/group/group.html',
-      controller: 'GroupCtrl',
-      controllerAs: 'vm',
-      resolve: {
-        group: ['$route', 'groupServices',
-          function($route, groupServices) {
-            var routeParams = $route.current.params;
-            return groupServices.getByGroupId(routeParams.groupid);
-          }
-        ]
-      }
-    };
-
-    $routeProvider.when('/home/groups/:groupid', routeDefinition);
-
-}]);
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
 	'categories', 'user', 'likeFactory', 'appearFactory',
 	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories, user, likeFactory, appearFactory) {
@@ -436,6 +385,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 	self.projects = projects;
 
 	self.changeTrue = function () {
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
 		appearFactory.changeTrue();
 	}
 
@@ -455,6 +405,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 	}	
 
 	self.setPage = function () {
+		console.log('top')
 		$('html, body').animate({ scrollTop: 0 }, 'fast');
 	}
 
@@ -559,6 +510,78 @@ $(function () {
 	}
 
 });
+app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph',
+	function (group, projectFactory, appearFactory, graph) {
+	var self = this;
+	self.group = group;
+	
+	console.log(group.projects);
+
+	self.rotate = appearFactory.rotate();
+
+    self.checkBox = function () {
+    	appearFactory.checkBox();
+    	self.rotate = appearFactory.rotate();
+	};
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.setPage = function () {
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	}
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
+
+	function parse(spec) {
+		vg.parse.spec(spec, function(chart) { 
+			// function graphing (argument) {
+			// 	// body...
+			// }
+			chart({el:".graph"}).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update(); 
+			if (window.innerWidth < 400) {
+				chart({el:".graph"}).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
+			}
+		});
+	}
+	parse(graph);
+
+}]);
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/group/group.html',
+      controller: 'GroupCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        graph: ['$route', 'groupServices',
+          function($route, groupServices) {
+            var routeParams = $route.current.params;
+            return groupServices.getGraphByGroupId(routeParams.groupid);
+          }
+        ],
+        group: ['$route', 'groupServices',
+          function($route, groupServices) {
+            var routeParams = $route.current.params;
+            return groupServices.getByGroupId(routeParams.groupid);
+          }
+        ]
+      }
+    };
+
+    $routeProvider.when('/home/groups/:groupid', routeDefinition);
+
+}]);
 app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 	function ($location, userServices, projectServices) {
 
@@ -612,6 +635,11 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 	var pf = projectFactory;
 
 	self.pyMoreInfo = pf.byPy();
+
+	self.setCommentPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 1100 }, 'fast');
+	}
 
 	self.pyInfo = function () {
 		pf.pyInfo();
@@ -714,6 +742,120 @@ app.config(['$routeProvider', function($routeProvider) {
 
 
 
+app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user',
+	function (activeRoute, submitFactory, groupServices, projectServices, user) {
+
+	var self = this;
+
+	self.byNew = true;
+	self.user = user.data;
+	console.log(user.data.pending_submissions);
+
+	self.newProject = {};
+
+	self.createProject = function () {
+		console.log(self.newProject);
+		projectServices.addProject(self.newProject);
+		self.newProject = {};
+		console.log(self.newProject);
+	};
+
+	self.setNew = function () {
+		self.byNew = true;
+	};
+
+	self.setPending = function () {
+		self.byNew = false;
+	};
+
+	self.isActive = function (path) {
+      return activeRoute.isActive(path);
+    };
+
+    var sf = submitFactory;
+
+    self.byNew = sf.byNew();
+
+	self.byEdit = sf.byEdit();
+
+	self.setNew = function () {
+		sf.setNew();
+		self.byNew = sf.byNew();
+		self.byEdit = sf.byEdit();
+	};
+
+	self.setPending = function () {
+		sf.setPending();
+		self.byNew = sf.byNew();
+		self.byEdit = sf.byEdit();
+	};
+	
+}]);
+(function () {
+	app.directive('newProject', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/submit/new-project.html'
+	  };
+	});
+})();
+app.config(['$routeProvider', function ($routeProvider) {
+  'use strict';
+
+  var submitPage = {
+    templateUrl: 'static/submit/submit.html',
+    controller: 'SubmitCtrl',
+    controllerAs: 'vm',
+    resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
+      changeToNew: ['submitFactory',
+        function(submitFactory) {
+          submitFactory.setNew();
+        }
+      ]
+    }
+  };
+
+  var pendingPage = {
+    templateUrl: 'static/submit/submit.html',
+    controller: 'SubmitCtrl',
+    controllerAs: 'vm',
+    resolve: {
+      user: ['userServices',
+        function(userServices) {
+          return userServices.currentUser();
+        }
+      ],
+      changeToPen: ['submitFactory',
+        function(submitFactory) {
+          submitFactory.setPending();
+        }
+      ]
+    }
+  };
+  
+  $routeProvider
+  .when('/submit', submitPage)
+  .when('/submit/new', submitPage)
+  .when('/submit/pending', pendingPage);
+  // .when('/account/edit', {
+  //   templateUrl: 'static/account/account.html',
+  //   controller: 'SubmitCtrl',
+  //   controllerAs: 'vm',
+  //   resolve: {
+  //     changeToAct: ['submitFactory',
+  //       function(submitFactory) {
+  //         submitFactory.setEdit();
+  //       }
+  //     ]
+  //   }
+  // });
+
+}]);
 app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $location) {
 
 	'use strict';
@@ -828,6 +970,10 @@ app.factory('groupServices', ['$http', '$log',
 
       getByGroupId: function (groupId) {
         return get('/api/v1/groups/' + groupId);
+      },
+
+      getGraphByGroupId: function (groupId) {
+        return get('/api/v1/groups/' + groupId + '/graph');
       },
 
       listGroups: function () {
@@ -1125,120 +1271,6 @@ app.factory('userServices', ['$http', '$q',
         };
     }
 ]);
-app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user',
-	function (activeRoute, submitFactory, groupServices, projectServices, user) {
-
-	var self = this;
-
-	self.byNew = true;
-	self.user = user.data;
-	console.log(user.data.pending_submissions);
-
-	self.newProject = {};
-
-	self.createProject = function () {
-		console.log(self.newProject);
-		projectServices.addProject(self.newProject);
-		self.newProject = {};
-		console.log(self.newProject);
-	};
-
-	self.setNew = function () {
-		self.byNew = true;
-	};
-
-	self.setPending = function () {
-		self.byNew = false;
-	};
-
-	self.isActive = function (path) {
-      return activeRoute.isActive(path);
-    };
-
-    var sf = submitFactory;
-
-    self.byNew = sf.byNew();
-
-	self.byEdit = sf.byEdit();
-
-	self.setNew = function () {
-		sf.setNew();
-		self.byNew = sf.byNew();
-		self.byEdit = sf.byEdit();
-	};
-
-	self.setPending = function () {
-		sf.setPending();
-		self.byNew = sf.byNew();
-		self.byEdit = sf.byEdit();
-	};
-	
-}]);
-(function () {
-	app.directive('newProject', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/submit/new-project.html'
-	  };
-	});
-})();
-app.config(['$routeProvider', function ($routeProvider) {
-  'use strict';
-
-  var submitPage = {
-    templateUrl: 'static/submit/submit.html',
-    controller: 'SubmitCtrl',
-    controllerAs: 'vm',
-    resolve: {
-      user: ['userServices',
-        function(userServices) {
-          return userServices.currentUser();
-        }
-      ],
-      changeToNew: ['submitFactory',
-        function(submitFactory) {
-          submitFactory.setNew();
-        }
-      ]
-    }
-  };
-
-  var pendingPage = {
-    templateUrl: 'static/submit/submit.html',
-    controller: 'SubmitCtrl',
-    controllerAs: 'vm',
-    resolve: {
-      user: ['userServices',
-        function(userServices) {
-          return userServices.currentUser();
-        }
-      ],
-      changeToPen: ['submitFactory',
-        function(submitFactory) {
-          submitFactory.setPending();
-        }
-      ]
-    }
-  };
-  
-  $routeProvider
-  .when('/submit', submitPage)
-  .when('/submit/new', submitPage)
-  .when('/submit/pending', pendingPage);
-  // .when('/account/edit', {
-  //   templateUrl: 'static/account/account.html',
-  //   controller: 'SubmitCtrl',
-  //   controllerAs: 'vm',
-  //   resolve: {
-  //     changeToAct: ['submitFactory',
-  //       function(submitFactory) {
-  //         submitFactory.setEdit();
-  //       }
-  //     ]
-  //   }
-  // });
-
-}]);
 app.factory('accountFactory', function () {
 
 	'use strict';
@@ -1395,7 +1427,13 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
 
 	// appearFactory.checkWidth();
 
+	self.setCommentPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 1100 }, 'fast');
+	}
+
 	self.setPage = function () {
+		console.log('top')
 		$('html, body').animate({ scrollTop: 0 }, 'fast');
 	}
 

@@ -14,8 +14,9 @@ app.controller('FooterCtrl', ['projectServices', 'groupServices', function (proj
 	})
 
 	self.setPage = function () {
+		console.log('top')
 		$('html, body').animate({ scrollTop: 0 }, 'fast');
-	}
+	};
 
 	self.bySiteMap = function () {
 		if (window.location.hash === '#/projectindex') {

@@ -1,5 +1,5 @@
-app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 
-	function (group, projectFactory, appearFactory) {
+app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph',
+	function (group, projectFactory, appearFactory, graph) {
 	var self = this;
 	self.group = group;
 	
@@ -31,4 +31,18 @@ app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory',
 		pf.ghInfo();
 		self.ghMoreInfo = pf.byGh();
 	};
+
+	function parse(spec) {
+		vg.parse.spec(spec, function(chart) { 
+			// function graphing (argument) {
+			// 	// body...
+			// }
+			chart({el:".graph"}).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update(); 
+			if (window.innerWidth < 400) {
+				chart({el:".graph"}).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
+			}
+		});
+	}
+	parse(graph);
+
 }]);
