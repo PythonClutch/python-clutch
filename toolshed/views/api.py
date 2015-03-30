@@ -244,6 +244,15 @@ def group_projects(id):
         return failure_response("There is no such group.", 404)
 
 
+@api.route("/groups/popular")
+def groups_by_popularity():
+    groups = Group.query.order_by(Group.average_score).all()
+    if groups:
+        return success_response(all_groups_schema, groups)
+    else:
+        return failure_response("There are no groups.", 404)
+
+
 # Category routes
 
 @api.route("/categories")
@@ -506,4 +515,3 @@ def graph_group_diff(id):
     bar_graph = vincent.Bar(data)
 
     return bar_graph.to_json()
-
