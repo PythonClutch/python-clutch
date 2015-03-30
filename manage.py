@@ -2,7 +2,7 @@
 import os
 import csv
 
-from flask.ext.script import Manager, Shell, Server
+from flask.ext.script import Manager, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 from toolshed.models import AdminAccount, Project
@@ -48,7 +48,7 @@ def test():
 @manager.command
 def create_admin():
     admin = AdminAccount(admin_name="joel",
-                  password="password")
+                         password="password")
     db.session.add(admin)
     db.session.commit()
 
@@ -58,6 +58,7 @@ def update():
     projects = Project.query.all()
     update_projects(projects)
     return "Projects updated."
+
 
 @manager.command
 def update_score():

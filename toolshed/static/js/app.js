@@ -278,58 +278,6 @@ app.config(['$routeProvider', function ($routeProvider) {
   });
 
 }]);
-app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 
-	function (group, projectFactory, appearFactory) {
-	var self = this;
-	self.group = group;
-	
-	console.log(group.projects);
-
-	self.rotate = appearFactory.rotate();
-
-    self.checkBox = function () {
-    	appearFactory.checkBox();
-    	self.rotate = appearFactory.rotate();
-	};
-
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.setPage = function () {
-		$('html, body').animate({ scrollTop: 0 }, 'fast');
-	}
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-}]);
-app.config(['$routeProvider', function($routeProvider) {    
-    var routeDefinition = {
-      templateUrl: 'static/group/group.html',
-      controller: 'GroupCtrl',
-      controllerAs: 'vm',
-      resolve: {
-        group: ['$route', 'groupServices',
-          function($route, groupServices) {
-            var routeParams = $route.current.params;
-            return groupServices.getByGroupId(routeParams.groupid);
-          }
-        ]
-      }
-    };
-
-    $routeProvider.when('/home/groups/:groupid', routeDefinition);
-
-}]);
 app.controller('FooterCtrl', ['projectServices', 'groupServices', function (projectServices, groupServices) {
 	var self = this;
 
@@ -425,6 +373,58 @@ app.config(['$routeProvider', function ($routeProvider) {
   .when('/projectindex', page)
   .when('/about', page)
   .when('/contact', page)
+}]);
+app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 
+	function (group, projectFactory, appearFactory) {
+	var self = this;
+	self.group = group;
+	
+	console.log(group.projects);
+
+	self.rotate = appearFactory.rotate();
+
+    self.checkBox = function () {
+    	appearFactory.checkBox();
+    	self.rotate = appearFactory.rotate();
+	};
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.setPage = function () {
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	}
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
+}]);
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/group/group.html',
+      controller: 'GroupCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        group: ['$route', 'groupServices',
+          function($route, groupServices) {
+            var routeParams = $route.current.params;
+            return groupServices.getByGroupId(routeParams.groupid);
+          }
+        ]
+      }
+    };
+
+    $routeProvider.when('/home/groups/:groupid', routeDefinition);
+
 }]);
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
 	'categories', 'user', 'likeFactory', 'appearFactory',
@@ -584,12 +584,27 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 		self.ghMoreInfo = pf.byGh();
 	};
 
+	self.comments = project.comments;
+	console.log(self.comments);
+
 	self.comment = {};
+
+	console.log(user);
 	
 	self.addComment = function () {
 		console.log(self.comment);
 		console.log(self.project.id);
 		projectServices.addComment(self.project.id, self.comment);
+		var tempComment = {
+			'created_display': 'seconds ago',
+			'project_id': project.id,
+			'text': self.comment.text,
+			'user_avatar': user.data.avatar_url,
+			'user_id': user.data.id,
+			'user_name': user.data.github_name
+		}
+		self.comments.push(tempComment);
+		console.log(self.comments);
 		self.comment = {};
 	};
 
