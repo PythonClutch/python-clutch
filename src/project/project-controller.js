@@ -11,6 +11,11 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 
 	self.pyMoreInfo = pf.byPy();
 
+	self.setCommentPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 1100 }, 'fast');
+	}
+
 	self.pyInfo = function () {
 		pf.pyInfo();
 		self.pyMoreInfo = pf.byPy(); 
@@ -23,12 +28,27 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 		self.ghMoreInfo = pf.byGh();
 	};
 
+	self.comments = project.comments;
+	console.log(self.comments);
+
 	self.comment = {};
+
+	console.log(user);
 	
 	self.addComment = function () {
 		console.log(self.comment);
 		console.log(self.project.id);
 		projectServices.addComment(self.project.id, self.comment);
+		var tempComment = {
+			'created_display': 'seconds ago',
+			'project_id': project.id,
+			'text': self.comment.text,
+			'user_avatar': user.data.avatar_url,
+			'user_id': user.data.id,
+			'user_name': user.data.github_name
+		}
+		self.comments.push(tempComment);
+		console.log(self.comments);
 		self.comment = {};
 	};
 

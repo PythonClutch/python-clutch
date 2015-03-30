@@ -145,6 +145,11 @@ b {
   .link:hover {
     color: black; }
 
+a.noLink {
+  color: #d1d1d1; }
+  a.noLink:hover {
+    color: #d1d1d1; }
+
 /*body {
   font-family: sans-serif;
   line-height: 1.4em;
@@ -243,7 +248,8 @@ input, textarea {
   justify-content: center;
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  margin-bottom: 34px; }
 
 .home-project-a {
   padding: 11px 0;
@@ -307,6 +313,9 @@ input, textarea {
 div.hfGroup {
   width: 32%; }
 
+div.activeFilter {
+  display: none; }
+
 .home-project-search::-webkit-input-placeholder {
   padding: 0 0 6px;
   color: #acabab;
@@ -349,7 +358,7 @@ div.hfGroup {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   width: 49%;
-  margin: 34px auto; }
+  margin: 0 auto 34px; }
 
 .home-project-filter label {
   display: -webkit-flex;
@@ -437,7 +446,7 @@ li.number-li {
   width: 100%;
   background: #e1e1e1;
   margin: 13px auto;
-  z-index: 5; }
+  z-index: 1; }
 
 .home-project-li a {
   color: #12897D; }
@@ -494,6 +503,9 @@ div.home-project-basic-info-icon, .home-project-basic-info-icon {
 div.home-project-basic-info-icon .fa {
   cursor: pointer; }
 
+div.home-project-basic-info-icon-gh-score .fa {
+  cursor: text; }
+
 .home-project-basic-info-comment i {
   margin-top: -1px; }
 
@@ -536,13 +548,15 @@ div.home-project-basic-info-icon .fa {
     transition: all .2s; }
 
 .home-project-details-div {
-  padding-bottom: 1px;
-  visibility: hidden;
-  height: 0;
   background: transparent;
-  width: 97.38%;
+  padding-bottom: 1px;
+  height: 573px;
+  position: absolute;
+  visibility: hidden;
+  width: 50%;
   margin: 0 auto;
-  z-index: 1; }
+  margin-top: -573px;
+  z-index: 0; }
 
 .home-project-content-p {
   font-size: 12px;
@@ -601,10 +615,11 @@ div.home-project-basic-info-icon .fa {
   text-align: left; }
 
 .home-project-details {
+  opacity: 0;
+  z-index: 3;
   background: white;
   margin: 13px auto;
-  padding: 28px 20px 28px;
-  z-index: 1; }
+  padding: 28px 20px 28px; }
   .home-project-details:first-of-type {
     margin-top: 0; }
 
@@ -651,8 +666,7 @@ div.home-project-basic-info-icon .fa {
   justify-content: flex-start;
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  width: 120px; }
+  flex-wrap: wrap; }
   .home-project-header-top a.link:hover {
     color: black; }
     .home-project-header-top a.link:hover i {
@@ -696,6 +710,9 @@ div.home-project-basic-info-icon .fa {
   margin-bottom: 10px;
   font-size: 16px; }
 
+.home-project-links a.link {
+  text-decoration: underline; }
+
 .home-project-links {
   height: 27px;
   color: #12897D;
@@ -708,13 +725,12 @@ div.home-project-basic-info-icon .fa {
   margin: 0 auto;
   font-weight: 300; }
 
-.home-project-links a.link {
-  text-decoration: underline; }
-
 .home-project-links-div i.fa {
   margin-right: 6px; }
-  .home-project-links-div i.fa:hover ~ a {
+  .home-project-links-div i.fa:hover ~ a.link {
     color: black; }
+  .home-project-links-div i.fa:hover ~ a.link {
+    color: #d1d1d1; }
 
 .home-project-links-div:hover {
   color: black; }
@@ -761,9 +777,17 @@ div.home-project-basic-info-icon .fa {
 .home-project-basic-info-plus {
   cursor: pointer; }
 
-.names-details-checkbox:checked ~ .home-project-details-div {
+.names-details-checkbox:checked ~ .home-project-details-div-projects {
+  position: relative;
   visibility: visible;
-  height: 100%; }
+  height: 100%;
+  width: 97.38%;
+  margin-top: 0;
+  transition: margin-top .15s ease-out; }
+
+.names-details-checkbox:checked ~ .home-project-details-div .home-project-details {
+  opacity: 1;
+  transition: all .25s ease-out .08s; }
 
 .more-info-input {
   visibility: hidden;
@@ -776,9 +800,24 @@ div.home-project-basic-info-icon .fa {
 .gh-checkbox:checked ~ .home-project-content-gh {
   display: block; }
 
+.home-project-li a.noLink {
+  color: #d1d1d1;
+  text-decoration: none;
+  cursor: text; }
+  .home-project-li a.noLink:hover {
+    cursor: text;
+    color: #d1d1d1; }
+.home-project-li i.noLink {
+  color: #d1d1d1; }
+  .home-project-li i.noLink:hover {
+    cursor: text;
+    color: #d1d1d1; }
+
 .project-info {
   background: #e1e1e1;
   margin-top: 24px; }
+  .project-info div.home-project-details {
+    opacity: 1; }
 
 .project a {
   color: #12897D; }
@@ -858,13 +897,14 @@ div.home-project-basic-info-icon .fa {
   width: 100%; }
 
 .comments-header-div {
-  font-size: 26px; }
+  font-size: 26px;
+  margin-bottom: 41px; }
   .comments-header-div i.fa {
     margin-right: 13px;
     font-size: 26px; }
 
 .comments-ul {
-  margin: 28px 0; }
+  margin-bottom: 41px; }
   .comments-ul li {
     margin: 13px 0;
     width: 100%; }
@@ -915,6 +955,19 @@ div.home-project-basic-info-icon .fa {
   .comment-form-textarea:focus {
     background: white;
     border: 1px solid #e1e1e1; }
+
+.project a.noLink {
+  color: #d1d1d1;
+  text-decoration: none;
+  cursor: text; }
+  .project a.noLink:hover {
+    cursor: text;
+    color: #d1d1d1; }
+.project i.noLink {
+  color: #d1d1d1; }
+  .project i.noLink:hover {
+    cursor: text;
+    color: #d1d1d1; }
 
 .account-set {
   padding-top: 41px;
@@ -1462,6 +1515,17 @@ footer a {
       color: #12897D;
       cursor: pointer; }
 
+.names-details-checkbox:checked ~ .home-project-details-div {
+  position: relative;
+  visibility: visible;
+  height: 100%;
+  width: 97.38%;
+  margin-top: 0; }
+
+.names-details-checkbox:checked ~ .home-project-details-div .home-project-details-div-li {
+  opacity: 1;
+  transition: all .3s ease-out .1s; }
+
 .home-group-basic-info-right-category {
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1479,8 +1543,17 @@ footer a {
 .home-project-details-div-li-cat {
   background: white; }
 
+.home-project-name a.category-details-link {
+  color: #12897D; }
+  .home-project-name a.category-details-link:hover {
+    color: black; }
+
 .hp-filter-list {
   margin: 0 auto; }
+
+.cat-push {
+  width: 100%;
+  height: 1200px; }
 
 @media screen and (max-width: 751px) {
   .nav-right {
@@ -1672,3 +1745,13 @@ footer a {
 
 .developer-links {
   margin-top: 10px; }
+
+.contact h1 {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 13px; }
+.contact a {
+  margin-left: 3px; }
+
+a.contact-email-link {
+  margin-left: 13px; }

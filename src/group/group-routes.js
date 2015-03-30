@@ -4,6 +4,12 @@ app.config(['$routeProvider', function($routeProvider) {
       controller: 'GroupCtrl',
       controllerAs: 'vm',
       resolve: {
+        graph: ['$route', 'groupServices',
+          function($route, groupServices) {
+            var routeParams = $route.current.params;
+            return groupServices.getGraphByGroupId(routeParams.groupid);
+          }
+        ],
         group: ['$route', 'groupServices',
           function($route, groupServices) {
             var routeParams = $route.current.params;

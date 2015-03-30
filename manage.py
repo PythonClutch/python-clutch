@@ -7,7 +7,7 @@ from faker import Factory
 
 fake = Factory.create()
 
-from flask.ext.script import Manager, Shell, Server
+from flask.ext.script import Manager, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 from toolshed.models import AdminAccount, Project, ProjectLog
@@ -53,7 +53,7 @@ def test():
 @manager.command
 def create_admin():
     admin = AdminAccount(admin_name="joel",
-                  password="password")
+                         password="password")
     db.session.add(admin)
     db.session.commit()
 

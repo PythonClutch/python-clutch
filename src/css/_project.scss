@@ -5,6 +5,9 @@
 .project-info {
 	background: $light-gray;
 	margin-top: 24px;  
+	div.home-project-details {
+		opacity: 1;
+	}
 }
 
 .project a {
@@ -94,6 +97,7 @@
 
 .comments-header-div {
 	font-size: 26px; 
+	margin-bottom: 41px; 
 	i.fa {
 		margin-right: 13px; 
 		font-size: 26px; 
@@ -101,7 +105,7 @@
 }
 
 .comments-ul {
-	margin: 28px 0;
+	margin-bottom: 41px;
 	li {
 		margin: 13px 0;
 		width: 100%;
@@ -159,7 +163,24 @@
 	}
 }
 
-
+.project {
+	a.noLink {
+		color: $gray;
+		text-decoration: none;
+		cursor: text;
+		&:hover {
+			cursor: text;
+			color: $gray; 
+		} 
+	}
+	i.noLink {
+		color: $gray;
+		&:hover {
+			cursor: text;
+			color: $gray; 
+		} 
+	}
+}
 
 
 
