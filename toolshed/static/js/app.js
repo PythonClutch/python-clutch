@@ -57,6 +57,12 @@ app.config(['$routeProvider', function ($routeProvider) {
           return projectServices.listPopular();
         }
       ],
+      newestProjects: function () {
+        return true
+      },
+      popularProjects: function () {
+        return true
+      },
       groups: ['groupServices',
         function(groupServices) {
           return groupServices.listGroups();
@@ -283,15 +289,23 @@ app.controller('FooterCtrl', ['projectServices', 'groupServices', function (proj
 
 	projectServices.list().then(function (result) {
 		self.projects = result;
+		self.firstColumn = Math.ceil(result.length/3);
+		self.firstColumnPlus = self.firstColumn + 1;
+		self.secondColumn = Math.ceil(result.length/1.5);
+		self.secondColumnPlus = self.secondColumn + 1;
+		self.thirdColumn = result.length;
 	});
 
-	groupServices.listCats().then(function (result) {
-		self.categories = result;
-	})
+	// self.firstColumn = function () {
+	// 	return function () {
+	// 		self.projects
+	// 	}
+	// }
 
-	groupServices.listGroups().then(function (result) {
-		self.groups = result;
-	})
+	self.setPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	};
 
 	self.bySiteMap = function () {
 		if (window.location.hash === '#/projectindex') {
@@ -370,8 +384,8 @@ app.config(['$routeProvider', function ($routeProvider) {
   .when('/about', page)
   .when('/contact', page)
 }]);
-app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 
-	function (group, projectFactory, appearFactory) {
+app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph',
+	function (group, projectFactory, appearFactory, graph) {
 	var self = this;
 	self.group = group;
 	
@@ -393,12 +407,30 @@ app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory',
 		self.pyMoreInfo = pf.byPy(); 
 	};
 
+	self.setPage = function () {
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	}
+
 	self.ghMoreInfo = pf.byGh();
 
 	self.ghInfo = function () {
 		pf.ghInfo();
 		self.ghMoreInfo = pf.byGh();
 	};
+
+	function parse(spec) {
+		vg.parse.spec(spec, function(chart) { 
+			// function graphing (argument) {
+			// 	// body...
+			// }
+			chart({el:".graph"}).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update(); 
+			if (window.innerWidth < 400) {
+				chart({el:".graph"}).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
+			}
+		});
+	}
+	parse(graph);
+
 }]);
 app.config(['$routeProvider', function($routeProvider) {    
     var routeDefinition = {
@@ -406,6 +438,12 @@ app.config(['$routeProvider', function($routeProvider) {
       controller: 'GroupCtrl',
       controllerAs: 'vm',
       resolve: {
+        graph: ['$route', 'groupServices',
+          function($route, groupServices) {
+            var routeParams = $route.current.params;
+            return groupServices.getGraphByGroupId(routeParams.groupid);
+          }
+        ],
         group: ['$route', 'groupServices',
           function($route, groupServices) {
             var routeParams = $route.current.params;
@@ -420,7 +458,8 @@ app.config(['$routeProvider', function($routeProvider) {
 }]);
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
 	'categories', 'user', 'likeFactory', 'appearFactory',
-	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories, user, likeFactory, appearFactory) {
+	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, 
+		categories, user, likeFactory, appearFactory) {
 	var self = this;
 
 	self.categories = categories;
@@ -428,6 +467,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 	self.projects = projects;
 
 	self.changeTrue = function () {
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
 		appearFactory.changeTrue();
 	}
 
@@ -445,6 +485,11 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 			paragraphAmt.show();
 		}
 	}	
+
+	self.setPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	}
 
 	self.byProjects = homeFactory.byProjects();
 
@@ -601,6 +646,11 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 
 	self.pyMoreInfo = pf.byPy();
 
+	self.setCommentPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 1100 }, 'fast');
+	}
+
 	self.pyInfo = function () {
 		pf.pyInfo();
 		self.pyMoreInfo = pf.byPy(); 
@@ -613,12 +663,27 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 		self.ghMoreInfo = pf.byGh();
 	};
 
+	self.comments = project.comments;
+	console.log(self.comments);
+
 	self.comment = {};
+
+	console.log(user);
 	
 	self.addComment = function () {
 		console.log(self.comment);
 		console.log(self.project.id);
 		projectServices.addComment(self.project.id, self.comment);
+		var tempComment = {
+			'created_display': 'seconds ago',
+			'project_id': project.id,
+			'text': self.comment.text,
+			'user_avatar': user.data.avatar_url,
+			'user_id': user.data.id,
+			'user_name': user.data.github_name
+		}
+		self.comments.push(tempComment);
+		console.log(self.comments);
 		self.comment = {};
 	};
 
@@ -803,6 +868,10 @@ app.factory('groupServices', ['$http', '$log',
         return get('/api/v1/groups/' + groupId);
       },
 
+      getGraphByGroupId: function (groupId) {
+        return get('/api/v1/groups/' + groupId + '/graph');
+      },
+
       listGroups: function () {
         groups = groups || get('/api/v1/groups');
         return groups;
@@ -898,6 +967,7 @@ app.factory('likeFactory', ['projectServices', function (projectServices) {
 		checkLike: function (project, user) {
 			for (var i = project.user_likes.length - 1; i >= 0; i--) {
 				if (project.user_likes[i].user_id === user.data.id) {
+					console.log(true);
 					return true;
 				} else {
 					return false;
@@ -1023,6 +1093,16 @@ app.factory('projectServices', ['$http', '$log',
       searchProjects: function (word) {
         console.log(word);
         return get('/api/v1/search?q="' + word + '"');
+      },
+
+      searchNewestProjects: function (word) {
+        console.log(word);
+        return get('/api/v1/newest/search?q="' + word + '"');
+      },
+
+      searchPopularProjects: function (word) {
+        console.log(word);
+        return get('/api/v1/popular/search?q="' + word + '"');
       }
 
     };
@@ -1347,12 +1427,15 @@ app.config(['$routeProvider', function ($routeProvider) {
 
   .when('/home/categories', homePage);
 }]);
-app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectServices, appearFactory) {
+app.controller('hpCtrl', ['projectServices', 'appearFactory',
+    function (projectServices, appearFactory) {
 	var self = this;
 
 	self.byNames = true;
 
-	self.rotate = appearFactory.rotate();
+	self.rotate = function () {
+		return appearFactory.rotate();
+	};
 
 	// function checkRotate () {
 	// 	self.rotate = appearFactory.rotate();
@@ -1368,19 +1451,47 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
 
 	// appearFactory.checkWidth();
 
+	// self.newestProjects = [];
 
+	// self.popularProjects = [];
+
+	self.setCommentPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 1100 }, 'fast');
+	}
+
+	self.setPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	}
 
 	self.checkBox = function () {
     	appearFactory.checkBox();
     	self.rotate = appearFactory.rotate();
 	};
 
+	// projectServices.searchNewestProjects().then(function (result){
+	// 	self.newestSearchedProjects = result;
+	// }, function () {
+	// 	console.log('nothing there');
+	// });
+
+	// projectServices.searchProjects().then(function (result){
+	// 	self.listSearchedProjects = result;
+	// }, function () {
+	// 	console.log('nothing there');
+	// });
+
 	projectServices.listNewest().then(function (result){
 		self.newestProjects = result;
+	}, function () {
+		console.log('nothing there');
 	});
 
 	projectServices.list().then(function (result){
 		self.listProjects = result;
+	}, function () {
+		console.log('nothing there');
 	});
 
 	self.setGroups = function () {
@@ -2099,6 +2210,16 @@ app.factory('submitFactory', function () {
 	};
 
 });
+app.controller('hgCtrl', ['group', function (group) {
+	var self = this;
+
+	self.group = group;
+
+	console.log(group);
+
+
+
+}]);
 app.controller('hnCtrl', ['projects', 'appearFactory', 'projectFactory', function (projects, appearFactory, projectFactory) {
 	var self = this;
 
@@ -2126,16 +2247,6 @@ app.controller('hnCtrl', ['projects', 'appearFactory', 'projectFactory', functio
 
 
 }]);
-app.controller('hgCtrl', ['group', function (group) {
-	var self = this;
-
-	self.group = group;
-
-	console.log(group);
-
-
-
-}]);
 app.config(['$routeProvider', function ($routeProvider) {
   'use strict';
 
@@ -2147,15 +2258,33 @@ app.config(['$routeProvider', function ($routeProvider) {
       projects: ['$route', 'projectServices',
         function($route, projectServices) {
           var routeParams = $route.current.params;
-          return projectServices.searchProjects(routeParams.word).then(function (results) {
+          return projectServices.searchPopularProjects(routeParams.word).then(function (results) {
             console.log(results.projects);
             return results.projects;
           });
         }
       ],
+      // newestProjects: ['$route', 'projectServices',
+      //   function($route, projectServices) {
+      //     var routeParams = $route.current.params;
+      //     return projectServices.searchNewestProjects(routeParams.word).then(function (results) {
+      //       console.log(results.projects);
+      //       return results.projects;
+      //     });
+      //   }
+      // ],
+      // listProjects: ['$route', 'projectServices',
+      //   function($route, projectServices) {
+      //     var routeParams = $route.current.params;
+      //     return projectServices.searchProjects(routeParams.word).then(function (results) {
+      //       console.log(results.projects);
+      //       return results.projects;
+      //     });
+      //   }
+      // ],
       groups: ['groupServices',
         function(groupServices) {
-          return groupServices.list();
+          return groupServices.listGroups();
         }
       ],
       categories: ['groupServices',

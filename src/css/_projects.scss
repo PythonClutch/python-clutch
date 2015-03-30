@@ -6,7 +6,7 @@
 	width: 100%;
 	background: $light-gray;
 	margin: 13px auto; 
-	z-index: 5; 
+	z-index: 1; 
 }
 
 .home-project-li a {
@@ -72,6 +72,10 @@ div.home-project-basic-info-icon .fa {
 	cursor: pointer;
 }
 
+div.home-project-basic-info-icon-gh-score .fa {
+	cursor: text; 
+}
+
 .home-project-basic-info-comment i {
 	margin-top: -1px; 
 }
@@ -107,13 +111,15 @@ div.home-project-basic-info-icon .fa {
 /////////////////////////////////////////////////////////////
 
 .home-project-details-div {
-	padding-bottom: 1px; 
-	visibility: hidden;
-	height: 0;
 	background: transparent;
-	width: 97.38%;
-	margin: 0 auto; 
-	z-index: 1;  
+	padding-bottom: 1px; 
+	height: 573px;
+	position: absolute;
+	visibility: hidden;
+	width: 50%;
+	margin: 0 auto;
+	margin-top: -573px; 
+	z-index: 0; 
 }
 
 .home-project-content-p {
@@ -186,11 +192,11 @@ div.home-project-basic-info-icon .fa {
 // }
 
 .home-project-details {
-	// width: 100%;
+	opacity: 0;
+	z-index: 3; 
 	background: white; 
 	margin: 13px auto;
 	padding: 28px 20px 28px; 
-	z-index: 1; 
 	&:first-of-type {
 		margin-top: 0; 
 	}
@@ -231,7 +237,6 @@ div.home-project-basic-info-icon .fa {
 	flex-direction: row;
 	justify-content: flex-start;
 	flex-wrap: wrap;
-	width: 120px;
 	&:hover {
 		color: black; 
 		i {
@@ -268,12 +273,16 @@ div.home-project-basic-info-icon .fa {
 
 /////////////// FIRST BLOCK /////////////////////////////////////
 
+.home-project-links a.link {
+	text-decoration: underline; 
+}
+
 .home-project-links {
 	height: 27px;
 	color: $base-color;
 	font-size: 22px; 
 	padding-top: 28px;  
-	z-index: -4 
+	z-index: -4;
 }
 
 .home-project-links-div-sizer {
@@ -283,14 +292,13 @@ div.home-project-basic-info-icon .fa {
 	
 }
 
-.home-project-links a.link {
-	text-decoration: underline; 
-}
-
 .home-project-links-div i.fa {
 	margin-right: 6px; 
-	&:hover ~ a {
+	&:hover ~ a.link {
 		color: black;
+	}
+	&:hover ~ a.link {
+		color: $gray;
 	}
 }
 
@@ -348,11 +356,18 @@ div.home-project-basic-info-icon .fa {
 	cursor: pointer;
 }
 
-.names-details-checkbox:checked ~ .home-project-details-div {
+.names-details-checkbox:checked ~ .home-project-details-div-projects {
+	position: relative;
 	visibility: visible;
 	height: 100%;
-	// margin-top: 80px;
-	// transition: visibility 1s, height 1s, z-index .01s ease-in 1s;
+	width: 97.38%;
+	margin-top: 0;  
+	transition: margin-top .15s ease-out;
+}
+
+.names-details-checkbox:checked ~ .home-project-details-div .home-project-details{
+	opacity: 1;
+	transition: all .25s ease-out .08s;
 }
 
 .more-info-input {
@@ -377,7 +392,24 @@ div.home-project-basic-info-icon .fa {
 // 	display: block;
 // }
 
-
+.home-project-li {
+	a.noLink {
+		color: $gray;
+		text-decoration: none;
+		cursor: text;
+		&:hover {
+			cursor: text;
+			color: $gray; 
+		} 
+	}
+	i.noLink {
+		color: $gray;
+		&:hover {
+			cursor: text;
+			color: $gray; 
+		} 
+	}
+}
 
 
 
