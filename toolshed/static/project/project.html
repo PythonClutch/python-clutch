@@ -46,7 +46,7 @@
 					</div>
 					<div class="home-project-links-div">
 						<i ng-class="{ noLink : vm.project.github_url === null }" class="fa fa-code"></i>
-						<a ng-class="{ noLink : vm.project.github_url === null }" class="link" href="{{vm.project.github_url}}">Source Code</a>
+						<a ng-class="{ noLink : vm.project.github_url === null }" class="link" href="{{vm.project.git_url || vm.project.pypi_url }}">Source Code</a>
 					</div>
 					<div class="home-project-links-div">
 						<i ng-class="{ noLink : vm.project.mailing_list_url === null }" class="fa fa-envelope-o"></i>
