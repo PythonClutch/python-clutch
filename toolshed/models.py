@@ -29,26 +29,22 @@ class User(db.Model):
     linkedin_url = db.Column(db.String(255))
     portfolio_url = db.Column(db.String(255))
 
-
     comments = db.relationship("Comment", backref="user", lazy="dynamic", foreign_keys="Comment.user_id",
                                cascade="all,delete")
     likes = db.relationship("Like", backref="user", lazy="dynamic", foreign_keys="Like.user_id",
-                           cascade="all,delete")
+                            cascade="all,delete")
 
     submissions = db.relationship("Project", backref="submitted_by",
-                                   lazy="dynamic", cascade="all,delete",
-                                   foreign_keys="Project.submitted_by_id")
-
+                                  lazy="dynamic", cascade="all,delete",
+                                  foreign_keys="Project.submitted_by_id")
 
     @property
     def pending_submissions(self):
         return Project.query.filter_by(submitted_by_id=self.id).filter_by(status=False).all()
 
-
     @property
     def complete_submissions(self):
         return Project.query.filter_by(submitted_by_id=self.id).filter_by(status=True).all()
-
 
     def __repr__(self):
         return "User: {}".format(self.github_name)
@@ -73,6 +69,7 @@ class Like(db.Model):
 
 class ProjectQuery(BaseQuery, SearchQueryMixin):
     pass
+
 
 class Project(db.Model):
 
@@ -158,7 +155,6 @@ class Project(db.Model):
             arrow_last_commit = arrow.get(last_string)
             return arrow_last_commit.humanize()
 
-
     def __repr__(self):
         return "{}".format(self.name)
 
@@ -178,7 +174,6 @@ class ProjectLog(db.Model):
     log_date = db.Column(db.DateTime)
     likes_count = db.Column(db.Integer)
     previous_score = db.Column(db.Float)
-
 
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
 
@@ -325,10 +320,9 @@ class LogSchema(Schema):
         fields = ("id", "project_id", "forks_count", "starred_count",
                   "current_version", "last_commit", "open_issues_count",
                   "downloads_count", "contributors_count", "log_date",
-                   "forks_difference", "watchers_difference",
+                  "forks_difference", "watchers_difference",
                   "download_difference", "likes_difference", "release_count",
                   "previous_score")
-
 
 
 class ProjectSchema(Schema):
@@ -365,22 +359,8 @@ class UserSchema(Schema):
 
     class Meta:
         fields = ("id", "github_name", "github_url", "email", "comments",
-        "likes", "public_repos", "avatar_url", "linkedin_url", "portfolio_url",
-        "pending_submissions", "completed_submissions")
-
-
-
-class UserSchema(Schema):
-    comments = fields.Nested(CommentSchema, many=True)
-    likes = fields.Nested(LikeSchema, many=True)
-    pending_submissions = fields.Nested(ProjectSchema, many=True)
-    completed_submissions = fields.Nested(ProjectSchema, many=True)
-
-    class Meta:
-        fields = ("id", "github_name", "github_url", "email", "comments",
-        "likes", "public_repos", "avatar_url", "linkedin_url", "portfolio_url",
-        "pending_submissions", "completed_submissions")
-
+                  "likes", "public_repos", "avatar_url", "linkedin_url", "portfolio_url",
+                  "pending_submissions", "completed_submissions")
 
 
 class GroupSchema(Schema):
