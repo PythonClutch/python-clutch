@@ -44,9 +44,33 @@
 	}
 }
 
+.names-details-checkbox:checked ~ .home-project-details-div {
+	position: relative;
+	visibility: visible;
+	height: 100%;
+	width: 97.38%;
+	margin-top: 0;  
+}
 
+.names-details-checkbox:checked ~ .home-project-details-div .home-project-details-div-li {
+	opacity: 1;
+	transition: all .3s ease-out .1s;
+}
 
+// .names-details-checkbox:checked ~ .home-project-details-div .home-project-details:nth-child(3) {
+// 	opacity: 1;
+// 	transition: all .3s ease-out .1s;
+// }
 
+// .names-details-checkbox:checked ~ .home-project-details-div .home-project-details:nth-child(2) {
+// 	opacity: 1;
+// 	transition: all .3s ease-out .1s;
+// }
+
+// .names-details-checkbox:checked ~ .home-project-details-div .home-project-details:nth-child(1) {
+// 	opacity: 1;
+// 	transition:all .3s ease-out .1s;
+// }
 
 
 

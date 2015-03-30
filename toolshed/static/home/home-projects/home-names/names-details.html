@@ -1,21 +1,21 @@
 	<input class="names-details-checkbox" type="checkbox">
 
 	<div class="home-project-basic-info flex-row">
-		<h4 class="home-project-name"><a href="#/home/projects/{{project.id}}">{{project.name}}</a></h4>
+		<h4 class="home-project-name"><a ng-click="vm.setPage()" href="#/home/projects/{{project.id}}">{{project.name}}</a></h4>
 		<div class="home-project-basic-info-right">
 			<div class="home-project-basic-info-icon home-project-basic-info-like"><i ng-click="vm.like(project, project.user_likes)" ng-class="{ 'fa-heart' : vm.checkLike(project), 'fa-heart-o' : !vm.checkLike(project) }" class="fa"></i><p>{{project.user_likes.length || 0}}</p></div>
-			<a href="#/home/projects/{{project.id}}"><div class="home-project-basic-info-icon home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{project.comments.length || 0}}</div>
+			<a ng-click="hp.setCommentPage()" href="#/home/projects/{{project.id}}"><div class="home-project-basic-info-icon home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{project.comments.length || 0}}</div>
 			<a href="{{project.pypi_url}}"><div class="home-project-basic-info-icon home-project-basic-info-check"><i ng-class="{ 'fa-check-square-o' : project.python_three_compatible, 'fa-square-o' : !project.python_three_compatible }" class="fa"></i><p>Py3</p></div></a>
 			<a href="#/home/projects/{{project.id}}"><div class="home-project-basic-info-icon home-project-basic-info-score"><i class="fa fa-calculator"></i></i>{{project.score}}</div></a>
 			<i ng-class="{'fa-times' : !hp.rotate, 'fa-plus': hp.rotate}" ng-click="hp.checkBox()" class="home-project-basic-info-icon home-project-basic-info-plus fa"></i>
 		</div>
 	</div>
-	<div class="home-project-details-div">
+	<div class="home-project-details-div home-project-details-div-projects">
 		<div class="home-project-details home-project-links">
 			<div class="flex-row home-project-links-div-sizer">
 				<div class="home-project-links-div">
-					<i ng-class="{ noLink : project.website === null }" class="fa fa-link"></i>
-					<a ng-class="{ noLink : project.website === null }" class="link" href="{{project.website}}">Website</a>
+					<i ng-class="{ noLink : project.website === null }"  class="fa fa-link"></i>
+					<a ng-class="{ noLink : project.website === null }"  class="link" href="{{project.website}}">Website</a>
 				</div>
 				<div class="home-project-links-div">
 					<i ng-class="{ noLink : project.docs_url === null }" class="fa fa-file-o"></i>
@@ -38,7 +38,7 @@
 			<div class="home-project-pypi-header-div">	
 				<div class="home-project-header-top">
 					<h3>PyPi</h3>
-					<a class="link" href="{{project.pypi_url}}"><i class="fa fa-code"></i><p>pypi name</p></a>
+					<a class="link" href="{{project.pypi_url}}"><i class="fa fa-code"></i><p>{{project.pypi_stub}}</p></a>
 				</div>
 				<div class="home-project-header-bottom home-project-header-bottom-pypi">
 					<h5>Version <b>{{project.current_version}}</b> Released {{project.last_commit_display}}</h5>
@@ -49,18 +49,18 @@
 				</div>
 			</div>
 			<div class="home-project-content home-project-content-pypi">
-				<h6 class="home-project-content-header"><b>{{project.release_count}}</b> Release(s)</h6>
+				<h6 class="home-project-content-header"><b>##</b> Release(s)</h6>
 				<h6 class="home-project-content-header"><b>1st</b> Release {{project.age_display}}</h6>
 				<h6 class="home-project-content-header"><b ng-show="project.python_three_compatible">Yes</b><b ng-show="!project.python_three_compatible">No</b> Python3 Compatibility</h6>
 			</div>
 		</div>
-		<div class="home-project-details home-project-github">
+		<div ng-show="!project.git_url" class="home-project-details home-project-github">
 			<input class="gh-checkbox" type="checkbox">
 			<div class="home-project-github-header-div">
 				<div class="home-project-header-top">
 					<h3 ng-show="project.bitbucket_url">BitBucket</h3>
 					<h3 ng-show="!project.bitbucket_url">GitHub</h3>			
-					<a class="link" href="{{project.git_url}}"><i ng-show="!project.bitbucket_url" class="fa fa-github"></i><i ng-show="project.bitbucket_url" class="fa fa-bitbucket-square"></i><p>gh repo</p></a>
+					<a class="link" href="{{project.git_url}}"><i ng-show="!project.bitbucket_url" class="fa fa-github"></i><i ng-show="project.bitbucket_url" class="fa fa-bitbucket-square"></i><p>{{project.project_stub}}</p></a>
 				</div>
 				<div class="home-project-header-bottom">
 					<h5>{{project.forks_count}} Forks</h5>

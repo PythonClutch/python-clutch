@@ -9,15 +9,33 @@ app.config(['$routeProvider', function ($routeProvider) {
       projects: ['$route', 'projectServices',
         function($route, projectServices) {
           var routeParams = $route.current.params;
-          return projectServices.searchProjects(routeParams.word).then(function (results) {
+          return projectServices.searchPopularProjects(routeParams.word).then(function (results) {
             console.log(results.projects);
             return results.projects;
           });
         }
       ],
+      // newestProjects: ['$route', 'projectServices',
+      //   function($route, projectServices) {
+      //     var routeParams = $route.current.params;
+      //     return projectServices.searchNewestProjects(routeParams.word).then(function (results) {
+      //       console.log(results.projects);
+      //       return results.projects;
+      //     });
+      //   }
+      // ],
+      // listProjects: ['$route', 'projectServices',
+      //   function($route, projectServices) {
+      //     var routeParams = $route.current.params;
+      //     return projectServices.searchProjects(routeParams.word).then(function (results) {
+      //       console.log(results.projects);
+      //       return results.projects;
+      //     });
+      //   }
+      // ],
       groups: ['groupServices',
         function(groupServices) {
-          return groupServices.list();
+          return groupServices.listGroups();
         }
       ],
       categories: ['groupServices',

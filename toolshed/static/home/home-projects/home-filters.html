@@ -16,7 +16,7 @@
 		<a class="home-project-a home-project-a-group" ng-class="{ projectActive: !hp.byNames }" ng-click="hp.setGroups()" href="">by group</a>
 	</div>
 
-	<div ng-class="{ hfGroup : !hp.byNames }"  class="home-filters-child home-project-filter">
+	<div ng-class="{ hfGroup : !hp.byNames, activeFilter: vm.startsWith('/home/search') }"  class="home-filters-child home-project-filter">
 		<label ng-click="hp.setPopular()" for="hp-filter-popular">
 			<input class="project-radio" id="project-popular-radio" name="filter" type="radio" checked />
 			<i class="fa fa-dot-circle-o"></i>

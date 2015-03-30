@@ -19,9 +19,9 @@
 		</div>
 		<div class="home-project-basic-info-right flex-row">
 			<div class="home-project-basic-info-icon home-project-basic-info-like"><i ng-click="vm.like(vm.project, vm.project.user_likes)" ng-class="{ 'fa-heart' : vm.checkLike(vm.project), 'fa-heart-o' : !vm.checkLike(vm.project) }" class="fa"></i>{{vm.project.user_likes.length || 0}}</div>
-			<a href="#/home/projects/{{vm.project.id}}"><div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{vm.project.comments.length || 0}}</div></a>
-			<a href="#/home/projects/{{vm.project.pypi_url}}"><div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-check"><i ng-class="{ 'fa-check-square-o' : vm.project.python_three_compatible, 'fa-square-o' : !vm.project.python_three_compatible }" class="fa"></i><p>Py3</p></div></a>
-			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-score"><i class="fa fa-calculator"></i></i>{{vm.project.score}}</div>
+			<a ng-click="vm.setCommentPage()" href="#/home/projects/{{vm.project.id}}"><div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{vm.project.comments.length || 0}}</div></a>
+			<a href="{{vm.project.pypi_url}}"><div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-check"><i ng-class="{ 'fa-check-square-o' : vm.project.python_three_compatible, 'fa-square-o' : !vm.project.python_three_compatible }" class="fa"></i><p>Py3</p></div></a>
+			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-icon-gh-score home-project-basic-info-score"><i class="fa fa-calculator"></i></i>{{vm.project.score}}</div>
 		</div>		
 	</div>
 
@@ -59,7 +59,7 @@
 				<div class="home-project-pypi-header-div">	
 					<div class="home-project-header-top">
 						<h3>PyPi</h3>
-						<a class="link" href="{{vm.project.pypi_url}}"><i class="fa fa-code"></i><p>pypi name</p></a>
+						<a class="link" href="{{vm.project.pypi_url}}"><i class="fa fa-code"></i><p>{{vm.project.pypi_stub}}</p></a>
 					</div>
 					<div class="home-project-header-bottom home-project-header-bottom-pypi">
 						<h5>Version <b>{{vm.project.current_version}}</b> Released {{vm.project.last_commit_display}}</h5>
@@ -75,12 +75,12 @@
 					<h6 class="home-project-content-header"><b ng-show="vm.project.python_three_compatible">Yes</b><b ng-show="!vm.project.python_three_compatible">No</b> Python3 Compatibility</h6>
 				</div>
 			</div>
-			<div class="home-project-details home-project-github">
+			<div ng-show="!vm.project.git_url" class="home-project-details home-project-github">
 				<div class="home-project-github-header-div">
 					<div class="home-project-header-top">
 						<h3>GitHub</h3>
 						
-						<a class="link" href="{{vm.project.git_url}}"><i class="fa fa-github"></i><p>gh repo</p></a>
+						<a class="link" href="{{vm.project.git_url}}"><i class="fa fa-github"></i><p>{{vm.project.project_stub}}</p></a>
 					</div>
 					<div class="home-project-header-bottom">
 						<h5>{{vm.project.forks_count}} Forks</h5>

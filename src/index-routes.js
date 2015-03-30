@@ -11,6 +11,12 @@ app.config(['$routeProvider', function ($routeProvider) {
           return projectServices.listPopular();
         }
       ],
+      newestProjects: function () {
+        return true
+      },
+      popularProjects: function () {
+        return true
+      },
       groups: ['groupServices',
         function(groupServices) {
           return groupServices.listGroups();
