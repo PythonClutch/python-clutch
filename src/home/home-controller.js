@@ -26,6 +26,10 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 		}
 	}	
 
+	self.setPage = function () {
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	}
+
 	self.byProjects = homeFactory.byProjects();
 
 	self.setProjects = function () {

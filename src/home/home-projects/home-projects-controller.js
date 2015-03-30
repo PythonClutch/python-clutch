@@ -19,7 +19,9 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
 
 	// appearFactory.checkWidth();
 
-
+	self.setPage = function () {
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	}
 
 	self.checkBox = function () {
     	appearFactory.checkBox();

@@ -293,6 +293,10 @@ app.controller('FooterCtrl', ['projectServices', 'groupServices', function (proj
 		self.groups = result;
 	})
 
+	self.setPage = function () {
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	}
+
 	self.bySiteMap = function () {
 		if (window.location.hash === '#/projectindex') {
 			return true;
@@ -393,6 +397,10 @@ app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory',
 		self.pyMoreInfo = pf.byPy(); 
 	};
 
+	self.setPage = function () {
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	}
+
 	self.ghMoreInfo = pf.byGh();
 
 	self.ghInfo = function () {
@@ -445,6 +453,10 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 			paragraphAmt.show();
 		}
 	}	
+
+	self.setPage = function () {
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	}
 
 	self.byProjects = homeFactory.byProjects();
 
@@ -1383,7 +1395,9 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
 
 	// appearFactory.checkWidth();
 
-
+	self.setPage = function () {
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	}
 
 	self.checkBox = function () {
     	appearFactory.checkBox();
