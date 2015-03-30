@@ -1,9 +1,12 @@
-app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectServices, appearFactory) {
+app.controller('hpCtrl', ['projectServices', 'appearFactory',
+    function (projectServices, appearFactory) {
 	var self = this;
 
 	self.byNames = true;
 
-	self.rotate = appearFactory.rotate();
+	self.rotate = function () {
+		return appearFactory.rotate();
+	};
 
 	// function checkRotate () {
 	// 	self.rotate = appearFactory.rotate();
@@ -18,6 +21,10 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
 	// };
 
 	// appearFactory.checkWidth();
+
+	// self.newestProjects = [];
+
+	// self.popularProjects = [];
 
 	self.setCommentPage = function () {
 		console.log('top')
@@ -34,12 +41,28 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', function (projectS
     	self.rotate = appearFactory.rotate();
 	};
 
+	// projectServices.searchNewestProjects().then(function (result){
+	// 	self.newestSearchedProjects = result;
+	// }, function () {
+	// 	console.log('nothing there');
+	// });
+
+	// projectServices.searchProjects().then(function (result){
+	// 	self.listSearchedProjects = result;
+	// }, function () {
+	// 	console.log('nothing there');
+	// });
+
 	projectServices.listNewest().then(function (result){
 		self.newestProjects = result;
+	}, function () {
+		console.log('nothing there');
 	});
 
 	projectServices.list().then(function (result){
 		self.listProjects = result;
+	}, function () {
+		console.log('nothing there');
 	});
 
 	self.setGroups = function () {

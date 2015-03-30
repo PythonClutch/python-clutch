@@ -248,7 +248,8 @@ input, textarea {
   justify-content: center;
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  margin-bottom: 34px; }
 
 .home-project-a {
   padding: 11px 0;
@@ -312,6 +313,9 @@ input, textarea {
 div.hfGroup {
   width: 32%; }
 
+div.activeFilter {
+  display: none; }
+
 .home-project-search::-webkit-input-placeholder {
   padding: 0 0 6px;
   color: #acabab;
@@ -354,7 +358,7 @@ div.hfGroup {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   width: 49%;
-  margin: 34px auto; }
+  margin: 0 auto 34px; }
 
 .home-project-filter label {
   display: -webkit-flex;
@@ -498,6 +502,9 @@ div.home-project-basic-info-icon, .home-project-basic-info-icon {
 
 div.home-project-basic-info-icon .fa {
   cursor: pointer; }
+
+div.home-project-basic-info-icon-gh-score .fa {
+  cursor: text; }
 
 .home-project-basic-info-comment i {
   margin-top: -1px; }

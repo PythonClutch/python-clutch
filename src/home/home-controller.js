@@ -1,6 +1,7 @@
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
 	'categories', 'user', 'likeFactory', 'appearFactory',
-	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, categories, user, likeFactory, appearFactory) {
+	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, 
+		categories, user, likeFactory, appearFactory) {
 	var self = this;
 
 	self.categories = categories;
