@@ -395,6 +395,18 @@ def search_by_newest():
     else:
         return failure_response("You must enter a query.", 400)
 
+@api.route("/popular/search")
+def search_by_popular():
+    text = request.args.get('q')
+    if text:
+        projects = Project.query.search(text).order_by(Project.score.desc()).all()
+
+        search = Search(query=text,
+                        projects=projects)
+        return success_response(search_schema, search)
+    else:
+        return failure_response("You must enter a query.", 400)
+
 
 # Magic Visualization Routes
 
