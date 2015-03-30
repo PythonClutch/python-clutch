@@ -45,5 +45,3 @@ Flask-Script
 arrow
 
 #Graph
-git+https://github.com/gordonfierce/vincent
-numpy==1.6.2
