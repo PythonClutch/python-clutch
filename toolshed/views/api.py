@@ -355,7 +355,7 @@ def get_user_likes(id):
 
 @api.route("/projects/<int:id>/likes")
 def get_project_likes(id):
-    project = Project.query.get_or_404(id)
+    project = Project.query.get(id)
     if project.user_likes:
         return success_response(all_likes_schema, project.user_likes)
     else:

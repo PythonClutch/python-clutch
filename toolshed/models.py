@@ -325,7 +325,7 @@ class LogSchema(Schema):
                   "previous_score")
 
 
-class ProjectSchema(Schema):
+class ProjectLogSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
     user_likes = fields.Nested(LikeSchema, many=True)
     logs = fields.Nested(LogSchema, many=True)
@@ -350,6 +350,30 @@ class ProjectSchema(Schema):
                   "github_url", "bitbucket_url", "pypi_stub", "logs",
                   "score", "release_count")
 
+class ProjectSchema(Schema):
+    comments = fields.Nested(CommentSchema, many=True)
+    user_likes = fields.Nested(LikeSchema, many=True)
+    score = fields.Method("round_score")
+
+    def round_score(self, obj):
+        if obj.score:
+            return round(obj.score, 3)
+        else:
+            return 0
+
+    class Meta:
+        fields = ("id", "status", "name", "summary", "forks_count",
+                  "starred_count", "watchers_count", "watchers_url",
+                  "current_version", "last_commit", "first_commit",
+                  "open_issues_count", "project_stub", "downloads_count",
+                  "contributors_count", "python_three_compatible", "website",
+                  "git_url", "pypi_url", "contributors_url", "mailing_list_url",
+                  "forks_url", "starred_url", "open_issues_url", "docs_url",
+                  "group_id", "category_id", "comments", "user_likes", "age_display",
+                  "last_commit_display", "date_added", "first_commit_display",
+                  "github_url", "bitbucket_url", "pypi_stub",
+                  "score", "release_count")
+
 
 class UserSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
@@ -361,6 +385,7 @@ class UserSchema(Schema):
         fields = ("id", "github_name", "github_url", "email", "comments",
                   "likes", "public_repos", "avatar_url", "linkedin_url", "portfolio_url",
                   "pending_submissions", "completed_submissions")
+
 
 
 class GroupSchema(Schema):
