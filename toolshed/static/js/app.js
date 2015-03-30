@@ -356,106 +356,6 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/home/groups/:groupid', routeDefinition);
 
 }]);
-app.controller('FooterCtrl', ['projectServices', 'groupServices', function (projectServices, groupServices) {
-	var self = this;
-
-	projectServices.list().then(function (result) {
-		self.projects = result;
-		self.firstColumn = Math.ceil(result.length/3);
-		self.firstColumnPlus = self.firstColumn + 1;
-		self.secondColumn = Math.ceil(result.length/1.5);
-		self.secondColumnPlus = self.secondColumn + 1;
-		self.thirdColumn = result.length;
-	});
-
-	// self.firstColumn = function () {
-	// 	return function () {
-	// 		self.projects
-	// 	}
-	// }
-
-	self.setPage = function () {
-		console.log('top')
-		$('html, body').animate({ scrollTop: 0 }, 'fast');
-	};
-
-	self.bySiteMap = function () {
-		if (window.location.hash === '#/projectindex') {
-			return true;
-		} else {
-			return false;
-		}
-	};
-
-	self.byAbout = function () {
-		if (window.location.hash === '#/about') {
-			return true;
-		} else {
-			return false;
-		}
-	};
-
-	self.byContact = function () {
-		if (window.location.hash === '#/contact') {
-			return true;
-		} else {
-			return false;
-		}
-	};
-}]);
-(function () {
-	app.directive('siteMap', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/footer/footer-pages/site-map.html'
-	  };
-	});
-
-	app.directive('about', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/footer/footer-pages/about.html'
-	  };
-	});
-
-	app.directive('contact', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/footer/footer-pages/contact.html'
-	  };
-	});
-})();
-app.config(['$routeProvider', function ($routeProvider) {
-  'use strict';
-
-  var page = {
-    templateUrl: 'static/footer/footer-pages/footer-pages.html',
-    controller: 'FooterCtrl',
-    controllerAs: 'vm',
-    // resolve: {
-		  // projects: ['projectServices',
-	   //      function(projectServices) {
-	   //        return projectServices.list();
-	   //      }
-	   //  ],
-    //   groups: ['groupServices',
-    //     function(groupServices) {
-    //       return groupServices.list();
-    //     }
-    //   ],
-    //   categories: ['groupServices',
-    //     function(groupServices) {
-    //       return groupServices.listCats();
-    //     }
-    //   ]
-    // }
-  };
-
-  $routeProvider
-  .when('/projectindex', page)
-  .when('/about', page)
-  .when('/contact', page)
-}]);
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
 	'categories', 'user', 'likeFactory', 'appearFactory',
 	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, 
@@ -592,6 +492,106 @@ $(function () {
 	}
 
 });
+app.controller('FooterCtrl', ['projectServices', 'groupServices', function (projectServices, groupServices) {
+	var self = this;
+
+	projectServices.list().then(function (result) {
+		self.projects = result;
+		self.firstColumn = Math.ceil(result.length/3);
+		self.firstColumnPlus = self.firstColumn + 1;
+		self.secondColumn = Math.ceil(result.length/1.5);
+		self.secondColumnPlus = self.secondColumn + 1;
+		self.thirdColumn = result.length;
+	});
+
+	// self.firstColumn = function () {
+	// 	return function () {
+	// 		self.projects
+	// 	}
+	// }
+
+	self.setPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	};
+
+	self.bySiteMap = function () {
+		if (window.location.hash === '#/projectindex') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	self.byAbout = function () {
+		if (window.location.hash === '#/about') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	self.byContact = function () {
+		if (window.location.hash === '#/contact') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+}]);
+(function () {
+	app.directive('siteMap', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/footer/footer-pages/site-map.html'
+	  };
+	});
+
+	app.directive('about', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/footer/footer-pages/about.html'
+	  };
+	});
+
+	app.directive('contact', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/footer/footer-pages/contact.html'
+	  };
+	});
+})();
+app.config(['$routeProvider', function ($routeProvider) {
+  'use strict';
+
+  var page = {
+    templateUrl: 'static/footer/footer-pages/footer-pages.html',
+    controller: 'FooterCtrl',
+    controllerAs: 'vm',
+    // resolve: {
+		  // projects: ['projectServices',
+	   //      function(projectServices) {
+	   //        return projectServices.list();
+	   //      }
+	   //  ],
+    //   groups: ['groupServices',
+    //     function(groupServices) {
+    //       return groupServices.list();
+    //     }
+    //   ],
+    //   categories: ['groupServices',
+    //     function(groupServices) {
+    //       return groupServices.listCats();
+    //     }
+    //   ]
+    // }
+  };
+
+  $routeProvider
+  .when('/projectindex', page)
+  .when('/about', page)
+  .when('/contact', page)
+}]);
 app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 	function ($location, userServices, projectServices) {
 
@@ -1427,6 +1427,203 @@ app.config(['$routeProvider', function ($routeProvider) {
 
   .when('/home/categories', homePage);
 }]);
+app.controller('hpCtrl', ['projectServices', 'appearFactory',
+    function (projectServices, appearFactory) {
+	var self = this;
+
+	self.byNames = true;
+
+	self.rotate = function () {
+		return appearFactory.rotate();
+	};
+
+	// function checkRotate () {
+	// 	self.rotate = appearFactory.rotate();
+	// }
+
+	// setInterval(checkRotate, 1000);
+
+	self.mobile = true;
+
+	// function screenWidth () {
+	// 	console.log(screenWidth);
+	// };
+
+	// appearFactory.checkWidth();
+
+	// self.newestProjects = [];
+
+	// self.popularProjects = [];
+
+	self.setCommentPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 1100 }, 'fast');
+	}
+
+	self.setPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	}
+
+	self.checkBox = function () {
+    	appearFactory.checkBox();
+    	self.rotate = appearFactory.rotate();
+	};
+
+	// projectServices.searchNewestProjects().then(function (result){
+	// 	self.newestSearchedProjects = result;
+	// }, function () {
+	// 	console.log('nothing there');
+	// });
+
+	// projectServices.searchProjects().then(function (result){
+	// 	self.listSearchedProjects = result;
+	// }, function () {
+	// 	console.log('nothing there');
+	// });
+
+	projectServices.listNewest().then(function (result){
+		self.newestProjects = result;
+	}, function () {
+		console.log('nothing there');
+	});
+
+	projectServices.list().then(function (result){
+		self.listProjects = result;
+	}, function () {
+		console.log('nothing there');
+	});
+
+	self.setGroups = function () {
+		self.byNames = false;
+	};
+
+	self.setNames = function () {
+		self.byNames = true;
+	};
+
+	function selectedClass () {
+		var closest = $(event.target).parent().parent().children();
+		console.log(closest);
+		closest.each(function () {
+			var fa = $(this).find('.fa');
+			$(this).find('.fa').removeClass('fa-dot-circle-o');
+			console.log($(this).find('.project-radio')[0]);
+			$(this).find('.project-radio').prop('checked', false);
+			if (!fa.hasClass('fa-circle-o')) {
+				fa.addClass('fa-circle-o');
+			}
+		});
+		$(event.target).parent().find('.fa').removeClass('fa-circle-o');
+		$(event.target).parent().find('.fa').addClass('fa-dot-circle-o');
+	}
+
+	self.list = false;
+	self.popular = true;
+	self.newest = false;
+	self.searched = false;
+
+	self.setPopular = function () {
+		selectedClass();
+		self.popular = true;
+		self.newest = false;
+		self.list = false;
+		self.searched = false;
+		$('#project-popular-radio').prop('checked', true);
+	};
+
+	self.setNewest = function () {
+		self.popular = false;
+		self.newest = true;
+		self.list = false;
+		self.searched = false;
+		selectedClass();
+		$('#project-newest-radio').prop('checked', true);
+	};
+
+	self.setSearch = function () {
+		console.log('eh');
+	}
+
+	self.setTrending = function () {
+		selectedClass();
+		$('#project-trending-radio').prop('checked', true);
+	};
+
+	self.setList = function () {
+		self.popular = false;
+		self.newest = false;
+		self.list = true;
+		selectedClass();
+		$('#project-list-radio').prop('checked', true);
+	};
+
+	self.searchClicked = true;
+
+	self.checkSearch = function () {
+		self.searchClicked = false;
+		$(event.target).parent().find('.home-project-search').focus();
+	};
+
+
+
+}]);
+(function () {
+	app.directive('homeNames', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-names/home-names.html'
+	  };
+	});
+
+	app.directive('namesDetails', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-names/names-details.html',
+	    // resolve: {
+	    //   projects: ['projectServices',
+	    //     function(projectServices) {
+	    //       return projectServices.list();
+	    //     }
+	    //   ]
+	    // },
+	    // controller: 'hnCtrl',
+	    // controllerAs: 'vm'
+	    controller: 'hpCtrl',
+	    controllerAs: 'hp'
+	  };
+	});
+
+	app.directive('homeGroups', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-groups/home-groups.html'
+	  };
+	});
+
+	app.directive('groupDetails', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-groups/group-details.html',
+	    controller: 'hpCtrl',
+	    controllerAs: 'hp'
+	  };
+	});	
+
+	app.directive('groupDetailsProjects', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-groups/group-details-projects.html'
+	  };
+	});
+
+	app.directive('homeFilters', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/home/home-projects/home-filters.html'
+	  };
+	});		
+})();
 /**
  * dirPagination - AngularJS module for paginating (almost) anything.
  *
@@ -1940,203 +2137,6 @@ app.config(['$routeProvider', function ($routeProvider) {
             };
         };
     }
-})();
-app.controller('hpCtrl', ['projectServices', 'appearFactory',
-    function (projectServices, appearFactory) {
-	var self = this;
-
-	self.byNames = true;
-
-	self.rotate = function () {
-		return appearFactory.rotate();
-	};
-
-	// function checkRotate () {
-	// 	self.rotate = appearFactory.rotate();
-	// }
-
-	// setInterval(checkRotate, 1000);
-
-	self.mobile = true;
-
-	// function screenWidth () {
-	// 	console.log(screenWidth);
-	// };
-
-	// appearFactory.checkWidth();
-
-	// self.newestProjects = [];
-
-	// self.popularProjects = [];
-
-	self.setCommentPage = function () {
-		console.log('top')
-		$('html, body').animate({ scrollTop: 1100 }, 'fast');
-	}
-
-	self.setPage = function () {
-		console.log('top')
-		$('html, body').animate({ scrollTop: 0 }, 'fast');
-	}
-
-	self.checkBox = function () {
-    	appearFactory.checkBox();
-    	self.rotate = appearFactory.rotate();
-	};
-
-	// projectServices.searchNewestProjects().then(function (result){
-	// 	self.newestSearchedProjects = result;
-	// }, function () {
-	// 	console.log('nothing there');
-	// });
-
-	// projectServices.searchProjects().then(function (result){
-	// 	self.listSearchedProjects = result;
-	// }, function () {
-	// 	console.log('nothing there');
-	// });
-
-	projectServices.listNewest().then(function (result){
-		self.newestProjects = result;
-	}, function () {
-		console.log('nothing there');
-	});
-
-	projectServices.list().then(function (result){
-		self.listProjects = result;
-	}, function () {
-		console.log('nothing there');
-	});
-
-	self.setGroups = function () {
-		self.byNames = false;
-	};
-
-	self.setNames = function () {
-		self.byNames = true;
-	};
-
-	function selectedClass () {
-		var closest = $(event.target).parent().parent().children();
-		console.log(closest);
-		closest.each(function () {
-			var fa = $(this).find('.fa');
-			$(this).find('.fa').removeClass('fa-dot-circle-o');
-			console.log($(this).find('.project-radio')[0]);
-			$(this).find('.project-radio').prop('checked', false);
-			if (!fa.hasClass('fa-circle-o')) {
-				fa.addClass('fa-circle-o');
-			}
-		});
-		$(event.target).parent().find('.fa').removeClass('fa-circle-o');
-		$(event.target).parent().find('.fa').addClass('fa-dot-circle-o');
-	}
-
-	self.list = false;
-	self.popular = true;
-	self.newest = false;
-	self.searched = false;
-
-	self.setPopular = function () {
-		selectedClass();
-		self.popular = true;
-		self.newest = false;
-		self.list = false;
-		self.searched = false;
-		$('#project-popular-radio').prop('checked', true);
-	};
-
-	self.setNewest = function () {
-		self.popular = false;
-		self.newest = true;
-		self.list = false;
-		self.searched = false;
-		selectedClass();
-		$('#project-newest-radio').prop('checked', true);
-	};
-
-	self.setSearch = function () {
-		console.log('eh');
-	}
-
-	self.setTrending = function () {
-		selectedClass();
-		$('#project-trending-radio').prop('checked', true);
-	};
-
-	self.setList = function () {
-		self.popular = false;
-		self.newest = false;
-		self.list = true;
-		selectedClass();
-		$('#project-list-radio').prop('checked', true);
-	};
-
-	self.searchClicked = true;
-
-	self.checkSearch = function () {
-		self.searchClicked = false;
-		$(event.target).parent().find('.home-project-search').focus();
-	};
-
-
-
-}]);
-(function () {
-	app.directive('homeNames', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/home/home-projects/home-names/home-names.html'
-	  };
-	});
-
-	app.directive('namesDetails', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/home/home-projects/home-names/names-details.html',
-	    // resolve: {
-	    //   projects: ['projectServices',
-	    //     function(projectServices) {
-	    //       return projectServices.list();
-	    //     }
-	    //   ]
-	    // },
-	    // controller: 'hnCtrl',
-	    // controllerAs: 'vm'
-	    controller: 'hpCtrl',
-	    controllerAs: 'hp'
-	  };
-	});
-
-	app.directive('homeGroups', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/home/home-projects/home-groups/home-groups.html'
-	  };
-	});
-
-	app.directive('groupDetails', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/home/home-projects/home-groups/group-details.html',
-	    controller: 'hpCtrl',
-	    controllerAs: 'hp'
-	  };
-	});	
-
-	app.directive('groupDetailsProjects', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/home/home-projects/home-groups/group-details-projects.html'
-	  };
-	});
-
-	app.directive('homeFilters', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/home/home-projects/home-filters.html'
-	  };
-	});		
 })();
 app.factory('homeFactory', function () {
 

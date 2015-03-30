@@ -205,6 +205,8 @@ class ProjectLog(db.Model):
             return project.number_of_likes - self.likes_count
         return None
 
+    def __repr__(self):
+        return "{} {}".format(self.previous_score, self.log_date)
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

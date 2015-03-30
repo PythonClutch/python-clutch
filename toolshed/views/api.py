@@ -41,7 +41,7 @@ search_schema = SearchSchema()
 try:
     line_style = os.environ['LINE_STYLE']
 except:
-    line_style = 'basis'
+    line_style = "basis"
 
 
 # response functions
