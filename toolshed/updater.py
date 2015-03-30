@@ -50,7 +50,7 @@ def update_projects(projects):
             update_github(project)
         elif project.bitbucket_url:
             update_bitbucket(project)
-    update_projects_score(projects)
+    # update_projects_score(projects)
     return print("Update Complete.")
 
 

@@ -21,6 +21,10 @@ app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory',
 		self.pyMoreInfo = pf.byPy(); 
 	};
 
+	self.setPage = function () {
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	}
+
 	self.ghMoreInfo = pf.byGh();
 
 	self.ghInfo = function () {

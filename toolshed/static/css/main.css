@@ -1482,6 +1482,10 @@ footer a {
 .hp-filter-list {
   margin: 0 auto; }
 
+.cat-push {
+  width: 100%;
+  height: 1200px; }
+
 @media screen and (max-width: 751px) {
   .nav-right {
     display: -webkit-flex;
