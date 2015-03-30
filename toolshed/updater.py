@@ -4,7 +4,7 @@ import math
 import os
 from datetime import datetime
 from .extensions import db
-from .importer import release_parse, parse_github_url, parse_bitbucket_url
+from .importer import release_parse, parse_github_url, parse_bitbucket_url, parse_pypi_url
 from .models import ProjectLog, Project
 
 
