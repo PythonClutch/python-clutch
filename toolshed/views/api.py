@@ -383,6 +383,18 @@ def search():
     else:
         return failure_response("You must enter a query.", 400)
 
+@api.route("/newest/search")
+def search_by_newest():
+    text = request.args.get('q')
+    if text:
+        projects = Project.query.search(text).order_by(Project.date_added).all()
+
+        search = Search(query=text,
+                        projects=projects)
+        return success_response(search_schema, search)
+    else:
+        return failure_response("You must enter a query.", 400)
+
 
 # Magic Visualization Routes
 
