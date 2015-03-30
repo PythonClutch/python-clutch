@@ -11,6 +11,11 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 
 	self.pyMoreInfo = pf.byPy();
 
+	self.setCommentPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 1100 }, 'fast');
+	}
+
 	self.pyInfo = function () {
 		pf.pyInfo();
 		self.pyMoreInfo = pf.byPy(); 
