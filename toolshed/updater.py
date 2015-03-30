@@ -122,7 +122,7 @@ def update_projects_score(projects):
         days_since_last_commit = time_delta.days
         github_score = (num_forks + num_watch) * math.exp(-1 * days_since_last_commit * github_lambda)
         if use_log:
-            if github_score < 0:
+            if github_score < 1:
                 github_score = 0
             else:
                 github_score = math.log(github_score)
@@ -134,7 +134,7 @@ def update_projects_score(projects):
         days_since_last_release = time_delta.days
         pypi_score = num_download * math.exp(-1 * days_since_last_release * pypi_lambda)
         if use_log:
-            if pypi_score < 0:
+            if pypi_score < 1:
                 pypi_score = 0
             else:
                 pypi_score = math.log(pypi_score)

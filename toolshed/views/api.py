@@ -515,7 +515,7 @@ def graph_distribution():
     data = {'x': x,
             'y': y}
     bar = vincent.Bar(data, iter_idx='x')
-
+    bar.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
     return bar.to_json()
 
 @api.route("/groups/<int:id>/binned")
