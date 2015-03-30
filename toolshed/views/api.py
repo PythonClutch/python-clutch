@@ -376,17 +376,39 @@ class Search:
         self.projects = projects
 
 
-@api.route("/search")
-def search():
+@api.route("/search/newest")
+def search_newest():
     text = request.args.get('q')
     if text:
-        projects = Project.query.search(text).all()
-
+        projects = Project.query.search(text).filter_by(Project.date_added).all()
         search = Search(query=text,
                         projects=projects)
         return success_response(search_schema, search)
     else:
         return failure_response("You must enter a query.", 400)
+
+@api.route("/search")
+def search():
+    text = request.args.get('q')
+    if text:
+        projects = Project.query.search(text).filter_by(Project.name).all()
+        search = Search(query=text,
+                        projects=projects)
+        return success_response(search_schema, search)
+    else:
+        return failure_response("You must enter a query.", 400)
+
+@api.route("/search/popular")
+def search_popular():
+    text = request.args.get('q')
+    if text:
+        projects = Project.query.search(text).filter_by(Project.score).all()
+        search = Search(query=text,
+                        projects=projects)
+        return success_response(search_schema, search)
+    else:
+        return failure_response("You must enter a query.", 400)
+
 
 
 # Magic Visualization Routes
