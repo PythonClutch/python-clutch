@@ -2,12 +2,11 @@ import os
 import vincent
 from ..models import (User, UserSchema, Project, Like, ProjectSchema,
                       Comment, CommentSchema, Category, CategorySchema,
-                      Group, GroupSchema, LikeSchema,ProjectLog, LogSchema,
+                      Group, GroupSchema, LikeSchema, ProjectLog, LogSchema,
                       SearchSchema)
 from flask import Blueprint, jsonify, request
 from ..extensions import db, mail
 from .toolshed import require_login, current_user
-from datetime import datetime
 from ..importer import create_project
 from toolshed import mail
 from flask_mail import Message
@@ -15,9 +14,7 @@ from datetime import datetime
 from ..updater import score_multiplier
 
 
-
 api = Blueprint('api', __name__)
-
 
 
 # Schemas
@@ -84,13 +81,13 @@ def get_user_pending():
         return failure_response("User not logged in", 401)
 
 
-
 @api.route('/user', methods=["POST"])
 def update_user():
     name = current_user()
     user = User.query.filter_by(github_name=name).first()
     if user:
         urls = request.get_json()
+
         def update_user(some_user, portfolio_url=None, linkedin_url=None):
             if linkedin_url:
                 some_user.linkedin_url = linkedin_url
@@ -101,7 +98,6 @@ def update_user():
         return success_response(single_user_schema, user)
     else:
         failure_response("You are not logged in", 401)
-
 
 
 @api.route("/users")
@@ -169,7 +165,6 @@ def popular_projects():
         return success_response(all_projects_schema, projects)
 
 
-
 @api.route("/projects/<int:id>")
 def project(id):
     project = Project.query.get(id)
@@ -195,8 +190,8 @@ def make_project():
     message = Message("New Submission",
                       sender="pythonclutch@gmail.com",
                       recipients=["pythonclutch@gmail.com"])
-    message.body = "Hello, there has been a new project submitted. It is called " + project.name +"" \
-                           " and was submitted by, " + user.github_name + " at " + str(datetime.utcnow()) + "."
+    message.body = "Hello, there has been a new project submitted. It is called " + project.name + "" \
+                   " and was submitted by, " + user.github_name + " at " + str(datetime.utcnow()) + "."
     mail.send(message)
     db.session.commit()
     return success_response(single_project_schema, project)
@@ -313,11 +308,10 @@ def edit_comment(id):
     comment = Comment.query.get_or_404(id)
     comment_data = request.get_json()
     if comment.user_id != user.id:
-        return failure_response("You are not authorized to edit this comment.")
+        return failure_response("You are not authorized to edit this comment.", 409)
     comment.text = comment_data['text']
     db.session.commit()
     return success_response(single_comment_schema, comment)
-
 
 
 @api.route("/comments/<int:id>", methods=["DELETE"])
@@ -329,13 +323,14 @@ def delete_comment(id):
 
 # Like Routes
 
+
 @api.route("/likes/projects/<int:id>", methods=["POST"])
 def like_project(id):
     project = Project.query.get_or_404(id)
     user_name = current_user()
     user = User.query.filter_by(github_name=user_name).first()
     new_like = Like(user_id=user.id,
-                     project_id=project.id)
+                    project_id=project.id)
     user.likes.append(new_like)
     db.session.add(new_like)
     db.session.commit()
@@ -396,16 +391,16 @@ def search():
 def graph(id):
     project = Project.query.get_or_404(id)
     logs = project.logs
-    log_number = len([1 for log in logs])
+    log_number = len([1 for _ in logs])
     if project.logs and log_number > 1:
         logs = project.logs.order_by(ProjectLog.log_date)
 
         x = [datetime.combine(log.log_date, datetime.min.time()).timestamp() * 1000
-                 for log in logs]
+             for log in logs]
         y = [log.previous_score for log in logs]
 
         multi_iter = {'x': x,
-                     'data': y}
+                      'data': y}
         line = vincent.Line(multi_iter, iter_idx='x')
 
         line.scales['x'] = vincent.Scale(name='x', type='time', range='width',
@@ -419,8 +414,6 @@ def graph(id):
         # marks[0].properties.update.fill.value
         if line_style:
             line.marks['group'].marks[0].properties.enter.interpolate = vincent.ValueRef(value=line_style)
-
-
 
         return jsonify({"status": "success", "data": line.grammar()})
     else:
@@ -443,16 +436,15 @@ def graph_group(id):
         score_avg = sum(date_scores)/len(date_scores)
         avg_scores.append((date, score_avg))
 
-
     if len(avg_scores) > 1:
         avg_scores.sort(key=lambda x: x[0])
 
         x = [datetime.combine(item[0], datetime.min.time()).timestamp() * 1000
-                 for item in avg_scores]
+             for item in avg_scores]
         y = [item[1] for item in avg_scores]
 
         multi_iter = {'x': x,
-                     'data': y}
+                      'data': y}
         line = vincent.Line(multi_iter, iter_idx='x')
 
         line.scales['x'] = vincent.Scale(name='x', type='time', range='width',
@@ -466,23 +458,20 @@ def graph_group(id):
         if line_style:
             line.marks['group'].marks[0].properties.enter.interpolate = vincent.ValueRef(value=line_style)
 
-
-
         return jsonify({"status": "success", "data": line.grammar()})
     else:
         return failure_response("No history for this group", 404)
+
 
 @api.route("/scoredist")
 def graph_distribution():
     projects = Project.query.all()
     scores = [project.score for project in projects]
-    maximum_value = max(scores)
-    minimum_value = min(scores)
     bin_number = 30
-    bin_width = (maximum_value - minimum_value) / bin_number
+    bin_width = 1 / bin_number
     x = []
     y = []
-    curr_bin = minimum_value
+    curr_bin = 0
     for _ in range(bin_number):
         count = len([score for score in scores
                     if score > curr_bin
@@ -496,6 +485,7 @@ def graph_distribution():
     bar = vincent.Bar(data, iter_idx='x')
 
     return bar.to_json()
+
 
 @api.route("/groups/<int:id>/binned")
 def graph_group_diff(id):
