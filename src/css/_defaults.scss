@@ -137,6 +137,13 @@ b {
   } 
 }
 
+a.noLink {
+  color: $gray;
+  &:hover {
+    color: $gray; 
+  } 
+}
+
 /*body {
   font-family: sans-serif;
   line-height: 1.4em;

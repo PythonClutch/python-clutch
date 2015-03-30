@@ -74,8 +74,20 @@
 // CONTACT
 /////////////////////////////////////////////////////////////
 
-// .contact {
-// }
+.contact {
+	h1 {
+		font-size: 30px;
+		font-weight: 700;
+		margin-bottom: 13px;   
+	}
+	a {
+		margin-left: 3px; 	
+	}
+}
+
+a.contact-email-link {
+	margin-left: 13px; 
+}
 
 
 
