@@ -61,6 +61,7 @@
 	flex-direction: row;
 	justify-content: center;
 	flex-wrap: wrap;
+	margin-bottom: 34px; 
 }
 
 .home-project-a {
@@ -128,6 +129,10 @@ div.hfGroup {
 	width: 32%;
 }
 
+div.activeFilter {
+	display: none;
+}
+
 /////////// SEARCH BAR PLACEHOLDER ////////////////////////////////
 
 .home-project-search::-webkit-input-placeholder {
@@ -174,7 +179,7 @@ div.hfGroup {
 	justify-content: space-between;
 	flex-wrap: wrap;
 	width: 49%;
-	margin: 34px auto;
+	margin: 0 auto 34px;
 }
 
 .home-project-filter label {
