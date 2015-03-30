@@ -159,7 +159,24 @@
 	}
 }
 
-
+.project {
+	a.noLink {
+		color: $gray;
+		text-decoration: none;
+		cursor: text;
+		&:hover {
+			cursor: text;
+			color: $gray; 
+		} 
+	}
+	i.noLink {
+		color: $gray;
+		&:hover {
+			cursor: text;
+			color: $gray; 
+		} 
+	}
+}
 
 
 
