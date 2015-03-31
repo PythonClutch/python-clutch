@@ -28,7 +28,7 @@ class ProjectView(ModelView):
 
     column_searchable_list = ('name', 'summary' )
 
-    column_list = ("status", "name", "summary", "pypi_url", "git_url", "category", "score")
+    column_list = ("status", "name", "summary", "pypi_url", "git_url", "score", "group", "category")
 
     def is_accessible(self):
         return current_user.is_authenticated()

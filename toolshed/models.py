@@ -58,11 +58,13 @@ class Like(db.Model):
 
     @property
     def user_name(self):
-        return self.user.github_name
+        user = User.query.get(self.user_id)
+        return user.github_name
 
     @property
     def project_name(self):
-        return self.project.name
+        project = Project.query.get(self.project_id)
+        return project.name
 
     def __repr__(self):
         return "{} likes {}".format(self.user.github_name, self.project.name)
@@ -121,6 +123,7 @@ class Project(db.Model):
     logs = db.relationship("ProjectLog", backref="project", lazy="dynamic", foreign_keys="ProjectLog.project_id",
                            cascade="all,delete")
 
+
     @property
     def number_of_comments(self):
         return len(Comment.query.filter_by(project_id=self.id).all())
@@ -158,6 +161,15 @@ class Project(db.Model):
 
     def __repr__(self):
         return "{}".format(self.name)
+
+    @property
+    def date_added_display(self):
+        if not self.date_added:
+            return None
+        else:
+            submitted_string = str(self.date_added)
+            arrow_submitted = arrow.get(submitted_string)
+            return arrow_submitted.humanize()
 
 
 class ProjectLog(db.Model):
@@ -328,7 +340,7 @@ class LogSchema(Schema):
                   "previous_score")
 
 
-class ProjectSchema(Schema):
+class ProjectLogSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
     user_likes = fields.Nested(LikeSchema, many=True)
     logs = fields.Nested(LogSchema, many=True)
@@ -354,6 +366,31 @@ class ProjectSchema(Schema):
                   "github_url", "bitbucket_url", "pypi_stub", "logs",
                   "score", "release_count")
 
+class ProjectSchema(Schema):
+    comments = fields.Nested(CommentSchema, many=True)
+    user_likes = fields.Nested(LikeSchema, many=True)
+    score = fields.Method("round_score")
+
+    def round_score(self, obj):
+        if obj.score:
+            score = obj.score * score_multiplier
+            return round(score, 1)
+        else:
+            return 0
+
+    class Meta:
+        fields = ("id", "status", "name", "summary", "forks_count",
+                  "starred_count", "watchers_count", "watchers_url",
+                  "current_version", "last_commit", "first_commit",
+                  "open_issues_count", "project_stub", "downloads_count",
+                  "contributors_count", "python_three_compatible", "website",
+                  "git_url", "pypi_url", "contributors_url", "mailing_list_url",
+                  "forks_url", "starred_url", "open_issues_url", "docs_url",
+                  "group_id", "category_id", "comments", "user_likes", "age_display",
+                  "last_commit_display", "date_added", "date_added_display", "first_commit_display",
+                  "github_url", "bitbucket_url", "pypi_stub",
+                  "score", "release_count")
+
 
 class UserSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
@@ -365,6 +402,7 @@ class UserSchema(Schema):
         fields = ("id", "github_name", "github_url", "email", "comments",
                   "likes", "public_repos", "avatar_url", "linkedin_url", "portfolio_url",
                   "pending_submissions", "completed_submissions")
+
 
 
 class GroupSchema(Schema):

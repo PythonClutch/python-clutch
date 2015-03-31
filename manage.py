@@ -68,9 +68,6 @@ def update():
 @manager.command
 def update_score():
     projects = Project.query.all()
-    for project in projects:
-        log_project(project)
-
     update_projects_score(projects)
     return "Scores updated."
 

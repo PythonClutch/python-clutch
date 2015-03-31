@@ -368,7 +368,7 @@ def get_user_likes(id):
 
 @api.route("/projects/<int:id>/likes")
 def get_project_likes(id):
-    project = Project.query.get_or_404(id)
+    project = Project.query.get(id)
     if project.user_likes:
         return success_response(all_likes_schema, project.user_likes)
     else:
@@ -388,13 +388,13 @@ class Search:
 def search():
     text = request.args.get('q')
     if text:
-        projects = Project.query.search(text).all()
-
+        projects = Project.query.search(text).filter_by(Project.name).all()
         search = Search(query=text,
                         projects=projects)
         return success_response(search_schema, search)
     else:
         return failure_response("You must enter a query.", 400)
+
 
 @api.route("/newest/search")
 def search_by_newest():
@@ -419,6 +419,7 @@ def search_by_popular():
         return success_response(search_schema, search)
     else:
         return failure_response("You must enter a query.", 400)
+
 
 
 # Magic Visualization Routes
@@ -518,7 +519,7 @@ def graph_distribution():
     data = {'x': x,
             'y': y}
     bar = vincent.Bar(data, iter_idx='x')
-
+    bar.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
     return bar.to_json()
 
 
