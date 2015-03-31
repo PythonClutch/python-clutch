@@ -341,7 +341,7 @@ def like_project(id):
     existing_likes = project.user_likes.filter(Like.user == user).all()
     if len(existing_likes) > 0:
         return failure_response("User has already liked the project", 409)
-    
+
     new_like = Like(user_id=user.id,
                     project_id=project.id)
     user.likes.append(new_like)
