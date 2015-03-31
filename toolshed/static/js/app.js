@@ -632,6 +632,125 @@ app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 
 }]);
 
+app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory', 'graph',
+	function (project, projectFactory, projectServices, user, likeFactory, graph) {
+
+	var self = this;
+
+	self.project = project;
+
+	self.graph = graph;
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.setCommentPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 1100 }, 'fast');
+	}
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
+
+	self.comments = project.comments;
+	console.log(self.comments);
+
+	self.comment = {};
+
+	console.log(user);
+	
+	self.addComment = function () {
+		console.log(self.comment);
+		console.log(self.project.id);
+		projectServices.addComment(self.project.id, self.comment);
+		var tempComment = {
+			'created_display': 'seconds ago',
+			'project_id': project.id,
+			'text': self.comment.text,
+			'user_avatar': user.data.avatar_url,
+			'user_id': user.data.id,
+			'user_name': user.data.github_name
+		}
+		self.comments.push(tempComment);
+		console.log(self.comments);
+		self.comment = {};
+	};
+
+	self.like = function (proj, likes) {
+		likeFactory.like(proj, likes, user);	
+	};
+
+	self.checkLike = function (project) {
+		return likeFactory.checkLike(project, user);
+	};
+
+	function parse(spec) {
+		vg.parse.spec(spec, function(chart) { 
+			// function graphing (argument) {
+			// 	// body...
+			// }
+			chart({el:".graph"}).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update(); 
+			if (window.innerWidth < 400) {
+				chart({el:".graph"}).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
+			}
+		});
+	}
+	parse(graph);
+
+
+}]);
+(function () {
+	app.directive('projectComments', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/project/project-comments.html'
+	  };
+	});
+})();
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/project/project.html',
+      controller: 'ProjectCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        user: ['userServices',
+          function(userServices) {
+            return userServices.currentUser();
+          }
+        ],
+        project: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getByProjectId(routeParams.projectid);
+          }
+        ],
+        graph: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getGraphByProjectId(routeParams.projectid);
+          }
+        ],
+      }
+    };
+
+    $routeProvider
+    .when('/projects/:projectid', routeDefinition)
+    .when('/home/projects/:projectid', routeDefinition);
+
+}]);
+
+
+
 app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $location) {
 
 	'use strict';
@@ -1058,125 +1177,6 @@ app.factory('userServices', ['$http', '$q',
         };
     }
 ]);
-app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory', 'graph',
-	function (project, projectFactory, projectServices, user, likeFactory, graph) {
-
-	var self = this;
-
-	self.project = project;
-
-	self.graph = graph;
-
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.setCommentPage = function () {
-		console.log('top')
-		$('html, body').animate({ scrollTop: 1100 }, 'fast');
-	}
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-
-	self.comments = project.comments;
-	console.log(self.comments);
-
-	self.comment = {};
-
-	console.log(user);
-	
-	self.addComment = function () {
-		console.log(self.comment);
-		console.log(self.project.id);
-		projectServices.addComment(self.project.id, self.comment);
-		var tempComment = {
-			'created_display': 'seconds ago',
-			'project_id': project.id,
-			'text': self.comment.text,
-			'user_avatar': user.data.avatar_url,
-			'user_id': user.data.id,
-			'user_name': user.data.github_name
-		}
-		self.comments.push(tempComment);
-		console.log(self.comments);
-		self.comment = {};
-	};
-
-	self.like = function (proj, likes) {
-		likeFactory.like(proj, likes, user);	
-	};
-
-	self.checkLike = function (project) {
-		return likeFactory.checkLike(project, user);
-	};
-
-	function parse(spec) {
-		vg.parse.spec(spec, function(chart) { 
-			// function graphing (argument) {
-			// 	// body...
-			// }
-			chart({el:".graph"}).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update(); 
-			if (window.innerWidth < 400) {
-				chart({el:".graph"}).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
-			}
-		});
-	}
-	parse(graph);
-
-
-}]);
-(function () {
-	app.directive('projectComments', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/project/project-comments.html'
-	  };
-	});
-})();
-app.config(['$routeProvider', function($routeProvider) {    
-    var routeDefinition = {
-      templateUrl: 'static/project/project.html',
-      controller: 'ProjectCtrl',
-      controllerAs: 'vm',
-      resolve: {
-        user: ['userServices',
-          function(userServices) {
-            return userServices.currentUser();
-          }
-        ],
-        project: ['$route', 'projectServices',
-          function($route, projectServices) {
-            var routeParams = $route.current.params;
-            return projectServices.getByProjectId(routeParams.projectid);
-          }
-        ],
-        graph: ['$route', 'projectServices',
-          function($route, projectServices) {
-            var routeParams = $route.current.params;
-            return projectServices.getGraphByProjectId(routeParams.projectid);
-          }
-        ],
-      }
-    };
-
-    $routeProvider
-    .when('/projects/:projectid', routeDefinition)
-    .when('/home/projects/:projectid', routeDefinition);
-
-}]);
-
-
-
 app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user',
 	function (activeRoute, submitFactory, groupServices, projectServices, user) {
 
