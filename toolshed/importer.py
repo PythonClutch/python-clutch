@@ -2,9 +2,7 @@ import re
 import requests
 from datetime import datetime
 import os
-
 from .models import Project
-
 
 github_search_regex = re.compile('github.com/(.*)')
 github_match_regex = re.compile('((http(s)*://)*github.com/)')
@@ -14,6 +12,7 @@ bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
 
 pypi_search_regex = re.compile('((http(s)*://)*pypi.python.org/pypi/(.*))')
 
+score_multiplier = 10
 
 gitkey = os.environ['GITKEY']
 auth=(gitkey, 'x-oauth-basic')
@@ -108,6 +107,7 @@ def parse_source(source_url, proj_dict):
 
 def create_project(pypi_url=None, git_url=None, docs_url=None, mailing_list_url=None, github_url=None,
                    bitbucket_url=None):
+    source_url = None
     if not pypi_url:
         return None
     pypi_api = pypi_url + "/json"
