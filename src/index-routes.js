@@ -8,15 +8,9 @@ app.config(['$routeProvider', function ($routeProvider) {
     resolve: {
       projects: ['projectServices',
         function(projectServices) {
-          return projectServices.listPopular();
+          return projectServices.list();
         }
       ],
-      newestProjects: function () {
-        return true
-      },
-      popularProjects: function () {
-        return true
-      },
       groups: ['groupServices',
         function(groupServices) {
           return groupServices.listGroups();

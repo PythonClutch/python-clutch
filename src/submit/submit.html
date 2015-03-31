@@ -14,7 +14,7 @@
 
 	<h1 class="no-projects-header" ng-show="!vm.byNew && (vm.user.pending_submissions === undefined) ">No Pending Projects </h1>
 	<ul class="pending-project-ul" ng-show="!vm.byNew && !(vm.user.pending_submissions === undefined) ">
-		<li class="pending-project-li">
+		<li ng-repeat="project in user.pending_submissions" class="pending-project-li">
 			<div class="pending-project-div">
 	<!-- 			<div class="pending-div">
 					<h6>Name:</h6>

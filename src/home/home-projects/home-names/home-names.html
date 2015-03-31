@@ -1,25 +1,19 @@
 <home-filters></home-filters>
 
 <ul ng-show="hp.list">
-	<li class="home-project-li" dir-paginate="project in hp.listProjects | filter:searchText | itemsPerPage: 5" pagination-id="name">
+	<li class="home-project-li" dir-paginate="project in vm.projects | filter:searchText | orderBy:'name' | itemsPerPage: 5" pagination-id="name">
 		<names-details class="name-details"></names-details>
 	</li>
 </ul>
 
 <ul class="popular-ul" ng-show="hp.popular">
-	<li class="home-project-li" dir-paginate="project in vm.projects | filter:searchText | itemsPerPage: 5 " pagination-id="name">
+	<li class="home-project-li" dir-paginate="project in vm.projects | filter:searchText | orderBy:'-score' | itemsPerPage: 5 " pagination-id="name">
 		<names-details class="name-details"></names-details>
 	</li>
 </ul>
 
 <ul ng-show="hp.newest">
-	<li class="home-project-li" dir-paginate="project in hp.newestProjects | filter:searchText | itemsPerPage: 5" pagination-id="name">
-		<names-details class="name-details"></names-details>
-	</li>
-</ul>
-
-<ul ng-show="hp.search">
-	<li class="home-project-li" dir-paginate="project in vm.projects | filter:searchText | itemsPerPage: 5 " pagination-id="name">
+	<li class="home-project-li" dir-paginate="project in vm.projects | filter:searchText | orderBy:'id' | itemsPerPage: 5" pagination-id="name">
 		<names-details class="name-details"></names-details>
 	</li>
 </ul>

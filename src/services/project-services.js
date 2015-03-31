@@ -73,15 +73,15 @@ app.factory('projectServices', ['$http', '$log',
         return get('/api/v1/search?q="' + word + '"');
       },
 
-      searchNewestProjects: function (word) {
-        console.log(word);
-        return get('/api/v1/newest/search?q="' + word + '"');
-      },
+      // searchNewestProjects: function (word) {
+      //   console.log(word);
+      //   return get('/api/v1/newest/search?q="' + word + '"');
+      // },
 
-      searchPopularProjects: function (word) {
-        console.log(word);
-        return get('/api/v1/popular/search?q="' + word + '"');
-      }
+      // searchPopularProjects: function (word) {
+      //   console.log(word);
+      //   return get('/api/v1/popular/search?q="' + word + '"');
+      // }
 
     };
   }

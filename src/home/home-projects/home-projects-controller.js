@@ -53,17 +53,17 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory',
 	// 	console.log('nothing there');
 	// });
 
-	projectServices.listNewest().then(function (result){
-		self.newestProjects = result;
-	}, function () {
-		console.log('nothing there');
-	});
+	// projectServices.listNewest().then(function (result){
+	// 	self.newestProjects = result;
+	// }, function () {
+	// 	console.log('nothing there');
+	// });
 
-	projectServices.list().then(function (result){
-		self.listProjects = result;
-	}, function () {
-		console.log('nothing there');
-	});
+	// projectServices.list().then(function (result){
+	// 	self.listProjects = result;
+	// }, function () {
+	// 	console.log('nothing there');
+	// });
 
 	self.setGroups = function () {
 		self.byNames = false;
@@ -75,7 +75,6 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory',
 
 	function selectedClass () {
 		var closest = $(event.target).parent().parent().children();
-		console.log(closest);
 		closest.each(function () {
 			var fa = $(this).find('.fa');
 			$(this).find('.fa').removeClass('fa-dot-circle-o');
@@ -125,6 +124,7 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory',
 		self.popular = false;
 		self.newest = false;
 		self.list = true;
+		console.log(self.list);
 		selectedClass();
 		$('#project-list-radio').prop('checked', true);
 	};

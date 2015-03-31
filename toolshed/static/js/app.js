@@ -54,15 +54,9 @@ app.config(['$routeProvider', function ($routeProvider) {
     resolve: {
       projects: ['projectServices',
         function(projectServices) {
-          return projectServices.listPopular();
+          return projectServices.list();
         }
       ],
-      newestProjects: function () {
-        return true
-      },
-      popularProjects: function () {
-        return true
-      },
       groups: ['groupServices',
         function(groupServices) {
           return groupServices.listGroups();
@@ -638,125 +632,6 @@ app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 
 }]);
 
-app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory', 'graph',
-	function (project, projectFactory, projectServices, user, likeFactory, graph) {
-
-	var self = this;
-
-	self.project = project;
-
-	self.graph = graph;
-
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.setCommentPage = function () {
-		console.log('top')
-		$('html, body').animate({ scrollTop: 1100 }, 'fast');
-	}
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-
-	self.comments = project.comments;
-	console.log(self.comments);
-
-	self.comment = {};
-
-	console.log(user);
-	
-	self.addComment = function () {
-		console.log(self.comment);
-		console.log(self.project.id);
-		projectServices.addComment(self.project.id, self.comment);
-		var tempComment = {
-			'created_display': 'seconds ago',
-			'project_id': project.id,
-			'text': self.comment.text,
-			'user_avatar': user.data.avatar_url,
-			'user_id': user.data.id,
-			'user_name': user.data.github_name
-		}
-		self.comments.push(tempComment);
-		console.log(self.comments);
-		self.comment = {};
-	};
-
-	self.like = function (proj, likes) {
-		likeFactory.like(proj, likes, user);	
-	};
-
-	self.checkLike = function (project) {
-		return likeFactory.checkLike(project, user);
-	};
-
-	function parse(spec) {
-		vg.parse.spec(spec, function(chart) { 
-			// function graphing (argument) {
-			// 	// body...
-			// }
-			chart({el:".graph"}).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update(); 
-			if (window.innerWidth < 400) {
-				chart({el:".graph"}).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
-			}
-		});
-	}
-	parse(graph);
-
-
-}]);
-(function () {
-	app.directive('projectComments', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/project/project-comments.html'
-	  };
-	});
-})();
-app.config(['$routeProvider', function($routeProvider) {    
-    var routeDefinition = {
-      templateUrl: 'static/project/project.html',
-      controller: 'ProjectCtrl',
-      controllerAs: 'vm',
-      resolve: {
-        user: ['userServices',
-          function(userServices) {
-            return userServices.currentUser();
-          }
-        ],
-        project: ['$route', 'projectServices',
-          function($route, projectServices) {
-            var routeParams = $route.current.params;
-            return projectServices.getByProjectId(routeParams.projectid);
-          }
-        ],
-        graph: ['$route', 'projectServices',
-          function($route, projectServices) {
-            var routeParams = $route.current.params;
-            return projectServices.getGraphByProjectId(routeParams.projectid);
-          }
-        ],
-      }
-    };
-
-    $routeProvider
-    .when('/projects/:projectid', routeDefinition)
-    .when('/home/projects/:projectid', routeDefinition);
-
-}]);
-
-
-
 app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $location) {
 
 	'use strict';
@@ -1100,15 +975,15 @@ app.factory('projectServices', ['$http', '$log',
         return get('/api/v1/search?q="' + word + '"');
       },
 
-      searchNewestProjects: function (word) {
-        console.log(word);
-        return get('/api/v1/newest/search?q="' + word + '"');
-      },
+      // searchNewestProjects: function (word) {
+      //   console.log(word);
+      //   return get('/api/v1/newest/search?q="' + word + '"');
+      // },
 
-      searchPopularProjects: function (word) {
-        console.log(word);
-        return get('/api/v1/popular/search?q="' + word + '"');
-      }
+      // searchPopularProjects: function (word) {
+      //   console.log(word);
+      //   return get('/api/v1/popular/search?q="' + word + '"');
+      // }
 
     };
   }
@@ -1183,6 +1058,125 @@ app.factory('userServices', ['$http', '$q',
         };
     }
 ]);
+app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory', 'graph',
+	function (project, projectFactory, projectServices, user, likeFactory, graph) {
+
+	var self = this;
+
+	self.project = project;
+
+	self.graph = graph;
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.setCommentPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 1100 }, 'fast');
+	}
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
+	};
+
+	self.comments = project.comments;
+	console.log(self.comments);
+
+	self.comment = {};
+
+	console.log(user);
+	
+	self.addComment = function () {
+		console.log(self.comment);
+		console.log(self.project.id);
+		projectServices.addComment(self.project.id, self.comment);
+		var tempComment = {
+			'created_display': 'seconds ago',
+			'project_id': project.id,
+			'text': self.comment.text,
+			'user_avatar': user.data.avatar_url,
+			'user_id': user.data.id,
+			'user_name': user.data.github_name
+		}
+		self.comments.push(tempComment);
+		console.log(self.comments);
+		self.comment = {};
+	};
+
+	self.like = function (proj, likes) {
+		likeFactory.like(proj, likes, user);	
+	};
+
+	self.checkLike = function (project) {
+		return likeFactory.checkLike(project, user);
+	};
+
+	function parse(spec) {
+		vg.parse.spec(spec, function(chart) { 
+			// function graphing (argument) {
+			// 	// body...
+			// }
+			chart({el:".graph"}).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update(); 
+			if (window.innerWidth < 400) {
+				chart({el:".graph"}).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
+			}
+		});
+	}
+	parse(graph);
+
+
+}]);
+(function () {
+	app.directive('projectComments', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/project/project-comments.html'
+	  };
+	});
+})();
+app.config(['$routeProvider', function($routeProvider) {    
+    var routeDefinition = {
+      templateUrl: 'static/project/project.html',
+      controller: 'ProjectCtrl',
+      controllerAs: 'vm',
+      resolve: {
+        user: ['userServices',
+          function(userServices) {
+            return userServices.currentUser();
+          }
+        ],
+        project: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getByProjectId(routeParams.projectid);
+          }
+        ],
+        graph: ['$route', 'projectServices',
+          function($route, projectServices) {
+            var routeParams = $route.current.params;
+            return projectServices.getGraphByProjectId(routeParams.projectid);
+          }
+        ],
+      }
+    };
+
+    $routeProvider
+    .when('/projects/:projectid', routeDefinition)
+    .when('/home/projects/:projectid', routeDefinition);
+
+}]);
+
+
+
 app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user',
 	function (activeRoute, submitFactory, groupServices, projectServices, user) {
 
@@ -1488,17 +1482,17 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory',
 	// 	console.log('nothing there');
 	// });
 
-	projectServices.listNewest().then(function (result){
-		self.newestProjects = result;
-	}, function () {
-		console.log('nothing there');
-	});
+	// projectServices.listNewest().then(function (result){
+	// 	self.newestProjects = result;
+	// }, function () {
+	// 	console.log('nothing there');
+	// });
 
-	projectServices.list().then(function (result){
-		self.listProjects = result;
-	}, function () {
-		console.log('nothing there');
-	});
+	// projectServices.list().then(function (result){
+	// 	self.listProjects = result;
+	// }, function () {
+	// 	console.log('nothing there');
+	// });
 
 	self.setGroups = function () {
 		self.byNames = false;
@@ -1510,7 +1504,6 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory',
 
 	function selectedClass () {
 		var closest = $(event.target).parent().parent().children();
-		console.log(closest);
 		closest.each(function () {
 			var fa = $(this).find('.fa');
 			$(this).find('.fa').removeClass('fa-dot-circle-o');
@@ -1560,6 +1553,7 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory',
 		self.popular = false;
 		self.newest = false;
 		self.list = true;
+		console.log(self.list);
 		selectedClass();
 		$('#project-list-radio').prop('checked', true);
 	};
@@ -2264,7 +2258,7 @@ app.config(['$routeProvider', function ($routeProvider) {
       projects: ['$route', 'projectServices',
         function($route, projectServices) {
           var routeParams = $route.current.params;
-          return projectServices.searchPopularProjects(routeParams.word).then(function (results) {
+          return projectServices.searchProjects(routeParams.word).then(function (results) {
             console.log(results.projects);
             return results.projects;
           });

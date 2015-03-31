@@ -33,14 +33,14 @@
 
 	<ul>
 <!-- 		<li ng-repeat="project in vm.group.projects">{{project.name}}</li> -->
-		<li class="home-project-li" dir-paginate="project in vm.group.projects | itemsPerPage: 5" pagination-id="list">
+		<li class="home-project-li" dir-paginate="project in vm.group.projects | orderBy:'-score' | itemsPerPage: 5" pagination-id="list">
 			<names-details class="name-details"></names-details>
 		</li>
 	</ul>
 
 	<div class="pagination-div">
-		<p ng-show="{{vm.group.projects.length}} > 5">5 of {{vm.group.projects.length}}</p>
-		<p ng-show="{{vm.group.projects.length}} < 5">{{vm.group.projects.length}} of {{vm.group.projects.length}}</p>
+<!-- 		<p ng-show="{{vm.group.projects.length}} > 5">5 of {{vm.group.projects.length}}</p>
+		<p ng-show="{{vm.group.projects.length}} < 5">{{vm.group.projects.length}} of {{vm.group.projects.length}}</p> -->
 		<dir-pagination-controls pagination-id="list"></dir-pagination-controls>
 	</div>
 

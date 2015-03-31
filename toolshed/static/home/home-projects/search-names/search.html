@@ -2,16 +2,28 @@
 
 	<home-filters></home-filters>
 
-	<ul>
-		<li class="home-project-li" dir-paginate="project in vm.projects | filter:searchText | itemsPerPage: 5 " pagination-id="search">
+	<ul ng-show="hp.list">
+		<li class="home-project-li" dir-paginate="project in vm.projects | filter:searchText | orderBy:'name' | itemsPerPage: 5" pagination-id="name">
+			<names-details class="name-details"></names-details>
+		</li>
+	</ul>
+
+	<ul class="popular-ul" ng-show="hp.popular">
+		<li class="home-project-li" dir-paginate="project in vm.projects | filter:searchText | orderBy:'-score' | itemsPerPage: 5 " pagination-id="name">
+			<names-details class="name-details"></names-details>
+		</li>
+	</ul>
+
+	<ul ng-show="hp.newest">
+		<li class="home-project-li" dir-paginate="project in vm.projects | filter:searchText | orderBy:'id' | itemsPerPage: 5" pagination-id="name">
 			<names-details class="name-details"></names-details>
 		</li>
 	</ul>
 
 	<div class="pagination-div">
-		<p ng-show="{{vm.projects.length}} > 5">5 of {{vm.projectNumber}}</p>
-		<p ng-show="{{vm.projects.length}} < 5">{{vm.projectNumber}} of {{vm.projectNumber}}</p>
-		<dir-pagination-controls pagination-id="search" max-size="6"></dir-pagination-controls>
+<!-- 		<p ng-show="{{vm.projects.length}} > 5">5 of {{vm.projectNumber}}</p>
+		<p ng-show="{{vm.projects.length}} < 5">{{vm.projectNumber}} of {{vm.projectNumber}}</p> -->
+		<dir-pagination-controls pagination-id="search" max-size="1"></dir-pagination-controls>
 	</div>
 
 </div>
