@@ -11,8 +11,7 @@ from ..importer import create_project
 from toolshed import mail
 from flask_mail import Message
 from datetime import datetime
-from ..updater import score_multiplier
-
+score_multiplier = 10
 
 api = Blueprint('api', __name__)
 
@@ -435,7 +434,7 @@ def graph(id):
 
         x = [datetime.combine(log.log_date, datetime.min.time()).timestamp() * 1000
              for log in logs]
-        y = [log.previous_score for log in logs]
+        y = [log.previous_score * score_multiplier for log in logs]
 
         multi_iter = {'x': x,
                       'data': y}
@@ -457,47 +456,47 @@ def graph(id):
         return failure_response("No history for this project", 404)
 
 
-@api.route("/groups/<int:id>/graph")
-def graph_group(id):
-    group = Group.query.get_or_404(id)
-    log_list = [proj.logs.all() for proj in group.projects.all()]
-    scores = []
-    for item in log_list:
-        for log in item:
-            scores.append((log.log_date, log.previous_score))
-
-    date_set = {item[0] for item in scores}
-    avg_scores = []
-    for date in date_set:
-        date_scores = [item[1] for item in scores if item[0] == date]
-        score_avg = sum(date_scores)/len(date_scores)
-        avg_scores.append((date, score_avg))
-
-    if len(avg_scores) > 1:
-        avg_scores.sort(key=lambda x: x[0])
-
-        x = [datetime.combine(item[0], datetime.min.time()).timestamp() * 1000
-             for item in avg_scores]
-        y = [item[1] for item in avg_scores]
-
-        multi_iter = {'x': x,
-                      'data': y}
-        line = vincent.Line(multi_iter, iter_idx='x')
-
-        line.scales['x'] = vincent.Scale(name='x', type='time', range='width',
-                                         domain=vincent.DataRef(data='table', field="data.idx"))
-        line.scales['y'] = vincent.Scale(name='y', range='height', nice=True,
-                                         domain=[0, score_multiplier])
-        line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
-        line.axes['y'].ticks = 3
-        line.axes['x'].ticks = 7
-
-        if line_style:
-            line.marks['group'].marks[0].properties.enter.interpolate = vincent.ValueRef(value=line_style)
-
-        return jsonify({"status": "success", "data": line.grammar()})
-    else:
-        return failure_response("No history for this group", 404)
+# @api.route("/groups/<int:id>/graph")
+# def graph_group(id):
+#     group = Group.query.get_or_404(id)
+#     log_list = [proj.logs.all() for proj in group.projects.all()]
+#     scores = []
+#     for item in log_list:
+#         for log in item:
+#             scores.append((log.log_date, log.previous_score))
+#
+#     date_set = {item[0] for item in scores}
+#     avg_scores = []
+#     for date in date_set:
+#         date_scores = [item[1] for item in scores if item[0] == date]
+#         score_avg = sum(date_scores)/len(date_scores)
+#         avg_scores.append((date, score_avg))
+#
+#     if len(avg_scores) > 1:
+#         avg_scores.sort(key=lambda x: x[0])
+#
+#         x = [datetime.combine(item[0], datetime.min.time()).timestamp() * 1000
+#              for item in avg_scores]
+#         y = [item[1] * score_multiplier for item in avg_scores]
+#
+#         multi_iter = {'x': x,
+#                       'data': y}
+#         line = vincent.Line(multi_iter, iter_idx='x')
+#
+#         line.scales['x'] = vincent.Scale(name='x', type='time', range='width',
+#                                          domain=vincent.DataRef(data='table', field="data.idx"))
+#         line.scales['y'] = vincent.Scale(name='y', range='height', nice=True,
+#                                          domain=[0, score_multiplier])
+#         line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
+#         line.axes['y'].ticks = 3
+#         line.axes['x'].ticks = 7
+#
+#         if line_style:
+#             line.marks['group'].marks[0].properties.enter.interpolate = vincent.ValueRef(value=line_style)
+#
+#         return jsonify({"status": "success", "data": line.grammar()})
+#     else:
+#         return failure_response("No history for this group", 404)
 
 
 @api.route("/scoredist")
@@ -524,12 +523,13 @@ def graph_distribution():
     return bar.to_json()
 
 
-@api.route("/groups/<int:id>/binned")
+@api.route("/groups/<int:id>/graph")
 def graph_group_diff(id):
     group = Group.query.get_or_404(id)
     projects = group.projects.all()
     projects.sort(key=lambda x: x.score)
-    data = {project.name: project.score for project in projects}
+    data = {project.name: (project.score * score_multiplier)for project in projects}
     bar_graph = vincent.Bar(data)
+    bar_graph.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
 
-    return bar_graph.to_json()
+    return jsonify({"status": "success", "data": bar_graph.grammar()})

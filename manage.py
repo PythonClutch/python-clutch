@@ -84,6 +84,7 @@ def fake_some_logs():
             log.project_id = project.id
             db.session.add(log)
 
+
     db.session.commit()
 
 

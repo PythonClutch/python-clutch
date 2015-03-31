@@ -2,9 +2,7 @@ import re
 import requests
 from datetime import datetime
 import os
-
 from .models import Project
-
 
 github_search_regex = re.compile('github.com/(.*)')
 github_match_regex = re.compile('((http(s)*://)*github.com/)')
@@ -14,6 +12,7 @@ bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
 
 pypi_search_regex = re.compile('((http(s)*://)*pypi.python.org/pypi/(.*))')
 
+score_multiplier = 10
 
 gitkey = os.environ['GITKEY']
 auth=(gitkey, 'x-oauth-basic')
