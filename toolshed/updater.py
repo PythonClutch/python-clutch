@@ -160,7 +160,7 @@ def update_projects_score(projects):
             else:
                 git_score = 0
             score = (score * (1-source_weight)) + (git_score * source_weight)
-            project.score = score * score_multiplier
+            project.score = score
         db.session.commit()
     set_scores(projects)
 
