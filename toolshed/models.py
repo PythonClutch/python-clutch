@@ -170,7 +170,6 @@ class Project(db.Model):
             return arrow_submitted.humanize()
 
 
-
 class ProjectLog(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     forks_count = db.Column(db.Integer)
@@ -372,7 +371,8 @@ class ProjectSchema(Schema):
 
     def round_score(self, obj):
         if obj.score:
-            return round(obj.score, 3)
+            score = obj.score * score_multiplier
+            return round(score, 1)
         else:
             return 0
 
