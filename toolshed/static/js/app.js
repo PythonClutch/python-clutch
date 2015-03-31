@@ -2210,16 +2210,6 @@ app.factory('submitFactory', function () {
 	};
 
 });
-app.controller('hgCtrl', ['group', function (group) {
-	var self = this;
-
-	self.group = group;
-
-	console.log(group);
-
-
-
-}]);
 app.controller('hnCtrl', ['projects', 'appearFactory', 'projectFactory', function (projects, appearFactory, projectFactory) {
 	var self = this;
 
@@ -2244,6 +2234,16 @@ app.controller('hnCtrl', ['projects', 'appearFactory', 'projectFactory', functio
 		pf.ghInfo();
 		self.ghMoreInfo = pf.byGh();
 	};
+
+
+}]);
+app.controller('hgCtrl', ['group', function (group) {
+	var self = this;
+
+	self.group = group;
+
+	console.log(group);
+
 
 
 }]);
