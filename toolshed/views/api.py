@@ -239,6 +239,15 @@ def group_projects(id):
         return failure_response("There is no such group.", 404)
 
 
+@api.route("/groups/popular")
+def groups_by_popularity():
+    groups = Group.query.order_by(Group.average_score).all()
+    if groups:
+        return success_response(all_groups_schema, groups)
+    else:
+        return failure_response("There are no groups.", 404)
+
+
 # Category routes
 
 @api.route("/categories")
@@ -433,8 +442,7 @@ def graph(id):
         line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
         line.axes['y'].ticks = 3
         line.axes['x'].ticks = 7
-        # line.marks['group'].marks[0].properties.enter["interpolate"] = {"value": "monotone"}
-        # marks[0].properties.update.fill.value
+
         if line_style:
             line.marks['group'].marks[0].properties.enter.interpolate = vincent.ValueRef(value=line_style)
 
@@ -519,4 +527,3 @@ def graph_group_diff(id):
     bar_graph = vincent.Bar(data)
 
     return bar_graph.to_json()
-
