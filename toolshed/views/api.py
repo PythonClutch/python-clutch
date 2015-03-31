@@ -11,8 +11,7 @@ from ..importer import create_project
 from toolshed import mail
 from flask_mail import Message
 from datetime import datetime
-from ..updater import score_multiplier
-
+score_multiplier = 10
 
 api = Blueprint('api', __name__)
 

@@ -5,15 +5,15 @@ import os
 from datetime import datetime
 from .extensions import db
 from .importer import release_parse, parse_github_url, parse_bitbucket_url, parse_pypi_url
-from .models import ProjectLog, Project
+from .models import ProjectLog
 
+score_multiplier = 10
 
 github_search_regex = re.compile('github.com/(.*)')
 github_match_regex = re.compile('((http(s)*://)*github.com/)')
 
 bitbucket_search_regex = re.compile('bitbucket.org/(.*)')
 bitbucket_match_regex = re.compile('((http(s)*://)*bitbucket.org/)')
-
 
 gitkey = os.environ['GITKEY']
 auth = (gitkey, 'x-oauth-basic')
@@ -30,6 +30,8 @@ except:
     score_multiplier = 10
     use_log = True
     source_weight = 0.5
+
+
 
 
 def update_single_project(project):

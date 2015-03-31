@@ -4,9 +4,9 @@ from flask.ext.login import UserMixin
 from flask.ext.sqlalchemy import BaseQuery
 from sqlalchemy_searchable import SearchQueryMixin
 from sqlalchemy_utils.types import TSVectorType
-from .updater import score_multiplier
 import arrow
 
+score_multiplier = 10
 
 @login_manager.user_loader
 def load_admin(admin_id):
