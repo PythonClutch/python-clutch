@@ -58,11 +58,13 @@ class Like(db.Model):
 
     @property
     def user_name(self):
-        return self.user.github_name
+        user = User.query.get(self.user_id)
+        return user.github_name
 
     @property
     def project_name(self):
-        return self.project.name
+        project = Project.query.get(self.project_id)
+        return project.name
 
     def __repr__(self):
         return "{} likes {}".format(self.user.github_name, self.project.name)
