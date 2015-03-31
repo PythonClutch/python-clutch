@@ -11,6 +11,18 @@
 	padding-top: 41px; 
 }
 
+.new-wrapper {
+	background: $light-gray; 
+	box-shadow: 0 1px 3px $light-gray;
+	padding: 13px;
+	width: 550px;
+}
+
+.submit-form {
+	padding: 13px;
+	background: white; 
+}
+
 .submit-wrapper .submit-button {
 	margin-top: 28px; 
 }
@@ -24,14 +36,15 @@
 }
 
 .new-input-div p {
-	width: 110px;
+	width: 220px;
+	font-size: 22px; 
 }
 
 .new-input-div input {
-	width: 200px;
-	height: 15px;
+	width: 300px;
+	height: 25px;
+	font-size: 16px; 
 	&:focus {
-		// height: 13px; 
 		background: white;
 		border: 1px solid $light-gray;  
 	}
@@ -58,8 +71,13 @@
 	background: $light-gray;
 	width: 44%;  
 	margin-bottom: 4%;
-	padding: 2%; 
+	padding: 13px; 
 	position: relative;
+}
+
+.pending-project-div {
+	padding: 13px; 
+	background: white; 
 }
 
 .pending-div {

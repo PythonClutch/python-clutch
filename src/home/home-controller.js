@@ -17,7 +17,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 
 	console.log(categories)
 
-	self.projectNumber = projects.length;
+	self.projectNumber = Math.ceil(projects.length/5);
 
 	self.searchChange = function () {
 		var paragraphAmt = $(event.target).closest('home-names').find('.pagination-div p');

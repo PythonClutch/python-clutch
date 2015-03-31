@@ -14,6 +14,7 @@ app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', '
 		projectServices.addProject(self.newProject);
 		self.newProject = {};
 		console.log(self.newProject);
+		window.location.hash = "#/submit/pending";
 	};
 
 	self.setNew = function () {
