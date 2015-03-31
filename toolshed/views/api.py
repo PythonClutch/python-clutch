@@ -337,6 +337,11 @@ def like_project(id):
     project = Project.query.get_or_404(id)
     user_name = current_user()
     user = User.query.filter_by(github_name=user_name).first()
+
+    existing_likes = project.user_likes.filter(Like.user == user).all()
+    if len(existing_likes) > 0:
+        return failure_response("User has already liked the project", 409)
+    
     new_like = Like(user_id=user.id,
                     project_id=project.id)
     user.likes.append(new_like)
