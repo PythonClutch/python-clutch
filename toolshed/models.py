@@ -120,6 +120,7 @@ class Project(db.Model):
     logs = db.relationship("ProjectLog", backref="project", lazy="dynamic", foreign_keys="ProjectLog.project_id",
                            cascade="all,delete")
 
+
     @property
     def number_of_comments(self):
         return len(Comment.query.filter_by(project_id=self.id).all())
@@ -157,6 +158,16 @@ class Project(db.Model):
 
     def __repr__(self):
         return "{}".format(self.name)
+
+    @property
+    def date_added_display(self):
+        if not self.date_added:
+            return None
+        else:
+            submitted_string = str(self.date_added)
+            arrow_submitted = arrow.get(submitted_string)
+            return arrow_submitted.humanize()
+
 
 
 class ProjectLog(db.Model):
@@ -370,7 +381,7 @@ class ProjectSchema(Schema):
                   "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
                   "group_id", "category_id", "comments", "user_likes", "age_display",
-                  "last_commit_display", "date_added", "first_commit_display",
+                  "last_commit_display", "date_added", "date_added_display", "first_commit_display",
                   "github_url", "bitbucket_url", "pypi_stub",
                   "score", "release_count")
 
