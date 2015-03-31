@@ -373,7 +373,7 @@ class GroupSchema(Schema):
 
     def round_score(self, obj):
         if obj.score:
-            score = obj.score * score_multiplier
+            score = obj.average_score * score_multiplier
             return round(score, 3)
         else:
             return 0
