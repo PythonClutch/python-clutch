@@ -526,10 +526,12 @@ def graph_distribution():
 @api.route("/groups/<int:id>/graph")
 def graph_group_diff(id):
     group = Group.query.get_or_404(id)
-    projects = group.projects.all()
-    projects.sort(key=lambda x: x.score)
-    data = {project.name: (project.score * score_multiplier)for project in projects}
-    bar_graph = vincent.Bar(data)
+    projects = group.projects.order_by(Project.score.desc()).all()
+    scores = [project.score * score_multiplier for project in projects]
+    index = [project.name for project in projects]
+    data = {'scores': scores,
+            'index': index}
+    bar_graph = vincent.Bar(data, iter_idx='index')
     bar_graph.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
 
     return jsonify({"status": "success", "data": bar_graph.grammar()})
