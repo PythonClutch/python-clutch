@@ -151,7 +151,7 @@ def projects():
 
 @api.route("/projects/newest")
 def newest_projects():
-    projects = Project.query.order_by(Project.date_added)
+    projects = Project.query.order_by(Project.date_added.desc())
     if projects:
         return success_response(all_projects_schema, projects)
     else:
@@ -396,7 +396,7 @@ def search():
 def search_by_newest():
     text = request.args.get('q')
     if text:
-        projects = Project.query.search(text).order_by(Project.date_added).all()
+        projects = Project.query.search(text).order_by(Project.date_added.desc()).all()
 
         search = Search(query=text,
                         projects=projects)
