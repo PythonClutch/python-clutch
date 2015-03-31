@@ -41,7 +41,7 @@ search_schema = SearchSchema()
 try:
     line_style = os.environ['LINE_STYLE']
 except:
-    line_style = 'basis'
+    line_style = "basis"
 
 
 # response functions
@@ -151,7 +151,7 @@ def projects():
 
 @api.route("/projects/newest")
 def newest_projects():
-    projects = Project.query.order_by(Project.date_added)
+    projects = Project.query.order_by(Project.date_added.desc())
     if projects:
         return success_response(all_projects_schema, projects)
     else:
@@ -337,6 +337,11 @@ def like_project(id):
     project = Project.query.get_or_404(id)
     user_name = current_user()
     user = User.query.filter_by(github_name=user_name).first()
+
+    existing_likes = project.user_likes.filter(Like.user == user).all()
+    if len(existing_likes) > 0:
+        return failure_response("User has already liked the project", 409)
+
     new_like = Like(user_id=user.id,
                     project_id=project.id)
     user.likes.append(new_like)
@@ -396,7 +401,7 @@ def search():
 def search_by_newest():
     text = request.args.get('q')
     if text:
-        projects = Project.query.search(text).order_by(Project.date_added).all()
+        projects = Project.query.search(text).order_by(Project.date_added.desc()).all()
 
         search = Search(query=text,
                         projects=projects)
@@ -443,8 +448,7 @@ def graph(id):
         line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
         line.axes['y'].ticks = 3
         line.axes['x'].ticks = 7
-        # line.marks['group'].marks[0].properties.enter["interpolate"] = {"value": "monotone"}
-        # marks[0].properties.update.fill.value
+
         if line_style:
             line.marks['group'].marks[0].properties.enter.interpolate = vincent.ValueRef(value=line_style)
 

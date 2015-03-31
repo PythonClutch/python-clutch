@@ -27,7 +27,7 @@ try:
 except:
     github_lambda = 0.005
     pypi_lambda = 0.005
-    score_multiplier = 1
+    score_multiplier = 10
     use_log = True
     source_weight = 0.5
 

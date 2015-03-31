@@ -108,6 +108,7 @@ def parse_source(source_url, proj_dict):
 
 def create_project(pypi_url=None, git_url=None, docs_url=None, mailing_list_url=None, github_url=None,
                    bitbucket_url=None):
+    source_url = None
     if not pypi_url:
         return None
     pypi_api = pypi_url + "/json"

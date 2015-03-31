@@ -284,106 +284,6 @@ app.config(['$routeProvider', function ($routeProvider) {
   });
 
 }]);
-app.controller('FooterCtrl', ['projectServices', 'groupServices', function (projectServices, groupServices) {
-	var self = this;
-
-	projectServices.list().then(function (result) {
-		self.projects = result;
-		self.firstColumn = Math.ceil(result.length/3);
-		self.firstColumnPlus = self.firstColumn + 1;
-		self.secondColumn = Math.ceil(result.length/1.5);
-		self.secondColumnPlus = self.secondColumn + 1;
-		self.thirdColumn = result.length;
-	});
-
-	// self.firstColumn = function () {
-	// 	return function () {
-	// 		self.projects
-	// 	}
-	// }
-
-	self.setPage = function () {
-		console.log('top')
-		$('html, body').animate({ scrollTop: 0 }, 'fast');
-	};
-
-	self.bySiteMap = function () {
-		if (window.location.hash === '#/projectindex') {
-			return true;
-		} else {
-			return false;
-		}
-	};
-
-	self.byAbout = function () {
-		if (window.location.hash === '#/about') {
-			return true;
-		} else {
-			return false;
-		}
-	};
-
-	self.byContact = function () {
-		if (window.location.hash === '#/contact') {
-			return true;
-		} else {
-			return false;
-		}
-	};
-}]);
-(function () {
-	app.directive('siteMap', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/footer/footer-pages/site-map.html'
-	  };
-	});
-
-	app.directive('about', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/footer/footer-pages/about.html'
-	  };
-	});
-
-	app.directive('contact', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/footer/footer-pages/contact.html'
-	  };
-	});
-})();
-app.config(['$routeProvider', function ($routeProvider) {
-  'use strict';
-
-  var page = {
-    templateUrl: 'static/footer/footer-pages/footer-pages.html',
-    controller: 'FooterCtrl',
-    controllerAs: 'vm',
-    // resolve: {
-		  // projects: ['projectServices',
-	   //      function(projectServices) {
-	   //        return projectServices.list();
-	   //      }
-	   //  ],
-    //   groups: ['groupServices',
-    //     function(groupServices) {
-    //       return groupServices.list();
-    //     }
-    //   ],
-    //   categories: ['groupServices',
-    //     function(groupServices) {
-    //       return groupServices.listCats();
-    //     }
-    //   ]
-    // }
-  };
-
-  $routeProvider
-  .when('/projectindex', page)
-  .when('/about', page)
-  .when('/contact', page)
-}]);
 app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph',
 	function (group, projectFactory, appearFactory, graph) {
 	var self = this;
@@ -592,6 +492,106 @@ $(function () {
 	}
 
 });
+app.controller('FooterCtrl', ['projectServices', 'groupServices', function (projectServices, groupServices) {
+	var self = this;
+
+	projectServices.list().then(function (result) {
+		self.projects = result;
+		self.firstColumn = Math.ceil(result.length/3);
+		self.firstColumnPlus = self.firstColumn + 1;
+		self.secondColumn = Math.ceil(result.length/1.5);
+		self.secondColumnPlus = self.secondColumn + 1;
+		self.thirdColumn = result.length;
+	});
+
+	// self.firstColumn = function () {
+	// 	return function () {
+	// 		self.projects
+	// 	}
+	// }
+
+	self.setPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	};
+
+	self.bySiteMap = function () {
+		if (window.location.hash === '#/projectindex') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	self.byAbout = function () {
+		if (window.location.hash === '#/about') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	self.byContact = function () {
+		if (window.location.hash === '#/contact') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+}]);
+(function () {
+	app.directive('siteMap', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/footer/footer-pages/site-map.html'
+	  };
+	});
+
+	app.directive('about', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/footer/footer-pages/about.html'
+	  };
+	});
+
+	app.directive('contact', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/footer/footer-pages/contact.html'
+	  };
+	});
+})();
+app.config(['$routeProvider', function ($routeProvider) {
+  'use strict';
+
+  var page = {
+    templateUrl: 'static/footer/footer-pages/footer-pages.html',
+    controller: 'FooterCtrl',
+    controllerAs: 'vm',
+    // resolve: {
+		  // projects: ['projectServices',
+	   //      function(projectServices) {
+	   //        return projectServices.list();
+	   //      }
+	   //  ],
+    //   groups: ['groupServices',
+    //     function(groupServices) {
+    //       return groupServices.list();
+    //     }
+    //   ],
+    //   categories: ['groupServices',
+    //     function(groupServices) {
+    //       return groupServices.listCats();
+    //     }
+    //   ]
+    // }
+  };
+
+  $routeProvider
+  .when('/projectindex', page)
+  .when('/about', page)
+  .when('/contact', page)
+}]);
 app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 	function ($location, userServices, projectServices) {
 
