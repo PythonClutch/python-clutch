@@ -434,7 +434,7 @@ def graph(id):
 
         x = [datetime.combine(log.log_date, datetime.min.time()).timestamp() * 1000
              for log in logs]
-        y = [log.previous_score for log in logs]
+        y = [log.previous_score * score_multiplier for log in logs]
 
         multi_iter = {'x': x,
                       'data': y}
@@ -477,7 +477,7 @@ def graph_group(id):
 
         x = [datetime.combine(item[0], datetime.min.time()).timestamp() * 1000
              for item in avg_scores]
-        y = [item[1] for item in avg_scores]
+        y = [item[1] * score_multiplier for item in avg_scores]
 
         multi_iter = {'x': x,
                       'data': y}
@@ -528,7 +528,7 @@ def graph_group_diff(id):
     group = Group.query.get_or_404(id)
     projects = group.projects.all()
     projects.sort(key=lambda x: x.score)
-    data = {project.name: project.score for project in projects}
+    data = {project.name: (project.score * score_multiplier)for project in projects}
     bar_graph = vincent.Bar(data)
 
     return bar_graph.to_json()

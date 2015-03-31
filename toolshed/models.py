@@ -4,6 +4,7 @@ from flask.ext.login import UserMixin
 from flask.ext.sqlalchemy import BaseQuery
 from sqlalchemy_searchable import SearchQueryMixin
 from sqlalchemy_utils.types import TSVectorType
+from .updater import score_multiplier
 import arrow
 
 
@@ -335,7 +336,8 @@ class ProjectSchema(Schema):
 
     def round_score(self, obj):
         if obj.score:
-            return round(obj.score, 3)
+            score = obj.score * score_multiplier
+            return round(score, 3)
         else:
             return 0
 
@@ -370,8 +372,9 @@ class GroupSchema(Schema):
     average_score = fields.Method("round_score")
 
     def round_score(self, obj):
-        if obj.average_score:
-            return round(obj.average_score, 3)
+        if obj.score:
+            score = obj.score * score_multiplier
+            return round(score, 3)
         else:
             return 0
 
