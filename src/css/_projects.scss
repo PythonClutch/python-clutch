@@ -135,9 +135,6 @@ div.home-project-basic-info-icon-gh-score .fa {
 	flex-wrap: wrap;
 }
 
-.home-project-content-gh {
-	display: none;
-}
 
 .more-info-label {
 	text-align: right;
@@ -362,12 +359,12 @@ div.home-project-basic-info-icon-gh-score .fa {
 	height: 100%;
 	width: 97.38%;
 	margin-top: 0;  
-	transition: margin-top .15s ease-out;
+	transition: margin-top .13s ease-out;
 }
 
 .names-details-checkbox:checked ~ .home-project-details-div .home-project-details{
 	opacity: 1;
-	transition: all .25s ease-out .08s;
+	transition: all .25s ease-out .1s;
 }
 
 .more-info-input {
@@ -380,17 +377,33 @@ div.home-project-basic-info-icon-gh-score .fa {
 	position: absolute;
 }
 
-.gh-checkbox:checked ~ .home-project-content-gh {
-	display: block;
+.home-project-content-gh {
+	visibility: hidden;
+	position: absolute;
+	margin-top: -106px;
+	height: 106px;
 }
 
-// #more-info-pypi:checked ~ .home-project-content {
-// 	display: block;
-// }
+.gh-checkbox:checked ~ .home-project-content-gh {
+	visibility: visible;
+	position: relative;
+	height: 100%;
+	margin-top: 0;
+	transition: margin-top .06s ease-out; 
+}
 
-// #more-info-github:checked ~ .home-project-content {
-// 	display: block;
-// }
+.home-project-content-gh-child {
+	opacity: 0;
+}
+
+.gh-checkbox:checked ~ .home-project-content-gh .home-project-content-gh-child {
+	opacity: 1;
+	transition: all .13s ease-out .05s;
+}
+
+/////////////////////////////////////////////////////////////
+// GRAY OUT LINKS
+/////////////////////////////////////////////////////////////
 
 .home-project-li {
 	a.noLink {

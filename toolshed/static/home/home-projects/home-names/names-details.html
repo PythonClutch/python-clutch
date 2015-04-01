@@ -6,7 +6,7 @@
 			<div class="home-project-basic-info-icon home-project-basic-info-like"><i ng-click="vm.like(project, project.user_likes)" ng-class="{ 'fa-heart' : vm.checkLike(project), 'fa-heart-o' : !vm.checkLike(project) }" class="fa"></i><p>{{project.user_likes.length || 0}}</p></div>
 			<a ng-click="hp.setCommentPage()" href="#/home/projects/{{project.id}}"><div class="home-project-basic-info-icon home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{project.comments.length || 0}}</div>
 			<a href="{{project.pypi_url}}"><div class="home-project-basic-info-icon home-project-basic-info-check"><i ng-class="{ 'fa-check-square-o' : project.python_three_compatible, 'fa-square-o' : !project.python_three_compatible }" class="fa"></i><p>Py3</p></div></a>
-			<a href="#/home/projects/{{project.id}}"><div class="home-project-basic-info-icon home-project-basic-info-score"><i class="fa fa-calculator"></i></i>{{project.score}}</div></a>
+			<a href="#/home/projects/{{project.id}}"><div class="home-project-basic-info-icon home-project-basic-info-score"><i class="fa fa-line-chart"></i></i>{{project.score}}</div></a>
 			<i ng-class="{'fa-times' : !hp.rotate, 'fa-plus': hp.rotate}" ng-click="hp.checkBox()" class="home-project-basic-info-icon home-project-basic-info-plus fa"></i>
 		</div>
 	</div>
@@ -65,12 +65,12 @@
 				<div class="home-project-header-bottom">
 					<h5>{{project.forks_count}} Forks</h5>
 					<h5>{{project.open_issues_count}} Issues</h5>
-					<label ng-click="vm.ghInfo()" class="more-info-label">VIEW MORE <i ng-class="{ 'fa-angle-up': vm.ghMoreInfo, 'fa-angle-down': !vm.ghMoreInfo}" class="fa"></i></label>					
+					<label ng-click="hp.ghInfo()" class="more-info-label">VIEW MORE <i ng-class="{ 'fa-angle-up': hp.ghMoreInfo, 'fa-angle-down': !hp.ghMoreInfo}" class="fa"></i></label>					
 				</div>
 			</div>
 			<div class="home-project-content home-project-content-gh">
-				<section class="gray-line"></section>
-				<div class="home-project-content-sizer">
+				<section class="gray-line home-project-content-gh-child"></section>
+				<div class="home-project-content-sizer home-project-content-gh-child">
 					<div class="home-project-content-div">
 						<h6 class="home-project-content-header"><b>{{project.watchers_count}}</b> Watchers</h6>
 <!-- 						<h6 class="home-project-content-header"><b>High</b> Developer Activity</h6> -->
@@ -88,6 +88,7 @@
 			</div>
 		</div>
 	</div>
+
 
 
 

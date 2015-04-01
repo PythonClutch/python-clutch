@@ -17,7 +17,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 
 	console.log(categories)
 
-	self.projectNumber = projects.length;
+	self.projectNumber = Math.ceil(projects.length/5);
 
 	self.searchChange = function () {
 		var paragraphAmt = $(event.target).closest('home-names').find('.pagination-div p');
@@ -67,22 +67,6 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 
 	self.checkLike = function (project) {
 		return likeFactory.checkLike(project, user);
-	};
-
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
 	};
 
 	self.searchClicked = true;
