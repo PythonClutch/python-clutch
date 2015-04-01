@@ -1021,6 +1021,7 @@ app.factory('projectServices', ['$http', '$log',
     }
     function processAjaxPromise(p) {
       return p.then(function(result) {
+        console.log(result.data);
         return result.data.data;
       })
       .catch(function(error) {
@@ -2270,6 +2271,7 @@ app.config(['$routeProvider', function ($routeProvider) {
       projects: ['$route', 'projectServices',
         function($route, projectServices) {
           var routeParams = $route.current.params;
+          console.log(routeParams.word);
           return projectServices.searchProjects(routeParams.word).then(function (results) {
             console.log(results.projects);
             return results.projects;

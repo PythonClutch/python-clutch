@@ -15,6 +15,7 @@ app.factory('projectServices', ['$http', '$log',
     }
     function processAjaxPromise(p) {
       return p.then(function(result) {
+        console.log(result.data);
         return result.data.data;
       })
       .catch(function(error) {
