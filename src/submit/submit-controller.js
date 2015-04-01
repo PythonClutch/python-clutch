@@ -9,6 +9,8 @@ app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', '
 
 	self.newProject = {};
 
+	self.user = user;
+
 	self.createProject = function () {
 		console.log(self.newProject);
 		projectServices.addProject(self.newProject);

@@ -142,16 +142,19 @@ div.activeFilter {
 }
 
 .home-project-search:-moz-placeholder { 
+	padding: 0 0 6px;
    color: $gray;  
    font-size: 20px; 
 }
 
 .home-project-search::-moz-placeholder {  
+	padding: 0 0 6px;
    color: $gray; 
    font-size: 20px; 
 }
 
 .home-project-search:-ms-input-placeholder {  
+	padding: 0 0 6px;
    color: $gray;   
    font-size: 20px; 
 }

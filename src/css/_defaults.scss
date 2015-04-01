@@ -86,7 +86,7 @@ b {
   text-transform: uppercase;
   letter-spacing: 1px;
   padding: 6px 24px;
-  color: #12997e;
+  color: $base-color;
   background: -moz-linear-gradient(
   top,
   #ffffff 0%,
@@ -98,20 +98,13 @@ b {
   -moz-border-radius: 0px;
   -webkit-border-radius: 0px;
   border-radius: 0px;
-  border: 1px solid #12997e;
+  border: 2px solid $base-color;
   transition: all .2s;
   transition: color .05s;
   cursor: pointer;
   &:hover {
     color: #ffffff;
-    background: -moz-linear-gradient(
-      top,
-      #12997e 0%,
-      #02c087);
-    background: -webkit-gradient(
-      linear, left top, left bottom,
-      from(#12997e),
-      to(#02c087));
+    background: $base-color; 
     border: 1px solid #12997e;
     transition: all .2s;
     transition: color .05s;
