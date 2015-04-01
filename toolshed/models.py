@@ -171,6 +171,10 @@ class Project(db.Model):
             arrow_submitted = arrow.get(submitted_string)
             return arrow_submitted.humanize()
 
+    @property
+    def show_likes(self):
+        return Like.query.filter_by(project_id=self.id).all()
+
 
 class ProjectLog(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -265,7 +269,7 @@ class Group(db.Model):
         scores = [project.score for project in self.projects]
         if scores:
             average_score = sum(scores) / len(scores)
-            return average_score
+            return round(average_score * 10, 1)
         else:
             return 0
 
@@ -342,7 +346,7 @@ class LogSchema(Schema):
 
 class ProjectLogSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
-    user_likes = fields.Nested(LikeSchema, many=True)
+    likes = fields.Nested(LikeSchema, many=True)
     logs = fields.Nested(LogSchema, many=True)
     score = fields.Method("round_score")
 
@@ -361,14 +365,14 @@ class ProjectLogSchema(Schema):
                   "contributors_count", "python_three_compatible", "website",
                   "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
-                  "group_id", "category_id", "comments", "user_likes", "age_display",
+                  "group_id", "category_id", "comments", "likes", "age_display",
                   "last_commit_display", "date_added", "first_commit_display",
                   "github_url", "bitbucket_url", "pypi_stub", "logs",
                   "score", "release_count")
 
 class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
-    user_likes = fields.Nested(LikeSchema, many=True)
+    show_likes = fields.Nested(LikeSchema, many=True)
     score = fields.Method("round_score")
 
     def round_score(self, obj):
@@ -386,7 +390,7 @@ class ProjectSchema(Schema):
                   "contributors_count", "python_three_compatible", "website",
                   "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
-                  "group_id", "category_id", "comments", "user_likes", "age_display",
+                  "group_id", "category_id", "comments", "show_likes", "age_display",
                   "last_commit_display", "date_added", "date_added_display", "first_commit_display",
                   "github_url", "bitbucket_url", "pypi_stub",
                   "score", "release_count")
@@ -407,14 +411,17 @@ class UserSchema(Schema):
 
 class GroupSchema(Schema):
     projects = fields.Nested(ProjectSchema, many=True)
-    average_score = fields.Method("round_score")
+    average_score = fields.Method("average_score")
 
-    def round_score(self, obj):
-        if obj.score:
-            score = obj.average_score * score_multiplier
-            return round(score, 3)
-        else:
+    def average_score(self, obj):
+        if not obj.projects:
             return 0
+        total = 0
+        number_of_projects = 0
+        for project in obj.projects:
+            number_of_projects += 1
+            project.score += total
+        return ((total/number_of_projects) * 10)
 
     class Meta:
         fields = ("id", "name", "projects", "category_id", "average_score")
