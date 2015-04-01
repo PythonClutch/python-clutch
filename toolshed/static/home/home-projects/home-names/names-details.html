@@ -65,12 +65,12 @@
 				<div class="home-project-header-bottom">
 					<h5>{{project.forks_count}} Forks</h5>
 					<h5>{{project.open_issues_count}} Issues</h5>
-					<label ng-click="vm.ghInfo()" class="more-info-label">VIEW MORE <i ng-class="{ 'fa-angle-up': vm.ghMoreInfo, 'fa-angle-down': !vm.ghMoreInfo}" class="fa"></i></label>					
+					<label ng-click="hp.ghInfo()" class="more-info-label">VIEW MORE <i ng-class="{ 'fa-angle-up': hp.ghMoreInfo, 'fa-angle-down': !hp.ghMoreInfo}" class="fa"></i></label>					
 				</div>
 			</div>
 			<div class="home-project-content home-project-content-gh">
-				<section class="gray-line"></section>
-				<div class="home-project-content-sizer">
+				<section class="gray-line home-project-content-gh-child"></section>
+				<div class="home-project-content-sizer home-project-content-gh-child">
 					<div class="home-project-content-div">
 						<h6 class="home-project-content-header"><b>{{project.watchers_count}}</b> Watchers</h6>
 <!-- 						<h6 class="home-project-content-header"><b>High</b> Developer Activity</h6> -->
@@ -88,6 +88,7 @@
 			</div>
 		</div>
 	</div>
+
 
 
 

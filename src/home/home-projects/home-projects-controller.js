@@ -1,5 +1,5 @@
-app.controller('hpCtrl', ['projectServices', 'appearFactory',
-    function (projectServices, appearFactory) {
+app.controller('hpCtrl', ['projectServices', 'appearFactory', 'projectFactory',
+    function (projectServices, appearFactory, projectFactory) {
 	var self = this;
 
 	self.byNames = true;
@@ -134,6 +134,22 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory',
 	self.checkSearch = function () {
 		self.searchClicked = false;
 		$(event.target).parent().find('.home-project-search').focus();
+	};
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
 	};
 
 

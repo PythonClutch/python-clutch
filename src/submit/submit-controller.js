@@ -1,5 +1,5 @@
-app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user',
-	function (activeRoute, submitFactory, groupServices, projectServices, user) {
+app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user', 'projectFactory',
+	function (activeRoute, submitFactory, groupServices, projectServices, user, projectFactory) {
 
 	var self = this;
 
@@ -47,6 +47,15 @@ app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', '
 		sf.setPending();
 		self.byNew = sf.byNew();
 		self.byEdit = sf.byEdit();
+	};
+
+	var pf = projectFactory;
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
 	};
 	
 }]);

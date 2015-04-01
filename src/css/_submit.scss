@@ -95,6 +95,7 @@
 
 .pending-project-li {
 	background: $light-gray;
+	margin-bottom: 28px; 
 	// width: 44%;  
 	// margin-bottom: 4%;
 	// padding: 13px; 
@@ -157,8 +158,6 @@
 	font-size: 30px; 
 }
 
-
-
 .home-project-links-div {
 	cursor: text;
 	i.noLink {
@@ -170,7 +169,6 @@
 			color: $gray; 
 		} 
 	}
-
 	a.noLink {
 		color: $gray;
 		text-decoration: none;
@@ -180,6 +178,12 @@
 			color: $gray; 
 		} 
 	}
+}
+
+.submitted-date-p {
+	text-align: left;
+	font-style: italic;
+	background: white; 
 }
 
 

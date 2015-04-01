@@ -283,6 +283,106 @@ app.config(['$routeProvider', function ($routeProvider) {
   });
 
 }]);
+app.controller('FooterCtrl', ['projectServices', 'groupServices', function (projectServices, groupServices) {
+	var self = this;
+
+	projectServices.list().then(function (result) {
+		self.projects = result;
+		self.firstColumn = Math.ceil(result.length/3);
+		self.firstColumnPlus = self.firstColumn + 1;
+		self.secondColumn = Math.ceil(result.length/1.5);
+		self.secondColumnPlus = self.secondColumn + 1;
+		self.thirdColumn = result.length;
+	});
+
+	// self.firstColumn = function () {
+	// 	return function () {
+	// 		self.projects
+	// 	}
+	// }
+
+	self.setPage = function () {
+		console.log('top')
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
+	};
+
+	self.bySiteMap = function () {
+		if (window.location.hash === '#/projectindex') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	self.byAbout = function () {
+		if (window.location.hash === '#/about') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	self.byContact = function () {
+		if (window.location.hash === '#/contact') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+}]);
+(function () {
+	app.directive('siteMap', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/footer/footer-pages/site-map.html'
+	  };
+	});
+
+	app.directive('about', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/footer/footer-pages/about.html'
+	  };
+	});
+
+	app.directive('contact', function() {
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'static/footer/footer-pages/contact.html'
+	  };
+	});
+})();
+app.config(['$routeProvider', function ($routeProvider) {
+  'use strict';
+
+  var page = {
+    templateUrl: 'static/footer/footer-pages/footer-pages.html',
+    controller: 'FooterCtrl',
+    controllerAs: 'vm',
+    // resolve: {
+		  // projects: ['projectServices',
+	   //      function(projectServices) {
+	   //        return projectServices.list();
+	   //      }
+	   //  ],
+    //   groups: ['groupServices',
+    //     function(groupServices) {
+    //       return groupServices.list();
+    //     }
+    //   ],
+    //   categories: ['groupServices',
+    //     function(groupServices) {
+    //       return groupServices.listCats();
+    //     }
+    //   ]
+    // }
+  };
+
+  $routeProvider
+  .when('/projectindex', page)
+  .when('/about', page)
+  .when('/contact', page)
+}]);
 app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph',
 	function (group, projectFactory, appearFactory, graph) {
 	var self = this;
@@ -426,22 +526,6 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 		return likeFactory.checkLike(project, user);
 	};
 
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-
 	self.searchClicked = true;
 
 	self.checkSearch = function () {
@@ -491,106 +575,6 @@ $(function () {
 	}
 
 });
-app.controller('FooterCtrl', ['projectServices', 'groupServices', function (projectServices, groupServices) {
-	var self = this;
-
-	projectServices.list().then(function (result) {
-		self.projects = result;
-		self.firstColumn = Math.ceil(result.length/3);
-		self.firstColumnPlus = self.firstColumn + 1;
-		self.secondColumn = Math.ceil(result.length/1.5);
-		self.secondColumnPlus = self.secondColumn + 1;
-		self.thirdColumn = result.length;
-	});
-
-	// self.firstColumn = function () {
-	// 	return function () {
-	// 		self.projects
-	// 	}
-	// }
-
-	self.setPage = function () {
-		console.log('top')
-		$('html, body').animate({ scrollTop: 0 }, 'fast');
-	};
-
-	self.bySiteMap = function () {
-		if (window.location.hash === '#/projectindex') {
-			return true;
-		} else {
-			return false;
-		}
-	};
-
-	self.byAbout = function () {
-		if (window.location.hash === '#/about') {
-			return true;
-		} else {
-			return false;
-		}
-	};
-
-	self.byContact = function () {
-		if (window.location.hash === '#/contact') {
-			return true;
-		} else {
-			return false;
-		}
-	};
-}]);
-(function () {
-	app.directive('siteMap', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/footer/footer-pages/site-map.html'
-	  };
-	});
-
-	app.directive('about', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/footer/footer-pages/about.html'
-	  };
-	});
-
-	app.directive('contact', function() {
-	  return {
-	    restrict: 'E',
-	    templateUrl: 'static/footer/footer-pages/contact.html'
-	  };
-	});
-})();
-app.config(['$routeProvider', function ($routeProvider) {
-  'use strict';
-
-  var page = {
-    templateUrl: 'static/footer/footer-pages/footer-pages.html',
-    controller: 'FooterCtrl',
-    controllerAs: 'vm',
-    // resolve: {
-		  // projects: ['projectServices',
-	   //      function(projectServices) {
-	   //        return projectServices.list();
-	   //      }
-	   //  ],
-    //   groups: ['groupServices',
-    //     function(groupServices) {
-    //       return groupServices.list();
-    //     }
-    //   ],
-    //   categories: ['groupServices',
-    //     function(groupServices) {
-    //       return groupServices.listCats();
-    //     }
-    //   ]
-    // }
-  };
-
-  $routeProvider
-  .when('/projectindex', page)
-  .when('/about', page)
-  .when('/contact', page)
-}]);
 app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 	function ($location, userServices, projectServices) {
 
@@ -713,7 +697,7 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
 	app.directive('projectComments', function() {
 	  return {
 	    restrict: 'E',
-	    templateUrl: 'static/project/project-comments.html'
+	    templateUrl: 'static/project/project-comments.html',
 	  };
 	});
 })();
@@ -1004,6 +988,7 @@ app.factory('projectFactory', function () {
 
 		ghInfo: function () {
 			if (ghMoreInfo === true) {
+				console.log('true');
 				ghMoreInfo = false;
 			} else {
 				ghMoreInfo = true;
@@ -1177,8 +1162,8 @@ app.factory('userServices', ['$http', '$q',
         };
     }
 ]);
-app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user',
-	function (activeRoute, submitFactory, groupServices, projectServices, user) {
+app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user', 'projectFactory',
+	function (activeRoute, submitFactory, groupServices, projectServices, user, projectFactory) {
 
 	var self = this;
 
@@ -1226,6 +1211,15 @@ app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', '
 		sf.setPending();
 		self.byNew = sf.byNew();
 		self.byEdit = sf.byEdit();
+	};
+
+	var pf = projectFactory;
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
 	};
 	
 }]);
@@ -1429,8 +1423,8 @@ app.config(['$routeProvider', function ($routeProvider) {
 
   .when('/home/categories', homePage);
 }]);
-app.controller('hpCtrl', ['projectServices', 'appearFactory',
-    function (projectServices, appearFactory) {
+app.controller('hpCtrl', ['projectServices', 'appearFactory', 'projectFactory',
+    function (projectServices, appearFactory, projectFactory) {
 	var self = this;
 
 	self.byNames = true;
@@ -1565,6 +1559,22 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory',
 	self.checkSearch = function () {
 		self.searchClicked = false;
 		$(event.target).parent().find('.home-project-search').focus();
+	};
+
+	var pf = projectFactory;
+
+	self.pyMoreInfo = pf.byPy();
+
+	self.pyInfo = function () {
+		pf.pyInfo();
+		self.pyMoreInfo = pf.byPy(); 
+	};
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
 	};
 
 

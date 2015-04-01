@@ -69,22 +69,6 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 		return likeFactory.checkLike(project, user);
 	};
 
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-
 	self.searchClicked = true;
 
 	self.checkSearch = function () {
