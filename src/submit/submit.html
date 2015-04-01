@@ -13,10 +13,10 @@
 	<h1 class="projects-header" ng-show="!vm.byNew && !(vm.user.data.pending_submissions === undefined) ">Pending Projects </h1>
 	<ul class="pending-project-ul" ng-show="!vm.byNew && !(vm.user.data.pending_submissions === undefined) ">
 		<li ng-repeat="project in vm.user.data.pending_submissions" class="pending-project-li">
-		<div>
-			<p class="submitted-date-p">Submitted on date</p>
-			<names-details class="names-details"></name-details>
+			<div>	
+				<names-details class="names-details"></name-details>
 			</div>
+			<p class="submitted-date-p">Submitted {{project.date_added_display}}</p>
 		</li>
 	</ul>
 </div>

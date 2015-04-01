@@ -5,6 +5,10 @@
 	<input ng-model="vm.newProject.name" class="search" type="text" placeholder="Enter project name">
 </div> -->
 <div class="new-project-container">
+<div class="new-input-div">
+		<p>PyPi URL*</p>
+		<input ng-model="vm.newProject.pypi_url" class="search" type="url" placeholder="https://pypi.python.org/pypi/name">
+	</div>
 	<div class="new-input-div">
 		<p>Git URL</p>
 		<input ng-model="vm.newProject.git_url" class="search" type="url" placeholder="https://github.com/id/repo">
@@ -13,16 +17,17 @@
 		<p>Bitbucket URL</p>
 		<input ng-model="vm.newProject.git_url" class="search" type="url" placeholder="Enter a URL">
 	</div> -->
-	<div class="new-input-div">
-		<p>PyPi URL*</p>
-		<input ng-model="vm.newProject.pypi_url" class="search" type="url" placeholder="https://pypi.python.org/pypi/name">
-	</div>
+	
 </div>
 <!-- <div class="new-input-div">
 	<p>Website</p>
 	<input ng-model="vm.newProject.website" class="search" type="url" placeholder="Enter a URL">
 </div> -->
 <div class="new-project-container">
+<div class="new-input-div">
+		<p>PyDoc URL</p>
+		<input ng-model="vm.newProject.docs_url" class="search" type="url" placeholder="Enter a URL">
+	</div>
 	<div class="new-input-div">
 		<p>Mailing List</p>
 		<input ng-model="vm.newProject.mailing_list_url" class="search" type="url" placeholder="Enter a URL">
@@ -31,10 +36,7 @@
 		<p>Source Code</p>
 		<input class="search" type="url" placeholder="Enter a URL">
 	</div> -->
-	<div class="new-input-div">
-		<p>PyDoc URL</p>
-		<input ng-model="vm.newProject.docs_url" class="search" type="url" placeholder="Enter a URL">
-	</div>
+	
 </div>
 <!-- <div class="new-input-div">
 	<p>Category</p>

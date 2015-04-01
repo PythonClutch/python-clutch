@@ -1316,7 +1316,7 @@ h2.activity-header {
       color: #d1d1d1; }
 
 .submitted-date-p {
-  text-align: left;
+  text-align: right;
   font-style: italic;
   background: white; }
 
@@ -1634,7 +1634,7 @@ footer a {
   .root-content {
     margin-top: -140px; }
   .home-project-basic-info-right {
-    width: 23%; }
+    width: 110px; }
     .home-project-basic-info-right .home-project-basic-info-like, .home-project-basic-info-right a:nth-child(-n+3) {
       display: none; }
   .home-project-links-div-sizer {
@@ -1756,6 +1756,14 @@ footer a {
   .home-filters-div {
     width: 156%;
     margin-left: -28%; } }
+
+@media screen and (max-width: 321px) {
+  .home-project-basic-info-right {
+    width: 100px; }
+  .home-project-content-div {
+    width: 100%; }
+  .home-project-content-div-gh:nth-child(2) {
+    margin-bottom: 10px; } }
 
 .footer-pages {
   padding-top: 28px; }
