@@ -42,8 +42,8 @@ app.factory('likeFactory', ['projectServices', function (projectServices) {
 		},
 
 		checkLike: function (project, user) {
-			for (var i = project.user_likes.length - 1; i >= 0; i--) {
-				if (project.user_likes[i].user_id === user.data.id) {
+			for (var i = project.show_likes.length - 1; i >= 0; i--) {
+				if (project.show_likes[i].user_id === user.data.id) {
 					console.log(true);
 					return true;
 				} else {
