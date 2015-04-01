@@ -37,6 +37,7 @@ class ProjectView(ModelView):
     column_list = ("status", "name", "summary", "pypi_url", "git_url", "score",
                    "group", "category", "date_added")
 
+
     def is_accessible(self):
         return current_user.is_authenticated()
 
