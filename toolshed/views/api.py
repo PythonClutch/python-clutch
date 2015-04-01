@@ -341,9 +341,9 @@ def like_project(id):
     if len(existing_likes) > 0:
         return failure_response("User has already liked the project", 409)
 
-    new_like = Like(user_id=user.id,
-                    project_id=project.id)
+    new_like = Like()
     user.likes.append(new_like)
+    project.user_likes.append(new_like)
     db.session.add(new_like)
     db.session.commit()
     return success_response(single_like_schema, new_like)
@@ -388,7 +388,7 @@ class Search:
 def search():
     text = request.args.get('q')
     if text:
-        projects = Project.query.search(text).filter_by(Project.name).all()
+        projects = Project.query.search(text).order_by(Project.name).all()
         search = Search(query=text,
                         projects=projects)
         return success_response(search_schema, search)

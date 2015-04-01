@@ -171,6 +171,10 @@ class Project(db.Model):
             arrow_submitted = arrow.get(submitted_string)
             return arrow_submitted.humanize()
 
+    @property
+    def show_likes(self):
+        return Like.query.filter_by(project_id=self.id).all()
+
 
 class ProjectLog(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -342,7 +346,7 @@ class LogSchema(Schema):
 
 class ProjectLogSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
-    user_likes = fields.Nested(LikeSchema, many=True)
+    likes = fields.Nested(LikeSchema, many=True)
     logs = fields.Nested(LogSchema, many=True)
     score = fields.Method("round_score")
 
@@ -361,14 +365,14 @@ class ProjectLogSchema(Schema):
                   "contributors_count", "python_three_compatible", "website",
                   "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
-                  "group_id", "category_id", "comments", "user_likes", "age_display",
+                  "group_id", "category_id", "comments", "likes", "age_display",
                   "last_commit_display", "date_added", "first_commit_display",
                   "github_url", "bitbucket_url", "pypi_stub", "logs",
                   "score", "release_count")
 
 class ProjectSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
-    user_likes = fields.Nested(LikeSchema, many=True)
+    show_likes = fields.Nested(LikeSchema, many=True)
     score = fields.Method("round_score")
 
     def round_score(self, obj):
@@ -386,7 +390,7 @@ class ProjectSchema(Schema):
                   "contributors_count", "python_three_compatible", "website",
                   "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
-                  "group_id", "category_id", "comments", "user_likes", "age_display",
+                  "group_id", "category_id", "comments", "show_likes", "age_display",
                   "last_commit_display", "date_added", "date_added_display", "first_commit_display",
                   "github_url", "bitbucket_url", "pypi_stub",
                   "score", "release_count")
