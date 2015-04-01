@@ -4,64 +4,19 @@
 </section>
 
 <div class="submit-wrapper container-width">
-	<form ng-submit="vm.createProject()" ng-show="vm.byNew">
+	<h2 ng-show="vm.byNew" class="new-project-heading">Submit New Project</h2>
+	<form ng-show="vm.byNew" class="submit-form" ng-submit="vm.createProject()">
 		<new-project></new-project>
 		<input class="submit-button" type="submit" value="Submit">
 	</form>
-
-	<h1 class="no-projects-header" ng-show="!vm.byNew && (vm.user.pending_submissions === undefined) ">No Pending Projects </h1>
-	<ul class="pending-project-ul" ng-show="!vm.byNew && !(vm.user.pending_submissions === undefined) ">
-		<li ng-repeat="project in vm.user.pending_submissions" class="pending-project-li">
-<!-- 			<div class="pending-div">
-				<h6>Name:</h6>
-				<p class="pending-p"></p>
-			</div> -->
-			<div class="pending-div">
-				<h6>Git URL:</h6>
-				<p class="pending-p">{{project.git_url}}</p>
+	<h1 class="projects-header" ng-show="!vm.byNew && (vm.user.data.pending_submissions === undefined) ">No Pending Projects </h1>
+	<h1 class="projects-header" ng-show="!vm.byNew && !(vm.user.data.pending_submissions === undefined) ">Pending Projects </h1>
+	<ul class="pending-project-ul" ng-show="!vm.byNew && !(vm.user.data.pending_submissions === undefined) ">
+		<li ng-repeat="project in vm.user.data.pending_submissions" class="pending-project-li">
+			<div>	
+				<names-details class="names-details"></name-details>
 			</div>
-<!-- 			<div class="pending-div">
-				<h6>Bitbucket URL:</h6>
-				<p class="pending-p"></p>
-			</div> -->
-			<div class="pending-div">
-				<h6>PyPi URL:</h6>
-				<p class="pending-p">{{project.pypi_url}}</p>
-			</div>
-<!-- 			<div class="pending-div">
-				<h6>Website URL:</h6>
-				<p class="pending-p"></p>
-			</div> -->
-			<div class="pending-div">
-				<h6>PyPi Documenation URL:</h6>
-				<p class="pending-p">{{project.docs_url}}</p>
-			</div>
-<!-- 			<div class="pending-div">
-				<h6>Source Code URL:</h6>
-				<p class="pending-p"></p>
-			</div> -->
-			<div class="pending-div">
-				<h6>Mailing List URL:</h6>
-				<p class="pending-p">{{project.mailing_list_url}}</p>
-			</div>
-<!-- 			<div class="pending-div">
-				<h6>Category:</h6>
-				<p class="pending-p"></p>
-			</div> -->
-<!-- 			<div class="pending-div">
-				<h6>Group:</h6>
-				<p class="pending-p"></p>
-			</div> -->
-			<div class="pending-div pending-div-date">
-				<h6>Date Submitted:</h6>
-				<p class="pending-p">{{project.age_display}}</p>
-			</div>		
-<!-- 			<a class="link" href="#/submit/new">
-				<div class="edit-div edit-div-submit">
-					<p>Edit</p>
-					<i class="fa fa-pencil"></i>
-				</div>
-			</a> -->
+			<p class="submitted-date-p">Submitted {{project.date_added_display}}</p>
 		</li>
 	</ul>
 </div>

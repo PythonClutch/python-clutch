@@ -1,5 +1,5 @@
-app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user',
-	function (activeRoute, submitFactory, groupServices, projectServices, user) {
+app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user', 'projectFactory',
+	function (activeRoute, submitFactory, groupServices, projectServices, user, projectFactory) {
 
 	var self = this;
 
@@ -9,11 +9,14 @@ app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', '
 
 	self.newProject = {};
 
+	self.user = user;
+
 	self.createProject = function () {
 		console.log(self.newProject);
 		projectServices.addProject(self.newProject);
 		self.newProject = {};
 		console.log(self.newProject);
+		window.location.hash = "#/submit/pending";
 	};
 
 	self.setNew = function () {
@@ -44,6 +47,15 @@ app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', '
 		sf.setPending();
 		self.byNew = sf.byNew();
 		self.byEdit = sf.byEdit();
+	};
+
+	var pf = projectFactory;
+
+	self.ghMoreInfo = pf.byGh();
+
+	self.ghInfo = function () {
+		pf.ghInfo();
+		self.ghMoreInfo = pf.byGh();
 	};
 	
 }]);

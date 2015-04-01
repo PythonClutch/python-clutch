@@ -75,7 +75,7 @@
 					<h6 class="home-project-content-header"><b ng-show="vm.project.python_three_compatible">Yes</b><b ng-show="!vm.project.python_three_compatible">No</b> Python3 Compatibility</h6>
 				</div>
 			</div>
-			<div ng-show="vm.project.git_url" class="home-project-details home-project-github">
+			<div ng-show="vm.project.git_url" class="home-project-details home-project-github-project">
 				<div class="home-project-github-header-div">
 					<div class="home-project-header-top">
 						<h3>GitHub</h3>
@@ -89,8 +89,8 @@
 					</div>
 				</div>
 				<div ng-show="vm.ghMoreInfo" class="home-project-content">
-					<section class="gray-line"></section>
-					<div class="home-project-content-sizer">
+					<section class="gray-line home-project-content-gh-child"></section>
+					<div class="home-project-content-sizer home-project-content-gh-child">
 						<div class="home-project-content-div">
 							<h6 class="home-project-content-header"><b>{{vm.project.watchers_count}}</b> Watchers</h6>
 <!-- 							<h6 class="home-project-content-header"><b>High</b> Developer Activity</h6> -->
