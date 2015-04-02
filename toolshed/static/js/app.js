@@ -415,9 +415,9 @@ app.config(['$routeProvider',
     }
 ]);
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
-    'categories', 'user', 'likeFactory', 'appearFactory',
+    'categories', 'user', 'likeFactory', 
     function(homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices,
-        categories, user, likeFactory, appearFactory) {
+        categories, user, likeFactory) {
         var self = this;
 
         self.categories = categories;
@@ -429,7 +429,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
                 scrollTop: 0
             }, 'fast');
             appearFactory.changeTrue();
-        }
+        };
 
         self.groups = groups;
 
@@ -442,13 +442,13 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
             } else {
                 paragraphAmt.show();
             }
-        }
+        };
 
         self.setPage = function() {
             $('html, body').animate({
                 scrollTop: 0
             }, 'fast');
-        }
+        };
 
         self.byProjects = homeFactory.byProjects();
 
@@ -469,7 +469,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 
         self.startsWith = function(path) {
             return activeRoute.startsWith(path);
-        }
+        };
 
         self.like = function(proj, likes) {
             likeFactory.like(proj, likes, user);
@@ -550,6 +550,121 @@ app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
         }
 
         checkLogIn();
+
+    }
+]);
+app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory', 'graph',
+    function(project, projectFactory, projectServices, user, likeFactory, graph) {
+
+        var self = this;
+
+        self.project = project;
+
+        self.graph = graph;
+
+        var pf = projectFactory;
+
+        self.pyMoreInfo = pf.byPy();
+
+        self.setCommentPage = function() {
+            $('html, body').animate({
+                scrollTop: 1100
+            }, 'fast');
+        }
+
+        self.pyInfo = function() {
+            pf.pyInfo();
+            self.pyMoreInfo = pf.byPy();
+        };
+
+        self.ghMoreInfo = pf.byGh();
+
+        self.ghInfo = function() {
+            pf.ghInfo();
+            self.ghMoreInfo = pf.byGh();
+        };
+
+        self.comments = project.comments;
+
+        self.comment = {};
+
+        self.addComment = function() {
+            projectServices.addComment(self.project.id, self.comment);
+            var tempComment = {
+                'created_display': 'seconds ago',
+                'project_id': project.id,
+                'text': self.comment.text,
+                'user_avatar': user.data.avatar_url,
+                'user_id': user.data.id,
+                'user_name': user.data.github_name
+            }
+            self.comments.push(tempComment);
+            self.comment = {};
+        };
+
+        self.like = function(proj, likes) {
+            likeFactory.like(proj, likes, user);
+        };
+
+        self.checkLike = function(project) {
+            return likeFactory.checkLike(project, user);
+        };
+
+        function parse(spec) {
+            vg.parse.spec(spec, function(chart) {
+                chart({
+                    el: ".graph"
+                }).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update();
+                if (window.innerWidth < 400) {
+                    chart({
+                        el: ".graph"
+                    }).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
+                }
+            });
+        }
+        parse(graph);
+
+
+    }
+]);
+(function() {
+    app.directive('projectComments', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/project/project-comments.html',
+        };
+    });
+})();
+app.config(['$routeProvider',
+    function($routeProvider) {
+        var routeDefinition = {
+            templateUrl: 'static/project/project.html',
+            controller: 'ProjectCtrl',
+            controllerAs: 'vm',
+            resolve: {
+                user: ['userServices',
+                    function(userServices) {
+                        return userServices.currentUser();
+                    }
+                ],
+                project: ['$route', 'projectServices',
+                    function($route, projectServices) {
+                        var routeParams = $route.current.params;
+                        return projectServices.getByProjectId(routeParams.projectid);
+                    }
+                ],
+                graph: ['$route', 'projectServices',
+                    function($route, projectServices) {
+                        var routeParams = $route.current.params;
+                        return projectServices.getGraphByProjectId(routeParams.projectid);
+                    }
+                ],
+            }
+        };
+
+        $routeProvider
+            .when('/projects/:projectid', routeDefinition)
+            .when('/home/projects/:projectid', routeDefinition);
 
     }
 ]);
@@ -947,121 +1062,6 @@ app.factory('userServices', ['$http', '$q',
         };
     }
 ]);
-app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', 'user', 'likeFactory', 'graph',
-    function(project, projectFactory, projectServices, user, likeFactory, graph) {
-
-        var self = this;
-
-        self.project = project;
-
-        self.graph = graph;
-
-        var pf = projectFactory;
-
-        self.pyMoreInfo = pf.byPy();
-
-        self.setCommentPage = function() {
-            $('html, body').animate({
-                scrollTop: 1100
-            }, 'fast');
-        }
-
-        self.pyInfo = function() {
-            pf.pyInfo();
-            self.pyMoreInfo = pf.byPy();
-        };
-
-        self.ghMoreInfo = pf.byGh();
-
-        self.ghInfo = function() {
-            pf.ghInfo();
-            self.ghMoreInfo = pf.byGh();
-        };
-
-        self.comments = project.comments;
-
-        self.comment = {};
-
-        self.addComment = function() {
-            projectServices.addComment(self.project.id, self.comment);
-            var tempComment = {
-                'created_display': 'seconds ago',
-                'project_id': project.id,
-                'text': self.comment.text,
-                'user_avatar': user.data.avatar_url,
-                'user_id': user.data.id,
-                'user_name': user.data.github_name
-            }
-            self.comments.push(tempComment);
-            self.comment = {};
-        };
-
-        self.like = function(proj, likes) {
-            likeFactory.like(proj, likes, user);
-        };
-
-        self.checkLike = function(project) {
-            return likeFactory.checkLike(project, user);
-        };
-
-        function parse(spec) {
-            vg.parse.spec(spec, function(chart) {
-                chart({
-                    el: ".graph"
-                }).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update();
-                if (window.innerWidth < 400) {
-                    chart({
-                        el: ".graph"
-                    }).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
-                }
-            });
-        }
-        parse(graph);
-
-
-    }
-]);
-(function() {
-    app.directive('projectComments', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/project/project-comments.html',
-        };
-    });
-})();
-app.config(['$routeProvider',
-    function($routeProvider) {
-        var routeDefinition = {
-            templateUrl: 'static/project/project.html',
-            controller: 'ProjectCtrl',
-            controllerAs: 'vm',
-            resolve: {
-                user: ['userServices',
-                    function(userServices) {
-                        return userServices.currentUser();
-                    }
-                ],
-                project: ['$route', 'projectServices',
-                    function($route, projectServices) {
-                        var routeParams = $route.current.params;
-                        return projectServices.getByProjectId(routeParams.projectid);
-                    }
-                ],
-                graph: ['$route', 'projectServices',
-                    function($route, projectServices) {
-                        var routeParams = $route.current.params;
-                        return projectServices.getGraphByProjectId(routeParams.projectid);
-                    }
-                ],
-            }
-        };
-
-        $routeProvider
-            .when('/projects/:projectid', routeDefinition)
-            .when('/home/projects/:projectid', routeDefinition);
-
-    }
-]);
 app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user', 'projectFactory',
     function(activeRoute, submitFactory, groupServices, projectServices, user, projectFactory) {
 
@@ -1297,6 +1297,172 @@ app.config(['$routeProvider',
         .when('/home/categories', homePage);
     }
 ]);
+app.controller('hpCtrl', ['projectServices', 'appearFactory', 'projectFactory',
+    function(projectServices, appearFactory, projectFactory) {
+        var self = this;
+
+        self.byNames = true;
+
+        self.rotate = function() {
+            return appearFactory.rotate();
+        };
+        self.mobile = true;
+
+        self.setCommentPage = function() {
+            console.log('top')
+            $('html, body').animate({
+                scrollTop: 1100
+            }, 'fast');
+        }
+
+        self.setPage = function() {
+            console.log('top')
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'fast');
+        }
+
+        self.checkBox = function() {
+            appearFactory.checkBox();
+            self.rotate = appearFactory.rotate();
+        };
+
+        self.setGroups = function() {
+            self.byNames = false;
+        };
+
+        self.setNames = function() {
+            self.byNames = true;
+        };
+
+        function selectedClass() {
+            var closest = $(event.target).parent().parent().children();
+            closest.each(function() {
+                var fa = $(this).find('.fa');
+                $(this).find('.fa').removeClass('fa-dot-circle-o');
+                console.log($(this).find('.project-radio')[0]);
+                $(this).find('.project-radio').prop('checked', false);
+                if (!fa.hasClass('fa-circle-o')) {
+                    fa.addClass('fa-circle-o');
+                }
+            });
+            $(event.target).parent().find('.fa').removeClass('fa-circle-o');
+            $(event.target).parent().find('.fa').addClass('fa-dot-circle-o');
+        }
+
+        self.list = false;
+        self.popular = true;
+        self.newest = false;
+        self.searched = false;
+
+        self.setPopular = function() {
+            selectedClass();
+            self.popular = true;
+            self.newest = false;
+            self.list = false;
+            self.searched = false;
+            $('#project-popular-radio').prop('checked', true);
+        };
+
+        self.setNewest = function() {
+            self.popular = false;
+            self.newest = true;
+            self.list = false;
+            self.searched = false;
+            selectedClass();
+            $('#project-newest-radio').prop('checked', true);
+        };
+
+        self.setSearch = function() {
+            console.log('eh');
+        }
+
+        self.setTrending = function() {
+            selectedClass();
+            $('#project-trending-radio').prop('checked', true);
+        };
+
+        self.setList = function() {
+            self.popular = false;
+            self.newest = false;
+            self.list = true;
+            console.log(self.list);
+            selectedClass();
+            $('#project-list-radio').prop('checked', true);
+        };
+
+        self.searchClicked = true;
+
+        self.checkSearch = function() {
+            self.searchClicked = false;
+            $(event.target).parent().find('.home-project-search').focus();
+        };
+
+        var pf = projectFactory;
+
+        self.pyMoreInfo = pf.byPy();
+
+        self.pyInfo = function() {
+            pf.pyInfo();
+            self.pyMoreInfo = pf.byPy();
+        };
+
+        self.ghMoreInfo = pf.byGh();
+
+        self.ghInfo = function() {
+            pf.ghInfo();
+            self.ghMoreInfo = pf.byGh();
+        };
+
+    }
+]);
+(function() {
+    app.directive('homeNames', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-names/home-names.html'
+        };
+    });
+
+    app.directive('namesDetails', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-names/names-details.html',
+            controller: 'hpCtrl',
+            controllerAs: 'hp'
+        };
+    });
+
+    app.directive('homeGroups', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-groups/home-groups.html'
+        };
+    });
+
+    app.directive('groupDetails', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-groups/group-details.html',
+            controller: 'hpCtrl',
+            controllerAs: 'hp'
+        };
+    });
+
+    app.directive('groupDetailsProjects', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-groups/group-details-projects.html'
+        };
+    });
+
+    app.directive('homeFilters', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-filters.html'
+        };
+    });
+})();
 /**
  * dirPagination - AngularJS module for paginating (almost) anything.
  *
@@ -1810,172 +1976,6 @@ app.config(['$routeProvider',
             };
         };
     }
-})();
-app.controller('hpCtrl', ['projectServices', 'appearFactory', 'projectFactory',
-    function(projectServices, appearFactory, projectFactory) {
-        var self = this;
-
-        self.byNames = true;
-
-        self.rotate = function() {
-            return appearFactory.rotate();
-        };
-        self.mobile = true;
-
-        self.setCommentPage = function() {
-            console.log('top')
-            $('html, body').animate({
-                scrollTop: 1100
-            }, 'fast');
-        }
-
-        self.setPage = function() {
-            console.log('top')
-            $('html, body').animate({
-                scrollTop: 0
-            }, 'fast');
-        }
-
-        self.checkBox = function() {
-            appearFactory.checkBox();
-            self.rotate = appearFactory.rotate();
-        };
-
-        self.setGroups = function() {
-            self.byNames = false;
-        };
-
-        self.setNames = function() {
-            self.byNames = true;
-        };
-
-        function selectedClass() {
-            var closest = $(event.target).parent().parent().children();
-            closest.each(function() {
-                var fa = $(this).find('.fa');
-                $(this).find('.fa').removeClass('fa-dot-circle-o');
-                console.log($(this).find('.project-radio')[0]);
-                $(this).find('.project-radio').prop('checked', false);
-                if (!fa.hasClass('fa-circle-o')) {
-                    fa.addClass('fa-circle-o');
-                }
-            });
-            $(event.target).parent().find('.fa').removeClass('fa-circle-o');
-            $(event.target).parent().find('.fa').addClass('fa-dot-circle-o');
-        }
-
-        self.list = false;
-        self.popular = true;
-        self.newest = false;
-        self.searched = false;
-
-        self.setPopular = function() {
-            selectedClass();
-            self.popular = true;
-            self.newest = false;
-            self.list = false;
-            self.searched = false;
-            $('#project-popular-radio').prop('checked', true);
-        };
-
-        self.setNewest = function() {
-            self.popular = false;
-            self.newest = true;
-            self.list = false;
-            self.searched = false;
-            selectedClass();
-            $('#project-newest-radio').prop('checked', true);
-        };
-
-        self.setSearch = function() {
-            console.log('eh');
-        }
-
-        self.setTrending = function() {
-            selectedClass();
-            $('#project-trending-radio').prop('checked', true);
-        };
-
-        self.setList = function() {
-            self.popular = false;
-            self.newest = false;
-            self.list = true;
-            console.log(self.list);
-            selectedClass();
-            $('#project-list-radio').prop('checked', true);
-        };
-
-        self.searchClicked = true;
-
-        self.checkSearch = function() {
-            self.searchClicked = false;
-            $(event.target).parent().find('.home-project-search').focus();
-        };
-
-        var pf = projectFactory;
-
-        self.pyMoreInfo = pf.byPy();
-
-        self.pyInfo = function() {
-            pf.pyInfo();
-            self.pyMoreInfo = pf.byPy();
-        };
-
-        self.ghMoreInfo = pf.byGh();
-
-        self.ghInfo = function() {
-            pf.ghInfo();
-            self.ghMoreInfo = pf.byGh();
-        };
-
-    }
-]);
-(function() {
-    app.directive('homeNames', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-names/home-names.html'
-        };
-    });
-
-    app.directive('namesDetails', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-names/names-details.html',
-            controller: 'hpCtrl',
-            controllerAs: 'hp'
-        };
-    });
-
-    app.directive('homeGroups', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-groups/home-groups.html'
-        };
-    });
-
-    app.directive('groupDetails', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-groups/group-details.html',
-            controller: 'hpCtrl',
-            controllerAs: 'hp'
-        };
-    });
-
-    app.directive('groupDetailsProjects', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-groups/group-details-projects.html'
-        };
-    });
-
-    app.directive('homeFilters', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-filters.html'
-        };
-    });
 })();
 app.factory('homeFactory', function() {
 

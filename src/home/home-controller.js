@@ -1,7 +1,7 @@
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
-    'categories', 'user', 'likeFactory', 'appearFactory',
+    'categories', 'user', 'likeFactory', 
     function(homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices,
-        categories, user, likeFactory, appearFactory) {
+        categories, user, likeFactory) {
         var self = this;
 
         self.categories = categories;
@@ -13,7 +13,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
                 scrollTop: 0
             }, 'fast');
             appearFactory.changeTrue();
-        }
+        };
 
         self.groups = groups;
 
@@ -26,13 +26,13 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
             } else {
                 paragraphAmt.show();
             }
-        }
+        };
 
         self.setPage = function() {
             $('html, body').animate({
                 scrollTop: 0
             }, 'fast');
-        }
+        };
 
         self.byProjects = homeFactory.byProjects();
 
@@ -53,7 +53,7 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
 
         self.startsWith = function(path) {
             return activeRoute.startsWith(path);
-        }
+        };
 
         self.like = function(proj, likes) {
             likeFactory.like(proj, likes, user);
