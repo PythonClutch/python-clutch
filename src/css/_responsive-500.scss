@@ -1,103 +1,13 @@
-@media screen and (max-width: 501px) {
-	
-/////////////////////////////////////////////////////////////
+@media screen and (max-width:501px){/////////////////////////////////////////////////////////////
 // HEADER
 /////////////////////////////////////////////////////////////
 
-.nav-logo {
-	width: 100%;
-	margin: 45px auto;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	flex-wrap: wrap;
-	h2 {
-		margin-left: 25px; 
-	}
-}
-
-.nav-right {
-	margin: 0 auto;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	width: 90%;
-	position: absolute;
-	height: 10px;
-	top: 20px;
-	left: 5%;
-}
-
-.nav-search-bar input {
-	visibility: hidden;
-	width: 20px;
-}
-
-/////////////////////////////////////////////////////////////
+.nav-logo{width:100%;margin:45px auto;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;h2{margin-left:25px}}.nav-right{margin:0 auto;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-webkit-flex-direction:row;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;width:90%;position:absolute;height:10px;top:20px;left:5%}.nav-search-bar input{visibility:hidden;width:20px}/////////////////////////////////////////////////////////////
 // DEFAULTS
 /////////////////////////////////////////////////////////////
 
-.root-content {
-	margin-top: -140px; 
-}
-
-/////////////////////////////////////////////////////////////
+.root-content{margin-top:-140px}/////////////////////////////////////////////////////////////
 // HOME
 /////////////////////////////////////////////////////////////
 
-#header-checkbox:checked ~ .nav-right {
-	width: 90%;
-}
-
-.home-set-a {
-	padding: 15px 9%;
-}
-
-.home-filters-div {
-	width: 156%;
-	margin-left: -28%; 
-}
-
-// .home-project-name {
-// 	margin: 18px 0 0 14px;
-// }
-
-/////////////// COMMENT /////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
+#header-checkbox:checked ~ .nav-right{width:90%}.home-set-a{padding:15px 9%}.home-filters-div{width:156%;margin-left:-28%}}

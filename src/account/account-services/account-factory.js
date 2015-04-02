@@ -1,35 +1,35 @@
-app.factory('accountFactory', function () {
+app.factory('accountFactory', function() {
 
-	'use strict';
+    'use strict';
 
-	var byInfo = true;
+    var byInfo = true;
 
-	var byEdit = false;
+    var byEdit = false;
 
-	return {
-		
-		byInfo: function () {
-			return byInfo;
-		},
+    return {
 
-		byEdit: function () {
-			return byEdit;
-		},
+        byInfo: function() {
+            return byInfo;
+        },
 
-		setInfo: function () {
-			byInfo = true;
-			byEdit = false;
-		},
+        byEdit: function() {
+            return byEdit;
+        },
 
-		setActivity: function () {
-			byInfo = false;
-			byEdit = false;
-		},
+        setInfo: function() {
+            byInfo = true;
+            byEdit = false;
+        },
 
-		setEdit: function () {
-			byEdit = true;
-		}
+        setActivity: function() {
+            byInfo = false;
+            byEdit = false;
+        },
 
-	};
+        setEdit: function() {
+            byEdit = true;
+        }
+
+    };
 
 });

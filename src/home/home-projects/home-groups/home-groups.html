@@ -1,19 +1,14 @@
 <home-filters></home-filters>
-
 <ul ng-show="hp.list">
-	<li class="home-project-li home-project-li-group" dir-paginate="group in vm.groups | filter:searchText | itemsPerPage: 5" pagination-id="group">
-		<group-details></group-details>
-	</li>
+    <li class="home-project-li home-project-li-group" dir-paginate="group in vm.groups | filter:searchText | itemsPerPage: 5" pagination-id="group">
+        <group-details></group-details>
+    </li>
 </ul>
-
 <ul ng-show="hp.popular">
-	<li class="home-project-li home-project-li-group" dir-paginate="group in vm.groups | filter:searchText | orderBy:'-average_score' | itemsPerPage: 5" pagination-id="group">
-		<group-details></group-details>
-	</li>
+    <li class="home-project-li home-project-li-group" dir-paginate="group in vm.groups | filter:searchText | orderBy:'-average_score' | itemsPerPage: 5" pagination-id="group">
+        <group-details></group-details>
+    </li>
 </ul>
-
 <div class="pagination-div">
-<!-- 	<p ng-show="{{vm.groups.length}} > 5">5 of {{vm.groups.length}}</p>
-	<p ng-show="{{vm.groups.length}} < 5">{{vm.groups.length}} of {{vm.groups.length}}</p> -->
-	<dir-pagination-controls pagination-id="group"></dir-pagination-controls>
+    <dir-pagination-controls pagination-id="group"></dir-pagination-controls>
 </div>

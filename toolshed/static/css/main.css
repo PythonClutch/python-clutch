@@ -44,7 +44,7 @@ table {
 body, html {
   height: 100%;
   width: 100%;
-  font-family: 'Source Sans Pro', sans-serif; }
+  font-family: 'Source Sans Pro',sans-serif; }
 
 .root-content {
   z-index: 2;
@@ -53,7 +53,7 @@ body, html {
   margin: -190px auto -117px;
   background: rgba(255, 255, 255, 0.77);
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.77) 0%, #ffffff 80px, #ffffff 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 ); }
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff',endColorstr='#ffffff',GradientType=0); }
   .root-content a {
     text-decoration: none; }
 
@@ -149,48 +149,6 @@ a.noLink {
   a.noLink:hover {
     color: #d1d1d1; }
 
-/*body {
-  font-family: sans-serif;
-  line-height: 1.4em;
-  background: $bg-color;
-  color: $fg-color;
-}
-
-h1 { font-size: 2em; margin: .67em 0 }
-h2 { font-size: 1.5em; margin: .75em 0 }
-h3 { font-size: 1.17em; margin: .83em 0 }
-h5 { font-size: .83em; margin: 1.5em 0 }
-h6 { font-size: .75em; margin: 1.67em 0 }
-h1, h2, h3, h4,
-h5, h6 {
-  font-weight: bolder;
-  line-height: 1.3em;
-}
-
-p {
-  line-height: 1.4em;
-  margin-bottom: 1em;
-}
-
-a {
-  color: $alt-bold-color;
-  text-decoration: none;
-  outline: none;
-}
-
-a:hover {
-  color: $alt-accent-bg;
-}
-
-td {
-  padding: 0.25em 0.5em;
-}
-
-input, textarea {
-  font-size: 1em;
-  border: 1px solid $input-border-color;
-  padding: 0.25em;
-}*/
 .home-set {
   text-align: center;
   padding-top: 41px; }
@@ -1209,7 +1167,6 @@ h2.activity-header {
   flex-wrap: wrap; }
 
 .new-input-div p {
-  width: 120px;
   font-size: 20px;
   margin-bottom: 5px; }
 
@@ -1329,7 +1286,7 @@ header {
   background: linear-gradient(to right, #12897d 0%, rgba(5, 182, 134, 0.5) 68%, rgba(2, 192, 136, 0.68) 83%, rgba(2, 192, 136, 0.9) 99%), url("../img/background-01.png");
   color: white;
   z-index: 1;
-  font-family: 'Source Sans Pro', sans-serif; }
+  font-family: 'Source Sans Pro',sans-serif; }
 
 .nav-right a {
   text-decoration: none;
@@ -1610,6 +1567,9 @@ footer a {
   width: 100%;
   height: 1200px; }
 
+.category-ul {
+  margin-top: 41px; }
+
 @media screen and (max-width: 751px) {
   .nav-right {
     display: -webkit-flex;
@@ -1790,6 +1750,10 @@ footer a {
   font-size: 30px;
   font-weight: 700;
   margin-bottom: 28px; }
+
+.about-heading-score {
+  margin: 13px 0;
+  font-size: 26px; }
 
 .developer {
   margin-bottom: 28px;

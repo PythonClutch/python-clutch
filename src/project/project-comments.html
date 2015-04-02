@@ -1,6 +1,5 @@
 <ul class="comments-ul">
 	<li class="flex-row" ng-repeat="comment in vm.project.comments">
-
 		<img src="{{comment.user_avatar}}" alt="">
 		<div class="comment-content">
 			
@@ -8,19 +7,9 @@
 				<p>{{comment.user_name}}</p>
 				<p>wrote {{comment.created_display}}:</p>
 			</div>
-
 			<section class="comment-content-section">
 				{{comment.text}}
 			</section>
-
 		</div>
-
 	</li>
 </ul>
-
-
-
-
-
-
-

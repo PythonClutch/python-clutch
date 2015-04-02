@@ -4,7 +4,6 @@
 		<h2>PYTHON CLUTCH</h2>
 	</a>
 </div>
-
 <input id="header-checkbox" type="checkbox">
 <div ng-controller="NavCtrl as vm" class="nav-right">
 	<a href="#/submit">Submit Project</a>
@@ -13,7 +12,8 @@
 	<a ng-show="!vm.loggedIn" ng-click="vm.checkUser()" class="nav-login-a" href="github/login">Login</a>
 	<form ng-submit="vm.searchProjects()" ng-controller="hpCtrl as hp" class="nav-search-bar">
 		<input ng-model="vm.word" type="search" id="nav-search" placeholder="Search">
-		<label class="header-checkbox-label" for="header-checkbox"><i class="fa fa-search"></i></label>
+		<label class="header-checkbox-label" for="header-checkbox"><i class="fa fa-search"></i>
+		</label>
 		<a href='#/home/search/{{vm.word}}'><i ng-click="vm.searchProjects()" class="clickable-fa fa fa-search"></i></a>
 	</form>
 </div>

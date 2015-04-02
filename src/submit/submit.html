@@ -2,7 +2,6 @@
 	<a class="home-set-a home-set-a-projects" ng-class="{ active: vm.isActive('/submit/new') || vm.isActive('/submit/edit') || vm.isActive('/submit') }" ng-click="vm.setNew()" href="#/submit/new">New</a>
 	<a class="home-set-a" ng-class="{ active: vm.isActive('/submit/pending') }" ng-click="vm.setPending()" href="#/submit/pending">Pending</a>
 </section>
-
 <div class="submit-wrapper container-width">
 	<h2 ng-show="vm.byNew" class="new-project-heading">Submit New Project</h2>
 	<form ng-show="vm.byNew" class="submit-form" ng-submit="vm.createProject()">
@@ -13,12 +12,11 @@
 	<h1 class="projects-header" ng-show="!vm.byNew && !(vm.user.data.pending_submissions === undefined) ">Pending Projects </h1>
 	<ul class="pending-project-ul" ng-show="!vm.byNew && !(vm.user.data.pending_submissions === undefined) ">
 		<li ng-repeat="project in vm.user.data.pending_submissions" class="pending-project-li">
-			<div>	
-				<names-details class="names-details"></name-details>
+			<div>
+				<names-details class="names-details">
+				</name-details>
 			</div>
 			<p class="submitted-date-p">Submitted {{project.date_added_display}}</p>
 		</li>
 	</ul>
 </div>
-
-

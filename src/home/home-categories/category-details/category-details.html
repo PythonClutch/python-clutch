@@ -1,12 +1,10 @@
 <input class="names-details-checkbox" type="checkbox">
-
 <div class="home-project-basic-info flex-row">
 	<h4 class="home-project-name">{{category.name}}</h4>
 	<div ng-controller="hpCtrl as hp" class="home-project-basic-info-right home-group-basic-info-right-category">
 		<i ng-class="{'fa-times' : !hp.rotate, 'fa-plus': hp.rotate}" ng-click="hp.checkBox()" class="home-project-basic-info-icon home-project-basic-info-plus fa"></i>
 	</div>
 </div>
-
 <ul class="home-project-details-div">
 	<li ng-repeat="group in category.groups" class="home-project-details-div-li home-project-details-div-li-cat">
 		<cat-details-groups></cat-details-groups>

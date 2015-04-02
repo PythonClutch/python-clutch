@@ -1,120 +1,13 @@
-@media screen and (max-width: 626px) {
-	
-/////////////////////////////////////////////////////////////
-// HEADER
-/////////////////////////////////////////////////////////////
-
-
-
-/////////////////////////////////////////////////////////////
+@media screen and (max-width:626px){/////////////////////////////////////////////////////////////
 // DEFAULTS
 /////////////////////////////////////////////////////////////
 
-.container-width {
-	width: 90%;
-}
-
-.push {
-	height: 80%;
-}
-
-/////////////////////////////////////////////////////////////
+.container-width{width:90%}.push{height:80%}/////////////////////////////////////////////////////////////
 // PROJECTS
 /////////////////////////////////////////////////////////////
 
-.pagination-div p {
-	display: none;
-}
-
-.home-filters-div {
-	width: 130%;
-	margin-left: -15%; 
-}
-
-.home-project-content-pypi {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	text-align: left;
-}
-
-.home-project-links-div {
-	font-size: 18px;
-	i.fa {
-		font-size: 18px; 
-	} 
-}
-
-
-/////////////////////////////////////////////////////////////
+.pagination-div p{display:none}.home-filters-div{width:130%;margin-left:-15%}.home-project-content-pypi{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;text-align:left}.home-project-links-div{font-size:18px;i.fa{font-size:18px}}/////////////////////////////////////////////////////////////
 // SUBMIT
 /////////////////////////////////////////////////////////////
 
-.pending-project-li {
-	width: 88%;
-	margin: 0 auto 2%;
-}
-
-
-/////////////// COMMENT /////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-// .footer-div {
-// 	display: flex;
-// 	flex-direction: column;
-// 	justify-content: space-between;
-// 	flex-wrap: wrap;
-// 	input {
-// 		margin: 25px auto -10px; 
-// 	}
-// 	.footer-links {
-// 		margin: 24px auto 0;
-// 		width: 65%;
-// 	}
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
+.pending-project-li{width:88%;margin:0 auto 2%}}

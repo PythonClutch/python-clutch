@@ -1,27 +1,29 @@
-app.factory('activeRoute', ['stringUtil', '$location', function (stringUtil, $location) {
+app.factory('activeRoute', ['stringUtil', '$location',
+    function(stringUtil, $location) {
 
-	'use strict';
+        'use strict';
 
-	return {
+        return {
 
-		isActive: function (path) {
-	      // The default route is a special case.
-	      if (path === '/') {
-	        return $location.path() === '/';
-	      }
-	      
-	      return stringUtil.isOnly($location.path(), path);
-	    },
+            isActive: function(path) {
+                // The default route is a special case.
+                if (path === '/') {
+                    return $location.path() === '/';
+                }
 
-	    startsWith: function (path) {
-	      // The default route is a special case.
-	      if (path === '/') {
-	        return $location.path() === '/';
-	      }
-	      
-	      return stringUtil.startsWith($location.path(), path);
-	    }
+                return stringUtil.isOnly($location.path(), path);
+            },
 
-	};
+            startsWith: function(path) {
+                // The default route is a special case.
+                if (path === '/') {
+                    return $location.path() === '/';
+                }
 
-}]);
+                return stringUtil.startsWith($location.path(), path);
+            }
+
+        };
+
+    }
+]);
