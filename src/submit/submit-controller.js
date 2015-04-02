@@ -1,61 +1,59 @@
 app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user', 'projectFactory',
-	function (activeRoute, submitFactory, groupServices, projectServices, user, projectFactory) {
+    function(activeRoute, submitFactory, groupServices, projectServices, user, projectFactory) {
 
-	var self = this;
+        var self = this;
 
-	self.byNew = true;
-	self.user = user.data;
-	console.log(user.data.pending_submissions);
+        self.byNew = true;
+        self.user = user.data;
 
-	self.newProject = {};
+        self.newProject = {};
 
-	self.user = user;
+        self.user = user;
 
-	self.createProject = function () {
-		console.log(self.newProject);
-		projectServices.addProject(self.newProject);
-		self.newProject = {};
-		console.log(self.newProject);
-		window.location.hash = "#/submit/pending";
-	};
+        self.createProject = function() {
+            projectServices.addProject(self.newProject);
+            self.newProject = {};
+            window.location.hash = "#/submit/pending";
+        };
 
-	self.setNew = function () {
-		self.byNew = true;
-	};
+        self.setNew = function() {
+            self.byNew = true;
+        };
 
-	self.setPending = function () {
-		self.byNew = false;
-	};
+        self.setPending = function() {
+            self.byNew = false;
+        };
 
-	self.isActive = function (path) {
-      return activeRoute.isActive(path);
-    };
+        self.isActive = function(path) {
+            return activeRoute.isActive(path);
+        };
 
-    var sf = submitFactory;
+        var sf = submitFactory;
 
-    self.byNew = sf.byNew();
+        self.byNew = sf.byNew();
 
-	self.byEdit = sf.byEdit();
+        self.byEdit = sf.byEdit();
 
-	self.setNew = function () {
-		sf.setNew();
-		self.byNew = sf.byNew();
-		self.byEdit = sf.byEdit();
-	};
+        self.setNew = function() {
+            sf.setNew();
+            self.byNew = sf.byNew();
+            self.byEdit = sf.byEdit();
+        };
 
-	self.setPending = function () {
-		sf.setPending();
-		self.byNew = sf.byNew();
-		self.byEdit = sf.byEdit();
-	};
+        self.setPending = function() {
+            sf.setPending();
+            self.byNew = sf.byNew();
+            self.byEdit = sf.byEdit();
+        };
 
-	var pf = projectFactory;
+        var pf = projectFactory;
 
-	self.ghMoreInfo = pf.byGh();
+        self.ghMoreInfo = pf.byGh();
 
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-	
-}]);
+        self.ghInfo = function() {
+            pf.ghInfo();
+            self.ghMoreInfo = pf.byGh();
+        };
+
+    }
+]);

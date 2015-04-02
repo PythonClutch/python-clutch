@@ -1,37 +1,22 @@
-app.factory('homeFactory', function () {
+app.factory('homeFactory', function() {
 
-	// var self = this;
+    var byProjects = true;
 
-	// self.byProjects = true;
+    'use strict';
 
-	// self.setProjects = function () {
-	// 	self.byProjects = true;
-	// }
+    return {
+        byProjects: function() {
+            return byProjects;
+        },
 
-	// self.setCategories = function () {
-	// 	console.log('cats')
-	// 	self.byProjects = false;
-	// 	console.log('cats')
-	// 	console.log(self.byProjects)
-	// }
+        setProjects: function() {
+            byProjects = true;
+        },
 
-	var byProjects = true;
+        setCategories: function() {
+            byProjects = false;
+        }
 
-	'use strict';
-
-	return {
-		byProjects: function () {
-			return byProjects;
-		},
-
-		setProjects: function () {
-			byProjects = true;
-		},
-
-		setCategories: function () {
-			byProjects = false;
-		}
-
-	};
+    };
 
 });

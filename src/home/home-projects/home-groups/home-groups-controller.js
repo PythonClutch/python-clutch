@@ -1,10 +1,9 @@
-app.controller('hgCtrl', ['group', function (group) {
-	var self = this;
+app.controller('hgCtrl', ['group',
+    function(group) {
+        var self = this;
 
-	self.group = group;
+        self.group = group;
 
-	console.log(group);
-
-
-
-}]);
+        console.log(group);
+    }
+]);

@@ -1,44 +1,44 @@
-app.factory('projectFactory', function () {
+app.factory('projectFactory', function() {
 
-	'use strict';
+    'use strict';
 
-	var pyMoreInfo = false;
-	var ghMoreInfo = false;
-	var target;
+    var pyMoreInfo = false;
+    var ghMoreInfo = false;
+    var target;
 
-	return {
+    return {
 
-		byPy: function () {
-			return pyMoreInfo;
-		},
+        byPy: function() {
+            return pyMoreInfo;
+        },
 
-		byGh: function () {
-			return ghMoreInfo;
-		},
+        byGh: function() {
+            return ghMoreInfo;
+        },
 
-		pyInfo: function () {
-			if (pyMoreInfo === true) {
-				pyMoreInfo = false;
-			} else {
-				pyMoreInfo = true;
-			};
-		},
+        pyInfo: function() {
+            if (pyMoreInfo === true) {
+                pyMoreInfo = false;
+            } else {
+                pyMoreInfo = true;
+            };
+        },
 
-		ghInfo: function () {
-			if (ghMoreInfo === true) {
-				console.log('true');
-				ghMoreInfo = false;
-			} else {
-				ghMoreInfo = true;
-			}
-			target = $(event.target).parent().parent().parent().find('.gh-checkbox');
-			if (target.prop('checked')) {
-				target.prop('checked', false);
-			} else {
-				target.prop('checked', true);
-			};
-		}
+        ghInfo: function() {
+            if (ghMoreInfo === true) {
+                console.log('true');
+                ghMoreInfo = false;
+            } else {
+                ghMoreInfo = true;
+            }
+            target = $(event.target).parent().parent().parent().find('.gh-checkbox');
+            if (target.prop('checked')) {
+                target.prop('checked', false);
+            } else {
+                target.prop('checked', true);
+            };
+        }
 
-	};
+    };
 
 });

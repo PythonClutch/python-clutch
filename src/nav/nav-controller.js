@@ -1,40 +1,40 @@
 app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
-	function ($location, userServices, projectServices) {
+    function($location, userServices, projectServices) {
 
-	var self = this;
+        var self = this;
 
-	self.loggedIn = true;
+        self.loggedIn = true;
 
-	self.currentUser;
+        self.currentUser;
 
-	self.word = '';
+        self.word = '';
 
-	self.searchProjects = function () {
-		window.location.hash = "home/search/" + self.word;
-	}
+        self.searchProjects = function() {
+            window.location.hash = "home/search/" + self.word;
+        }
 
-	function checkLogIn () {
-		userServices.currentUser().then(function (result) {
-			self.currentUser = result;
-			if (self.currentUser) {
-				console.log('one');
-				if (self.currentUser.status === "success") {
-					self.loggedIn = true;
-				} else {
-					self.loggedIn = false;
-				}
-			} else {
-				self.loggedIn = false;
-			}
-		}, function (err) {
-			self.loggedIn = false;
-		});
-	}
+        function checkLogIn() {
+            userServices.currentUser().then(function(result) {
+                self.currentUser = result;
+                if (self.currentUser) {
+                    if (self.currentUser.status === "success") {
+                        self.loggedIn = true;
+                    } else {
+                        self.loggedIn = false;
+                    }
+                } else {
+                    self.loggedIn = false;
+                }
+            }, function(err) {
+                self.loggedIn = false;
+            });
+        }
 
-	self.checkUser = function () {
-		checkLogIn();
-	}
+        self.checkUser = function() {
+            checkLogIn();
+        }
 
-	checkLogIn();
+        checkLogIn();
 
-}]);
+    }
+]);

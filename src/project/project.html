@@ -1,133 +1,120 @@
 <div class="project container-width">
+    <div class="project-links-div">
+        <a href="#/home">home ></a>
+        <a href="#/home/categories">
+            <p>category ></p>
+        </a>
+        <a href="#/home/groups/{{vm.project.group_id}}">group ></a>
+        <p>{{vm.project.name}}</p>
+    </div>
+    <div class="project-header">
+        <div class="projectname-user-div">
+            <h1>{{vm.project.name}}</h1>
+        </div>
+        <div class="home-project-basic-info-right flex-row">
+            <div class="home-project-basic-info-icon home-project-basic-info-like"><i ng-click="vm.like(vm.project, vm.project.show_likes)" ng-class="{ 'fa-heart' : vm.checkLike(vm.project), 'fa-heart-o' : !vm.checkLike(vm.project) }" class="fa"></i>{{vm.project.show_likes.length || 0}}</div>
+            <a ng-click="vm.setCommentPage()" href="#/home/projects/{{vm.project.id}}">
+                <div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{vm.project.comments.length || 0}}</div>
+            </a>
+            <a href="{{vm.project.pypi_url}}">
+                <div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-check"><i ng-class="{ 'fa-check-square-o' : vm.project.python_three_compatible, 'fa-square-o' : !vm.project.python_three_compatible }" class="fa"></i>
+                    <p>Py3</p>
+                </div>
+            </a>
+            <div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-icon-gh-score home-project-basic-info-score"><i class="fa fa-calculator"></i></i>{{vm.project.score}}</div>
+        </div>
+    </div>
 
+    <p class="project-details">{{vm.project.summary}}</p>
 
+    <div class="graph"></div>
+    <div class="project-info">
+        <div class="project-details-div">
+            <div class="home-project-details home-project-links">
+                <div class="flex-row home-project-links-div-sizer">
+                    <div class="home-project-links-div">
+                        <i ng-class="{ noLink : vm.project.website === null }" class="fa fa-link"></i>
+                        <a ng-class="{ noLink : vm.project.website === null }" class="link" href="{{vm.project.website}}">Website</a>
+                    </div>
+                    <div class="home-project-links-div">
+                        <i ng-class="{ noLink : vm.project.docs_url === null }" class="fa fa-file-o"></i>
+                        <a ng-class="{ noLink : vm.project.docs_url === null }" class="link" href="{{vm.project.docs_url}}">PyDocs</a>
+                    </div>
+                    <div class="home-project-links-div">
+                        <i ng-class="{ noLink : vm.project.github_url === null }" class="fa fa-code"></i>
+                        <a ng-class="{ noLink : vm.project.github_url === null }" class="link" href="{{vm.project.git_url || vm.project.pypi_url }}">Source Code</a>
+                    </div>
+                    <div class="home-project-links-div">
+                        <i ng-class="{ noLink : vm.project.mailing_list_url === null }" class="fa fa-envelope-o"></i>
+                        <a ng-class="{ noLink : vm.project.mailing_list_url === null }" class="link" href="{{vm.project.mailing_list_url}}">Mailing List</a>
+                    </div>
+                </div>
+            </div>
+            <div class="home-project-details home-project-pypi">
+                <!-- 			<input class="more-info-input" id="more-info-pypi" type="checkbox"> -->
+                <div class="home-project-pypi-header-div">
+                    <div class="home-project-header-top">
+                        <h3>PyPi</h3>
+                        <a class="link" href="{{vm.project.pypi_url}}"><i class="fa fa-code"></i><p>{{vm.project.pypi_stub}}</p></a>
+                    </div>
+                    <div class="home-project-header-bottom home-project-header-bottom-pypi">
+                        <h5>Version <b>{{vm.project.current_version}}</b> Released {{vm.project.last_commit_display}}</h5>
+                        <div class="home-project-header-bottom-downloads">
+                            <i class="fa fa-download"></i>
+                            <h5>{{vm.project.downloads_count}} Downloads</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="home-project-content home-project-content-pypi">
+                    <h6 class="home-project-content-header"><b>{{vm.project.release_count}}</b> Release(s)</h6>
+                    <h6 class="home-project-content-header"><b>1st</b> Release on date</h6>
+                    <h6 class="home-project-content-header"><b ng-show="vm.project.python_three_compatible">Yes</b><b ng-show="!vm.project.python_three_compatible">No</b> Python3 Compatibility</h6>
+                </div>
+            </div>
+            <div ng-show="vm.project.git_url" class="home-project-details home-project-github-project">
+                <div class="home-project-github-header-div">
+                    <div class="home-project-header-top">
+                        <h3>GitHub</h3>
 
-	<div class="project-links-div">
-		<a href="#/home">home ></a>
-		<a href="#/home/categories">
-			<p>category ></p>
-		</a>
-		<a href="#/home/groups/{{vm.project.group_id}}">group ></a>
-		<p>{{vm.project.name}}</p>
-	</div>
-
-
-
-	<div class="project-header">
-		<div class="projectname-user-div">
-			<h1>{{vm.project.name}}</h1>
-		</div>
-		<div class="home-project-basic-info-right flex-row">
-			<div class="home-project-basic-info-icon home-project-basic-info-like"><i ng-click="vm.like(vm.project, vm.project.show_likes)" ng-class="{ 'fa-heart' : vm.checkLike(vm.project), 'fa-heart-o' : !vm.checkLike(vm.project) }" class="fa"></i>{{vm.project.show_likes.length || 0}}</div>
-			<a ng-click="vm.setCommentPage()" href="#/home/projects/{{vm.project.id}}"><div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{vm.project.comments.length || 0}}</div></a>
-			<a href="{{vm.project.pypi_url}}"><div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-check"><i ng-class="{ 'fa-check-square-o' : vm.project.python_three_compatible, 'fa-square-o' : !vm.project.python_three_compatible }" class="fa"></i><p>Py3</p></div></a>
-			<div class="home-project-basic-info-icon home-project-basic-info-icon-gh home-project-basic-info-icon-gh-score home-project-basic-info-score"><i class="fa fa-calculator"></i></i>{{vm.project.score}}</div>
-		</div>		
-	</div>
-
-	
-	<p class="project-details">{{vm.project.summary}}</p>
-	
-
-	<div class="graph"></div>
-
-
-	<div class="project-info">
-		<div class="project-details-div">
-			<div class="home-project-details home-project-links">
-				<div class="flex-row home-project-links-div-sizer">
-					<div class="home-project-links-div">
-						<i ng-class="{ noLink : vm.project.website === null }" class="fa fa-link"></i>
-						<a ng-class="{ noLink : vm.project.website === null }" class="link" href="{{vm.project.website}}">Website</a>
-					</div>
-					<div class="home-project-links-div">
-						<i ng-class="{ noLink : vm.project.docs_url === null }" class="fa fa-file-o"></i>
-						<a ng-class="{ noLink : vm.project.docs_url === null }" class="link" href="{{vm.project.docs_url}}">PyDocs</a>
-					</div>
-					<div class="home-project-links-div">
-						<i ng-class="{ noLink : vm.project.github_url === null }" class="fa fa-code"></i>
-						<a ng-class="{ noLink : vm.project.github_url === null }" class="link" href="{{vm.project.git_url || vm.project.pypi_url }}">Source Code</a>
-					</div>
-					<div class="home-project-links-div">
-						<i ng-class="{ noLink : vm.project.mailing_list_url === null }" class="fa fa-envelope-o"></i>
-						<a ng-class="{ noLink : vm.project.mailing_list_url === null }" class="link" href="{{vm.project.mailing_list_url}}">Mailing List</a>
-					</div>
-				</div>
-			</div>
-			<div class="home-project-details home-project-pypi">
-	<!-- 			<input class="more-info-input" id="more-info-pypi" type="checkbox"> -->
-				<div class="home-project-pypi-header-div">	
-					<div class="home-project-header-top">
-						<h3>PyPi</h3>
-						<a class="link" href="{{vm.project.pypi_url}}"><i class="fa fa-code"></i><p>{{vm.project.pypi_stub}}</p></a>
-					</div>
-					<div class="home-project-header-bottom home-project-header-bottom-pypi">
-						<h5>Version <b>{{vm.project.current_version}}</b> Released {{vm.project.last_commit_display}}</h5>
-						<div class="home-project-header-bottom-downloads">
-							<i class="fa fa-download"></i>
-							<h5>{{vm.project.downloads_count}} Downloads</h5>
-						</div>
-					</div>
-				</div>
-				<div class="home-project-content home-project-content-pypi">
-					<h6 class="home-project-content-header"><b>{{vm.project.release_count}}</b> Release(s)</h6>
-					<h6 class="home-project-content-header"><b>1st</b> Release on date</h6>
-					<h6 class="home-project-content-header"><b ng-show="vm.project.python_three_compatible">Yes</b><b ng-show="!vm.project.python_three_compatible">No</b> Python3 Compatibility</h6>
-				</div>
-			</div>
-			<div ng-show="vm.project.git_url" class="home-project-details home-project-github-project">
-				<div class="home-project-github-header-div">
-					<div class="home-project-header-top">
-						<h3>GitHub</h3>
-						
-						<a class="link" href="{{vm.project.git_url}}"><i class="fa fa-github"></i><p>{{vm.project.project_stub}}</p></a>
-					</div>
-					<div class="home-project-header-bottom">
-						<h5>{{vm.project.forks_count}} Forks</h5>
-						<h5>{{vm.project.open_issues_count}} Issues</h5>
-						<label ng-click="vm.ghInfo()" class="more-info-label" for="more-info-github">VIEW MORE <i ng-class="{ 'fa-angle-up': vm.ghMoreInfo, 'fa-angle-down': !vm.ghMoreInfo}" class="fa"></i></label>					
-					</div>
-				</div>
-				<div ng-show="vm.ghMoreInfo" class="home-project-content">
-					<section class="gray-line home-project-content-gh-child"></section>
-					<div class="home-project-content-sizer home-project-content-gh-child">
-						<div class="home-project-content-div">
-							<h6 class="home-project-content-header"><b>{{vm.project.watchers_count}}</b> Watchers</h6>
-<!-- 							<h6 class="home-project-content-header"><b>High</b> Developer Activity</h6> -->
-							<h6 class="home-project-content-header"><b>{{vm.project.contributors_count}}</b> Contributors</h6>
-						</div>
-						<div class="home-project-content-div home-project-content-div-gh">
-							<h6 class="home-project-content-header">Last commit:</h6>
-							<p class="home-project-content-p">{{vm.project.last_commit_display}}</p>
-						</div>
-						<div class="home-project-content-div home-project-content-div-gh">
-							<h6 class="home-project-content-header">First commit:</h6>
-							<p class="home-project-content-p">{{vm.project.first_commit_display}}</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-	<div class="comments">
-
-		<div class="comments-header-div flex-start-row">
-			<i class="fa fa-comments"></i>
-			<h2>Comments</h2>
-		</div>
-
-		<project-comments></project-comments>
-
-		<form class="comment-form" ng-submit="vm.addComment()">
-			<input class="comment-form-textarea" ng-model="vm.comment.text" type="textarea">
-			<input class="submit-button" type="submit" value="Post Comment">
-		</form>
-
-	</div>
-
-
-
-
+                        <a class="link" href="{{vm.project.git_url}}"><i class="fa fa-github"></i><p>{{vm.project.project_stub}}</p></a>
+                    </div>
+                    <div class="home-project-header-bottom">
+                        <h5>{{vm.project.forks_count}} Forks</h5>
+                        <h5>{{vm.project.open_issues_count}} Issues</h5>
+                        <label ng-click="vm.ghInfo()" class="more-info-label" for="more-info-github">VIEW MORE <i ng-class="{ 'fa-angle-up': vm.ghMoreInfo, 'fa-angle-down': !vm.ghMoreInfo}" class="fa"></i>
+                        </label>
+                    </div>
+                </div>
+                <div ng-show="vm.ghMoreInfo" class="home-project-content">
+                    <section class="gray-line home-project-content-gh-child"></section>
+                    <div class="home-project-content-sizer home-project-content-gh-child">
+                        <div class="home-project-content-div">
+                            <h6 class="home-project-content-header"><b>{{vm.project.watchers_count}}</b> Watchers</h6>
+                            <!-- 							<h6 class="home-project-content-header"><b>High</b> Developer Activity</h6> -->
+                            <h6 class="home-project-content-header"><b>{{vm.project.contributors_count}}</b> Contributors</h6>
+                        </div>
+                        <div class="home-project-content-div home-project-content-div-gh">
+                            <h6 class="home-project-content-header">Last commit:</h6>
+                            <p class="home-project-content-p">{{vm.project.last_commit_display}}</p>
+                        </div>
+                        <div class="home-project-content-div home-project-content-div-gh">
+                            <h6 class="home-project-content-header">First commit:</h6>
+                            <p class="home-project-content-p">{{vm.project.first_commit_display}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="comments">
+        <div class="comments-header-div flex-start-row">
+            <i class="fa fa-comments"></i>
+            <h2>Comments</h2>
+        </div>
+        <project-comments></project-comments>
+        <form class="comment-form" ng-submit="vm.addComment()">
+            <input class="comment-form-textarea" ng-model="vm.comment.text" type="textarea">
+            <input class="submit-button" type="submit" value="Post Comment">
+        </form>
+    </div>
 </div>

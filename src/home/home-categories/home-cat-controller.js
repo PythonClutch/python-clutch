@@ -1,9 +1,11 @@
-app.controller('CategoryCtrl', ['appearFactory', function (appearFactory) {
-	var self = this;
+app.controller('CategoryCtrl', ['appearFactory',
+    function(appearFactory) {
+        var self = this;
 
-	self.rotate = appearFactory.rotate();
-	
-	self.checkBox = function () {
-    	appearFactory.checkBox();
-	};
-}]);
+        self.rotate = appearFactory.rotate();
+
+        self.checkBox = function() {
+            appearFactory.checkBox();
+        };
+    }
+]);
