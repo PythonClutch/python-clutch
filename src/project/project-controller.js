@@ -52,7 +52,11 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
         };
 
         self.checkLike = function(project) {
-            return likeFactory.checkLike(project, user);
+            if (user) {
+                return likeFactory.checkLike(project, user);
+            } else {
+                return false;
+            }    
         };
 
         function parse(spec) {
