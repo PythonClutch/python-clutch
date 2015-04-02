@@ -26,7 +26,6 @@ app.factory('projectFactory', function() {
 
         ghInfo: function() {
             if (ghMoreInfo === true) {
-                console.log('true');
                 ghMoreInfo = false;
             } else {
                 ghMoreInfo = true;

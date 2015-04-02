@@ -779,7 +779,7 @@ div.home-project-basic-info-icon-gh-score .fa {
 .home-project-content-gh-child {
   opacity: 0; }
 
-.gh-checkbox:checked ~ .home-project-content-gh .home-project-content-gh-child {
+.gh-checkbox:checked ~ .home-project-content .home-project-content-gh-child {
   opacity: 1;
   transition: all .13s ease-out .05s; }
 

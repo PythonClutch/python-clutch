@@ -584,7 +584,7 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
             self.ghMoreInfo = pf.byGh();
         };
 
-        self.comments = project.comments;
+        self.comments = project.show_comments;
 
         self.comment = {};
 
@@ -901,7 +901,6 @@ app.factory('projectFactory', function() {
 
         ghInfo: function() {
             if (ghMoreInfo === true) {
-                console.log('true');
                 ghMoreInfo = false;
             } else {
                 ghMoreInfo = true;

@@ -29,7 +29,7 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
             self.ghMoreInfo = pf.byGh();
         };
 
-        self.comments = project.comments;
+        self.comments = project.show_comments;
 
         self.comment = {};
 
