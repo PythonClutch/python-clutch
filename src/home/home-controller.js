@@ -60,7 +60,11 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
         };
 
         self.checkLike = function(project) {
-            return likeFactory.checkLike(project, user);
+            if (user) {
+                return likeFactory.checkLike(project, user);
+            } else {
+                return false;
+            }    
         };
 
         self.searchClicked = true;
