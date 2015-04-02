@@ -175,6 +175,10 @@ class Project(db.Model):
     def show_likes(self):
         return Like.query.filter_by(project_id=self.id).all()
 
+    @property
+    def show_comments(self):
+        return Comment.query.filter_by(project_id=self.id).all()
+
 
 class ProjectLog(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -371,9 +375,10 @@ class ProjectLogSchema(Schema):
                   "score", "release_count")
 
 class ProjectSchema(Schema):
-    comments = fields.Nested(CommentSchema, many=True)
+    show_comments = fields.Nested(CommentSchema, many=True)
     show_likes = fields.Nested(LikeSchema, many=True)
     score = fields.Method("round_score")
+    user_likes = fields.Nested(LikeSchema, many=True)
 
     def round_score(self, obj):
         if obj.score:
@@ -390,10 +395,10 @@ class ProjectSchema(Schema):
                   "contributors_count", "python_three_compatible", "website",
                   "git_url", "pypi_url", "contributors_url", "mailing_list_url",
                   "forks_url", "starred_url", "open_issues_url", "docs_url",
-                  "group_id", "category_id", "comments", "show_likes", "age_display",
+                  "group_id", "category_id", "show_comments", "show_likes", "age_display",
                   "last_commit_display", "date_added", "date_added_display", "first_commit_display",
                   "github_url", "bitbucket_url", "pypi_stub",
-                  "score", "release_count")
+                  "score", "release_count", "user_likes")
 
 
 class UserSchema(Schema):
@@ -421,7 +426,7 @@ class GroupSchema(Schema):
         for project in obj.projects:
             number_of_projects += 1
             project.score += total
-        return ((total/number_of_projects) * 10)
+        return ((total/number_of_projects) * 10, 1)
 
     class Meta:
         fields = ("id", "name", "projects", "category_id", "average_score")
