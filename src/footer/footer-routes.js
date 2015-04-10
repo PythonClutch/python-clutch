@@ -11,6 +11,6 @@ app.config(['$routeProvider',
         $routeProvider
             .when('/projectindex', page)
             .when('/about', page)
-            .when('/contact', page)
+            .when('/contact', page);
     }
 ]);

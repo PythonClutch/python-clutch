@@ -15,7 +15,7 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
             $('html, body').animate({
                 scrollTop: 1100
             }, 'fast');
-        }
+        };
 
         self.pyInfo = function() {
             pf.pyInfo();
@@ -42,7 +42,7 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
                 'user_avatar': user.data.avatar_url,
                 'user_id': user.data.id,
                 'user_name': user.data.github_name
-            }
+            };
             self.comments.push(tempComment);
             self.comment = {};
         };

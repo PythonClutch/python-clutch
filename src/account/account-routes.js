@@ -36,7 +36,7 @@ app.config(['$routeProvider',
                     }
                 ]
             }
-        }
+        };
 
         $routeProvider
             .when('/account', accountPage)

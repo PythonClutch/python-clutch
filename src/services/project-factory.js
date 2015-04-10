@@ -21,7 +21,7 @@ app.factory('projectFactory', function() {
                 pyMoreInfo = false;
             } else {
                 pyMoreInfo = true;
-            };
+            }
         },
 
         ghInfo: function() {
@@ -35,7 +35,7 @@ app.factory('projectFactory', function() {
                 target.prop('checked', false);
             } else {
                 target.prop('checked', true);
-            };
+            }
         }
 
     };

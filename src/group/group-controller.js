@@ -26,7 +26,7 @@ app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph'
             $('html, body').animate({
                 scrollTop: 0
             }, 'fast');
-        }
+        };
 
         self.ghMoreInfo = pf.byGh();
 

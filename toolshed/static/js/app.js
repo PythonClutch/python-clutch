@@ -107,7 +107,7 @@ app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory',
             console.log(self.accountUrls);
             userServices.addUserUrls(self.accountUrls);
             self.accountUrls = {};
-        }
+        };
 
         self.setInfo = function() {
             accountFactory.setInfo();
@@ -128,12 +128,11 @@ app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory',
         self.setEdit = function() {
             accountFactory.setEdit();
             self.byEdit = accountFactory.byEdit();
-        }
+        };
 
         self.checkBox = function() {
-            console.log('checked')
             appearFactory.checkBox();
-        }
+        };
 
         var pf = projectFactory;
 
@@ -227,7 +226,7 @@ app.config(['$routeProvider',
                     }
                 ]
             }
-        }
+        };
 
         $routeProvider
             .when('/account', accountPage)
@@ -332,7 +331,7 @@ app.config(['$routeProvider',
         $routeProvider
             .when('/projectindex', page)
             .when('/about', page)
-            .when('/contact', page)
+            .when('/contact', page);
     }
 ]);
 app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph',
@@ -363,7 +362,7 @@ app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph'
             $('html, body').animate({
                 scrollTop: 0
             }, 'fast');
-        }
+        };
 
         self.ghMoreInfo = pf.byGh();
 
@@ -530,7 +529,7 @@ app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 
         self.searchProjects = function() {
             window.location.hash = "home/search/" + self.word;
-        }
+        };
 
         function checkLogIn() {
             userServices.currentUser().then(function(result) {
@@ -551,7 +550,7 @@ app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 
         self.checkUser = function() {
             checkLogIn();
-        }
+        };
 
         checkLogIn();
 
@@ -574,7 +573,7 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
             $('html, body').animate({
                 scrollTop: 1100
             }, 'fast');
-        }
+        };
 
         self.pyInfo = function() {
             pf.pyInfo();
@@ -601,7 +600,7 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
                 'user_avatar': user.data.avatar_url,
                 'user_id': user.data.id,
                 'user_name': user.data.github_name
-            }
+            };
             self.comments.push(tempComment);
             self.comment = {};
         };
@@ -673,120 +672,6 @@ app.config(['$routeProvider',
         $routeProvider
             .when('/projects/:projectid', routeDefinition)
             .when('/home/projects/:projectid', routeDefinition);
-
-    }
-]);
-app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user', 'projectFactory',
-    function(activeRoute, submitFactory, groupServices, projectServices, user, projectFactory) {
-
-        var self = this;
-
-        self.byNew = true;
-        self.user = user.data;
-
-        self.newProject = {};
-
-        self.user = user;
-
-        self.createProject = function() {
-            projectServices.addProject(self.newProject);
-            self.newProject = {};
-            window.location.hash = "#/submit/pending";
-        };
-
-        self.setNew = function() {
-            self.byNew = true;
-        };
-
-        self.setPending = function() {
-            self.byNew = false;
-        };
-
-        self.isActive = function(path) {
-            return activeRoute.isActive(path);
-        };
-
-        var sf = submitFactory;
-
-        self.byNew = sf.byNew();
-
-        self.byEdit = sf.byEdit();
-
-        self.setNew = function() {
-            sf.setNew();
-            self.byNew = sf.byNew();
-            self.byEdit = sf.byEdit();
-        };
-
-        self.setPending = function() {
-            sf.setPending();
-            self.byNew = sf.byNew();
-            self.byEdit = sf.byEdit();
-        };
-
-        var pf = projectFactory;
-
-        self.ghMoreInfo = pf.byGh();
-
-        self.ghInfo = function() {
-            pf.ghInfo();
-            self.ghMoreInfo = pf.byGh();
-        };
-
-    }
-]);
-(function() {
-    app.directive('newProject', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/submit/new-project.html'
-        };
-    });
-})();
-app.config(['$routeProvider',
-    function($routeProvider) {
-        'use strict';
-
-        var submitPage = {
-            templateUrl: 'static/submit/submit.html',
-            controller: 'SubmitCtrl',
-            controllerAs: 'vm',
-            resolve: {
-                user: ['userServices',
-                    function(userServices) {
-                        return userServices.currentUser();
-                    }
-                ],
-                changeToNew: ['submitFactory',
-                    function(submitFactory) {
-                        submitFactory.setNew();
-                    }
-                ]
-            }
-        };
-
-        var pendingPage = {
-            templateUrl: 'static/submit/submit.html',
-            controller: 'SubmitCtrl',
-            controllerAs: 'vm',
-            resolve: {
-                user: ['userServices',
-                    function(userServices) {
-                        return userServices.currentUser();
-                    }
-                ],
-                changeToPen: ['submitFactory',
-                    function(submitFactory) {
-                        submitFactory.setPending();
-                    }
-                ]
-            }
-        };
-
-        $routeProvider
-            .when('/submit', submitPage)
-            .when('/submit/new', submitPage)
-            .when('/submit/pending', pendingPage);
 
     }
 ]);
@@ -961,24 +846,24 @@ app.factory('likeFactory', ['projectServices',
                         } else {
                             return false;
                         }
-                    };
+                    }
                 };
                 var likeAmount = likeArray.length;
                 if (checkUserMatch()) {
                     target.addClass('fa-heart-o');
-                    likeAmount -= 1
+                    likeAmount -= 1;
                     target.parent().find('p').text(likeAmount);
                     projectServices.removeLike(likedId).then(function(array) {
                         likeArray.pop(array);
-                    })
+                    });
                 } else {
                     target.removeClass('fa-heart-o');
                     target.addClass('fa-heart');
-                    likeAmount += 1
+                    likeAmount += 1;
                     target.parent().find('p').text(likeAmount);
                     projectServices.like(proj.id).then(function(array) {
                         likeArray.push(array);
-                    })
+                    });
                 }
             },
 
@@ -989,7 +874,7 @@ app.factory('likeFactory', ['projectServices',
                     } else {
                         return false;
                     }
-                };
+                }
             }
         };
 
@@ -1018,7 +903,7 @@ app.factory('projectFactory', function() {
                 pyMoreInfo = false;
             } else {
                 pyMoreInfo = true;
-            };
+            }
         },
 
         ghInfo: function() {
@@ -1032,7 +917,7 @@ app.factory('projectFactory', function() {
                 target.prop('checked', false);
             } else {
                 target.prop('checked', true);
-            };
+            }
         }
 
     };
@@ -1177,10 +1062,124 @@ app.factory('userServices', ['$http', '$q',
             },
 
             addUserUrls: function(urls) {
-                return post('/api/v1/user', urls)
+                return post('/api/v1/user', urls);
             },
 
         };
+    }
+]);
+app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user', 'projectFactory',
+    function(activeRoute, submitFactory, groupServices, projectServices, user, projectFactory) {
+
+        var self = this;
+
+        self.byNew = true;
+        self.user = user.data;
+
+        self.newProject = {};
+
+        self.user = user;
+
+        self.createProject = function() {
+            projectServices.addProject(self.newProject);
+            self.newProject = {};
+            window.location.hash = "#/submit/pending";
+        };
+
+        self.setNew = function() {
+            self.byNew = true;
+        };
+
+        self.setPending = function() {
+            self.byNew = false;
+        };
+
+        self.isActive = function(path) {
+            return activeRoute.isActive(path);
+        };
+
+        var sf = submitFactory;
+
+        self.byNew = sf.byNew();
+
+        self.byEdit = sf.byEdit();
+
+        self.setNew = function() {
+            sf.setNew();
+            self.byNew = sf.byNew();
+            self.byEdit = sf.byEdit();
+        };
+
+        self.setPending = function() {
+            sf.setPending();
+            self.byNew = sf.byNew();
+            self.byEdit = sf.byEdit();
+        };
+
+        var pf = projectFactory;
+
+        self.ghMoreInfo = pf.byGh();
+
+        self.ghInfo = function() {
+            pf.ghInfo();
+            self.ghMoreInfo = pf.byGh();
+        };
+
+    }
+]);
+(function() {
+    app.directive('newProject', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/submit/new-project.html'
+        };
+    });
+})();
+app.config(['$routeProvider',
+    function($routeProvider) {
+        'use strict';
+
+        var submitPage = {
+            templateUrl: 'static/submit/submit.html',
+            controller: 'SubmitCtrl',
+            controllerAs: 'vm',
+            resolve: {
+                user: ['userServices',
+                    function(userServices) {
+                        return userServices.currentUser();
+                    }
+                ],
+                changeToNew: ['submitFactory',
+                    function(submitFactory) {
+                        submitFactory.setNew();
+                    }
+                ]
+            }
+        };
+
+        var pendingPage = {
+            templateUrl: 'static/submit/submit.html',
+            controller: 'SubmitCtrl',
+            controllerAs: 'vm',
+            resolve: {
+                user: ['userServices',
+                    function(userServices) {
+                        return userServices.currentUser();
+                    }
+                ],
+                changeToPen: ['submitFactory',
+                    function(submitFactory) {
+                        submitFactory.setPending();
+                    }
+                ]
+            }
+        };
+
+        $routeProvider
+            .when('/submit', submitPage)
+            .when('/submit/new', submitPage)
+            .when('/submit/pending', pendingPage);
+
     }
 ]);
 app.factory('accountFactory', function() {
@@ -1304,6 +1303,170 @@ app.config(['$routeProvider',
         .when('/home/categories', homePage);
     }
 ]);
+app.controller('hpCtrl', ['projectServices', 'appearFactory', 'projectFactory',
+    function(projectServices, appearFactory, projectFactory) {
+        var self = this;
+
+        self.byNames = true;
+
+        self.rotate = function() {
+            return appearFactory.rotate();
+        };
+        self.mobile = true;
+
+        self.setCommentPage = function() {
+            $('html, body').animate({
+                scrollTop: 1100
+            }, 'fast');
+        };
+
+        self.setPage = function() {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'fast');
+        };
+
+        self.checkBox = function() {
+            appearFactory.checkBox();
+            self.rotate = appearFactory.rotate();
+        };
+
+        self.setGroups = function() {
+            self.byNames = false;
+        };
+
+        self.setNames = function() {
+            self.byNames = true;
+        };
+
+        function selectedClass() {
+            var closest = $(event.target).parent().parent().children();
+            closest.each(function() {
+                var fa = $(this).find('.fa');
+                $(this).find('.fa').removeClass('fa-dot-circle-o');
+                console.log($(this).find('.project-radio')[0]);
+                $(this).find('.project-radio').prop('checked', false);
+                if (!fa.hasClass('fa-circle-o')) {
+                    fa.addClass('fa-circle-o');
+                }
+            });
+            $(event.target).parent().find('.fa').removeClass('fa-circle-o');
+            $(event.target).parent().find('.fa').addClass('fa-dot-circle-o');
+        }
+
+        self.list = false;
+        self.popular = true;
+        self.newest = false;
+        self.searched = false;
+
+        self.setPopular = function() {
+            selectedClass();
+            self.popular = true;
+            self.newest = false;
+            self.list = false;
+            self.searched = false;
+            $('#project-popular-radio').prop('checked', true);
+        };
+
+        self.setNewest = function() {
+            self.popular = false;
+            self.newest = true;
+            self.list = false;
+            self.searched = false;
+            selectedClass();
+            $('#project-newest-radio').prop('checked', true);
+        };
+
+        self.setSearch = function() {
+            console.log('eh');
+        };
+
+        self.setTrending = function() {
+            selectedClass();
+            $('#project-trending-radio').prop('checked', true);
+        };
+
+        self.setList = function() {
+            self.popular = false;
+            self.newest = false;
+            self.list = true;
+            console.log(self.list);
+            selectedClass();
+            $('#project-list-radio').prop('checked', true);
+        };
+
+        self.searchClicked = true;
+
+        self.checkSearch = function() {
+            self.searchClicked = false;
+            $(event.target).parent().find('.home-project-search').focus();
+        };
+
+        var pf = projectFactory;
+
+        self.pyMoreInfo = pf.byPy();
+
+        self.pyInfo = function() {
+            pf.pyInfo();
+            self.pyMoreInfo = pf.byPy();
+        };
+
+        self.ghMoreInfo = pf.byGh();
+
+        self.ghInfo = function() {
+            pf.ghInfo();
+            self.ghMoreInfo = pf.byGh();
+        };
+
+    }
+]);
+(function() {
+    app.directive('homeNames', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-names/home-names.html'
+        };
+    });
+
+    app.directive('namesDetails', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-names/names-details.html',
+            controller: 'hpCtrl',
+            controllerAs: 'hp'
+        };
+    });
+
+    app.directive('homeGroups', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-groups/home-groups.html'
+        };
+    });
+
+    app.directive('groupDetails', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-groups/group-details.html',
+            controller: 'hpCtrl',
+            controllerAs: 'hp'
+        };
+    });
+
+    app.directive('groupDetailsProjects', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-groups/group-details-projects.html'
+        };
+    });
+
+    app.directive('homeFilters', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-filters.html'
+        };
+    });
+})();
 /**
  * dirPagination - AngularJS module for paginating (almost) anything.
  *
@@ -1818,172 +1981,6 @@ app.config(['$routeProvider',
         };
     }
 })();
-app.controller('hpCtrl', ['projectServices', 'appearFactory', 'projectFactory',
-    function(projectServices, appearFactory, projectFactory) {
-        var self = this;
-
-        self.byNames = true;
-
-        self.rotate = function() {
-            return appearFactory.rotate();
-        };
-        self.mobile = true;
-
-        self.setCommentPage = function() {
-            console.log('top')
-            $('html, body').animate({
-                scrollTop: 1100
-            }, 'fast');
-        }
-
-        self.setPage = function() {
-            console.log('top')
-            $('html, body').animate({
-                scrollTop: 0
-            }, 'fast');
-        }
-
-        self.checkBox = function() {
-            appearFactory.checkBox();
-            self.rotate = appearFactory.rotate();
-        };
-
-        self.setGroups = function() {
-            self.byNames = false;
-        };
-
-        self.setNames = function() {
-            self.byNames = true;
-        };
-
-        function selectedClass() {
-            var closest = $(event.target).parent().parent().children();
-            closest.each(function() {
-                var fa = $(this).find('.fa');
-                $(this).find('.fa').removeClass('fa-dot-circle-o');
-                console.log($(this).find('.project-radio')[0]);
-                $(this).find('.project-radio').prop('checked', false);
-                if (!fa.hasClass('fa-circle-o')) {
-                    fa.addClass('fa-circle-o');
-                }
-            });
-            $(event.target).parent().find('.fa').removeClass('fa-circle-o');
-            $(event.target).parent().find('.fa').addClass('fa-dot-circle-o');
-        }
-
-        self.list = false;
-        self.popular = true;
-        self.newest = false;
-        self.searched = false;
-
-        self.setPopular = function() {
-            selectedClass();
-            self.popular = true;
-            self.newest = false;
-            self.list = false;
-            self.searched = false;
-            $('#project-popular-radio').prop('checked', true);
-        };
-
-        self.setNewest = function() {
-            self.popular = false;
-            self.newest = true;
-            self.list = false;
-            self.searched = false;
-            selectedClass();
-            $('#project-newest-radio').prop('checked', true);
-        };
-
-        self.setSearch = function() {
-            console.log('eh');
-        }
-
-        self.setTrending = function() {
-            selectedClass();
-            $('#project-trending-radio').prop('checked', true);
-        };
-
-        self.setList = function() {
-            self.popular = false;
-            self.newest = false;
-            self.list = true;
-            console.log(self.list);
-            selectedClass();
-            $('#project-list-radio').prop('checked', true);
-        };
-
-        self.searchClicked = true;
-
-        self.checkSearch = function() {
-            self.searchClicked = false;
-            $(event.target).parent().find('.home-project-search').focus();
-        };
-
-        var pf = projectFactory;
-
-        self.pyMoreInfo = pf.byPy();
-
-        self.pyInfo = function() {
-            pf.pyInfo();
-            self.pyMoreInfo = pf.byPy();
-        };
-
-        self.ghMoreInfo = pf.byGh();
-
-        self.ghInfo = function() {
-            pf.ghInfo();
-            self.ghMoreInfo = pf.byGh();
-        };
-
-    }
-]);
-(function() {
-    app.directive('homeNames', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-names/home-names.html'
-        };
-    });
-
-    app.directive('namesDetails', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-names/names-details.html',
-            controller: 'hpCtrl',
-            controllerAs: 'hp'
-        };
-    });
-
-    app.directive('homeGroups', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-groups/home-groups.html'
-        };
-    });
-
-    app.directive('groupDetails', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-groups/group-details.html',
-            controller: 'hpCtrl',
-            controllerAs: 'hp'
-        };
-    });
-
-    app.directive('groupDetailsProjects', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-groups/group-details-projects.html'
-        };
-    });
-
-    app.directive('homeFilters', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-filters.html'
-        };
-    });
-})();
 app.factory('homeFactory', function() {
 
     var byProjects = true;
@@ -2041,15 +2038,6 @@ app.factory('submitFactory', function() {
     };
 
 });
-app.controller('hgCtrl', ['group',
-    function(group) {
-        var self = this;
-
-        self.group = group;
-
-        console.log(group);
-    }
-]);
 app.controller('hnCtrl', ['projects', 'appearFactory', 'projectFactory',
     function(projects, appearFactory, projectFactory) {
         var self = this;
@@ -2077,6 +2065,15 @@ app.controller('hnCtrl', ['projects', 'appearFactory', 'projectFactory',
         };
 
 
+    }
+]);
+app.controller('hgCtrl', ['group',
+    function(group) {
+        var self = this;
+
+        self.group = group;
+
+        console.log(group);
     }
 ]);
 app.config(['$routeProvider',
@@ -2122,7 +2119,7 @@ app.config(['$routeProvider',
         };
 
         $routeProvider
-            .when('/home/search/:word', homePage)
+            .when('/home/search/:word', homePage);
     }
 ]);
 //# sourceMappingURL=app.js.map

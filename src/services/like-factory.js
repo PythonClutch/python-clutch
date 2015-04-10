@@ -19,24 +19,24 @@ app.factory('likeFactory', ['projectServices',
                         } else {
                             return false;
                         }
-                    };
+                    }
                 };
                 var likeAmount = likeArray.length;
                 if (checkUserMatch()) {
                     target.addClass('fa-heart-o');
-                    likeAmount -= 1
+                    likeAmount -= 1;
                     target.parent().find('p').text(likeAmount);
                     projectServices.removeLike(likedId).then(function(array) {
                         likeArray.pop(array);
-                    })
+                    });
                 } else {
                     target.removeClass('fa-heart-o');
                     target.addClass('fa-heart');
-                    likeAmount += 1
+                    likeAmount += 1;
                     target.parent().find('p').text(likeAmount);
                     projectServices.like(proj.id).then(function(array) {
                         likeArray.push(array);
-                    })
+                    });
                 }
             },
 
@@ -47,7 +47,7 @@ app.factory('likeFactory', ['projectServices',
                     } else {
                         return false;
                     }
-                };
+                }
             }
         };
 
