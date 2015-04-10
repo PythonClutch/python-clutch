@@ -1,5 +1,5 @@
-app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph',
-    function(group, projectFactory, appearFactory, graph) {
+app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph', 'likeFactory', 'user',
+    function(group, projectFactory, appearFactory, graph, likeFactory, user) {
         var self = this;
 
         self.group = group;
@@ -33,6 +33,18 @@ app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph'
         self.ghInfo = function() {
             pf.ghInfo();
             self.ghMoreInfo = pf.byGh();
+        };
+
+        self.like = function(proj, likes) {
+            likeFactory.like(proj, likes, user);
+        };
+
+        self.checkLike = function(project) {
+            if (user) {
+                return likeFactory.checkLike(project, user);
+            } else {
+                return false;
+            }    
         };
 
         function parse(spec) {
