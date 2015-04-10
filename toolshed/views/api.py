@@ -70,7 +70,7 @@ def page_response(schema, data, page, per_page, total, kind):
     # If you just have a next page and a current page.
     links = {"first_page": str(request.url_root)+"api/v1/" + str(kind) + "/" +
              str(1) + "/" + str(per_page), "last_page": str(request.url_root)+"api/v1/" + str(kind) + "/" +
-             str(total) + "/" + str(per_page), "current_page":str(request.url_root)+ "api/v1/" + str(kind) + "/" +
+             str(total_pages) + "/" + str(per_page), "current_page":str(request.url_root)+ "api/v1/" + str(kind) + "/" +
              str(page) + "/" + str(per_page)}
     if page == first_page and total_pages > 1:
         links["next_pages"] = more_pages(True, page, total_pages, per_page, kind)
