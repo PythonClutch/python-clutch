@@ -1,0 +1,10 @@
+branch-defaults:
+  master:
+    environment: pythonclutch-dev
+global:
+  application_name: pythonclutch
+  default_ec2_keyname: null
+  default_platform: Python 3.4 (Preconfigured - Docker)
+  default_region: us-east-1
+  profile: eb-cli
+  sc: git

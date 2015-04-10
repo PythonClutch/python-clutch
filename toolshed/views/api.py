@@ -11,6 +11,8 @@ from ..importer import create_project
 from toolshed import mail
 from flask_mail import Message
 from datetime import datetime
+from math import ceil
+
 score_multiplier = 10
 
 api = Blueprint('api', __name__)
@@ -36,6 +38,7 @@ single_log_schema = LogSchema()
 search_schema = SearchSchema()
 
 
+
 # grab line_style from env
 try:
     line_style = os.environ['LINE_STYLE']
@@ -44,6 +47,44 @@ except:
 
 
 # response functions
+
+def more_pages(forward, page, total_pages, per_page):
+    urls = []
+    if forward:
+        for current_page in range(page + 1, page + 4):
+            if current_page <= total_pages:
+                urls.append(str(request.url_root)+"api/v1/projects/" +
+                str(current_page) + "/" + str(per_page))
+    else:
+        for current_page in range(page + 1, page - 4, -1):
+            if page > current_page > 0:
+                urls.append(str(request.url_root)+"api/v1/projects/" +
+                str(current_page) + "/" + str(per_page))
+    return urls
+
+
+def page_response(schema, data, page, per_page, total):
+    results = schema.dump(data)
+    total_pages = ceil(total / per_page)
+    first_page = 1
+    # If you just have a next page and a current page.
+    links = {"first_page": str(request.url_root)+"api/v1/projects/" +
+             str(1) + "/" + str(per_page), "last_page": str(request.url_root)+"api/v1/projects/" +
+             str(total) + "/" + str(per_page), "current_page":str(request.url_root)+"api/v1/projects/" +
+             str(page) + "/" + str(per_page)}
+    if page == first_page and total_pages > 1:
+        links["next_pages"] = more_pages(True, page, total_pages, per_page)
+    # If you need a prevous current and next page URL.
+    elif page < total_pages:
+        links["previous_pages"] = more_pages(False, page, total_pages, per_page)
+        links["next_pages"] = more_pages(True, page, total_pages, per_page)
+    # If you only need a previous and current page URL.
+    elif page > 1:
+        links["previous_pages"] = more_pages(False, page, total_pages, per_page)
+    return jsonify({"status": "success", "data": results.data,
+                    "page": {"current_page": page, "per_page": per_page,
+                    "total_pages": total_pages, "links": links}})
+
 
 def success_response(schema, data):
     results = schema.dump(data)
@@ -139,6 +180,17 @@ def get_submissions(id):
 
 # project routes
 
+
+@api.route("/projects/<int:page>/<int:per_page>")
+def paginate_projects(page=1, per_page=20):
+    projects = Project.query.order_by(Project.name).paginate(page, per_page, False).items
+    total = len(Project.query.all())
+    if projects:
+        return page_response(all_projects_schema, projects, page, per_page, total)
+    else:
+        return failure_response("There are no projects.", 404)
+
+
 @api.route("/projects")
 def projects():
     projects = Project.query.order_by(Project.name)
@@ -146,22 +198,6 @@ def projects():
         return success_response(all_projects_schema, projects)
     else:
         return failure_response("There are no projects.", 404)
-
-
-@api.route("/projects/newest")
-def newest_projects():
-    projects = Project.query.order_by(Project.date_added.desc())
-    if projects:
-        return success_response(all_projects_schema, projects)
-    else:
-        return failure_response("There are no projects.", 404)
-
-
-@api.route("/projects/popular")
-def popular_projects():
-    projects = Project.query.order_by(Project.score.desc())
-    if projects:
-        return success_response(all_projects_schema, projects)
 
 
 @api.route("/projects/<int:id>")
@@ -236,15 +272,6 @@ def group_projects(id):
         return success_response(single_group_schema, group)
     else:
         return failure_response("There is no such group.", 404)
-
-
-@api.route("/groups/popular")
-def groups_by_popularity():
-    groups = Group.query.order_by(Group.average_score).all()
-    if groups:
-        return success_response(all_groups_schema, groups)
-    else:
-        return failure_response("There are no groups.", 404)
 
 
 # Category routes
@@ -396,32 +423,6 @@ def search():
         return failure_response("You must enter a query.", 400)
 
 
-@api.route("/newest/search")
-def search_by_newest():
-    text = request.args.get('q')
-    if text:
-        projects = Project.query.search(text).order_by(Project.date_added.desc()).all()
-
-        search = Search(query=text,
-                        projects=projects)
-        return success_response(search_schema, search)
-    else:
-        return failure_response("You must enter a query.", 400)
-
-@api.route("/popular/search")
-def search_by_popular():
-    text = request.args.get('q')
-    if text:
-        projects = Project.query.search(text).order_by(Project.score.desc()).all()
-
-        search = Search(query=text,
-                        projects=projects)
-        return success_response(search_schema, search)
-    else:
-        return failure_response("You must enter a query.", 400)
-
-
-
 # Magic Visualization Routes
 
 @api.route("/projects/<int:id>/graph")
@@ -454,49 +455,6 @@ def graph(id):
         return jsonify({"status": "success", "data": line.grammar()})
     else:
         return failure_response("No history for this project", 404)
-
-
-# @api.route("/groups/<int:id>/graph")
-# def graph_group(id):
-#     group = Group.query.get_or_404(id)
-#     log_list = [proj.logs.all() for proj in group.projects.all()]
-#     scores = []
-#     for item in log_list:
-#         for log in item:
-#             scores.append((log.log_date, log.previous_score))
-#
-#     date_set = {item[0] for item in scores}
-#     avg_scores = []
-#     for date in date_set:
-#         date_scores = [item[1] for item in scores if item[0] == date]
-#         score_avg = sum(date_scores)/len(date_scores)
-#         avg_scores.append((date, score_avg))
-#
-#     if len(avg_scores) > 1:
-#         avg_scores.sort(key=lambda x: x[0])
-#
-#         x = [datetime.combine(item[0], datetime.min.time()).timestamp() * 1000
-#              for item in avg_scores]
-#         y = [item[1] * score_multiplier for item in avg_scores]
-#
-#         multi_iter = {'x': x,
-#                       'data': y}
-#         line = vincent.Line(multi_iter, iter_idx='x')
-#
-#         line.scales['x'] = vincent.Scale(name='x', type='time', range='width',
-#                                          domain=vincent.DataRef(data='table', field="data.idx"))
-#         line.scales['y'] = vincent.Scale(name='y', range='height', nice=True,
-#                                          domain=[0, score_multiplier])
-#         line.scales['color'] = vincent.Scale(name='color', range=['#12897D'], type='ordinal')
-#         line.axes['y'].ticks = 3
-#         line.axes['x'].ticks = 7
-#
-#         if line_style:
-#             line.marks['group'].marks[0].properties.enter.interpolate = vincent.ValueRef(value=line_style)
-#
-#         return jsonify({"status": "success", "data": line.grammar()})
-#     else:
-#         return failure_response("No history for this group", 404)
 
 
 @api.route("/scoredist")
