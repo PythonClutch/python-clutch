@@ -28,8 +28,8 @@
 | POST   | `/api/v1/projects`                           | Submit a new project                                          |
 | GET    | `/api/v1/search?q="<word>"`                  | Search database for any projects, categories, or groups, and returns them all. |
 | GET    | `/api/v1/projects/<int:id>/graph`            | Get a Vega object for a project's score graph               |
-| GET  | `api/v1/groups/<int:page>/<int:per_page>` | Get a paginated list of groups. |
-| GET | `api/v1/projects/<int:page>/<int:per_page> | Get a paginate list of projects. |
+| GET    | `api/v1/groups/<int:page>/<int:per_page>` | Get a paginated list of groups. |
+| GET    | `api/v1/projects/<int:page>/<int:per_page>` | Get a paginate list of projects. |
 
 ## Example usage
 
@@ -60,6 +60,71 @@ Get back:
 }
 ```
 
+#### GET `api/v1/projects/1/2`
+
+```
+{
+  "data": [
+    {
+     Project 1
+    },
+    {
+     Project 2
+    }
+  ],
+  "page": {
+    "current_page": 1,
+    "links": {
+      "current_page": "http://localhost:5000/api/v1/projects/1/2",
+      "first_page": "http://localhost:5000/api/v1/projects/1/2",
+      "last_page": "http://localhost:5000/api/v1/projects/49/2",
+      "next_pages": [
+        "http://localhost:5000/api/v1/projects/2/2",
+        "http://localhost:5000/api/v1/projects/3/2",
+        "http://localhost:5000/api/v1/projects/4/2"
+      ]
+    },
+    "per_page": 2,
+    "total_pages": 49
+  },
+  "status": "success"
+}
+```
+
+#### GET `api/v1/projects/3/2`
+
+```
+{
+  "data": [
+    {
+     Project 1
+    },
+    {
+     Project 2
+    }
+  ],
+  "page": {
+    "current_page": 3,
+    "links": {
+      "current_page": "http://localhost:5000/api/v1/projects/3/2",
+      "first_page": "http://localhost:5000/api/v1/projects/1/2",
+      "last_page": "http://localhost:5000/api/v1/projects/49/2",
+      "next_pages": [
+        "http://localhost:5000/api/v1/projects/4/2",
+        "http://localhost:5000/api/v1/projects/5/2",
+        "http://localhost:5000/api/v1/projects/6/2"
+      ],
+      "previous_pages": [
+        "http://localhost:5000/api/v1/projects/2/2",
+        "http://localhost:5000/api/v1/projects/1/2"
+      ]
+    },
+    "per_page": 2,
+    "total_pages": 49
+  },
+  "status": "success"
+}
+```
 
 #### POST to ```/projects```
 
@@ -68,7 +133,6 @@ send JSON like:
 {
     "pypi_url": "https://pypi.python.org/pypi/pandas",
     "github_url": "https://github.com/pydata/pandas"
-
 }
 ```
 
