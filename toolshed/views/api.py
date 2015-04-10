@@ -191,6 +191,26 @@ def paginate_projects(page=1, per_page=20):
         return failure_response("There are no projects.", 404)
 
 
+@api.route("/projects/newest/<int:page>/<int:per_page>")
+def paginate_projects_newest(page=1, per_page=20):
+    projects = Project.query.order_by(Project.date_added).paginate(page, per_page, False).items
+    total = len(Project.query.all())
+    if projects:
+        return page_response(all_projects_schema, projects, page, per_page, total)
+    else:
+        return failure_response("There are no projects.", 404)
+
+
+@api.route("/projects/popular/<int:page>/<int:per_page>")
+def paginate_projects_popular(page=1, per_page=20):
+    projects = Project.query.order_by(Project.score).paginate(page, per_page, False).items
+    total = len(Project.query.all())
+    if projects:
+        return page_response(all_projects_schema, projects, page, per_page, total)
+    else:
+        return failure_response("There are no projects.", 404)
+
+
 @api.route("/projects")
 def projects():
     projects = Project.query.order_by(Project.name)
@@ -263,6 +283,15 @@ def all_groups():
         return success_response(all_groups_schema, groups)
     else:
         return failure_response("There are no groups.", 404)
+
+@api.route("/groups/<int:page>/<int:per_page>")
+def paginated_groups_name(page, per_page):
+    groups = Group.query.order_by(Group.name).paginate(page, per_page, False).items
+    total = len(Group.query.all())
+    if groups:
+        return page_response(all_groups_schema, groups, page, per_page, total)
+    else:
+        return failure_response("There are no projects.", 404)
 
 
 @api.route("/groups/<int:id>")
