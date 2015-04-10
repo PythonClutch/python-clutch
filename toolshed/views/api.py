@@ -48,42 +48,43 @@ except:
 
 # response functions
 
-def more_pages(forward, page, total_pages, per_page):
+def more_pages(forward, page, total_pages, per_page, kind):
     urls = []
     if forward:
         for current_page in range(page + 1, page + 4):
             if current_page <= total_pages:
-                urls.append(str(request.url_root)+"api/v1/projects/" +
+                urls.append(str(request.url_root)+ "api/v1/" + str(kind) + "/" +
                 str(current_page) + "/" + str(per_page))
     else:
         for current_page in range(page + 1, page - 4, -1):
             if page > current_page > 0:
-                urls.append(str(request.url_root)+"api/v1/projects/" +
+                urls.append(str(request.url_root)+ "api/v1/" + str(kind) + "/" +
                 str(current_page) + "/" + str(per_page))
     return urls
 
 
-def page_response(schema, data, page, per_page, total):
+def page_response(schema, data, page, per_page, total, kind):
     results = schema.dump(data)
     total_pages = ceil(total / per_page)
     first_page = 1
     # If you just have a next page and a current page.
-    links = {"first_page": str(request.url_root)+"api/v1/projects/" +
-             str(1) + "/" + str(per_page), "last_page": str(request.url_root)+"api/v1/projects/" +
-             str(total) + "/" + str(per_page), "current_page":str(request.url_root)+"api/v1/projects/" +
+    links = {"first_page": str(request.url_root)+"api/v1/" + str(kind) + "/" +
+             str(1) + "/" + str(per_page), "last_page": str(request.url_root)+"api/v1/" + str(kind) + "/" +
+             str(total) + "/" + str(per_page), "current_page":str(request.url_root)+ "api/v1/" + str(kind) + "/" +
              str(page) + "/" + str(per_page)}
     if page == first_page and total_pages > 1:
-        links["next_pages"] = more_pages(True, page, total_pages, per_page)
+        links["next_pages"] = more_pages(True, page, total_pages, per_page, kind)
     # If you need a prevous current and next page URL.
     elif page < total_pages:
-        links["previous_pages"] = more_pages(False, page, total_pages, per_page)
-        links["next_pages"] = more_pages(True, page, total_pages, per_page)
+        links["previous_pages"] = more_pages(False, page, total_pages, per_page, kind)
+        links["next_pages"] = more_pages(True, page, total_pages, per_page, kind)
     # If you only need a previous and current page URL.
     elif page > 1:
-        links["previous_pages"] = more_pages(False, page, total_pages, per_page)
+        links["previous_pages"] = more_pages(False, page, total_pages, per_page, kind)
     return jsonify({"status": "success", "data": results.data,
                     "page": {"current_page": page, "per_page": per_page,
                     "total_pages": total_pages, "links": links}})
+
 
 
 def success_response(schema, data):
@@ -186,7 +187,7 @@ def paginate_projects(page=1, per_page=20):
     projects = Project.query.order_by(Project.name).paginate(page, per_page, False).items
     total = len(Project.query.all())
     if projects:
-        return page_response(all_projects_schema, projects, page, per_page, total)
+        return page_response(all_projects_schema, projects, page, per_page, total, "projects")
     else:
         return failure_response("There are no projects.", 404)
 
@@ -196,7 +197,7 @@ def paginate_projects_newest(page=1, per_page=20):
     projects = Project.query.order_by(Project.date_added).paginate(page, per_page, False).items
     total = len(Project.query.all())
     if projects:
-        return page_response(all_projects_schema, projects, page, per_page, total)
+        return page_response(all_projects_schema, projects, page, per_page, total, "projects")
     else:
         return failure_response("There are no projects.", 404)
 
@@ -284,12 +285,13 @@ def all_groups():
     else:
         return failure_response("There are no groups.", 404)
 
+
 @api.route("/groups/<int:page>/<int:per_page>")
 def paginated_groups_name(page, per_page):
     groups = Group.query.order_by(Group.name).paginate(page, per_page, False).items
     total = len(Group.query.all())
     if groups:
-        return page_response(all_groups_schema, groups, page, per_page, total)
+        return page_response(all_groups_schema, groups, page, per_page, total, "groups")
     else:
         return failure_response("There are no projects.", 404)
 

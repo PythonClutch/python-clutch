@@ -8,7 +8,7 @@ from .views.api import api
 from flask_admin import Admin
 
 
-DEBUG = False
+DEBUG = True
 SECRET_KEY = 'development-key'
 MAIL_SERVER = 'smtp.googlemail.com'
 MAIL_PORT = 465
