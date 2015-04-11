@@ -83,7 +83,7 @@ def page_response(schema, data, page, per_page, total, kind):
         links["previous_pages"] = more_pages(False, page, total_pages, per_page, kind)
     return jsonify({"status": "success", "data": results.data,
                     "page": {"current_page": page, "per_page": per_page,
-                    "total_pages": total_pages, "links": links}})
+                    "total_pages": total_pages, "links": links, "total_" + kind: total}})
 
 
 
