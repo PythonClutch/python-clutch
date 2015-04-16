@@ -1,5 +1,5 @@
-app.controller('CategoryCtrl', ['appearFactory',
-    function(appearFactory) {
+app.controller('CategoryCtrl', ['appearFactory', '$q', 'projectServices', 'groupServices',
+    function(appearFactory, $q, projectServices, groupServices) {
         var self = this;
 
         self.rotate = appearFactory.rotate();
@@ -7,5 +7,19 @@ app.controller('CategoryCtrl', ['appearFactory',
         self.checkBox = function() {
             appearFactory.checkBox();
         };
+
+
+        var myPromise = $q.defer();
+
+        myPromise.promise.then(function () {
+            groupServices.listGroups();
+            projectServices.listThird();
+            setTimeout(function () {
+                projectServices.list();
+            }, 0);
+        });
+
+        myPromise.resolve();
+
     }
 ]);

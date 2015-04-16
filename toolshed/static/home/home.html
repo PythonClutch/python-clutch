@@ -6,5 +6,16 @@
 	<home-projects ng-controller="hpCtrl as hp"></home-projects>
 </div>
 <div class="home-set container-width" ng-show="!vm.byProjects">
-	<home-categories></home-categories>
+	<div ng-show="!vm.allProjects" class="loader-inner ball-grid-pulse">
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
+	<home-categories ng-show="vm.allProjects"></home-categories>
 </div>

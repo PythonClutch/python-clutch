@@ -10,6 +10,13 @@
         };
     });
 
+    app.directive('loader', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/services/loader.html'
+        };
+    });
+
     app.directive('footerBar', function() {
         return {
             restrict: 'E',

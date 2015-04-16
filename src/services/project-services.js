@@ -1,5 +1,5 @@
-app.factory('projectServices', ['$http', '$log',
-    function($http, $log) {
+app.factory('projectServices', ['$http', '$log', '$q',
+    function($http, $log, $q) {
 
         function get(url) {
             return processAjaxPromise($http.get(url));
@@ -31,11 +31,42 @@ app.factory('projectServices', ['$http', '$log',
         var projectsPopular;
         var searchedProjects;
 
+        function addProjects (len, url) {
+            if (projects) {
+               return projects.then(function (result) {
+                    if (result.length < len) {
+                        console.log('here');
+                        projects = get('/api/v1/projects' + url);
+                    }
+                    return projects;
+                }) 
+            } else {
+                projects = get('/api/v1/projects' + url);
+                return projects;
+            }
+        };
+
         return {
 
-            list: function() {
-                projects = projects || get('/api/v1/projects');
+            projects: function () {
                 return projects;
+            },
+
+            list: function() {
+                addProjects(101, '');
+            },
+
+            listCurrent: function(num) {
+                projects = projects || get('/api/v1/projects/' + num + '/5');
+                return projects;
+            },
+
+            listSecond: function() {
+                addProjects(26, '/1/25');
+            },
+
+            listThird: function() {
+                addProjects(99, '/1/100');
             },
 
             getGraphByProjectId: function(projectId) {

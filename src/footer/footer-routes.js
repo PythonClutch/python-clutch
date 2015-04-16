@@ -6,6 +6,13 @@ app.config(['$routeProvider',
             templateUrl: 'static/footer/footer-pages/footer-pages.html',
             controller: 'FooterCtrl',
             controllerAs: 'vm',
+            resolve: {
+                projects: ['projectServices',
+                    function(projectServices) {
+                        return projectServices.list();
+                    }
+                ],
+            }
         };
 
         $routeProvider

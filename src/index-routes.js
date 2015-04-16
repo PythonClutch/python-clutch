@@ -7,16 +7,13 @@ app.config(['$routeProvider',
             controller: 'HomeCtrl',
             controllerAs: 'vm',
             resolve: {
-                projects: ['projectServices',
-                    function(projectServices) {
-                        return projectServices.list();
-                    }
-                ],
+        
                 groups: ['groupServices',
                     function(groupServices) {
-                        return groupServices.listGroups();
+                        return groupServices.listCurrentGroups();
                     }
                 ],
+
                 categories: ['groupServices',
                     function(groupServices) {
                         return groupServices.listCats();
@@ -25,6 +22,11 @@ app.config(['$routeProvider',
                 user: ['userServices',
                     function(userServices) {
                         return userServices.currentUser();
+                    }
+                ],
+                projectsCurrent: ['projectServices',
+                    function(projectServices) {
+                        return projectServices.listSecond();
                     }
                 ],
                 setProj: ['homeFactory',
@@ -43,6 +45,6 @@ app.config(['$routeProvider',
                 templateUrl: 'static/submit/submit.html',
                 controller: 'SubmitCtrl',
                 controllerAs: 'vm'
-            })
+            });
     }
 ]);

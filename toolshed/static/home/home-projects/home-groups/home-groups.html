@@ -1,14 +1,17 @@
 <home-filters></home-filters>
-<ul ng-show="hp.list">
-    <li class="home-project-li home-project-li-group" dir-paginate="group in vm.groups | filter:searchText | itemsPerPage: 5" pagination-id="group">
-        <group-details></group-details>
-    </li>
-</ul>
-<ul ng-show="hp.popular">
-    <li class="home-project-li home-project-li-group" dir-paginate="group in vm.groups | filter:searchText | orderBy:'-average_score' | itemsPerPage: 5" pagination-id="group">
-        <group-details></group-details>
-    </li>
-</ul>
-<div class="pagination-div">
-    <dir-pagination-controls pagination-id="group"></dir-pagination-controls>
+<loader ng-show="!vm.allProjects"></loader>
+<div ng-show="vm.allProjects">
+	<ul ng-show="hp.list">
+	    <li class="home-project-li home-project-li-group" dir-paginate="group in vm.groups | filter:searchText | itemsPerPage: 5" pagination-id="group">
+	        <group-details></group-details>
+	    </li>
+	</ul>
+	<ul ng-show="hp.popular">
+	    <li class="home-project-li home-project-li-group" dir-paginate="group in vm.groups | filter:searchText | orderBy:'-average_score' | itemsPerPage: 5" pagination-id="group">
+	        <group-details></group-details>
+	    </li>
+	</ul>
+	<div class="pagination-div">
+	    <dir-pagination-controls pagination-id="group"></dir-pagination-controls>
+	</div>
 </div>

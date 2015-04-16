@@ -27,6 +27,13 @@ app.config(['$routeProvider', function ($routeProvider) {
         };
     });
 
+    app.directive('loader', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/services/loader.html'
+        };
+    });
+
     app.directive('footerBar', function() {
         return {
             restrict: 'E',
@@ -46,16 +53,13 @@ app.config(['$routeProvider',
             controller: 'HomeCtrl',
             controllerAs: 'vm',
             resolve: {
-                projects: ['projectServices',
-                    function(projectServices) {
-                        return projectServices.list();
-                    }
-                ],
+        
                 groups: ['groupServices',
                     function(groupServices) {
-                        return groupServices.listGroups();
+                        return groupServices.listCurrentGroups();
                     }
                 ],
+
                 categories: ['groupServices',
                     function(groupServices) {
                         return groupServices.listCats();
@@ -64,6 +68,11 @@ app.config(['$routeProvider',
                 user: ['userServices',
                     function(userServices) {
                         return userServices.currentUser();
+                    }
+                ],
+                projectsCurrent: ['projectServices',
+                    function(projectServices) {
+                        return projectServices.listSecond();
                     }
                 ],
                 setProj: ['homeFactory',
@@ -82,7 +91,7 @@ app.config(['$routeProvider',
                 templateUrl: 'static/submit/submit.html',
                 controller: 'SubmitCtrl',
                 controllerAs: 'vm'
-            })
+            });
     }
 ]);
 /*! jQuery v1.11.2 | (c) 2005, 2014 jQuery Foundation, Inc. | jquery.org/license */
@@ -252,88 +261,6 @@ app.config(['$routeProvider',
 
     }
 ]);
-app.controller('FooterCtrl', ['projectServices', 'groupServices',
-    function(projectServices, groupServices) {
-        var self = this;
-
-        projectServices.list().then(function(result) {
-            self.projects = result;
-            self.firstColumn = Math.ceil(result.length / 3);
-            self.firstColumnPlus = self.firstColumn + 1;
-            self.secondColumn = Math.ceil(result.length / 1.5);
-            self.secondColumnPlus = self.secondColumn + 1;
-            self.thirdColumn = result.length;
-        });
-
-        self.setPage = function() {
-            $('html, body').animate({
-                scrollTop: 0
-            }, 'fast');
-        };
-
-        self.bySiteMap = function() {
-            if (window.location.hash === '#/projectindex') {
-                return true;
-            } else {
-                return false;
-            }
-        };
-
-        self.byAbout = function() {
-            if (window.location.hash === '#/about') {
-                return true;
-            } else {
-                return false;
-            }
-        };
-
-        self.byContact = function() {
-            if (window.location.hash === '#/contact') {
-                return true;
-            } else {
-                return false;
-            }
-        };
-    }
-]);
-(function() {
-    app.directive('siteMap', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/footer/footer-pages/site-map.html'
-        };
-    });
-
-    app.directive('about', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/footer/footer-pages/about.html'
-        };
-    });
-
-    app.directive('contact', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/footer/footer-pages/contact.html'
-        };
-    });
-})();
-app.config(['$routeProvider',
-    function($routeProvider) {
-        'use strict';
-
-        var page = {
-            templateUrl: 'static/footer/footer-pages/footer-pages.html',
-            controller: 'FooterCtrl',
-            controllerAs: 'vm',
-        };
-
-        $routeProvider
-            .when('/projectindex', page)
-            .when('/about', page)
-            .when('/contact', page);
-    }
-]);
 app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph', 'likeFactory', 'user',
     function(group, projectFactory, appearFactory, graph, likeFactory, user) {
         var self = this;
@@ -430,15 +357,188 @@ app.config(['$routeProvider',
         $routeProvider.when('/home/groups/:groupid', routeDefinition);
     }
 ]);
-app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
-    'categories', 'user', 'likeFactory', 
-    function(homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices,
-        categories, user, likeFactory) {
+app.controller('FooterCtrl', ['projectServices', 'groupServices',
+    function(projectServices, groupServices) {
+        var self = this;
+
+        self.allProjects = false;
+
+        self.projects;
+
+        function getProjects () {
+            return projectServices.projects().then(function (result) {
+                self.projects = result;
+            });
+        };
+
+        getProjects();
+
+        var int = setInterval(function () {
+           findProjects(); 
+        }, 600);
+
+        function findProjects () {
+            projectServices.projects().then(function (result) {
+                if (result.length > 101) {
+                    clearInterval(int);
+                    getProjects();
+                    self.allProjects = true;
+                    self.projects = result;
+                    self.firstColumn = Math.ceil(result.length / 3);
+                    self.firstColumnPlus = self.firstColumn + 1;
+                    self.secondColumn = Math.ceil(result.length / 1.5);
+                    self.secondColumnPlus = self.secondColumn + 1;
+                    self.thirdColumn = result.length;
+                }
+            });
+        }
+
+        self.setPage = function() {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'fast');
+        };
+
+        self.bySiteMap = function() {
+            if (window.location.hash === '#/projectindex') {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        self.byAbout = function() {
+            if (window.location.hash === '#/about') {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        self.byContact = function() {
+            if (window.location.hash === '#/contact') {
+                return true;
+            } else {
+                return false;
+            }
+        };
+    }
+]);
+(function() {
+    app.directive('siteMap', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/footer/footer-pages/site-map.html'
+        };
+    });
+
+    app.directive('about', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/footer/footer-pages/about.html'
+        };
+    });
+
+    app.directive('contact', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/footer/footer-pages/contact.html'
+        };
+    });
+})();
+app.config(['$routeProvider',
+    function($routeProvider) {
+        'use strict';
+
+        var page = {
+            templateUrl: 'static/footer/footer-pages/footer-pages.html',
+            controller: 'FooterCtrl',
+            controllerAs: 'vm',
+            resolve: {
+                projects: ['projectServices',
+                    function(projectServices) {
+                        return projectServices.list();
+                    }
+                ],
+            }
+        };
+
+        $routeProvider
+            .when('/projectindex', page)
+            .when('/about', page)
+            .when('/contact', page);
+    }
+]);
+app.controller('HomeCtrl', ['homeFactory', 'projectsCurrent', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
+    'categories', 'user', 'likeFactory', 'groupServices',
+    function(homeFactory, projectsCurrent, projectFactory, activeRoute, appearFactory, groups, projectServices,
+        categories, user, likeFactory, groupServices) {
         var self = this;
 
         self.categories = categories;
 
-        self.projects = projects;
+        self.allProjects = false;
+
+        self.projects;
+        self.groups = groups;
+
+        function getProjects () {
+            return projectServices.projects().then(function (result) {
+                self.projects = result;
+            });
+        };
+
+        function getGroups () {
+            return groupServices.groups().then(function (result) {
+                self.groups = result;
+            });
+        };
+
+        getProjects();
+
+        var int = setInterval(function () {
+           findProjects(); 
+        }, 04);
+
+        var int1 = setInterval(function () { 
+           find100Projects();
+        }, 04);
+
+        var intG = setInterval(function () {
+           findGroups(); 
+        }, 10);
+
+        function findProjects () {
+            projectServices.projects().then(function (result) {
+                if (result.length > 101) {
+                    clearInterval(int);
+                    getProjects();
+                    self.allProjects = true;
+                } else {
+                    getProjects();
+                }
+            });
+        }
+
+        function find100Projects () {
+            projectServices.projects().then(function (result) {
+                if (result.length > 26) {
+                    clearInterval(int1);
+                    getProjects();
+                } else {
+                    getProjects();
+                }
+            });
+        }
+
+        function findGroups () {
+            groupServices.groups().then(function (result) {
+                if (result.length > 11) {
+                    clearInterval(intG);
+                    getGroups();
+                } 
+            });
+        }
 
         self.changeTrue = function() {
             $('html, body').animate({
@@ -446,10 +546,6 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
             }, 'fast');
             appearFactory.changeTrue();
         };
-
-        self.groups = groups;
-
-        self.projectNumber = Math.ceil(projects.length / 5);
 
         self.searchChange = function() {
             var paragraphAmt = $(event.target).closest('home-names').find('.pagination-div p');
@@ -800,6 +896,10 @@ app.factory('groupServices', ['$http', '$log',
 
         return {
 
+            groups: function () {
+                return groups;
+            },
+
             getByGroupId: function(groupId) {
                 return get('/api/v1/groups/' + groupId);
             },
@@ -809,7 +909,20 @@ app.factory('groupServices', ['$http', '$log',
             },
 
             listGroups: function() {
-                groups = groups || get('/api/v1/groups');
+                if (groups) {
+                    return groups.then(function (result) {
+                        if (result.length < 11) {
+                            groups = get('/api/v1/groups');
+                        }
+                        return groups;
+                    })   
+                } else {
+                    groups = get('/api/v1/groups');
+                }   
+            },
+
+            listCurrentGroups: function() {
+                groups = groups || get('/api/v1/groups/1/5');
                 return groups;
             },
 
@@ -916,7 +1029,6 @@ app.factory('projectFactory', function() {
         },
 
         byGh: function() {
-            console.log(ghMoreInfo);
             return ghMoreInfo;
         },
 
@@ -931,21 +1043,24 @@ app.factory('projectFactory', function() {
         ghInfo: function() {
             target = $(event.target).parent().parent().parent().find('.gh-checkbox');
             chevron = $(event.target).closest('.home-project-header-bottom').find('.fa');
-            console.log(chevron);
             if (target.prop('checked')) {
                 target.prop('checked', false);
                 ghMoreInfo = false;
+                chevron.removeClass('fa-angle-up');
+                chevron.addClass('fa-angle-down');
             } else {
                 target.prop('checked', true);
                 ghMoreInfo = true;
+                chevron.removeClass('fa-angle-down');
+                chevron.addClass('fa-angle-up');
             }
         }
 
     };
 
 });
-app.factory('projectServices', ['$http', '$log',
-    function($http, $log) {
+app.factory('projectServices', ['$http', '$log', '$q',
+    function($http, $log, $q) {
 
         function get(url) {
             return processAjaxPromise($http.get(url));
@@ -977,11 +1092,42 @@ app.factory('projectServices', ['$http', '$log',
         var projectsPopular;
         var searchedProjects;
 
+        function addProjects (len, url) {
+            if (projects) {
+               return projects.then(function (result) {
+                    if (result.length < len) {
+                        console.log('here');
+                        projects = get('/api/v1/projects' + url);
+                    }
+                    return projects;
+                }) 
+            } else {
+                projects = get('/api/v1/projects' + url);
+                return projects;
+            }
+        };
+
         return {
 
-            list: function() {
-                projects = projects || get('/api/v1/projects');
+            projects: function () {
                 return projects;
+            },
+
+            list: function() {
+                addProjects(101, '');
+            },
+
+            listCurrent: function(num) {
+                projects = projects || get('/api/v1/projects/' + num + '/5');
+                return projects;
+            },
+
+            listSecond: function() {
+                addProjects(26, '/1/25');
+            },
+
+            listThird: function() {
+                addProjects(99, '/1/100');
             },
 
             getGraphByProjectId: function(projectId) {
@@ -1267,12 +1413,12 @@ app.controller('Error404Ctrl', ['$location', function ($location) {
     app.directive('catDetailsGroups', function() {
         return {
             restrict: 'E',
-            templateUrl: 'static/home/home-categories/category-details/cat-details-groups.html'
+            templateUrl: 'static/home/home-categories/category-details/cat-details-groups.html',
         };
     });
 })();
-app.controller('CategoryCtrl', ['appearFactory',
-    function(appearFactory) {
+app.controller('CategoryCtrl', ['appearFactory', '$q', 'projectServices', 'groupServices',
+    function(appearFactory, $q, projectServices, groupServices) {
         var self = this;
 
         self.rotate = appearFactory.rotate();
@@ -1280,6 +1426,20 @@ app.controller('CategoryCtrl', ['appearFactory',
         self.checkBox = function() {
             appearFactory.checkBox();
         };
+
+
+        var myPromise = $q.defer();
+
+        myPromise.promise.then(function () {
+            groupServices.listGroups();
+            projectServices.listThird();
+            setTimeout(function () {
+                projectServices.list();
+            }, 0);
+        });
+
+        myPromise.resolve();
+
     }
 ]);
 app.config(['$routeProvider',
@@ -1291,9 +1451,9 @@ app.config(['$routeProvider',
             controller: 'HomeCtrl',
             controllerAs: 'vm',
             resolve: {
-                projects: ['projectServices',
+                projectsCurrent: ['projectServices',
                     function(projectServices) {
-                        return projectServices.list();
+                        return projectServices.listCurrent(1);
                     }
                 ],
                 groups: ['groupServices',
@@ -2059,13 +2219,47 @@ app.factory('submitFactory', function() {
     };
 
 });
-app.controller('hgCtrl', ['group',
-    function(group) {
+app.controller('hgCtrl', ['group', '$q', 'projectServices',
+    function(group, $q, projectServices) {
         var self = this;
 
         self.group = group;
 
         console.log(group);
+
+//                 var myPromise = $q.defer();
+
+// myPromise.promise.then(function () {
+//     // var ps = function () {
+//     //     return projectServices.list();
+//     // }
+//     // console.log(ps());
+
+//     (function () {
+//         return projectServices.list().then(function (result) {
+//             console.log(result);
+            
+//             self.projects = result;
+            
+//         });
+//     })();
+//     console.log(self.projects);
+
+//     // console.log('this');
+    
+//     // console.log(function () {
+//     //     return projectServices.listSecond();
+//     // })();
+//     // self.projects;
+//     // console.log('We got: ');
+// });
+
+// // myPromise.done(function (result) {
+// //     console.log(result);
+// // });
+
+// // myPromise.resolve('All done, yo!');
+// myPromise.resolve();
     }
 ]);
 app.controller('hnCtrl', ['projects', 'appearFactory', 'projectFactory',

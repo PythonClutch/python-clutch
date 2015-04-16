@@ -17,7 +17,6 @@ app.factory('projectFactory', function() {
         },
 
         byGh: function() {
-            console.log(ghMoreInfo);
             return ghMoreInfo;
         },
 
@@ -32,13 +31,16 @@ app.factory('projectFactory', function() {
         ghInfo: function() {
             target = $(event.target).parent().parent().parent().find('.gh-checkbox');
             chevron = $(event.target).closest('.home-project-header-bottom').find('.fa');
-            console.log(chevron);
             if (target.prop('checked')) {
                 target.prop('checked', false);
                 ghMoreInfo = false;
+                chevron.removeClass('fa-angle-up');
+                chevron.addClass('fa-angle-down');
             } else {
                 target.prop('checked', true);
                 ghMoreInfo = true;
+                chevron.removeClass('fa-angle-down');
+                chevron.addClass('fa-angle-up');
             }
         }
 

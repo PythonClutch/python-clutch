@@ -18,6 +18,8 @@
     </li>
 </ul>
 
+<p ng-show="!vm.allProjects" class="loading-p">still loading...</p>
+
 <div class="pagination-div">
     <dir-pagination-controls ng-show="hp.mobile" pagination-id="name" max-size="6"></dir-pagination-controls>
     <dir-pagination-controls ng-show="!hp.mobile" pagination-id="name" max-size="6"></dir-pagination-controls>

@@ -23,7 +23,7 @@
     app.directive('catDetailsGroups', function() {
         return {
             restrict: 'E',
-            templateUrl: 'static/home/home-categories/category-details/cat-details-groups.html'
+            templateUrl: 'static/home/home-categories/category-details/cat-details-groups.html',
         };
     });
 })();

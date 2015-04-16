@@ -3,7 +3,7 @@
 		<input ng-click="vm.checkSearch()" ng-model="searchText.name" ng-keyup="vm.searchChange()" class="home-project-search search" type="search">
 		<p ng-click="vm.checkSearch()" ng-show="vm.searchClicked" for="search-projects-checkbox">Search</p>
 	</div>
-	<div class="home-project-i-div">
+	<div ng-controller="CategoryCtrl as vm" class="home-project-i-div">
 		<i class="fa fa-search"></i>
 	</div>
 </div>
