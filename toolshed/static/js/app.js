@@ -261,102 +261,6 @@ app.config(['$routeProvider',
 
     }
 ]);
-app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph', 'likeFactory', 'user',
-    function(group, projectFactory, appearFactory, graph, likeFactory, user) {
-        var self = this;
-
-        self.group = group;
-
-        console.log(group.projects);
-
-        self.rotate = appearFactory.rotate();
-
-        self.checkBox = function() {
-            appearFactory.checkBox();
-            self.rotate = appearFactory.rotate();
-        };
-
-        var pf = projectFactory;
-
-        self.pyMoreInfo = pf.byPy();
-
-        self.pyInfo = function() {
-            pf.pyInfo();
-            self.pyMoreInfo = pf.byPy();
-        };
-
-        self.setPage = function() {
-            $('html, body').animate({
-                scrollTop: 0
-            }, 'fast');
-        };
-
-        self.ghMoreInfo = pf.byGh();
-
-        self.ghInfo = function() {
-            pf.ghInfo();
-            self.ghMoreInfo = pf.byGh();
-        };
-
-        self.like = function(proj, likes) {
-            likeFactory.like(proj, likes, user);
-        };
-
-        self.checkLike = function(project) {
-            if (user) {
-                return likeFactory.checkLike(project, user);
-            } else {
-                return false;
-            }    
-        };
-
-        function parse(spec) {
-            vg.parse.spec(spec, function(chart) {
-                chart({
-                    el: ".graph"
-                }).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update();
-                if (window.innerWidth < 400) {
-                    chart({
-                        el: ".graph"
-                    }).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
-                }
-            });
-        }
-        
-        parse(graph);
-
-    }
-]);
-
-app.config(['$routeProvider',
-    function($routeProvider) {
-        var routeDefinition = {
-            templateUrl: 'static/group/group.html',
-            controller: 'GroupCtrl',
-            controllerAs: 'vm',
-            resolve: {
-                user: ['userServices',
-                    function(userServices) {
-                        return userServices.currentUser();
-                    }
-                ],
-                graph: ['$route', 'groupServices',
-                    function($route, groupServices) {
-                        var routeParams = $route.current.params;
-                        return groupServices.getGraphByGroupId(routeParams.groupid);
-                    }
-                ],
-                group: ['$route', 'groupServices',
-                    function($route, groupServices) {
-                        var routeParams = $route.current.params;
-                        return groupServices.getByGroupId(routeParams.groupid);
-                    }
-                ]
-            }
-        };
-        $routeProvider.when('/home/groups/:groupid', routeDefinition);
-    }
-]);
 app.controller('FooterCtrl', ['projectServices', 'groupServices',
     function(projectServices, groupServices) {
         var self = this;
@@ -467,6 +371,102 @@ app.config(['$routeProvider',
             .when('/projectindex', page)
             .when('/about', page)
             .when('/contact', page);
+    }
+]);
+app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph', 'likeFactory', 'user',
+    function(group, projectFactory, appearFactory, graph, likeFactory, user) {
+        var self = this;
+
+        self.group = group;
+
+        console.log(group.projects);
+
+        self.rotate = appearFactory.rotate();
+
+        self.checkBox = function() {
+            appearFactory.checkBox();
+            self.rotate = appearFactory.rotate();
+        };
+
+        var pf = projectFactory;
+
+        self.pyMoreInfo = pf.byPy();
+
+        self.pyInfo = function() {
+            pf.pyInfo();
+            self.pyMoreInfo = pf.byPy();
+        };
+
+        self.setPage = function() {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'fast');
+        };
+
+        self.ghMoreInfo = pf.byGh();
+
+        self.ghInfo = function() {
+            pf.ghInfo();
+            self.ghMoreInfo = pf.byGh();
+        };
+
+        self.like = function(proj, likes) {
+            likeFactory.like(proj, likes, user);
+        };
+
+        self.checkLike = function(project) {
+            if (user) {
+                return likeFactory.checkLike(project, user);
+            } else {
+                return false;
+            }    
+        };
+
+        function parse(spec) {
+            vg.parse.spec(spec, function(chart) {
+                chart({
+                    el: ".graph"
+                }).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update();
+                if (window.innerWidth < 400) {
+                    chart({
+                        el: ".graph"
+                    }).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
+                }
+            });
+        }
+        
+        parse(graph);
+
+    }
+]);
+
+app.config(['$routeProvider',
+    function($routeProvider) {
+        var routeDefinition = {
+            templateUrl: 'static/group/group.html',
+            controller: 'GroupCtrl',
+            controllerAs: 'vm',
+            resolve: {
+                user: ['userServices',
+                    function(userServices) {
+                        return userServices.currentUser();
+                    }
+                ],
+                graph: ['$route', 'groupServices',
+                    function($route, groupServices) {
+                        var routeParams = $route.current.params;
+                        return groupServices.getGraphByGroupId(routeParams.groupid);
+                    }
+                ],
+                group: ['$route', 'groupServices',
+                    function($route, groupServices) {
+                        var routeParams = $route.current.params;
+                        return groupServices.getByGroupId(routeParams.groupid);
+                    }
+                ]
+            }
+        };
+        $routeProvider.when('/home/groups/:groupid', routeDefinition);
     }
 ]);
 app.controller('HomeCtrl', ['homeFactory', 'projectsCurrent', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
@@ -1484,6 +1484,170 @@ app.config(['$routeProvider',
         .when('/home/categories', homePage);
     }
 ]);
+app.controller('hpCtrl', ['projectServices', 'appearFactory', 'projectFactory',
+    function(projectServices, appearFactory, projectFactory) {
+        var self = this;
+
+        self.byNames = true;
+
+        self.rotate = function() {
+            return appearFactory.rotate();
+        };
+        self.mobile = true;
+
+        self.setCommentPage = function() {
+            $('html, body').animate({
+                scrollTop: 1100
+            }, 'fast');
+        };
+
+        self.setPage = function() {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'fast');
+        };
+
+        self.checkBox = function() {
+            appearFactory.checkBox();
+            self.rotate = appearFactory.rotate();
+        };
+
+        self.setGroups = function() {
+            self.byNames = false;
+        };
+
+        self.setNames = function() {
+            self.byNames = true;
+        };
+
+        function selectedClass() {
+            var closest = $(event.target).parent().parent().children();
+            closest.each(function() {
+                var fa = $(this).find('.fa');
+                $(this).find('.fa').removeClass('fa-dot-circle-o');
+                console.log($(this).find('.project-radio')[0]);
+                $(this).find('.project-radio').prop('checked', false);
+                if (!fa.hasClass('fa-circle-o')) {
+                    fa.addClass('fa-circle-o');
+                }
+            });
+            $(event.target).parent().find('.fa').removeClass('fa-circle-o');
+            $(event.target).parent().find('.fa').addClass('fa-dot-circle-o');
+        }
+
+        self.list = false;
+        self.popular = true;
+        self.newest = false;
+        self.searched = false;
+
+        self.setPopular = function() {
+            selectedClass();
+            self.popular = true;
+            self.newest = false;
+            self.list = false;
+            self.searched = false;
+            $('#project-popular-radio').prop('checked', true);
+        };
+
+        self.setNewest = function() {
+            self.popular = false;
+            self.newest = true;
+            self.list = false;
+            self.searched = false;
+            selectedClass();
+            $('#project-newest-radio').prop('checked', true);
+        };
+
+        self.setSearch = function() {
+            console.log('eh');
+        };
+
+        self.setTrending = function() {
+            selectedClass();
+            $('#project-trending-radio').prop('checked', true);
+        };
+
+        self.setList = function() {
+            self.popular = false;
+            self.newest = false;
+            self.list = true;
+            console.log(self.list);
+            selectedClass();
+            $('#project-list-radio').prop('checked', true);
+        };
+
+        self.searchClicked = true;
+
+        self.checkSearch = function() {
+            self.searchClicked = false;
+            $(event.target).parent().find('.home-project-search').focus();
+        };
+
+        var pf = projectFactory;
+
+        self.pyMoreInfo = pf.byPy();
+
+        self.pyInfo = function() {
+            pf.pyInfo();
+            self.pyMoreInfo = pf.byPy();
+        };
+
+        self.ghMoreInfo = pf.byGh();
+
+        self.ghInfo = function() {
+            pf.ghInfo();
+            self.ghMoreInfo = pf.byGh();
+        };
+
+    }
+]);
+(function() {
+    app.directive('homeNames', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-names/home-names.html'
+        };
+    });
+
+    app.directive('namesDetails', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-names/names-details.html',
+            controller: 'hpCtrl',
+            controllerAs: 'hp'
+        };
+    });
+
+    app.directive('homeGroups', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-groups/home-groups.html'
+        };
+    });
+
+    app.directive('groupDetails', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-groups/group-details.html',
+            controller: 'hpCtrl',
+            controllerAs: 'hp'
+        };
+    });
+
+    app.directive('groupDetailsProjects', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-groups/group-details-projects.html'
+        };
+    });
+
+    app.directive('homeFilters', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/home/home-projects/home-filters.html'
+        };
+    });
+})();
 /**
  * dirPagination - AngularJS module for paginating (almost) anything.
  *
@@ -1997,170 +2161,6 @@ app.config(['$routeProvider',
             };
         };
     }
-})();
-app.controller('hpCtrl', ['projectServices', 'appearFactory', 'projectFactory',
-    function(projectServices, appearFactory, projectFactory) {
-        var self = this;
-
-        self.byNames = true;
-
-        self.rotate = function() {
-            return appearFactory.rotate();
-        };
-        self.mobile = true;
-
-        self.setCommentPage = function() {
-            $('html, body').animate({
-                scrollTop: 1100
-            }, 'fast');
-        };
-
-        self.setPage = function() {
-            $('html, body').animate({
-                scrollTop: 0
-            }, 'fast');
-        };
-
-        self.checkBox = function() {
-            appearFactory.checkBox();
-            self.rotate = appearFactory.rotate();
-        };
-
-        self.setGroups = function() {
-            self.byNames = false;
-        };
-
-        self.setNames = function() {
-            self.byNames = true;
-        };
-
-        function selectedClass() {
-            var closest = $(event.target).parent().parent().children();
-            closest.each(function() {
-                var fa = $(this).find('.fa');
-                $(this).find('.fa').removeClass('fa-dot-circle-o');
-                console.log($(this).find('.project-radio')[0]);
-                $(this).find('.project-radio').prop('checked', false);
-                if (!fa.hasClass('fa-circle-o')) {
-                    fa.addClass('fa-circle-o');
-                }
-            });
-            $(event.target).parent().find('.fa').removeClass('fa-circle-o');
-            $(event.target).parent().find('.fa').addClass('fa-dot-circle-o');
-        }
-
-        self.list = false;
-        self.popular = true;
-        self.newest = false;
-        self.searched = false;
-
-        self.setPopular = function() {
-            selectedClass();
-            self.popular = true;
-            self.newest = false;
-            self.list = false;
-            self.searched = false;
-            $('#project-popular-radio').prop('checked', true);
-        };
-
-        self.setNewest = function() {
-            self.popular = false;
-            self.newest = true;
-            self.list = false;
-            self.searched = false;
-            selectedClass();
-            $('#project-newest-radio').prop('checked', true);
-        };
-
-        self.setSearch = function() {
-            console.log('eh');
-        };
-
-        self.setTrending = function() {
-            selectedClass();
-            $('#project-trending-radio').prop('checked', true);
-        };
-
-        self.setList = function() {
-            self.popular = false;
-            self.newest = false;
-            self.list = true;
-            console.log(self.list);
-            selectedClass();
-            $('#project-list-radio').prop('checked', true);
-        };
-
-        self.searchClicked = true;
-
-        self.checkSearch = function() {
-            self.searchClicked = false;
-            $(event.target).parent().find('.home-project-search').focus();
-        };
-
-        var pf = projectFactory;
-
-        self.pyMoreInfo = pf.byPy();
-
-        self.pyInfo = function() {
-            pf.pyInfo();
-            self.pyMoreInfo = pf.byPy();
-        };
-
-        self.ghMoreInfo = pf.byGh();
-
-        self.ghInfo = function() {
-            pf.ghInfo();
-            self.ghMoreInfo = pf.byGh();
-        };
-
-    }
-]);
-(function() {
-    app.directive('homeNames', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-names/home-names.html'
-        };
-    });
-
-    app.directive('namesDetails', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-names/names-details.html',
-            controller: 'hpCtrl',
-            controllerAs: 'hp'
-        };
-    });
-
-    app.directive('homeGroups', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-groups/home-groups.html'
-        };
-    });
-
-    app.directive('groupDetails', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-groups/group-details.html',
-            controller: 'hpCtrl',
-            controllerAs: 'hp'
-        };
-    });
-
-    app.directive('groupDetailsProjects', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-groups/group-details-projects.html'
-        };
-    });
-
-    app.directive('homeFilters', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'static/home/home-projects/home-filters.html'
-        };
-    });
 })();
 app.factory('homeFactory', function() {
 
