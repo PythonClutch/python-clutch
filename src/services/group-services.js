@@ -31,6 +31,10 @@ app.factory('groupServices', ['$http', '$log',
 
         return {
 
+            groups: function () {
+                return groups;
+            },
+
             getByGroupId: function(groupId) {
                 return get('/api/v1/groups/' + groupId);
             },
@@ -40,7 +44,20 @@ app.factory('groupServices', ['$http', '$log',
             },
 
             listGroups: function() {
-                groups = groups || get('/api/v1/groups');
+                if (groups) {
+                    return groups.then(function (result) {
+                        if (result.length < 11) {
+                            groups = get('/api/v1/groups');
+                        }
+                        return groups;
+                    })   
+                } else {
+                    groups = get('/api/v1/groups');
+                }   
+            },
+
+            listCurrentGroups: function() {
+                groups = groups || get('/api/v1/groups/1/5');
                 return groups;
             },
 

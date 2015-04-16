@@ -5,6 +5,11 @@ app.config(['$routeProvider',
             controller: 'GroupCtrl',
             controllerAs: 'vm',
             resolve: {
+                user: ['userServices',
+                    function(userServices) {
+                        return userServices.currentUser();
+                    }
+                ],
                 graph: ['$route', 'groupServices',
                     function($route, groupServices) {
                         var routeParams = $route.current.params;

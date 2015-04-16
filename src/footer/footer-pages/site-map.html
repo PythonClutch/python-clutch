@@ -1,6 +1,7 @@
 <div class="site-map-bottom-div">
     <h1>Projects</h1>
-    <div class="site-map-projects flex-row">
+    <loader ng-show="!vm.allProjects"></loader>
+    <div ng-show="vm.allProjects" class="site-map-projects flex-row">
         <ul class="site-map-ul">
             <li class="site-map-li site-map-first-li" ng-repeat="project in vm.projects | slice:0:vm.firstColumn ">
                 <h2><a class="link" href="#/projects/{{project.id}}">{{project.name}}-</a>{{project.summary}}</h2>

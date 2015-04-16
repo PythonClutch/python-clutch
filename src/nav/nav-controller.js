@@ -11,7 +11,7 @@ app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 
         self.searchProjects = function() {
             window.location.hash = "home/search/" + self.word;
-        }
+        };
 
         function checkLogIn() {
             userServices.currentUser().then(function(result) {
@@ -32,7 +32,7 @@ app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 
         self.checkUser = function() {
             checkLogIn();
-        }
+        };
 
         checkLogIn();
 

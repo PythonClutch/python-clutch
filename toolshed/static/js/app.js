@@ -27,6 +27,13 @@ app.config(['$routeProvider', function ($routeProvider) {
         };
     });
 
+    app.directive('loader', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'static/services/loader.html'
+        };
+    });
+
     app.directive('footerBar', function() {
         return {
             restrict: 'E',
@@ -46,16 +53,13 @@ app.config(['$routeProvider',
             controller: 'HomeCtrl',
             controllerAs: 'vm',
             resolve: {
-                projects: ['projectServices',
-                    function(projectServices) {
-                        return projectServices.list();
-                    }
-                ],
+        
                 groups: ['groupServices',
                     function(groupServices) {
-                        return groupServices.listGroups();
+                        return groupServices.listCurrentGroups();
                     }
                 ],
+
                 categories: ['groupServices',
                     function(groupServices) {
                         return groupServices.listCats();
@@ -64,6 +68,11 @@ app.config(['$routeProvider',
                 user: ['userServices',
                     function(userServices) {
                         return userServices.currentUser();
+                    }
+                ],
+                projectsCurrent: ['projectServices',
+                    function(projectServices) {
+                        return projectServices.listSecond();
                     }
                 ],
                 setProj: ['homeFactory',
@@ -82,7 +91,7 @@ app.config(['$routeProvider',
                 templateUrl: 'static/submit/submit.html',
                 controller: 'SubmitCtrl',
                 controllerAs: 'vm'
-            })
+            });
     }
 ]);
 /*! jQuery v1.11.2 | (c) 2005, 2014 jQuery Foundation, Inc. | jquery.org/license */
@@ -107,7 +116,7 @@ app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory',
             console.log(self.accountUrls);
             userServices.addUserUrls(self.accountUrls);
             self.accountUrls = {};
-        }
+        };
 
         self.setInfo = function() {
             accountFactory.setInfo();
@@ -128,12 +137,11 @@ app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory',
         self.setEdit = function() {
             accountFactory.setEdit();
             self.byEdit = accountFactory.byEdit();
-        }
+        };
 
         self.checkBox = function() {
-            console.log('checked')
             appearFactory.checkBox();
-        }
+        };
 
         var pf = projectFactory;
 
@@ -227,7 +235,7 @@ app.config(['$routeProvider',
                     }
                 ]
             }
-        }
+        };
 
         $routeProvider
             .when('/account', accountPage)
@@ -253,18 +261,137 @@ app.config(['$routeProvider',
 
     }
 ]);
+app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph', 'likeFactory', 'user',
+    function(group, projectFactory, appearFactory, graph, likeFactory, user) {
+        var self = this;
+
+        self.group = group;
+
+        console.log(group.projects);
+
+        self.rotate = appearFactory.rotate();
+
+        self.checkBox = function() {
+            appearFactory.checkBox();
+            self.rotate = appearFactory.rotate();
+        };
+
+        var pf = projectFactory;
+
+        self.pyMoreInfo = pf.byPy();
+
+        self.pyInfo = function() {
+            pf.pyInfo();
+            self.pyMoreInfo = pf.byPy();
+        };
+
+        self.setPage = function() {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'fast');
+        };
+
+        self.ghMoreInfo = pf.byGh();
+
+        self.ghInfo = function() {
+            pf.ghInfo();
+            self.ghMoreInfo = pf.byGh();
+        };
+
+        self.like = function(proj, likes) {
+            likeFactory.like(proj, likes, user);
+        };
+
+        self.checkLike = function(project) {
+            if (user) {
+                return likeFactory.checkLike(project, user);
+            } else {
+                return false;
+            }    
+        };
+
+        function parse(spec) {
+            vg.parse.spec(spec, function(chart) {
+                chart({
+                    el: ".graph"
+                }).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update();
+                if (window.innerWidth < 400) {
+                    chart({
+                        el: ".graph"
+                    }).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
+                }
+            });
+        }
+        
+        parse(graph);
+
+    }
+]);
+
+app.config(['$routeProvider',
+    function($routeProvider) {
+        var routeDefinition = {
+            templateUrl: 'static/group/group.html',
+            controller: 'GroupCtrl',
+            controllerAs: 'vm',
+            resolve: {
+                user: ['userServices',
+                    function(userServices) {
+                        return userServices.currentUser();
+                    }
+                ],
+                graph: ['$route', 'groupServices',
+                    function($route, groupServices) {
+                        var routeParams = $route.current.params;
+                        return groupServices.getGraphByGroupId(routeParams.groupid);
+                    }
+                ],
+                group: ['$route', 'groupServices',
+                    function($route, groupServices) {
+                        var routeParams = $route.current.params;
+                        return groupServices.getByGroupId(routeParams.groupid);
+                    }
+                ]
+            }
+        };
+        $routeProvider.when('/home/groups/:groupid', routeDefinition);
+    }
+]);
 app.controller('FooterCtrl', ['projectServices', 'groupServices',
     function(projectServices, groupServices) {
         var self = this;
 
-        projectServices.list().then(function(result) {
-            self.projects = result;
-            self.firstColumn = Math.ceil(result.length / 3);
-            self.firstColumnPlus = self.firstColumn + 1;
-            self.secondColumn = Math.ceil(result.length / 1.5);
-            self.secondColumnPlus = self.secondColumn + 1;
-            self.thirdColumn = result.length;
-        });
+        self.allProjects = false;
+
+        self.projects;
+
+        function getProjects () {
+            return projectServices.projects().then(function (result) {
+                self.projects = result;
+            });
+        };
+
+        getProjects();
+
+        var int = setInterval(function () {
+           findProjects(); 
+        }, 600);
+
+        function findProjects () {
+            projectServices.projects().then(function (result) {
+                if (result.length > 101) {
+                    clearInterval(int);
+                    getProjects();
+                    self.allProjects = true;
+                    self.projects = result;
+                    self.firstColumn = Math.ceil(result.length / 3);
+                    self.firstColumnPlus = self.firstColumn + 1;
+                    self.secondColumn = Math.ceil(result.length / 1.5);
+                    self.secondColumnPlus = self.secondColumn + 1;
+                    self.thirdColumn = result.length;
+                }
+            });
+        }
 
         self.setPage = function() {
             $('html, body').animate({
@@ -327,102 +454,91 @@ app.config(['$routeProvider',
             templateUrl: 'static/footer/footer-pages/footer-pages.html',
             controller: 'FooterCtrl',
             controllerAs: 'vm',
+            resolve: {
+                projects: ['projectServices',
+                    function(projectServices) {
+                        return projectServices.list();
+                    }
+                ],
+            }
         };
 
         $routeProvider
             .when('/projectindex', page)
             .when('/about', page)
-            .when('/contact', page)
+            .when('/contact', page);
     }
 ]);
-app.controller('GroupCtrl', ['group', 'projectFactory', 'appearFactory', 'graph',
-    function(group, projectFactory, appearFactory, graph) {
-        var self = this;
-
-        self.group = group;
-
-        console.log(group.projects);
-
-        self.rotate = appearFactory.rotate();
-
-        self.checkBox = function() {
-            appearFactory.checkBox();
-            self.rotate = appearFactory.rotate();
-        };
-
-        var pf = projectFactory;
-
-        self.pyMoreInfo = pf.byPy();
-
-        self.pyInfo = function() {
-            pf.pyInfo();
-            self.pyMoreInfo = pf.byPy();
-        };
-
-        self.setPage = function() {
-            $('html, body').animate({
-                scrollTop: 0
-            }, 'fast');
-        }
-
-        self.ghMoreInfo = pf.byGh();
-
-        self.ghInfo = function() {
-            pf.ghInfo();
-            self.ghMoreInfo = pf.byGh();
-        };
-
-        function parse(spec) {
-            vg.parse.spec(spec, function(chart) {
-                chart({
-                    el: ".graph"
-                }).width(document.querySelector('.graph').offsetWidth - 70).height(210).renderer("svg").update();
-                if (window.innerWidth < 400) {
-                    chart({
-                        el: ".graph"
-                    }).width(400).viewport([document.querySelector('.graph').offsetWidth, 249]).height(210).renderer("svg").update();
-                }
-            });
-        }
-        
-        parse(graph);
-
-    }
-]);
-
-app.config(['$routeProvider',
-    function($routeProvider) {
-        var routeDefinition = {
-            templateUrl: 'static/group/group.html',
-            controller: 'GroupCtrl',
-            controllerAs: 'vm',
-            resolve: {
-                graph: ['$route', 'groupServices',
-                    function($route, groupServices) {
-                        var routeParams = $route.current.params;
-                        return groupServices.getGraphByGroupId(routeParams.groupid);
-                    }
-                ],
-                group: ['$route', 'groupServices',
-                    function($route, groupServices) {
-                        var routeParams = $route.current.params;
-                        return groupServices.getByGroupId(routeParams.groupid);
-                    }
-                ]
-            }
-        };
-        $routeProvider.when('/home/groups/:groupid', routeDefinition);
-    }
-]);
-app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
-    'categories', 'user', 'likeFactory', 
-    function(homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices,
-        categories, user, likeFactory) {
+app.controller('HomeCtrl', ['homeFactory', 'projectsCurrent', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
+    'categories', 'user', 'likeFactory', 'groupServices',
+    function(homeFactory, projectsCurrent, projectFactory, activeRoute, appearFactory, groups, projectServices,
+        categories, user, likeFactory, groupServices) {
         var self = this;
 
         self.categories = categories;
 
-        self.projects = projects;
+        self.allProjects = false;
+
+        self.projects;
+        self.groups = groups;
+
+        function getProjects () {
+            return projectServices.projects().then(function (result) {
+                self.projects = result;
+            });
+        };
+
+        function getGroups () {
+            return groupServices.groups().then(function (result) {
+                self.groups = result;
+            });
+        };
+
+        getProjects();
+
+        var int = setInterval(function () {
+           findProjects(); 
+        }, 04);
+
+        var int1 = setInterval(function () { 
+           find100Projects();
+        }, 04);
+
+        var intG = setInterval(function () {
+           findGroups(); 
+        }, 10);
+
+        function findProjects () {
+            projectServices.projects().then(function (result) {
+                if (result.length > 101) {
+                    clearInterval(int);
+                    getProjects();
+                    self.allProjects = true;
+                } else {
+                    getProjects();
+                }
+            });
+        }
+
+        function find100Projects () {
+            projectServices.projects().then(function (result) {
+                if (result.length > 26) {
+                    clearInterval(int1);
+                    getProjects();
+                } else {
+                    getProjects();
+                }
+            });
+        }
+
+        function findGroups () {
+            groupServices.groups().then(function (result) {
+                if (result.length > 11) {
+                    clearInterval(intG);
+                    getGroups();
+                } 
+            });
+        }
 
         self.changeTrue = function() {
             $('html, body').animate({
@@ -430,10 +546,6 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
             }, 'fast');
             appearFactory.changeTrue();
         };
-
-        self.groups = groups;
-
-        self.projectNumber = Math.ceil(projects.length / 5);
 
         self.searchChange = function() {
             var paragraphAmt = $(event.target).closest('home-names').find('.pagination-div p');
@@ -530,7 +642,7 @@ app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 
         self.searchProjects = function() {
             window.location.hash = "home/search/" + self.word;
-        }
+        };
 
         function checkLogIn() {
             userServices.currentUser().then(function(result) {
@@ -551,7 +663,7 @@ app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
 
         self.checkUser = function() {
             checkLogIn();
-        }
+        };
 
         checkLogIn();
 
@@ -574,7 +686,7 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
             $('html, body').animate({
                 scrollTop: 1100
             }, 'fast');
-        }
+        };
 
         self.pyInfo = function() {
             pf.pyInfo();
@@ -601,7 +713,7 @@ app.controller('ProjectCtrl', ['project', 'projectFactory', 'projectServices', '
                 'user_avatar': user.data.avatar_url,
                 'user_id': user.data.id,
                 'user_name': user.data.github_name
-            }
+            };
             self.comments.push(tempComment);
             self.comment = {};
         };
@@ -674,6 +786,453 @@ app.config(['$routeProvider',
             .when('/projects/:projectid', routeDefinition)
             .when('/home/projects/:projectid', routeDefinition);
 
+    }
+]);
+app.factory('activeRoute', ['stringUtil', '$location',
+    function(stringUtil, $location) {
+
+        'use strict';
+
+        return {
+
+            isActive: function(path) {
+                // The default route is a special case.
+                if (path === '/') {
+                    return $location.path() === '/';
+                }
+
+                return stringUtil.isOnly($location.path(), path);
+            },
+
+            startsWith: function(path) {
+                // The default route is a special case.
+                if (path === '/') {
+                    return $location.path() === '/';
+                }
+
+                return stringUtil.startsWith($location.path(), path);
+            }
+
+        };
+
+    }
+]);
+app.factory('appearFactory', function() {
+
+    'use strict';
+
+    var target;
+    var targetScore;
+    var rotated = true;
+
+    function rotateThis() {
+        rotated = true;
+    }
+    setInterval(rotateThis, 5000);
+
+    return {
+
+        rotate: function() {
+            return rotated;
+        },
+
+        checkBox: function(target) {
+            target = $(event.target).parent().parent().parent().find('.names-details-checkbox');
+            targetScore = $(event.target).parent().find('.home-project-basic-info-score');
+            if (target.prop('checked')) {
+                target.prop('checked', false);
+            } else {
+                target.prop('checked', true);
+            }
+            if (target.prop('checked')) {
+                rotated = false;
+            } else {
+                rotated = true;
+            }
+        },
+
+        changeTrue: function() {
+            rotated = true;
+        }
+
+    };
+
+});
+app.filter('slice', function() {
+    return function(arr, start, end) {
+        return (arr || []).slice(start, end);
+    };
+});
+app.factory('groupServices', ['$http', '$log',
+    function($http, $log) {
+
+        function get(url) {
+            return processAjaxPromise($http.get(url));
+        }
+
+        function post(url, share) {
+            return processAjaxPromise($http.post(url, share));
+        }
+
+        function put(url, share) {
+            return processAjaxPromise($http.put(url, share));
+        }
+
+        function remove(url) {
+            return processAjaxPromise($http.delete(url));
+        }
+
+        function processAjaxPromise(p) {
+            return p.then(function(result) {
+                    return result.data.data;
+                })
+                .catch(function(error) {
+                    $log.log(error);
+                });
+        }
+
+        var groups;
+        var categories;
+
+        return {
+
+            groups: function () {
+                return groups;
+            },
+
+            getByGroupId: function(groupId) {
+                return get('/api/v1/groups/' + groupId);
+            },
+
+            getGraphByGroupId: function(groupId) {
+                return get('/api/v1/groups/' + groupId + '/graph');
+            },
+
+            listGroups: function() {
+                if (groups) {
+                    return groups.then(function (result) {
+                        if (result.length < 11) {
+                            groups = get('/api/v1/groups');
+                        }
+                        return groups;
+                    })   
+                } else {
+                    groups = get('/api/v1/groups');
+                }   
+            },
+
+            listCurrentGroups: function() {
+                groups = groups || get('/api/v1/groups/1/5');
+                return groups;
+            },
+
+            listCats: function() {
+                categories = categories || get('/api/v1/categories');
+                return categories;
+            }
+
+        };
+    }
+]);
+app.factory('homeFactory', function() {
+
+    var byProjects = true;
+
+    return {
+
+        byProjects: function() {
+            return byProjects;
+        },
+
+        setProjects: function() {
+            byProjects = true;
+        },
+
+        setCategories: function() {
+            byProjects = false;
+        }
+
+    };
+
+});
+app.factory('likeFactory', ['projectServices',
+    function(projectServices) {
+
+        'use strict';
+
+        return {
+            like: function(proj, likes, user) {
+                self.likedHeart = true;
+
+                var target = $(event.target);
+                var likedId;
+                var likeArray = likes;
+                var checkUserMatch = function() {
+                    for (var i = likeArray.length - 1; i >= 0; i--) {
+                        if (likeArray[i].user_id === user.data.id) {
+                            likedId = likeArray[i].id;
+                            console.log(likedId);
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                };
+                var likeAmount = likeArray.length;
+                if (checkUserMatch()) {
+                    target.addClass('fa-heart-o');
+                    likeAmount -= 1;
+                    target.parent().find('p').text(likeAmount);
+                    projectServices.removeLike(likedId).then(function(array) {
+                        likeArray.pop(array);
+                    });
+                } else {
+                    target.removeClass('fa-heart-o');
+                    target.addClass('fa-heart');
+                    likeAmount += 1;
+                    target.parent().find('p').text(likeAmount);
+                    projectServices.like(proj.id).then(function(array) {
+                        likeArray.push(array);
+                    });
+                }
+            },
+
+            checkLike: function(project, user) {
+                for (var i = project.show_likes.length - 1; i >= 0; i--) {
+                    if (project.show_likes[i].user_id === user.data.id) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        };
+
+    }
+]);
+app.factory('projectFactory', function() {
+
+    'use strict';
+
+    var pyMoreInfo = false;
+    var ghMoreInfo = false;
+    var target;
+    var chevron;
+    window.setTimeout(function() {
+        ghMoreInfo = false;
+    }, 200);
+
+    return {
+
+        byPy: function() {
+            return pyMoreInfo;
+        },
+
+        byGh: function() {
+            return ghMoreInfo;
+        },
+
+        pyInfo: function() {
+            if (pyMoreInfo === true) {
+                pyMoreInfo = false;
+            } else {
+                pyMoreInfo = true;
+            }
+        },
+
+        ghInfo: function() {
+            target = $(event.target).parent().parent().parent().find('.gh-checkbox');
+            chevron = $(event.target).closest('.home-project-header-bottom').find('.fa');
+            if (target.prop('checked')) {
+                target.prop('checked', false);
+                ghMoreInfo = false;
+                chevron.removeClass('fa-angle-up');
+                chevron.addClass('fa-angle-down');
+            } else {
+                target.prop('checked', true);
+                ghMoreInfo = true;
+                chevron.removeClass('fa-angle-down');
+                chevron.addClass('fa-angle-up');
+            }
+        }
+
+    };
+
+});
+app.factory('projectServices', ['$http', '$log', '$q',
+    function($http, $log, $q) {
+
+        function get(url) {
+            return processAjaxPromise($http.get(url));
+        }
+
+        function post(url, share) {
+            return processAjaxPromise($http.post(url, share));
+        }
+
+        function put(url, share) {
+            return processAjaxPromise($http.put(url, share));
+        }
+
+        function remove(url) {
+            return processAjaxPromise($http.delete(url));
+        }
+
+        function processAjaxPromise(p) {
+            return p.then(function(result) {
+                    return result.data.data;
+                })
+                .catch(function(error) {
+                    $log.log(error);
+                });
+        }
+
+        var projects;
+        var projectsNewest;
+        var projectsPopular;
+        var searchedProjects;
+
+        function addProjects (len, url) {
+            if (projects) {
+               return projects.then(function (result) {
+                    if (result.length < len) {
+                        console.log('here');
+                        projects = get('/api/v1/projects' + url);
+                    }
+                    return projects;
+                }) 
+            } else {
+                projects = get('/api/v1/projects' + url);
+                return projects;
+            }
+        };
+
+        return {
+
+            projects: function () {
+                return projects;
+            },
+
+            list: function() {
+                addProjects(101, '');
+            },
+
+            listCurrent: function(num) {
+                projects = projects || get('/api/v1/projects/' + num + '/5');
+                return projects;
+            },
+
+            listSecond: function() {
+                addProjects(26, '/1/25');
+            },
+
+            listThird: function() {
+                addProjects(99, '/1/100');
+            },
+
+            getGraphByProjectId: function(projectId) {
+                return get('/api/v1/projects/' + projectId + '/graph');
+            },
+
+            listNewest: function() {
+                projectsNewest = projectsNewest || get('/api/v1/projects/newest');
+                return projectsNewest;
+            },
+
+            listPopular: function() {
+                projectsPopular = projectsPopular || get('/api/v1/projects/popular');
+                return projectsPopular;
+            },
+
+            getByProjectId: function(projectId) {
+                return get('/api/v1/projects/' + projectId);
+            },
+
+            like: function(projectId) {
+                return post('/api/v1/likes/projects/' + projectId);
+            },
+
+            removeLike: function(likedId) {
+                return remove('/api/v1/likes/' + likedId);
+            },
+
+            addProject: function(project) {
+                return post('/api/v1/projects', project);
+            },
+
+            addComment: function(projectId, comment) {
+                return post('/api/v1/projects/' + projectId + '/comments', comment);
+            },
+
+            searchProjects: function(word) {
+                console.log(word);
+                return get('/api/v1/search?q="' + word + '"');
+            },
+
+        };
+    }
+]);
+app.factory('stringUtil', function() {
+    return {
+        isOnly: function(str, subStr) {
+            str = str || '';
+            return str === subStr;
+        },
+
+        startsWith: function(str, subStr) {
+            str = str || '';
+            return str.slice(0, subStr.length) === subStr;
+        }
+    };
+});
+app.factory('userServices', ['$http', '$q',
+    function($http, $q) {
+        function get(url) {
+            return processAjaxPromise($http.get(url));
+        }
+
+        function post(url, user) {
+            return processAjaxPromise($http.post(url, user));
+        }
+
+        function remove(url) {
+            return processAjaxPromise($http.delete(url));
+        }
+
+        function processAjaxPromise(p) {
+            return p.then(function(result) {
+                    return result.data;
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        }
+
+        var currentUser;
+
+        return {
+            list: function() {
+                return get('/api/v1/users');
+            },
+
+            getByUserId: function(userId) {
+                if (!userId) {
+                    throw new Error('getByUserId requires a user id');
+                }
+
+                return get('/api/v1/users/' + userId);
+            },
+
+            currentUser: function() {
+                currentUser = currentUser || get('/api/v1/user');
+                return currentUser;
+            },
+
+            addUserUrls: function(urls) {
+                return post('/api/v1/user', urls);
+            },
+
+        };
     }
 ]);
 app.controller('SubmitCtrl', ['activeRoute', 'submitFactory', 'groupServices', 'projectServices', 'user', 'projectFactory',
@@ -790,399 +1349,6 @@ app.config(['$routeProvider',
 
     }
 ]);
-app.factory('activeRoute', ['stringUtil', '$location',
-    function(stringUtil, $location) {
-
-        'use strict';
-
-        return {
-
-            isActive: function(path) {
-                // The default route is a special case.
-                if (path === '/') {
-                    return $location.path() === '/';
-                }
-
-                return stringUtil.isOnly($location.path(), path);
-            },
-
-            startsWith: function(path) {
-                // The default route is a special case.
-                if (path === '/') {
-                    return $location.path() === '/';
-                }
-
-                return stringUtil.startsWith($location.path(), path);
-            }
-
-        };
-
-    }
-]);
-app.factory('appearFactory', function() {
-
-    'use strict';
-
-    var target;
-    var targetScore;
-    var rotated = true;
-
-    function rotateThis() {
-        rotated = true;
-    }
-    setInterval(rotateThis, 5000);
-
-    return {
-
-        rotate: function() {
-            return rotated;
-        },
-
-        checkBox: function(target) {
-            target = $(event.target).parent().parent().parent().find('.names-details-checkbox');
-            targetScore = $(event.target).parent().find('.home-project-basic-info-score');
-            if (target.prop('checked')) {
-                target.prop('checked', false);
-            } else {
-                target.prop('checked', true);
-            }
-            if (target.prop('checked')) {
-                rotated = false;
-            } else {
-                rotated = true;
-            }
-        },
-
-        changeTrue: function() {
-            rotated = true;
-        }
-
-    };
-
-});
-app.filter('slice', function() {
-    return function(arr, start, end) {
-        return (arr || []).slice(start, end);
-    };
-});
-app.factory('groupServices', ['$http', '$log',
-    function($http, $log) {
-
-        function get(url) {
-            return processAjaxPromise($http.get(url));
-        }
-
-        function post(url, share) {
-            return processAjaxPromise($http.post(url, share));
-        }
-
-        function put(url, share) {
-            return processAjaxPromise($http.put(url, share));
-        }
-
-        function remove(url) {
-            return processAjaxPromise($http.delete(url));
-        }
-
-        function processAjaxPromise(p) {
-            return p.then(function(result) {
-                    return result.data.data;
-                })
-                .catch(function(error) {
-                    $log.log(error);
-                });
-        }
-
-        var groups;
-        var categories;
-
-        return {
-
-            getByGroupId: function(groupId) {
-                return get('/api/v1/groups/' + groupId);
-            },
-
-            getGraphByGroupId: function(groupId) {
-                return get('/api/v1/groups/' + groupId + '/graph');
-            },
-
-            listGroups: function() {
-                groups = groups || get('/api/v1/groups');
-                return groups;
-            },
-
-            listCats: function() {
-                categories = categories || get('/api/v1/categories');
-                return categories;
-            }
-
-        };
-    }
-]);
-app.factory('homeFactory', function() {
-
-    var byProjects = true;
-
-    return {
-
-        byProjects: function() {
-            return byProjects;
-        },
-
-        setProjects: function() {
-            byProjects = true;
-        },
-
-        setCategories: function() {
-            byProjects = false;
-        }
-
-    };
-
-});
-app.factory('likeFactory', ['projectServices',
-    function(projectServices) {
-
-        'use strict';
-
-        return {
-            like: function(proj, likes, user) {
-                self.likedHeart = true;
-
-                var target = $(event.target);
-                var likedId;
-                var likeArray = likes;
-                var checkUserMatch = function() {
-                    for (var i = likeArray.length - 1; i >= 0; i--) {
-                        if (likeArray[i].user_id === user.data.id) {
-                            likedId = likeArray[i].id;
-                            console.log(likedId);
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    };
-                };
-                var likeAmount = likeArray.length;
-                if (checkUserMatch()) {
-                    target.addClass('fa-heart-o');
-                    likeAmount -= 1
-                    target.parent().find('p').text(likeAmount);
-                    projectServices.removeLike(likedId).then(function(array) {
-                        likeArray.pop(array);
-                    })
-                } else {
-                    target.removeClass('fa-heart-o');
-                    target.addClass('fa-heart');
-                    likeAmount += 1
-                    target.parent().find('p').text(likeAmount);
-                    projectServices.like(proj.id).then(function(array) {
-                        likeArray.push(array);
-                    })
-                }
-            },
-
-            checkLike: function(project, user) {
-                for (var i = project.show_likes.length - 1; i >= 0; i--) {
-                    if (project.show_likes[i].user_id === user.data.id) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                };
-            }
-        };
-
-    }
-]);
-app.factory('projectFactory', function() {
-
-    'use strict';
-
-    var pyMoreInfo = false;
-    var ghMoreInfo = false;
-    var target;
-
-    return {
-
-        byPy: function() {
-            return pyMoreInfo;
-        },
-
-        byGh: function() {
-            return ghMoreInfo;
-        },
-
-        pyInfo: function() {
-            if (pyMoreInfo === true) {
-                pyMoreInfo = false;
-            } else {
-                pyMoreInfo = true;
-            };
-        },
-
-        ghInfo: function() {
-            if (ghMoreInfo === true) {
-                ghMoreInfo = false;
-            } else {
-                ghMoreInfo = true;
-            }
-            target = $(event.target).parent().parent().parent().find('.gh-checkbox');
-            if (target.prop('checked')) {
-                target.prop('checked', false);
-            } else {
-                target.prop('checked', true);
-            };
-        }
-
-    };
-
-});
-app.factory('projectServices', ['$http', '$log',
-    function($http, $log) {
-
-        function get(url) {
-            return processAjaxPromise($http.get(url));
-        }
-
-        function post(url, share) {
-            return processAjaxPromise($http.post(url, share));
-        }
-
-        function put(url, share) {
-            return processAjaxPromise($http.put(url, share));
-        }
-
-        function remove(url) {
-            return processAjaxPromise($http.delete(url));
-        }
-
-        function processAjaxPromise(p) {
-            return p.then(function(result) {
-                    return result.data.data;
-                })
-                .catch(function(error) {
-                    $log.log(error);
-                });
-        }
-
-        var projects;
-        var projectsNewest;
-        var projectsPopular;
-        var searchedProjects;
-
-        return {
-
-            list: function() {
-                projects = projects || get('/api/v1/projects');
-                return projects;
-            },
-
-            getGraphByProjectId: function(projectId) {
-                return get('/api/v1/projects/' + projectId + '/graph');
-            },
-
-            listNewest: function() {
-                projectsNewest = projectsNewest || get('/api/v1/projects/newest');
-                return projectsNewest;
-            },
-
-            listPopular: function() {
-                projectsPopular = projectsPopular || get('/api/v1/projects/popular');
-                return projectsPopular;
-            },
-
-            getByProjectId: function(projectId) {
-                return get('/api/v1/projects/' + projectId);
-            },
-
-            like: function(projectId) {
-                return post('/api/v1/likes/projects/' + projectId);
-            },
-
-            removeLike: function(likedId) {
-                return remove('/api/v1/likes/' + likedId);
-            },
-
-            addProject: function(project) {
-                return post('/api/v1/projects', project);
-            },
-
-            addComment: function(projectId, comment) {
-                return post('/api/v1/projects/' + projectId + '/comments', comment);
-            },
-
-            searchProjects: function(word) {
-                console.log(word);
-                return get('/api/v1/search?q="' + word + '"');
-            },
-
-        };
-    }
-]);
-app.factory('stringUtil', function() {
-    return {
-        isOnly: function(str, subStr) {
-            str = str || '';
-            return str === subStr;
-        },
-
-        startsWith: function(str, subStr) {
-            str = str || '';
-            return str.slice(0, subStr.length) === subStr;
-        }
-    };
-});
-app.factory('userServices', ['$http', '$q',
-    function($http, $q) {
-        function get(url) {
-            return processAjaxPromise($http.get(url));
-        }
-
-        function post(url, user) {
-            return processAjaxPromise($http.post(url, user));
-        }
-
-        function remove(url) {
-            return processAjaxPromise($http.delete(url));
-        }
-
-        function processAjaxPromise(p) {
-            return p.then(function(result) {
-                    return result.data;
-                })
-                .catch(function(error) {
-                    console.log(error);
-                });
-        }
-
-        var currentUser;
-
-        return {
-            list: function() {
-                return get('/api/v1/users');
-            },
-
-            getByUserId: function(userId) {
-                if (!userId) {
-                    throw new Error('getByUserId requires a user id');
-                }
-
-                return get('/api/v1/users/' + userId);
-            },
-
-            currentUser: function() {
-                currentUser = currentUser || get('/api/v1/user');
-                return currentUser;
-            },
-
-            addUserUrls: function(urls) {
-                return post('/api/v1/user', urls)
-            },
-
-        };
-    }
-]);
 app.factory('accountFactory', function() {
 
     'use strict';
@@ -1247,12 +1413,12 @@ app.controller('Error404Ctrl', ['$location', function ($location) {
     app.directive('catDetailsGroups', function() {
         return {
             restrict: 'E',
-            templateUrl: 'static/home/home-categories/category-details/cat-details-groups.html'
+            templateUrl: 'static/home/home-categories/category-details/cat-details-groups.html',
         };
     });
 })();
-app.controller('CategoryCtrl', ['appearFactory',
-    function(appearFactory) {
+app.controller('CategoryCtrl', ['appearFactory', '$q', 'projectServices', 'groupServices',
+    function(appearFactory, $q, projectServices, groupServices) {
         var self = this;
 
         self.rotate = appearFactory.rotate();
@@ -1260,6 +1426,20 @@ app.controller('CategoryCtrl', ['appearFactory',
         self.checkBox = function() {
             appearFactory.checkBox();
         };
+
+
+        var myPromise = $q.defer();
+
+        myPromise.promise.then(function () {
+            groupServices.listGroups();
+            projectServices.listThird();
+            setTimeout(function () {
+                projectServices.list();
+            }, 0);
+        });
+
+        myPromise.resolve();
+
     }
 ]);
 app.config(['$routeProvider',
@@ -1271,9 +1451,9 @@ app.config(['$routeProvider',
             controller: 'HomeCtrl',
             controllerAs: 'vm',
             resolve: {
-                projects: ['projectServices',
+                projectsCurrent: ['projectServices',
                     function(projectServices) {
-                        return projectServices.list();
+                        return projectServices.listCurrent(1);
                     }
                 ],
                 groups: ['groupServices',
@@ -1830,18 +2010,16 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', 'projectFactory',
         self.mobile = true;
 
         self.setCommentPage = function() {
-            console.log('top')
             $('html, body').animate({
                 scrollTop: 1100
             }, 'fast');
-        }
+        };
 
         self.setPage = function() {
-            console.log('top')
             $('html, body').animate({
                 scrollTop: 0
             }, 'fast');
-        }
+        };
 
         self.checkBox = function() {
             appearFactory.checkBox();
@@ -1896,7 +2074,7 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', 'projectFactory',
 
         self.setSearch = function() {
             console.log('eh');
-        }
+        };
 
         self.setTrending = function() {
             selectedClass();
@@ -2041,13 +2219,47 @@ app.factory('submitFactory', function() {
     };
 
 });
-app.controller('hgCtrl', ['group',
-    function(group) {
+app.controller('hgCtrl', ['group', '$q', 'projectServices',
+    function(group, $q, projectServices) {
         var self = this;
 
         self.group = group;
 
         console.log(group);
+
+//                 var myPromise = $q.defer();
+
+// myPromise.promise.then(function () {
+//     // var ps = function () {
+//     //     return projectServices.list();
+//     // }
+//     // console.log(ps());
+
+//     (function () {
+//         return projectServices.list().then(function (result) {
+//             console.log(result);
+            
+//             self.projects = result;
+            
+//         });
+//     })();
+//     console.log(self.projects);
+
+//     // console.log('this');
+    
+//     // console.log(function () {
+//     //     return projectServices.listSecond();
+//     // })();
+//     // self.projects;
+//     // console.log('We got: ');
+// });
+
+// // myPromise.done(function (result) {
+// //     console.log(result);
+// // });
+
+// // myPromise.resolve('All done, yo!');
+// myPromise.resolve();
     }
 ]);
 app.controller('hnCtrl', ['projects', 'appearFactory', 'projectFactory',
@@ -2122,7 +2334,7 @@ app.config(['$routeProvider',
         };
 
         $routeProvider
-            .when('/home/search/:word', homePage)
+            .when('/home/search/:word', homePage);
     }
 ]);
 //# sourceMappingURL=app.js.map

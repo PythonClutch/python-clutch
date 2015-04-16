@@ -30,3 +30,8 @@ Before running tests, run ```createdb testdb```, to make the testing database.
 To create a personal access key, go to https://github.com/settings/applications#personal-access-tokens and make one. 
 Then, assuming you've installed direnv, run ```echo export GITKEY=<thekeyyougenerate> > .envrc```
 We'll figure out how to use it to do API calls in a bit.
+
+## Thanks to
+
+Connor Atherton [loaders.css](https://github.com/ConnorAtherton/loaders.css)
+Michael Bromley [Pagination](https://github.com/michaelbromley/angularUtils/tree/master/src/directives/pagination)

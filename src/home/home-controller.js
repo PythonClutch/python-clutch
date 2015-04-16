@@ -1,12 +1,73 @@
-app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
-    'categories', 'user', 'likeFactory', 
-    function(homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices,
-        categories, user, likeFactory) {
+app.controller('HomeCtrl', ['homeFactory', 'projectsCurrent', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
+    'categories', 'user', 'likeFactory', 'groupServices',
+    function(homeFactory, projectsCurrent, projectFactory, activeRoute, appearFactory, groups, projectServices,
+        categories, user, likeFactory, groupServices) {
         var self = this;
 
         self.categories = categories;
 
-        self.projects = projects;
+        self.allProjects = false;
+
+        self.projects;
+        self.groups = groups;
+
+        function getProjects () {
+            return projectServices.projects().then(function (result) {
+                self.projects = result;
+            });
+        };
+
+        function getGroups () {
+            return groupServices.groups().then(function (result) {
+                self.groups = result;
+            });
+        };
+
+        getProjects();
+
+        var int = setInterval(function () {
+           findProjects(); 
+        }, 04);
+
+        var int1 = setInterval(function () { 
+           find100Projects();
+        }, 04);
+
+        var intG = setInterval(function () {
+           findGroups(); 
+        }, 10);
+
+        function findProjects () {
+            projectServices.projects().then(function (result) {
+                if (result.length > 101) {
+                    clearInterval(int);
+                    getProjects();
+                    self.allProjects = true;
+                } else {
+                    getProjects();
+                }
+            });
+        }
+
+        function find100Projects () {
+            projectServices.projects().then(function (result) {
+                if (result.length > 26) {
+                    clearInterval(int1);
+                    getProjects();
+                } else {
+                    getProjects();
+                }
+            });
+        }
+
+        function findGroups () {
+            groupServices.groups().then(function (result) {
+                if (result.length > 11) {
+                    clearInterval(intG);
+                    getGroups();
+                } 
+            });
+        }
 
         self.changeTrue = function() {
             $('html, body').animate({
@@ -14,10 +75,6 @@ app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'active
             }, 'fast');
             appearFactory.changeTrue();
         };
-
-        self.groups = groups;
-
-        self.projectNumber = Math.ceil(projects.length / 5);
 
         self.searchChange = function() {
             var paragraphAmt = $(event.target).closest('home-names').find('.pagination-div p');

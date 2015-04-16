@@ -10,18 +10,16 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', 'projectFactory',
         self.mobile = true;
 
         self.setCommentPage = function() {
-            console.log('top')
             $('html, body').animate({
                 scrollTop: 1100
             }, 'fast');
-        }
+        };
 
         self.setPage = function() {
-            console.log('top')
             $('html, body').animate({
                 scrollTop: 0
             }, 'fast');
-        }
+        };
 
         self.checkBox = function() {
             appearFactory.checkBox();
@@ -76,7 +74,7 @@ app.controller('hpCtrl', ['projectServices', 'appearFactory', 'projectFactory',
 
         self.setSearch = function() {
             console.log('eh');
-        }
+        };
 
         self.setTrending = function() {
             selectedClass();

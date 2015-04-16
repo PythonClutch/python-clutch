@@ -42,7 +42,7 @@ app.factory('userServices', ['$http', '$q',
             },
 
             addUserUrls: function(urls) {
-                return post('/api/v1/user', urls)
+                return post('/api/v1/user', urls);
             },
 
         };

@@ -41,6 +41,6 @@ app.config(['$routeProvider',
         };
 
         $routeProvider
-            .when('/home/search/:word', homePage)
+            .when('/home/search/:word', homePage);
     }
 ]);

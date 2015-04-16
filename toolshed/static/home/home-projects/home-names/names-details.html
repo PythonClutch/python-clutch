@@ -7,16 +7,16 @@
             <p>{{project.show_likes.length || 0}}</p>
         </div>
         <a ng-click="hp.setCommentPage()" href="#/home/projects/{{project.id}}">
-            <div class="home-project-basic-info-icon home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{project.show_comments.length || 0}}</div>
-            <a href="{{project.pypi_url}}">
-                <div class="home-project-basic-info-icon home-project-basic-info-check"><i ng-class="{ 'fa-check-square-o' : project.python_three_compatible, 'fa-square-o' : !project.python_three_compatible }" class="fa"></i>
-                    <p>Py3</p>
-                </div>
-            </a>
-            <a href="#/home/projects/{{project.id}}">
-                <div class="home-project-basic-info-icon home-project-basic-info-score"><i class="fa fa-line-chart"></i></i>{{project.score}}</div>
-            </a>
-            <i ng-class="{'fa-times' : !hp.rotate, 'fa-plus': hp.rotate}" ng-click="hp.checkBox()" class="home-project-basic-info-icon home-project-basic-info-plus fa"></i>
+        <div class="home-project-basic-info-icon home-project-basic-info-comment"><i class="fa fa-comment-o"></i>{{project.show_comments.length || 0}}</div></a>
+        <a href="{{project.pypi_url}}">
+            <div class="home-project-basic-info-icon home-project-basic-info-check"><i ng-class="{ 'fa-check-square-o' : project.python_three_compatible, 'fa-square-o' : !project.python_three_compatible }" class="fa"></i>
+                <p>Py3</p>
+            </div>
+        </a>
+        <a href="#/home/projects/{{project.id}}">
+            <div class="home-project-basic-info-icon home-project-basic-info-score"><i class="fa fa-line-chart"></i></i>{{project.score}}</div>
+        </a>
+        <i ng-class="{'fa-times' : !hp.rotate, 'fa-plus': hp.rotate}" ng-click="hp.checkBox()" class="home-project-basic-info-icon home-project-basic-info-plus fa"></i>
     </div>
 </div>
 <div class="home-project-details-div home-project-details-div-projects">
@@ -74,7 +74,7 @@
             <div class="home-project-header-bottom">
                 <h5>{{project.forks_count}} Forks</h5>
                 <h5>{{project.open_issues_count}} Issues</h5>
-                <label ng-click="hp.ghInfo()" class="more-info-label">VIEW MORE <i ng-class="{ 'fa-angle-up': hp.ghMoreInfo, 'fa-angle-down': !hp.ghMoreInfo}" class="fa"></i>
+                <label ng-click="hp.ghInfo()" class="more-info-label">VIEW MORE <i class="fa fa-angle-down"></i>
                 </label>
             </div>
         </div>

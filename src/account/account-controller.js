@@ -15,7 +15,7 @@ app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory',
             console.log(self.accountUrls);
             userServices.addUserUrls(self.accountUrls);
             self.accountUrls = {};
-        }
+        };
 
         self.setInfo = function() {
             accountFactory.setInfo();
@@ -36,12 +36,11 @@ app.controller('AccountCtrl', ['activeRoute', 'accountFactory', 'appearFactory',
         self.setEdit = function() {
             accountFactory.setEdit();
             self.byEdit = accountFactory.byEdit();
-        }
+        };
 
         self.checkBox = function() {
-            console.log('checked')
             appearFactory.checkBox();
-        }
+        };
 
         var pf = projectFactory;
 
