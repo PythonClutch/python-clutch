@@ -36,4 +36,5 @@ We'll figure out how to use it to do API calls in a bit.
 ## Thanks to
 
 Connor Atherton [loaders.css](https://github.com/ConnorAtherton/loaders.css)
+
 Michael Bromley [Pagination](https://github.com/michaelbromley/angularUtils/tree/master/src/directives/pagination)
