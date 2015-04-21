@@ -10,9 +10,7 @@ app.config(['$routeProvider',
                 projects: ['$route', 'projectServices',
                     function($route, projectServices) {
                         var routeParams = $route.current.params;
-                        console.log(routeParams.word);
                         return projectServices.searchProjects(routeParams.word).then(function(results) {
-                            console.log(results.projects);
                             return results.projects;
                         });
                     }

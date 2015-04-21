@@ -24,7 +24,7 @@ app.config(['$routeProvider',
                         return userServices.currentUser();
                     }
                 ],
-                projectsCurrent: ['projectServices',
+                projects: ['projectServices',
                     function(projectServices) {
                         return projectServices.listSecond();
                     }

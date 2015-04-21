@@ -70,7 +70,7 @@ app.config(['$routeProvider',
                         return userServices.currentUser();
                     }
                 ],
-                projectsCurrent: ['projectServices',
+                projects: ['projectServices',
                     function(projectServices) {
                         return projectServices.listSecond();
                     }
@@ -469,9 +469,9 @@ app.config(['$routeProvider',
         $routeProvider.when('/home/groups/:groupid', routeDefinition);
     }
 ]);
-app.controller('HomeCtrl', ['homeFactory', 'projectsCurrent', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
+app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
     'categories', 'user', 'likeFactory', 'groupServices',
-    function(homeFactory, projectsCurrent, projectFactory, activeRoute, appearFactory, groups, projectServices,
+    function(homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices,
         categories, user, likeFactory, groupServices) {
         var self = this;
 
@@ -479,8 +479,26 @@ app.controller('HomeCtrl', ['homeFactory', 'projectsCurrent', 'projectFactory', 
 
         self.allProjects = false;
 
-        self.projects;
+        self.projects = projects;
         self.groups = groups;
+
+        if (window.location.hash.substring(0, 14) !== '#/home/search/') {
+            getProjects();
+
+            var int = setInterval(function () {
+               findProjects(); 
+            }, 04);
+
+            var int1 = setInterval(function () { 
+               find100Projects();
+            }, 04);
+
+            var intG = setInterval(function () {
+               findGroups(); 
+            }, 10);
+        } else {
+            self.allProjects = true;
+        }
 
         function getProjects () {
             return projectServices.projects().then(function (result) {
@@ -493,20 +511,6 @@ app.controller('HomeCtrl', ['homeFactory', 'projectsCurrent', 'projectFactory', 
                 self.groups = result;
             });
         };
-
-        getProjects();
-
-        var int = setInterval(function () {
-           findProjects(); 
-        }, 04);
-
-        var int1 = setInterval(function () { 
-           find100Projects();
-        }, 04);
-
-        var intG = setInterval(function () {
-           findGroups(); 
-        }, 10);
 
         function findProjects () {
             projectServices.projects().then(function (result) {
@@ -641,7 +645,7 @@ app.controller('NavCtrl', ['$location', 'userServices', 'projectServices',
         self.word = '';
 
         self.searchProjects = function() {
-            window.location.hash = "home/search/" + self.word;
+            window.location.hash = 'home/search/' + self.word;
         };
 
         function checkLogIn() {
@@ -1165,8 +1169,9 @@ app.factory('projectServices', ['$http', '$log', '$q',
             },
 
             searchProjects: function(word) {
-                console.log(word);
-                return get('/api/v1/search?q="' + word + '"');
+                searchedProjects = get('/api/v1/search?q="' + word + '"');
+                projects = projects || searchedProjects;
+                return searchedProjects;
             },
 
         };
@@ -2303,9 +2308,7 @@ app.config(['$routeProvider',
                 projects: ['$route', 'projectServices',
                     function($route, projectServices) {
                         var routeParams = $route.current.params;
-                        console.log(routeParams.word);
                         return projectServices.searchProjects(routeParams.word).then(function(results) {
-                            console.log(results.projects);
                             return results.projects;
                         });
                     }

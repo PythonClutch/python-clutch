@@ -1,6 +1,6 @@
-app.controller('HomeCtrl', ['homeFactory', 'projectsCurrent', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
+app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
     'categories', 'user', 'likeFactory', 'groupServices',
-    function(homeFactory, projectsCurrent, projectFactory, activeRoute, appearFactory, groups, projectServices,
+    function(homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices,
         categories, user, likeFactory, groupServices) {
         var self = this;
 
@@ -8,8 +8,26 @@ app.controller('HomeCtrl', ['homeFactory', 'projectsCurrent', 'projectFactory', 
 
         self.allProjects = false;
 
-        self.projects;
+        self.projects = projects;
         self.groups = groups;
+
+        if (window.location.hash.substring(0, 14) !== '#/home/search/') {
+            getProjects();
+
+            var int = setInterval(function () {
+               findProjects(); 
+            }, 04);
+
+            var int1 = setInterval(function () { 
+               find100Projects();
+            }, 04);
+
+            var intG = setInterval(function () {
+               findGroups(); 
+            }, 10);
+        } else {
+            self.allProjects = true;
+        }
 
         function getProjects () {
             return projectServices.projects().then(function (result) {
@@ -22,20 +40,6 @@ app.controller('HomeCtrl', ['homeFactory', 'projectsCurrent', 'projectFactory', 
                 self.groups = result;
             });
         };
-
-        getProjects();
-
-        var int = setInterval(function () {
-           findProjects(); 
-        }, 04);
-
-        var int1 = setInterval(function () { 
-           find100Projects();
-        }, 04);
-
-        var intG = setInterval(function () {
-           findGroups(); 
-        }, 10);
 
         function findProjects () {
             projectServices.projects().then(function (result) {
