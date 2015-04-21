@@ -104,8 +104,9 @@ app.factory('projectServices', ['$http', '$log', '$q',
             },
 
             searchProjects: function(word) {
-                console.log(word);
-                return get('/api/v1/search?q="' + word + '"');
+                searchedProjects = get('/api/v1/search?q="' + word + '"');
+                projects = projects || searchedProjects;
+                return searchedProjects;
             },
 
         };
