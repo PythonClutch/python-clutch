@@ -7,7 +7,7 @@ app.config(['$routeProvider',
             controller: 'HomeCtrl',
             controllerAs: 'vm',
             resolve: {
-                projectsCurrent: ['projectServices',
+                projects: ['projectServices',
                     function(projectServices) {
                         return projectServices.listCurrent(1);
                     }
