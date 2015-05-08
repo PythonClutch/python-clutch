@@ -3,15 +3,13 @@ import os
 import csv
 import random
 import datetime
-from faker import Factory
 
-fake = Factory.create()
 
 from flask.ext.script import Manager, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
 from toolshed.models import AdminAccount, Project, ProjectLog
-from toolshed.updater import update_projects, update_projects_score, log_project
+from toolshed.updater import update_projects, update_projects_score
 from toolshed import create_app, db, models
 from toolshed.importer import create_project
 
@@ -52,6 +50,7 @@ def test():
 
 @manager.command
 def create_admin():
+    """Seed the admin interface with an awfully insecure user/pass."""
     admin = AdminAccount(admin_name="joel",
                          password="password")
     db.session.add(admin)
@@ -95,10 +94,12 @@ def seed_db(file):
     with open(file) as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
-            list = []
+            proj_list = []
             for url in row:
-                list.append(url)
-            project = create_project(pypi_url=str(list[0]), github_url=str(list[1]), bitbucket_url=str(list[2]))
+                proj_list.append(url)
+            project = create_project(pypi_url=str(proj_list[0]),
+                                     github_url=str(proj_list[1]),
+                                     bitbucket_url=str(proj_list[2]))
             if project:
                 db.session.add(project)
         db.session.commit()
