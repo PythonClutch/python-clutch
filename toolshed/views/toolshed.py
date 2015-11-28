@@ -77,11 +77,11 @@ def github_authorized():
     session['github_name'] = me.data['name']
 
     if not User.query.filter_by(github_name=me.data['name']).first():
-        user = User(github_name = me.data['name'],
-                    email = me.data['email'],
-                    github_url = me.data['html_url'],
-                    avatar_url = me.data['avatar_url'],
-                    public_repos = me.data['public_repos'])
+        user = User(github_name=me.data['name'],
+                    email=me.data['email'],
+                    github_url=me.data['html_url'],
+                    avatar_url=me.data['avatar_url'],
+                    public_repos=me.data['public_repos'])
         db.session.add(user)
         db.session.commit()
 
