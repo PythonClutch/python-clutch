@@ -59,9 +59,10 @@ def logout():
 @toolshed.route("/github/login")
 def github_login():
     session.pop('github_token', None)
-    return github.authorize(callback=url_for('.github_authorized',
-                                             _external=True,
-                                             next=request.args.get('next') or url_for("toolshed.index")))
+    return github.authorize(
+        callback=url_for('.github_authorized',
+                         _external=True,
+                         next=request.args.get('next') or url_for("toolshed.index")))
 
 
 @toolshed.route('/login/github/authorized', methods=["GET", "POST"])
