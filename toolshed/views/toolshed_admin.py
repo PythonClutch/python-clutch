@@ -29,10 +29,9 @@ class GroupView(MyView):
 
 
 
-
 class ProjectView(ModelView):
 
-    column_searchable_list = ('name', 'summary' )
+    column_searchable_list = ('name', 'summary')
 
     column_list = ("status", "name", "summary", "pypi_url", "git_url", "score",
                    "group", "category", "date_added")
@@ -62,7 +61,7 @@ class ProjectView(ModelView):
         self.session.commit()
 
         flash(ngettext('Record was successfully confirmed.',
-                           '%(count)s records were successfully confirmed.', count, count=count))
+                       '%(count)s records were successfully confirmed.', count, count=count))
 
     @action('update', lazy_gettext('Update'))
     def action_update(self, ids):
@@ -81,7 +80,7 @@ class ProjectView(ModelView):
         self.session.commit()
 
         flash(ngettext('Record was successfully updated.',
-                           '%(count)s records were successfully updated.', count, count=count))
+                       '%(count)s records were successfully updated.', count, count=count))
 
 
 
