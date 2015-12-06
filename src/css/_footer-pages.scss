@@ -2,97 +2,16 @@
 // GENERAL
 /////////////////////////////////////////////////////////////
 
-.footer-pages {
-	padding-top: 28px; 
-}
-
-/////////////////////////////////////////////////////////////
+.footer-pages{padding-top:28px}/////////////////////////////////////////////////////////////
 // SITE MAP
 /////////////////////////////////////////////////////////////
 
-.site-map-bottom-div {
-	width: 83.8%;
-	margin: 0 auto;
-	h1 {
-		font-size: 30px;
-		font-weight: 700;
-		margin: 0 1.667% 28px;   
-	}
-}
-
-.site-map-ul {
-	width: 30%;
-	margin: 0 1.6667%
-}
-
-.site-map-li {
-	
-}
-
-/////////////////////////////////////////////////////////////
+.site-map-bottom-div{width:83.8%;margin:0 auto;h1{font-size:30px;font-weight:700;margin:0 1.667% 28px}}.site-map-ul{width:30%;margin:0 1.6667%}.site-map-li{}/////////////////////////////////////////////////////////////
 // ABOUT
 /////////////////////////////////////////////////////////////
 
-.about-description,
-.developer-descriptions {
-	width: 48%
-}
-
-.about-description {
-	max-width: 350px;
-}
-
-.about-heading {
-	font-size: 30px;
-	font-weight: 700;
-	margin-bottom: 28px; 	
-}
-
-.developer {
-	margin-bottom: 28px; 
-	width: 100%;
-	h3 {
-		font-size: 22px;
-		font-weight: 600; 
-		margin-bottom: 4px; 
-	}
-	img {
-		margin-top: 4px; 
-		width: 100px;
-		height: 100px;
-		border-radius: 2px;
-		margin-right: 15px; 
-		float: left;
-	}
-}
-
-.developer-links {
-	margin-top: 10px; 
-	a.noLink {
-		cursor: text; 
-	}
-}
-
-/////////////////////////////////////////////////////////////
+.about-description,.developer-descriptions{width:48%}.about-description{max-width:350px}.about-heading{font-size:30px;font-weight:700;margin-bottom:28px}.about-heading-score{margin:13px 0;font-size:26px}.developer{margin-bottom:28px;width:100%;h3{font-size:22px;font-weight:600;margin-bottom:4px}img{margin-top:4px;width:100px;height:100px;border-radius:2px;margin-right:15px;float:left}}.developer-links{margin-top:10px;a.noLink{cursor:text}}/////////////////////////////////////////////////////////////
 // CONTACT
 /////////////////////////////////////////////////////////////
 
-.contact {
-	h1 {
-		font-size: 30px;
-		font-weight: 700;
-		margin-bottom: 13px;   
-	}
-	a {
-		margin-left: 3px; 	
-	}
-}
-
-a.contact-email-link {
-	margin-left: 13px; 
-}
-
-
-
-
-/////////////// COMMENT /////////////////////////////////////
+.contact{h1{font-size:30px;font-weight:700;margin-bottom:13px}a{margin-left:3px}}a.contact-email-link{margin-left:13px}

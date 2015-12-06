@@ -1,5 +1,4 @@
 <h2>{{vm.user.github_name}}</h2>
-
 <div class="account-links">
 	<img src="{{vm.user.user_avatar}}" alt="">
 	<div class="account-links-div">
@@ -17,14 +16,12 @@
 		</div>
 	</div>
 </div>
-
 <a ng-click="vm.setEdit()" href="#/account/edit">
 	<div class="edit-div">
 		<p>Edit</p>
 		<i class="fa fa-pencil"></i>
 	</div>
 </a>
-
 <div class="account-info-numbers">
 	<div>
 		<h4>Public Repos</h4>
@@ -34,5 +31,4 @@
 		<h4>Submitted Resources</h4>
 		<h5>{{vm.user.completed_submissions.length}}</h5>
 	</div>
-
 </div>

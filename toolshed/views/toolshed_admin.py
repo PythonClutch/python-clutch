@@ -23,12 +23,19 @@ class MyView(ModelView):
             return redirect(url_for('login', next=request.url))
 
 
+class GroupView(MyView):
+
+    column_searchable_list = ('name')
+
+
 
 class ProjectView(ModelView):
 
-    column_searchable_list = ('name', 'summary' )
+    column_searchable_list = ('name', 'summary')
 
-    column_list = ("status", "name", "summary", "pypi_url", "git_url", "score", "group", "category")
+    column_list = ("status", "name", "summary", "pypi_url", "git_url", "score",
+                   "group", "category", "date_added")
+
 
     def is_accessible(self):
         return current_user.is_authenticated()
@@ -54,7 +61,7 @@ class ProjectView(ModelView):
         self.session.commit()
 
         flash(ngettext('Record was successfully confirmed.',
-                           '%(count)s records were successfully confirmed.', count, count=count))
+                       '%(count)s records were successfully confirmed.', count, count=count))
 
     @action('update', lazy_gettext('Update'))
     def action_update(self, ids):
@@ -73,7 +80,7 @@ class ProjectView(ModelView):
         self.session.commit()
 
         flash(ngettext('Record was successfully updated.',
-                           '%(count)s records were successfully updated.', count, count=count))
+                       '%(count)s records were successfully updated.', count, count=count))
 
 
 
@@ -106,5 +113,3 @@ class MyAdminIndexView(AdminIndexView):
     def logout_view(self):
         logout_user()
         return redirect(url_for(".admin_login"))
-
-

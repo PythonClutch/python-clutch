@@ -1,157 +1,117 @@
 app.controller('hpCtrl', ['projectServices', 'appearFactory', 'projectFactory',
-    function (projectServices, appearFactory, projectFactory) {
-	var self = this;
+    function(projectServices, appearFactory, projectFactory) {
+        var self = this;
 
-	self.byNames = true;
+        self.byNames = true;
 
-	self.rotate = function () {
-		return appearFactory.rotate();
-	};
+        self.rotate = function() {
+            return appearFactory.rotate();
+        };
+        self.mobile = true;
 
-	// function checkRotate () {
-	// 	self.rotate = appearFactory.rotate();
-	// }
+        self.setCommentPage = function() {
+            $('html, body').animate({
+                scrollTop: 1100
+            }, 'fast');
+        };
 
-	// setInterval(checkRotate, 1000);
+        self.setPage = function() {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'fast');
+        };
 
-	self.mobile = true;
+        self.checkBox = function() {
+            appearFactory.checkBox();
+            self.rotate = appearFactory.rotate();
+        };
 
-	// function screenWidth () {
-	// 	console.log(screenWidth);
-	// };
+        self.setGroups = function() {
+            self.byNames = false;
+        };
 
-	// appearFactory.checkWidth();
+        self.setNames = function() {
+            self.byNames = true;
+        };
 
-	// self.newestProjects = [];
+        function selectedClass() {
+            var closest = $(event.target).parent().parent().children();
+            closest.each(function() {
+                var fa = $(this).find('.fa');
+                $(this).find('.fa').removeClass('fa-dot-circle-o');
+                console.log($(this).find('.project-radio')[0]);
+                $(this).find('.project-radio').prop('checked', false);
+                if (!fa.hasClass('fa-circle-o')) {
+                    fa.addClass('fa-circle-o');
+                }
+            });
+            $(event.target).parent().find('.fa').removeClass('fa-circle-o');
+            $(event.target).parent().find('.fa').addClass('fa-dot-circle-o');
+        }
 
-	// self.popularProjects = [];
+        self.list = false;
+        self.popular = true;
+        self.newest = false;
+        self.searched = false;
 
-	self.setCommentPage = function () {
-		console.log('top')
-		$('html, body').animate({ scrollTop: 1100 }, 'fast');
-	}
+        self.setPopular = function() {
+            selectedClass();
+            self.popular = true;
+            self.newest = false;
+            self.list = false;
+            self.searched = false;
+            $('#project-popular-radio').prop('checked', true);
+        };
 
-	self.setPage = function () {
-		console.log('top')
-		$('html, body').animate({ scrollTop: 0 }, 'fast');
-	}
+        self.setNewest = function() {
+            self.popular = false;
+            self.newest = true;
+            self.list = false;
+            self.searched = false;
+            selectedClass();
+            $('#project-newest-radio').prop('checked', true);
+        };
 
-	self.checkBox = function () {
-    	appearFactory.checkBox();
-    	self.rotate = appearFactory.rotate();
-	};
+        self.setSearch = function() {
+            console.log('eh');
+        };
 
-	// projectServices.searchNewestProjects().then(function (result){
-	// 	self.newestSearchedProjects = result;
-	// }, function () {
-	// 	console.log('nothing there');
-	// });
+        self.setTrending = function() {
+            selectedClass();
+            $('#project-trending-radio').prop('checked', true);
+        };
 
-	// projectServices.searchProjects().then(function (result){
-	// 	self.listSearchedProjects = result;
-	// }, function () {
-	// 	console.log('nothing there');
-	// });
+        self.setList = function() {
+            self.popular = false;
+            self.newest = false;
+            self.list = true;
+            console.log(self.list);
+            selectedClass();
+            $('#project-list-radio').prop('checked', true);
+        };
 
-	// projectServices.listNewest().then(function (result){
-	// 	self.newestProjects = result;
-	// }, function () {
-	// 	console.log('nothing there');
-	// });
+        self.searchClicked = true;
 
-	// projectServices.list().then(function (result){
-	// 	self.listProjects = result;
-	// }, function () {
-	// 	console.log('nothing there');
-	// });
+        self.checkSearch = function() {
+            self.searchClicked = false;
+            $(event.target).parent().find('.home-project-search').focus();
+        };
 
-	self.setGroups = function () {
-		self.byNames = false;
-	};
+        var pf = projectFactory;
 
-	self.setNames = function () {
-		self.byNames = true;
-	};
+        self.pyMoreInfo = pf.byPy();
 
-	function selectedClass () {
-		var closest = $(event.target).parent().parent().children();
-		closest.each(function () {
-			var fa = $(this).find('.fa');
-			$(this).find('.fa').removeClass('fa-dot-circle-o');
-			console.log($(this).find('.project-radio')[0]);
-			$(this).find('.project-radio').prop('checked', false);
-			if (!fa.hasClass('fa-circle-o')) {
-				fa.addClass('fa-circle-o');
-			}
-		});
-		$(event.target).parent().find('.fa').removeClass('fa-circle-o');
-		$(event.target).parent().find('.fa').addClass('fa-dot-circle-o');
-	}
+        self.pyInfo = function() {
+            pf.pyInfo();
+            self.pyMoreInfo = pf.byPy();
+        };
 
-	self.list = false;
-	self.popular = true;
-	self.newest = false;
-	self.searched = false;
+        self.ghMoreInfo = pf.byGh();
 
-	self.setPopular = function () {
-		selectedClass();
-		self.popular = true;
-		self.newest = false;
-		self.list = false;
-		self.searched = false;
-		$('#project-popular-radio').prop('checked', true);
-	};
+        self.ghInfo = function() {
+            pf.ghInfo();
+            self.ghMoreInfo = pf.byGh();
+        };
 
-	self.setNewest = function () {
-		self.popular = false;
-		self.newest = true;
-		self.list = false;
-		self.searched = false;
-		selectedClass();
-		$('#project-newest-radio').prop('checked', true);
-	};
-
-	self.setSearch = function () {
-		console.log('eh');
-	}
-
-	self.setTrending = function () {
-		selectedClass();
-		$('#project-trending-radio').prop('checked', true);
-	};
-
-	self.setList = function () {
-		self.popular = false;
-		self.newest = false;
-		self.list = true;
-		console.log(self.list);
-		selectedClass();
-		$('#project-list-radio').prop('checked', true);
-	};
-
-	self.searchClicked = true;
-
-	self.checkSearch = function () {
-		self.searchClicked = false;
-		$(event.target).parent().find('.home-project-search').focus();
-	};
-
-	var pf = projectFactory;
-
-	self.pyMoreInfo = pf.byPy();
-
-	self.pyInfo = function () {
-		pf.pyInfo();
-		self.pyMoreInfo = pf.byPy(); 
-	};
-
-	self.ghMoreInfo = pf.byGh();
-
-	self.ghInfo = function () {
-		pf.ghInfo();
-		self.ghMoreInfo = pf.byGh();
-	};
-
-
-
-}]);
+    }
+]);

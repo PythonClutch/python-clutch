@@ -59,9 +59,10 @@ def logout():
 @toolshed.route("/github/login")
 def github_login():
     session.pop('github_token', None)
-    return github.authorize(callback=url_for('.github_authorized',
-                                             _external=True,
-                                             next=request.args.get('next') or url_for("toolshed.index")))
+    return github.authorize(
+        callback=url_for('.github_authorized',
+                         _external=True,
+                         next=request.args.get('next') or url_for("toolshed.index")))
 
 
 @toolshed.route('/login/github/authorized', methods=["GET", "POST"])
@@ -77,11 +78,11 @@ def github_authorized():
     session['github_name'] = me.data['name']
 
     if not User.query.filter_by(github_name=me.data['name']).first():
-        user = User(github_name = me.data['name'],
-                    email = me.data['email'],
-                    github_url = me.data['html_url'],
-                    avatar_url = me.data['avatar_url'],
-                    public_repos = me.data['public_repos'])
+        user = User(github_name=me.data['name'],
+                    email=me.data['email'],
+                    github_url=me.data['html_url'],
+                    avatar_url=me.data['avatar_url'],
+                    public_repos=me.data['public_repos'])
         db.session.add(user)
         db.session.commit()
 

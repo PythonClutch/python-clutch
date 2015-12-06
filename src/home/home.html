@@ -1,18 +1,21 @@
 <section class="home-set-section">
-<!-- <div class="home-set-a-div"> -->
 	<a class="home-set-a home-set-a-projects" ng-class="{ active: vm.isActive('/home/projects') || vm.isActive('/home') || vm.isActive('/') || vm.startsWith('/home/search') }" ng-click="vm.setProjects()" href="#/home/projects">Projects</a>
-<!-- </div> -->
-<!-- <div class="home-set-a-div"> -->
 	<a class="home-set-a" ng-class="{ active: vm.isActive('/home/categories') }" ng-click="vm.setCategories()" href="#/home/categories">Categories</a>
-<!-- </div> -->
 </section>
-
-
-
 <div class="home-set container-width" ng-show="vm.byProjects">
 	<home-projects ng-controller="hpCtrl as hp"></home-projects>
 </div>
-
 <div class="home-set container-width" ng-show="!vm.byProjects">
-	<home-categories></home-categories>
+	<div ng-show="!vm.allProjects" class="loader-inner ball-grid-pulse">
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
+	<home-categories ng-show="vm.allProjects"></home-categories>
 </div>

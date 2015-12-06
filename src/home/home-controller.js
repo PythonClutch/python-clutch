@@ -1,79 +1,139 @@
 app.controller('HomeCtrl', ['homeFactory', 'projects', 'projectFactory', 'activeRoute', 'appearFactory', 'groups', 'projectServices',
-	'categories', 'user', 'likeFactory', 'appearFactory',
-	function (homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices, 
-		categories, user, likeFactory, appearFactory) {
-	var self = this;
+    'categories', 'user', 'likeFactory', 'groupServices',
+    function(homeFactory, projects, projectFactory, activeRoute, appearFactory, groups, projectServices,
+        categories, user, likeFactory, groupServices) {
+        var self = this;
 
-	self.categories = categories;
+        self.categories = categories;
 
-	self.projects = projects;
+        self.allProjects = false;
 
-	self.changeTrue = function () {
-		$('html, body').animate({ scrollTop: 0 }, 'fast');
-		appearFactory.changeTrue();
-	}
+        self.projects = projects;
+        self.groups = groups;
 
-	self.groups = groups;
+        if (window.location.hash.substring(0, 14) !== '#/home/search/') {
+            getProjects();
 
-	console.log(categories)
+            var int = setInterval(function () {
+               findProjects(); 
+            }, 04);
 
-	self.projectNumber = Math.ceil(projects.length/5);
+            var int1 = setInterval(function () { 
+               find100Projects();
+            }, 04);
 
-	self.searchChange = function () {
-		var paragraphAmt = $(event.target).closest('home-names').find('.pagination-div p');
-		if ($(event.target).val() !== '') {
-			paragraphAmt.hide();
-		} else {
-			paragraphAmt.show();
-		}
-	}	
+            var intG = setInterval(function () {
+               findGroups(); 
+            }, 10);
+        } else {
+            self.allProjects = true;
+        }
 
-	self.setPage = function () {
-		console.log('top')
-		$('html, body').animate({ scrollTop: 0 }, 'fast');
-	}
+        function getProjects () {
+            return projectServices.projects().then(function (result) {
+                self.projects = result;
+            });
+        };
 
-	self.byProjects = homeFactory.byProjects();
+        function getGroups () {
+            return groupServices.groups().then(function (result) {
+                self.groups = result;
+            });
+        };
 
-	self.setProjects = function () {
-		homeFactory.setProjects();
-		self.byProjects = homeFactory.byProjects();
-	};
+        function findProjects () {
+            projectServices.projects().then(function (result) {
+                if (result.length > 101) {
+                    clearInterval(int);
+                    getProjects();
+                    self.allProjects = true;
+                } else {
+                    getProjects();
+                }
+            });
+        }
 
-	self.setCategories = function () {
-		homeFactory.setCategories();
-		self.byProjects = homeFactory.byProjects();
-	};
+        function find100Projects () {
+            projectServices.projects().then(function (result) {
+                if (result.length > 26) {
+                    clearInterval(int1);
+                    getProjects();
+                } else {
+                    getProjects();
+                }
+            });
+        }
+
+        function findGroups () {
+            groupServices.groups().then(function (result) {
+                if (result.length > 11) {
+                    clearInterval(intG);
+                    getGroups();
+                } 
+            });
+        }
+
+        self.changeTrue = function() {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'fast');
+            appearFactory.changeTrue();
+        };
+
+        self.searchChange = function() {
+            var paragraphAmt = $(event.target).closest('home-names').find('.pagination-div p');
+            if ($(event.target).val() !== '') {
+                paragraphAmt.hide();
+            } else {
+                paragraphAmt.show();
+            }
+        };
+
+        self.setPage = function() {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'fast');
+        };
+
+        self.byProjects = homeFactory.byProjects();
+
+        self.setProjects = function() {
+            homeFactory.setProjects();
+            self.byProjects = homeFactory.byProjects();
+        };
+
+        self.setCategories = function() {
+            homeFactory.setCategories();
+            self.byProjects = homeFactory.byProjects();
+        };
 
 
-    self.isActive = function (path) {
-      return activeRoute.isActive(path);
-    };
+        self.isActive = function(path) {
+            return activeRoute.isActive(path);
+        };
 
-    self.startsWith = function (path) {
-      return activeRoute.startsWith(path);
+        self.startsWith = function(path) {
+            return activeRoute.startsWith(path);
+        };
+
+        self.like = function(proj, likes) {
+            likeFactory.like(proj, likes, user);
+        };
+
+        self.checkLike = function(project) {
+            if (user) {
+                return likeFactory.checkLike(project, user);
+            } else {
+                return false;
+            }    
+        };
+
+        self.searchClicked = true;
+
+        self.checkSearch = function() {
+            self.searchClicked = false;
+            $(event.target).parent().find('.home-project-search').focus();
+        };
+
     }
-
-    // self.rotate = appearFactory.rotate();
-
- //    self.checkBox = function () {
- //    	appearFactory.checkBox();
- //    	self.rotate = appearFactory.rotate();
-	// };
-
-	self.like = function (proj, likes) {
-		likeFactory.like(proj, likes, user);	
-	};
-
-	self.checkLike = function (project) {
-		return likeFactory.checkLike(project, user);
-	};
-
-	self.searchClicked = true;
-
-	self.checkSearch = function () {
-		self.searchClicked = false;
-		$(event.target).parent().find('.home-project-search').focus();
-	};
-
-}]);
+]);

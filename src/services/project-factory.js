@@ -1,44 +1,49 @@
-app.factory('projectFactory', function () {
+app.factory('projectFactory', function() {
 
-	'use strict';
+    'use strict';
 
-	var pyMoreInfo = false;
-	var ghMoreInfo = false;
-	var target;
+    var pyMoreInfo = false;
+    var ghMoreInfo = false;
+    var target;
+    var chevron;
+    window.setTimeout(function() {
+        ghMoreInfo = false;
+    }, 200);
 
-	return {
+    return {
 
-		byPy: function () {
-			return pyMoreInfo;
-		},
+        byPy: function() {
+            return pyMoreInfo;
+        },
 
-		byGh: function () {
-			return ghMoreInfo;
-		},
+        byGh: function() {
+            return ghMoreInfo;
+        },
 
-		pyInfo: function () {
-			if (pyMoreInfo === true) {
-				pyMoreInfo = false;
-			} else {
-				pyMoreInfo = true;
-			};
-		},
+        pyInfo: function() {
+            if (pyMoreInfo === true) {
+                pyMoreInfo = false;
+            } else {
+                pyMoreInfo = true;
+            }
+        },
 
-		ghInfo: function () {
-			if (ghMoreInfo === true) {
-				console.log('true');
-				ghMoreInfo = false;
-			} else {
-				ghMoreInfo = true;
-			}
-			target = $(event.target).parent().parent().parent().find('.gh-checkbox');
-			if (target.prop('checked')) {
-				target.prop('checked', false);
-			} else {
-				target.prop('checked', true);
-			};
-		}
+        ghInfo: function() {
+            target = $(event.target).parent().parent().parent().find('.gh-checkbox');
+            chevron = $(event.target).closest('.home-project-header-bottom').find('.fa');
+            if (target.prop('checked')) {
+                target.prop('checked', false);
+                ghMoreInfo = false;
+                chevron.removeClass('fa-angle-up');
+                chevron.addClass('fa-angle-down');
+            } else {
+                target.prop('checked', true);
+                ghMoreInfo = true;
+                chevron.removeClass('fa-angle-down');
+                chevron.addClass('fa-angle-up');
+            }
+        }
 
-	};
+    };
 
 });

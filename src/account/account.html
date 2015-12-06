@@ -1,12 +1,9 @@
 <section class="home-set-section">
-	<a class="home-set-a home-set-a-projects" ng-class="{ active: vm.isActive('/account/info') || vm.isActive('/account/edit') || vm.isActive('/account') }" ng-click="vm.setInfo()" href="#/account/info">Info</a>
-	<a class="home-set-a" ng-class="{ active: vm.isActive('/account/activity') }" ng-click="vm.setActivity()" href="#/account/activity">Activity</a>
+    <a class="home-set-a home-set-a-projects" ng-class="{ active: vm.isActive('/account/info') || vm.isActive('/account/edit') || vm.isActive('/account') }" ng-click="vm.setInfo()" href="#/account/info">Info</a>
+    <a class="home-set-a" ng-class="{ active: vm.isActive('/account/activity') }" ng-click="vm.setActivity()" href="#/account/activity">Activity</a>
 </section>
-
 <div class="account-set container-width">
-	<account-info ng-show="vm.byInfo && !vm.byEdit"></account-info>
-	<account-activity ng-show="!vm.byInfo && !vm.byEdit"></account-activity>
-	<edit-account ng-show="vm.byEdit"></edit-account>
+    <account-info ng-show="vm.byInfo && !vm.byEdit"></account-info>
+    <account-activity ng-show="!vm.byInfo && !vm.byEdit"></account-activity>
+    <edit-account ng-show="vm.byEdit"></edit-account>
 </div>
-
-

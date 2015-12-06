@@ -1,35 +1,35 @@
-app.factory('submitFactory', function () {
+app.factory('submitFactory', function() {
 
-	'use strict';
+    'use strict';
 
-	var byNew = true;
+    var byNew = true;
 
-	var byEdit = false;
+    var byEdit = false;
 
-	return {
-		
-		byNew: function () {
-			return byNew;
-		},
+    return {
 
-		byEdit: function () {
-			return byEdit;
-		},
+        byNew: function() {
+            return byNew;
+        },
 
-		setNew: function () {
-			byNew = true;
-			byEdit = false;
-		},
+        byEdit: function() {
+            return byEdit;
+        },
 
-		setPending: function () {
-			byNew = false;
-			byEdit = false;
-		},
+        setNew: function() {
+            byNew = true;
+            byEdit = false;
+        },
 
-		setEdit: function () {
-			byEdit = true;
-		}
+        setPending: function() {
+            byNew = false;
+            byEdit = false;
+        },
 
-	};
+        setEdit: function() {
+            byEdit = true;
+        }
+
+    };
 
 });
