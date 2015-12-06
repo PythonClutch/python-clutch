@@ -15,7 +15,7 @@ pypi_search_regex = re.compile('((http(s)*://)*pypi.python.org/pypi/(.*))')
 score_multiplier = 10
 
 gitkey = os.environ['GITKEY']
-auth=(gitkey, 'x-oauth-basic')
+auth = (gitkey, 'x-oauth-basic')
 
 
 def parse_github_url(github_url):
@@ -86,7 +86,7 @@ def bitbucket_populate(proj_dict, bitbucket_url):
 
 def release_parse(pypi_result):
     total_list = [[item['downloads'] for item in pypi_result['releases'][key]] for key in pypi_result['releases']]
-    return sum([sum(list) for list in total_list]), len(total_list)
+    return sum([sum(list_item) for list_item in total_list]), len(total_list)
 
 def python_three_check(pypi):
     py3_match_regex = re.compile('Programming Language :: Python :: 3(.*)')

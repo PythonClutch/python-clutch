@@ -38,6 +38,7 @@ pytest>=2.6.3
 pytest-flask>=0.7.3
 webtest
 fake-factory==0.5.0
+coverage
 
 # Management script
 Flask-Script
