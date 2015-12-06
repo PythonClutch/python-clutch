@@ -499,8 +499,8 @@ def graph_distribution():
     curr_bin = 0
     for _ in range(bin_number):
         count = len([score for score in scores
-                    if score > curr_bin
-                    if score < curr_bin + bin_width])
+                     if score > curr_bin
+                     if score < curr_bin + bin_width])
         x.append(curr_bin)
         y.append(count)
         curr_bin += bin_width
